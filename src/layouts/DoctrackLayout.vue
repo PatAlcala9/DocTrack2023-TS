@@ -5,7 +5,7 @@ q-layout(view="hHh lpR lFr").page
   q-page-container
     router-view
 
-  </template>
+</template>
 
 <script setup lang="ts"></script>
 

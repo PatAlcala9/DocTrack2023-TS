@@ -32,10 +32,50 @@ const setName = async () => {
   // employeenameLocal.value = SessionStorage.getItem('EmployeeName')
 
   employeenameLocal.value = _employeename.employeename
-
 }
 
 ;(async () => {
   await setName()
 })()
 </script>
+
+<style lang="sass" scoped>
+.logo
+  width: 16rem
+  height: auto
+  position: fixed
+  opacity: 0.05
+
+.name
+  font-size: 4rem
+  font-family: 'RalewayBold'
+  color: #ffffff
+
+.menu
+  margin-top: 1rem
+  font-size: 2.2rem
+  font-family: 'RalewayBold'
+  color: #ffffff
+
+.button-area
+  margin-top: 4.2rem
+
+.button-access
+  font-family: 'RalewayBold'
+  font-size: 1.4rem
+  border-radius: 8px
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.18)
+  border: none
+  padding: 0.80rem 1.85rem
+  min-width: 10ch
+  min-height: 44px
+  text-align: center
+  line-height: 1.1
+  cursor: pointer
+  text-transform: uppercase
+
+.button-access:hover
+  background-color: #021926
+  color: #ffffff
+  // border: 1px solid #ffffff
+</style>

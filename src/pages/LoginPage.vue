@@ -9,17 +9,17 @@ q-page(padding)
           span.ocbo-title OCBO
           span.ocbo-text Doctrack System 2023
 
-      //- img(src="../assets/cabinet.svg" alt="Cabinet").cabinet
-
     div(v-if="inquiry === false").login
       section.username-area.column.wrap.justify-center.items-center.content-center
-        span.username-label Username
-        input(v-model="usernameEntry").username-input
+        component(:is="docLabel" text="Username")
+        component(:is="docInput" v-model:value="usernameEntry")
+
       section.password-area.column.wrap.justify-center.items-center.content-center
-        span.password-label Password
-        input(type="password" v-model="passwordEntry" @keypress.enter="login").password-input
+        component(:is="docLabel" text="Password")
+        component(:is="docInputPassword" v-model:value="passwordEntry" @keypress.enter="login")
+
       section.button-area.column.wrap.justify-center.items-center.content-center
-        q-btn(outline padding="0.4rem 3rem" rounded color="white" label="Login" size="lg" @click="login")
+        component(:is="docButton" text="login" @click="login")
 
       section.register.column.wrap.justify-center.items-center.content-center
         span(@click="gotoRegister") Create New Account
@@ -28,11 +28,9 @@ q-page(padding)
       section.username-area.column.wrap.justify-center.items-center.content-center
         span.inquiry-label Inquiry
       section.username-area.column.wrap.justify-center.items-center.content-center
-        q-btn(outline padding="0.4rem 3rem" rounded color="white" label="Received" size="lg" @click="inquireReceivedTrigger")
+        component(:is="docButton" text="Received" @click="inquireReceivedTrigger")
       section.password-area.column.wrap.justify-center.items-center.content-center
-        q-btn(outline padding="0.4rem 3rem" rounded color="white" label="Released" size="lg" @click="inquireReleasedTrigger")
-
-
+        component(:is="docButton" text="Released" @click="inquireReleasedTrigger")
 
     div.inquiry
       span(v-if="inquiry" @click="inquiry = !inquiry").inquiry-text Login
@@ -49,31 +47,6 @@ q-page(padding)
           q-btn(flat size="md" label="close" v-close-popup).dialog-close
 
       q-card-section
-        //- div.dialog-content
-        //-   section.dialog-content-search.fit.row.wrap.justify-start.items-start.content-start
-        //-     section.column
-        //-       span.dialog-content-label Search
-        //-       input.dialog-content-input
-        //-     section.column
-        //-       span.dialog-content-label Date
-        //-       input.dialog-content-input
-        //-   section.dialog-content-table
-        //-     table.table
-        //-       thead
-        //-         tr.table-header-group
-        //-           th.table-header Entry Code
-        //-           th.table-header Received Date
-        //-           th.table-header Source
-        //-           th.table-header Subject
-        //-           th.table-header Details
-        //-       tbody
-        //-         tr(v-for="data in incomingList" :key="data").table-content-group
-        //-           td.table-content {{data.entryCodeNo}}
-        //-           td.table-content {{data.receivedDate}}
-        //-           td.table-content {{data.sourceName}}
-        //-           td.table-content {{data.subjectInfo}}
-        //-           td.table-content View
-        //-     //- q-table(dark :rows="incomingList" :columns="incomingHeaderList" row-key="name")
         div.fit.row.wrap.justify-start.items-start.content-start
           section.column
             span.dialog-content-label Search
@@ -102,16 +75,21 @@ q-page(padding)
             span Loading
             //- q-table(:rows="incomingList" :columns="incomingHeaderList" row-key="name" :table-header-style="{ backgroundColor: '#021926', color: '#ffffff', fontFamily: 'Raleway', fontSize: '12px' }" :table-style="{ backgroundColor: 'red' }")
 
-  </template>
+</template>
+
 <script setup lang="ts">
 import { ref } from 'vue'
 import { api } from 'boot/axios'
-import { date } from 'quasar'
 import { useRouter } from 'vue-router'
 import { encrypt, comparePassword } from 'src/js/OCBO'
 
 import { useEmployeeName } from 'stores/employeename'
 import { useUserID } from 'stores/userid'
+
+import docButton from 'components/docButton.vue'
+import docInput from 'components/docInput.vue'
+import docInputPassword from 'components/docInputPassword.vue'
+import docLabel from 'components/docLabel.vue'
 
 let _employeename = useEmployeeName()
 let _userid = useUserID()
@@ -310,21 +288,12 @@ const login = async () => {
   font-size: 1.4rem
   color: #ffffff
 
-.username-input
-  font-family: 'Raleway'
-  font-size: 1.3rem
-  border-radius: 0.6rem
-  text-align: center
-  text-transform: uppercase
-
 .password-area
   margin: 1rem
 
 .password-label
   @extend .username-label
 
-.password-input
-  @extend .username-input
 
 .button-area
   padding-top: 1rem
