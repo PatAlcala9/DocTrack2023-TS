@@ -283,17 +283,8 @@ const login = async () => {
 .username-area
   margin: 1rem
 
-.username-label
-  font-family: 'Raleway'
-  font-size: 1.4rem
-  color: #ffffff
-
 .password-area
   margin: 1rem
-
-.password-label
-  @extend .username-label
-
 
 .button-area
   padding-top: 1rem

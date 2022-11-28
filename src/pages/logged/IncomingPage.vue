@@ -11,7 +11,8 @@ q-page(padding)
     div.column
       span.inputs__label Received Date:
       q-date(flat v-model="receivedDate" minimal color="$button" @click="sample").calendar
-      span.inputs__label--date {{ formattedReceivedDate }}
+      span(v-if="formattedReceivedDate.length > 0").inputs__label--date {{ formattedReceivedDate }}
+      span(v-else).inputs__label--date No Date Selected
 
     div.inputs.column
       span.inputs__label Source:
@@ -26,12 +27,16 @@ q-page(padding)
       span.inputs__label Attachments:
       input.inputs__input
 
+  section.button-area.fit.row.items-center.justify-center
+    component(:is="docButton" text="Register")
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import { date } from 'quasar'
 import { useRouter } from 'vue-router'
+
+import docButton from 'components/docButton.vue'
 
 let router = useRouter()
 let receivedDate = ref('')
@@ -49,10 +54,17 @@ const gotoMenu = () => {
 <style lang="sass" scoped>
 
 .calendar
-  background-color: $button
-  border: 1px solid white
+  background-color: rgba(8,25,35, 0.75)
+  border: 1px solid rgba(255, 255, 255, 0.525)
   font-family: 'OpenSans'
   font-size: 1.6rem
+  border-radius: 12px
+  ::v-deep .q-date__calendar-item
+    padding-top: 0.6rem
+    // padding-left: 0.5rem
+    // padding-right: 0.5rem
+  ::v-deep .block
+    font-size: 1.25rem
 
 .show
   cursor: pointer
@@ -223,4 +235,7 @@ const gotoMenu = () => {
   font-family: 'OpenSans'
   margin-top: 0.5rem
   font-size: 1.4rem
+
+.button-area
+  margin-top: 2rem
 </style>
