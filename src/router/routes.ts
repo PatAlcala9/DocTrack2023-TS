@@ -1,10 +1,19 @@
-import { RouteRecordRaw } from 'vue-router';
+import { RouteRecordRaw } from 'vue-router'
 
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/IndexPage.vue') }],
+    component: () => import('src/layouts/DoctrackLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/LoginPage.vue') },
+      { path: '/received', component: () => import('pages/inquiry/ReceivedPage.vue') },
+      { path: '/released', component: () => import('pages/inquiry/ReleasedPage.vue') },
+
+      { path: '/dashboard', component: () => import('pages/IndexPage.vue') },
+      { path: '/register', component: () => import('pages/RegisterPage.vue') },
+
+      { path: '/incoming', component: () => import('pages/logged/IncomingPage.vue') }
+    ],
   },
 
   // Always leave this as last one,
@@ -13,6 +22,6 @@ const routes: RouteRecordRaw[] = [
     path: '/:catchAll(.*)*',
     component: () => import('pages/ErrorNotFound.vue'),
   },
-];
+]
 
-export default routes;
+export default routes
