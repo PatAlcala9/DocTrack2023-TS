@@ -70,6 +70,7 @@ const gotoMenu = () => {
   cursor: pointer
   text-decoration: underline
   font-size: 1.6rem
+  
 .cabinet
   width: 25rem
   height: auto

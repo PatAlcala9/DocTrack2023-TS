@@ -25,4 +25,12 @@ const updateValue = (value: string) => {
   border-radius: 0.6rem
   text-align: center
   text-transform: uppercase
+  border: 1px solid #ffffff
+  color: #000000
+
+.input:focus
+  outline: none
+  border: 1px solid $button
+  background-color: #274c62
+  color: #ffffff
 </style>

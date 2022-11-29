@@ -11,7 +11,7 @@
 
 /* eslint-disable @typescript-eslint/no-var-requires */
 
-const ESLintPlugin = require('eslint-webpack-plugin')
+// const ESLintPlugin = require('eslint-webpack-plugin')
 const { configure } = require('quasar/wrappers');
 
 const CompressionPlugin = require('compression-webpack-plugin')
@@ -36,7 +36,6 @@ module.exports = configure(function (ctx) {
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-webpack/boot-files
     boot: [
-
       'axios',
     ],
 
@@ -91,7 +90,7 @@ module.exports = configure(function (ctx) {
           .use('pug-plain-loader')
           .loader('pug-plain-loader')
 
-        chain.plugin('eslint-webpack-plugin').use(ESLintPlugin, [{ extensions: ['js', 'vue'] }])
+        // chain.plugin('eslint-webpack-plugin').use(ESLintPlugin, [{ extensions: ['js', 'vue'] }])
 
         if (!ctx.dev && !ctx.debug) {
           chain.plugin('compression-webpack-plugin').use(CompressionPlugin, [
