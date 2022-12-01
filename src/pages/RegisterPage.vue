@@ -1,30 +1,34 @@
 <template lang="pug">
 
 q-page(padding)
-  //- div.full-width.row.justify-between
-  //-   span.title Registration
-  //-   q-btn(flat size="md" label="Back" @click="gotoHome" icon="arrow_back").close-button
+  div.full-width.row.justify-between
+    transition(appear @before-enter="beforeEnterTitle" @enter="enterTitle")
+      span.title Registration
+    transition(appear @before-enter="beforeEnterClose" @enter="enterClose")
+      q-btn(flat size="md" label="Back" @click="gotoHome" icon="arrow_back" ).close-button
+
+  //- transition(appear @before-enter="beforeEnterPage" @enter="enterPage")
   section.login.column.items-center
     span.login__username--label Fullname
-    input(v-model="ifullname").login__username--input
+    component(:is="docInput" v-model:value="ifullname" width="30").login__username--input
 
     span.login__username--label Username
-    input(v-model="iusername").login__username--input
+    component(:is="docInput" v-model:value="iusername").login__username--input
 
     span.login__username--label Password
-    input(v-model="ipassword" type="password").login__username--input
+    component(:is="docInputPassword" v-model:value="ipassword").login__username--input
 
     span.login__username--label Access
     q-option-group(dark v-model="accessList" :options="accessOption" color="indigo-9" type="checkbox").login__username--option
 
-    q-btn(outline padding="0.4rem 3rem" rounded color="white" label="Register" size="lg" @click="saveAccount")
+    q-btn(outline padding="0.4rem 3rem" rounded color="white" label="Register" size="lg" @click="sample")
 
-q-dialog(v-model="dialog" persistent full-width full-height transition-show="scale" transition-hide="scale")
+q-dialog(v-model="dialog" transition-show="flip-right" transition-hide="flip-left")
   q-card.dialog-card.text-white
-    q-card-section
+    q-card-section.dialog-card__section.flex.flex-center
       div.dialog-title-area.row.justify-between
         span.dialog-title {{dialogMessage}}
-        q-btn(flat size="md" label="close" v-close-popup).dialog-close
+        //- q-btn(flat size="md" label="close" v-close-popup).dialog-close
 
 </template>
 
@@ -32,6 +36,33 @@ q-dialog(v-model="dialog" persistent full-width full-height transition-show="sca
 import { api } from 'boot/axios'
 import { ref } from 'vue'
 import { encrypt } from 'src/js/OCBO'
+import { useRouter } from 'vue-router'
+import { gsap } from 'gsap'
+
+import docInput from 'components/docInput.vue'
+import docInputPassword from 'components/docInputPassword.vue'
+
+const router = useRouter()
+
+const beforeEnterTitle = (el: any) => {
+  el.style.transform = 'translateX(-100px)'
+  el.style.opacity = 0
+}
+const enterTitle = (el: any) => {
+  gsap.to(el, { duration: 0.8, x: 0, opacity: 1 })
+}
+
+const beforeEnterClose = (el: any) => {
+  el.style.transform = 'translateX(100px)'
+  el.style.opacity = 0
+}
+const enterClose = (el: any) => {
+  gsap.to(el, { duration: 0.8, x: 0, opacity: 1 })
+}
+
+const enterPage = (el: any) => {
+  gsap.to(el, { duration: 1, y: 0, opacity: 1 })
+}
 
 let ifullname = ref('')
 let iusername = ref('')
@@ -81,12 +112,22 @@ const saveAccount = async () => {
     dialogMessage.value = 'Failed to Register'
   }
 }
+
+const sample = () => {
+  dialog.value = true
+  dialogMessage.value = 'Sample'
+}
+
+const gotoHome = () => {
+  router.push('/')
+}
 </script>
 
 <style lang="sass" scoped>
 
 .dialog
   font-family: 'Raleway'
+  background-color: $button
 
 .detail-dialog__info
   font-size: 2rem
@@ -107,17 +148,19 @@ const saveAccount = async () => {
   font-size: 1.4rem
 
 .login__username--input
-  font-family: 'OpenSans'
-  font-size: 1.3rem
-  border-radius: 0.6rem
-  text-align: center
   margin-bottom: 1.4rem
-  text-transform: uppercase
 
 .login__username--option
   @extend .login__username--input
   text-transform: capitalize
 
 .dialog-card
-  background-color: blue
+  font-family: "OpenSans"
+  background-color: rgba(2,25,38, 0.7)
+  width: 50%
+  height: 50%
+
+.dialog-card__section
+  padding: 2rem
+  font-size: 2rem
 </style>

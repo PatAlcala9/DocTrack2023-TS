@@ -36,8 +36,8 @@ q-page(padding)
       span(v-if="inquiry" @click="inquiry = !inquiry").inquiry-text Login
       span(v-else @click="inquiry = !inquiry").inquiry-text Inquire without logging In
 
-    div.davao
-      img(src="../assets/davao.svg" alt="Davao Logo").davaologo
+    //- div.davao
+    //-   img(src="../assets/davao.svg" alt="Davao Logo").davaologo
 
   q-dialog(v-model="inquireReceived" persistent full-width full-height transition-show="scale" transition-hide="scale")
     q-card.dialog-card.text-white
@@ -75,13 +75,20 @@ q-page(padding)
             span Loading
             //- q-table(:rows="incomingList" :columns="incomingHeaderList" row-key="name" :table-header-style="{ backgroundColor: '#021926', color: '#ffffff', fontFamily: 'Raleway', fontSize: '12px' }" :table-style="{ backgroundColor: 'red' }")
 
+q-dialog(v-model="error" transition-show="flip-right" transition-hide="flip-left")
+  q-card.dialog-card.text-white.flex.flex-center
+    q-card-section.dialog-card__section
+      div.dialog-title-area.column.justify-center.items-center
+        span.dialog-card__title {{errorMessage}}
+        span.dialog-card__info {{errorInformation}}
+        component(:is="docButton" text="OK" @click="error=false")
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import { api } from 'boot/axios'
 import { useRouter } from 'vue-router'
-import { encrypt, comparePassword } from 'src/js/OCBO'
+import { comparePassword } from 'src/js/OCBO'
 
 import { useEmployeeName } from 'stores/employeename'
 import { useUserID } from 'stores/userid'
@@ -93,6 +100,10 @@ import docLabel from 'components/docLabel.vue'
 
 let _employeename = useEmployeeName()
 let _userid = useUserID()
+
+let error = ref(false)
+let errorMessage = ref('')
+let errorInformation = ref('')
 
 const router = useRouter()
 
@@ -191,24 +202,37 @@ const getUserDetails = async () => {
 const login = async () => {
   await checkUsername()
   if (usernameAccepted === false) {
-    console.log('INVALUD USERNAME')
+    error.value = true
+    errorMessage.value = 'Invalid Username'
+
+    if (usernameEntry.value.length > 0) errorInformation.value = `${usernameEntry.value.toUpperCase()} does not exist`
+    else errorInformation.value = 'Username is Empty'
+
     return
   }
 
   await checkPassword()
   if (passwordAccepted === false) {
-    console.log('INVALID PASSWORD')
+    error.value = true
+    errorMessage.value = 'Invalid Password'
+    errorInformation.value = `Password does not match with ${usernameEntry.value.toUpperCase()}`
+
+    if (passwordEntry.value.length > 0) errorInformation.value = `Password does not match with ${usernameEntry.value.toUpperCase()}`
+    else errorInformation.value = 'Password is Empty'
     return
   }
 
   await getUserDetails()
   if (detailsAllowed === false) {
-    console.log('NO DETAILS')
+    error.value = true
+    errorMessage.value = 'No Details Found'
     return
   }
 
   router.push('/dashboard')
 }
+
+
 </script>
 
 <style lang="sass" scoped>
@@ -372,4 +396,21 @@ const login = async () => {
 
 .register:hover
   text-decoration: underline
+
+.dialog-card
+  font-family: "OpenSans"
+  background-color: rgba(2, 25, 38, 0.8)
+  backdrop-filter: blur(16px)
+  border: 1px solid rgba(255, 255, 255, 0.125)
+  border-radius: 12px
+  width: 40%
+  height: 40%
+
+.dialog-card__title
+  font-size: 2.2rem
+  margin-bottom: 2rem
+
+.dialog-card__info
+  font-size: 1rem
+  margin-bottom: 2rem
 </style>

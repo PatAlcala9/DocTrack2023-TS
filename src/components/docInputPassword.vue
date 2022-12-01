@@ -7,7 +7,7 @@ div
 
 <script setup lang="ts">
 export interface Props {
-  value: string
+  value: string,
 }
 
 const props = defineProps<Props>()
@@ -25,12 +25,12 @@ const updateValue = (value: any) => {
   border-radius: 0.6rem
   text-align: center
   text-transform: uppercase
-  border: 1px solid #ffffff
+  border: 1px solid $button
   color: #000000
 
 .input:focus
   outline: none
-  border: 1px solid $button
+  border: 1px solid #ffffff
   background-color: #274c62
   color: #ffffff
 </style>

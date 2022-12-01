@@ -1,8 +1,9 @@
 <template lang="pug">
 
-q-layout(view="hHh lpR lFr").page
-  img(src="../assets/cabinet.svg" alt="Cabinet").cabinet
-  q-page-container
+q-layout(view="hHh lpR lFr")
+  q-page-container.page
+    img(src="../assets/cabinet.svg" alt="Cabinet").cabinet
+    img(src="../assets/davao.svg" alt="Davao Logo").davaologo
     router-view
 
 </template>
@@ -24,4 +25,12 @@ q-layout(view="hHh lpR lFr").page
   margin-top: 2rem
   margin-right: 2rem
   right: 0
+
+.davaologo
+  position: absolute
+  top: calc(100vh - 8rem)
+  left: calc(100% - 20rem)
+  width: 18rem
+  height: auto
+  opacity: 0.4
 </style>
