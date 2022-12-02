@@ -21,14 +21,14 @@ q-page(padding)
     span.login__username--label Access
     q-option-group(dark v-model="accessList" :options="accessOption" color="indigo-9" type="checkbox").login__username--option
 
-    q-btn(outline padding="0.4rem 3rem" rounded color="white" label="Register" size="lg" @click="sample")
+    q-btn(outline padding="0.4rem 3rem" rounded color="white" label="Register" size="lg" @click="saveAccount")
 
 q-dialog(v-model="dialog" transition-show="flip-right" transition-hide="flip-left")
   q-card.dialog-card.text-white
     q-card-section.dialog-card__section.flex.flex-center
       div.dialog-title-area.row.justify-between
         span.dialog-title {{dialogMessage}}
-        //- q-btn(flat size="md" label="close" v-close-popup).dialog-close
+        component(:is="docButton" text="OK" @click="error=false")
 
 </template>
 

@@ -8,15 +8,12 @@ q-page(padding).full-width.column.items-start.content-center
       span.name {{_employeename.employeename}}
     transition(appear @before-enter="beforeEnterMenu" @enter="enterMenu")
       span.menu Menu
+    transition(appear @before-enter="beforeEnterLogout" @enter="enterLogout")
+      q-btn(flat size="md" label="Logout" @click="logout" icon="logout" ).logout-button
 
   div.button-area.fit.row.justify-evenly.content-start
-    //- q-btn(outline text-color="white" color="white" to="incoming").button-access Incoming
-    //- q-btn(outline text-color="white" color="white" ).button-access Outgoing
-    //- q-btn(outline text-color="white" color="white" ).button-access Releasing
-    //- q-btn(outline text-color="white" color="white" ).button-access Inventory
-    //- q-btn(outline text-color="white" color="white" ).button-access Other Docs
-
-    component(:is="docButton" text="Incoming" @click="gotoPage('incoming')")
+    transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
+      component(:is="docButton" text="Incoming" @click="gotoPage('incoming')")
     component(:is="docButton" text="Outgoing")
     component(:is="docButton" text="Releasing")
     component(:is="docButton" text="Inventory")
@@ -64,6 +61,27 @@ const enterMenu = (el: any) => {
   gsap.to(el, { delay: 0.3, duration: 0.8, y: 0, opacity: 1 })
 }
 
+const beforeEnterLogout = (el: any) => {
+  el.style.transform = 'translateX(30px)'
+  el.style.opacity = 0
+}
+const enterLogout = (el: any) => {
+  gsap.to(el, { delay: 0.1, duration: 0.8, x: 0, opacity: 1 })
+}
+
+const beforeEnterButton = (el: any) => {
+  el.style.transform = 'translateX(30px)'
+  el.style.opacity = 0
+}
+const enterButton = (el: any) => {
+  gsap.to(el, { delay: 0.1, duration: 0.8, x: 0, opacity: 1 })
+}
+
+const logout = async () => {
+  quasar.sessionStorage.remove('EmployeeName')
+  gotoPage('/')
+}
+
 const gotoPage = (page: string) => {
   router.push(page)
 }
@@ -94,4 +112,12 @@ const gotoPage = (page: string) => {
 
 .button-area
   margin-top: 4.2rem
+
+.logout-button
+  font-family: 'Montserrat'
+  font-weight: bold
+  padding: 1.6rem
+  position: absolute
+  top: 0
+  right: 0
 </style>

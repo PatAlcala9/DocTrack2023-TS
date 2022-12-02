@@ -4,9 +4,6 @@ q-page(padding)
     span.title Incoming Commmunications - New Entry
     q-btn(flat size="md" label="Back" @click="gotoMenu" icon="arrow_back").close-button
 
-  div.column.text-center
-    span.show Show List
-
   section.fit.row.items-center.justify-center
     div.column
       span.inputs__label Received Date:
@@ -16,19 +13,26 @@ q-page(padding)
 
     div.inputs.column
       span.inputs__label Source:
-      input.inputs__input
+      //- input.inputs__input
+      component(:is="docInput" width="40" alignment="left" transform="initial")
 
       span.inputs__label Subject:
-      input.inputs__input
+      //- input.inputs__input
+      component(:is="docInput" width="40" alignment="left" transform="initial")
 
       span.inputs__label Details:
-      input.inputs__input
+      //- input.inputs__input
+      component(:is="docTextArea" width="40")
 
       span.inputs__label Attachments:
-      input.inputs__input
+      //- input.inputs__input
+      component(:is="docTextArea" width="40")
 
   section.button-area.fit.row.items-center.justify-center
-    component(:is="docButton" text="Register")
+    component(:is="docButton" text="Save")
+
+  section.list-area.column.text-center
+    span.list-area__span Show List of Incomings
 </template>
 
 <script setup lang="ts">
@@ -37,6 +41,8 @@ import { date } from 'quasar'
 import { useRouter } from 'vue-router'
 
 import docButton from 'components/docButton.vue'
+import docTextArea from 'components/docTextArea.vue'
+import docInput from 'components/docInput.vue'
 
 let router = useRouter()
 let receivedDate = ref('')
@@ -66,36 +72,8 @@ const gotoMenu = () => {
   ::v-deep .block
     font-size: 1.25rem
 
-.show
-  cursor: pointer
-  text-decoration: underline
-  font-size: 1.6rem
-  
-.cabinet
-  width: 25rem
-  height: auto
-  opacity: 0.05
 
-.ocbo-title
-  font-size: 5rem
-  font-family: 'RalewayBold'
-  color: #ffffff
 
-.ocbo-text
-  font-size: 3.5rem
-  font-family: 'Montserrat'
-  margin-top: -2rem
-  color: #ffffff
-
-.grid
-  display: grid
-  grid-template-columns: 1fr 1fr 1fr
-  grid-template-rows: 1fr 1fr 1fr
-  gap: 0px 0px
-  grid-auto-flow: row
-  justify-items: end
-  grid-template-areas: "title title title" ". login ." "inquiry . davao"
-  height: 100vh
 
 .title
   grid-area: title
@@ -239,4 +217,13 @@ const gotoMenu = () => {
 
 .button-area
   margin-top: 2rem
+
+.list-area
+  padding-top: 2rem
+  font-size: 0.5rem
+
+.list-area__span
+  cursor: pointer
+  text-decoration: underline
+  font-size: 1.2rem
 </style>

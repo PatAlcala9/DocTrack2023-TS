@@ -75,7 +75,7 @@ q-page(padding)
             span Loading
             //- q-table(:rows="incomingList" :columns="incomingHeaderList" row-key="name" :table-header-style="{ backgroundColor: '#021926', color: '#ffffff', fontFamily: 'Raleway', fontSize: '12px' }" :table-style="{ backgroundColor: 'red' }")
 
-q-dialog(v-model="error" transition-show="flip-right" transition-hide="flip-left")
+q-dialog(v-model="error" transition-show="flip-right" transition-hide="flip-left" @keypress.enter="error=false")
   q-card.dialog-card.text-white.flex.flex-center
     q-card-section.dialog-card__section
       div.dialog-title-area.column.justify-center.items-center

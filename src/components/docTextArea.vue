@@ -1,7 +1,7 @@
 <template lang="pug">
 
 div
-  input(:value="props.value" @input="updateValue($event.target.value)" :style="styleComponent").input
+  textarea(:value="props.value" @input="updateValue($event.target.value)" :style="widthComponent").textarea
 
 </template>
 
@@ -11,43 +11,34 @@ import { computed } from 'vue'
 export interface Props {
   value: string
   width: number
-  alignment: string
-  transform: string
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  value: '',
-  width: 16,
-  alignment: 'center',
-  transform: 'uppercase'
-})
+const props = defineProps<Props>()
 const emit = defineEmits(['update:value'])
 
 const updateValue = (value: string) => {
   emit('update:value', value)
 }
 
-const styleComponent = computed(() => {
+const widthComponent = computed(() => {
   return {
-    '--width': props.width + 'rem',
-    '--alignment': props.alignment,
-    '--transform': props.transform,
+    '--width': props.width + 'rem'
   }
 })
 </script>
 
 <style lang="sass" scoped>
-.input
+.textarea
   font-family: 'Raleway'
   font-size: 1.3rem
   border-radius: 0.6rem
-  text-align: var(--alignment)
-  text-transform: var(--transform)
+  text-align: left
+  text-transform: initial
   border: 1px solid $button
   color: #000000
   width: var(--width)
 
-.input:focus
+.textarea:focus
   outline: none
   border: 1px solid #ffffff
   background-color: #274c62

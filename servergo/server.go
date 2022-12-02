@@ -513,6 +513,16 @@ func connect() {
 				"result": result,
         "result2": result2,
 			})
+
+    } else if method == "GetMaxEntrycode" {
+      err = db.QueryRow("SELECT MAX(entryCodeNo) AS result FROM incoming WHERE substring(entrycodeNo, 1, 2) = ?", data).Scan(&result)
+      if err != nil {
+        panic(err.Error())
+      }
+
+			c.JSON(http.StatusOK, gin.H{
+				"result": result,
+			})
     }
   })
 
@@ -556,6 +566,48 @@ func connect() {
       c.String(http.StatusInternalServerError, "Failed on Registering")
     }
   })
+
+
+
+  // router.POST("/api/SaveIncoming/:data/:data2/:data3/:data4/:data5/:data6/:data7/:data8", func(c *gin.Context) {
+  //   data := c.Param("data")
+  //   data2 := c.Param("data2")
+  //   data3 := c.Param("data3")
+  //   data4 := c.Param("data4")
+  //   data5 := c.Param("data5")
+  //   data6 := c.Param("data6")
+  //   data7 := c.Param("data7")
+  //   data8 := c.Param("data8")
+
+  //   c.Writer.Header().Set("X-XSS-Protection", "1; mode=block")
+  //   c.Writer.Header().Set("X-Content-Type-Options", "nosniff")
+  //   c.Writer.Header().Set("X-DNS-Prefetch-Control", "off")
+  //   c.Writer.Header().Set("X-Frame-Options", "DENY")
+  //   c.Writer.Header().Set("X-Download-Options", "noopen")
+  //   c.Writer.Header().Set("Referrer-Policy", "no-referrer")
+
+  //   dbpost, err := db.Prepare("INSERT INTO incoming (entryCodeNo, receivedDate, comType, sourceName, subjectInfo, subDetails, attachments, bo_notes, tag_filing, page_no, folder_no) VALUES (?, ?, '', @name, @subinfo, @subdetails, @attachment, @notes, @tag, @page, @folder)")
+  //   if err != nil {
+  //     panic(err.Error())
+  //   }
+  //   defer dbpost.Close()
+
+  //   exec, err := dbpost.Exec(data, data2, data3, data4, data5, data6, data7, data8)
+  //   if err != nil {
+  //     panic(err.Error())
+  //   }
+
+  //   affect, err := exec.RowsAffected()
+  //   if err != nil {
+  //     panic(err.Error())
+  //   }
+
+  //   if affect > 0 {
+  //     c.String(http.StatusOK, "Success on Registering")
+  //   } else {
+  //     c.String(http.StatusInternalServerError, "Failed on Registering")
+  //   }
+  // })
 
   router.Run(":8081")
 }

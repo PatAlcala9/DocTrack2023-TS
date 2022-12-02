@@ -27,6 +27,7 @@ const updateValue = (value: any) => {
   text-transform: uppercase
   border: 1px solid $button
   color: #000000
+  width: 16rem
 
 .input:focus
   outline: none
