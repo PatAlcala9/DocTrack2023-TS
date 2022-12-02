@@ -10,31 +10,34 @@ q-page(padding)
           span.ocbo-text Doctrack System 2023
 
     div(v-if="inquiry === false").login
-      section.username-area.column.wrap.justify-center.items-center.content-center
-        component(:is="docLabel" text="Username")
-        component(:is="docInput" v-model:value="usernameEntry")
+      div#login
+        section.username-area.column.wrap.justify-center.items-center.content-center
+          component(:is="docLabel" text="Username")
+          component(:is="docInput" v-model:value="usernameEntry")
 
-      section.password-area.column.wrap.justify-center.items-center.content-center
-        component(:is="docLabel" text="Password")
-        component(:is="docInputPassword" v-model:value="passwordEntry" @keypress.enter="login")
+        section.password-area.column.wrap.justify-center.items-center.content-center
+          component(:is="docLabel" text="Password")
+          component(:is="docInputPassword" v-model:value="passwordEntry" @keypress.enter="login")
 
-      section.button-area.column.wrap.justify-center.items-center.content-center
-        component(:is="docButton" text="login" @click="login")
+        section.button-area.column.wrap.justify-center.items-center.content-center
+          component(:is="docButton" text="login" @click="login")
 
-      section.register.column.wrap.justify-center.items-center.content-center
-        span(@click="gotoRegister") Create New Account
+        section.register.column.wrap.justify-center.items-center.content-center
+          span(@click="gotoRegister") Create New Account
 
     div(v-else).login
-      section.username-area.column.wrap.justify-center.items-center.content-center
-        span.inquiry-label Inquiry
-      section.username-area.column.wrap.justify-center.items-center.content-center
-        component(:is="docButton" text="Received" @click="inquireReceivedTrigger")
-      section.password-area.column.wrap.justify-center.items-center.content-center
-        component(:is="docButton" text="Released" @click="inquireReleasedTrigger")
+      transition(appear @before-enter="beforeEnterInquiry" @enter="enterInquiry")
+        div
+          section.username-area.column.wrap.justify-center.items-center.content-center
+            span.inquiry-label Inquiry
+          section.button-area--inquiry.column.wrap.justify-center.items-center.content-center
+            component(:is="docButton" text="Received" @click="inquireReceivedTrigger")
+          section.button-area--inquiry.column.wrap.justify-center.items-center.content-center
+            component(:is="docButton" text="Released" @click="inquireReleasedTrigger")
 
     div.inquiry
       span(v-if="inquiry" @click="inquiry = !inquiry").inquiry-text Login
-      span(v-else @click="inquiry = !inquiry").inquiry-text Inquire without logging In
+      span(v-else @click="showLogin").inquiry-text Inquire without logging In
 
     //- div.davao
     //-   img(src="../assets/davao.svg" alt="Davao Logo").davaologo
@@ -89,6 +92,7 @@ import { ref } from 'vue'
 import { api } from 'boot/axios'
 import { useRouter } from 'vue-router'
 import { comparePassword } from 'src/js/OCBO'
+import { gsap } from 'gsap'
 
 import { useEmployeeName } from 'stores/employeename'
 import { useUserID } from 'stores/userid'
@@ -127,6 +131,7 @@ let employeeName = null
 let loginSuccess = false
 
 const showLogin = () => {
+  exitLogin()
   inquiry.value = !inquiry.value
 }
 
@@ -232,7 +237,16 @@ const login = async () => {
   router.push('/dashboard')
 }
 
-
+const exitLogin = () => {
+  gsap.to('#login', { duration: 1, rotateY: 90, opacity: 0 })
+}
+const beforeEnterInquiry = (el: any) => {
+  el.style.transform = 'rotateY(90)'
+  el.style.opacity = 0
+}
+const enterInquiry = (el: any) => {
+  gsap.to(el, { duration: 0.8, rotateY: 0, opacity: 1 })
+}
 </script>
 
 <style lang="sass" scoped>
@@ -289,7 +303,8 @@ const login = async () => {
   border-radius: 2rem
   background-color: #021926
   margin-top: -10rem
-  // backdrop-filter: blur(16px) saturate(180%)
+  width: 22rem
+  height: 22rem
 
 .inquiry
   grid-area: inquiry
@@ -312,6 +327,9 @@ const login = async () => {
 
 .button-area
   padding-top: 1rem
+
+.button-area--inquiry
+  padding-top: 2rem
 
 .davao
   grid-area: davao

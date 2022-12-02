@@ -77,6 +77,8 @@ const enterButton = (el: any) => {
   gsap.to(el, { delay: 0.1, duration: 0.8, x: 0, opacity: 1 })
 }
 
+
+
 const logout = async () => {
   quasar.sessionStorage.remove('EmployeeName')
   gotoPage('/')
