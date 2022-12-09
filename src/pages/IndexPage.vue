@@ -3,7 +3,7 @@
 q-page(padding).full-width.column.items-start.content-center
   img(src="../assets/ocbologo.svg" alt="OCBO Logo").logo
 
-  div.fit.column.text-center
+  div.fit.column.text-center.main
     transition(appear @before-enter="beforeEnterTitle" @enter="enterTitle")
       span.name {{_employeename.employeename}}
     transition(appear @before-enter="beforeEnterMenu" @enter="enterMenu")
@@ -14,10 +14,14 @@ q-page(padding).full-width.column.items-start.content-center
   div.button-area.fit.row.justify-evenly.content-start
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
       component(:is="docButton" text="Incoming" @click="gotoPage('incoming')")
-    component(:is="docButton" text="Outgoing")
-    component(:is="docButton" text="Releasing")
-    component(:is="docButton" text="Inventory")
-    component(:is="docButton" text="Other Docs")
+    transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
+      component(:is="docButton" text="Outgoing")
+    transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
+      component(:is="docButton" text="Releasing")
+    transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
+      component(:is="docButton" text="Inventory")
+    transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
+      component(:is="docButton" text="Other Docs")
 
   </template>
 
@@ -70,11 +74,11 @@ const enterLogout = (el: any) => {
 }
 
 const beforeEnterButton = (el: any) => {
-  el.style.transform = 'translateX(30px)'
+  el.style.transform = 'translateY(40px)'
   el.style.opacity = 0
 }
 const enterButton = (el: any) => {
-  gsap.to(el, { delay: 0.1, duration: 0.8, x: 0, opacity: 1 })
+  gsap.to(el, { delay: 0.1, duration: 0.8, y: 0, opacity: 1 })
 }
 
 
@@ -95,6 +99,8 @@ const gotoPage = (page: string) => {
 </script>
 
 <style lang="sass" scoped>
+.main
+  margin-top: 2rem
 .logo
   width: 16rem
   height: auto
@@ -122,4 +128,5 @@ const gotoPage = (page: string) => {
   position: absolute
   top: 0
   right: 0
+  /* margin-top: -5.5rem */
 </style>

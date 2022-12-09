@@ -39,10 +39,13 @@ import { encrypt } from 'src/js/OCBO'
 import { useRouter } from 'vue-router'
 import { gsap } from 'gsap'
 
+import { usePageWithTable } from 'stores/pagewithtable'
+
 import docInput from 'components/docInput.vue'
 import docInputPassword from 'components/docInputPassword.vue'
 
 const router = useRouter()
+const _pagewithtable = usePageWithTable()
 
 const beforeEnterTitle = (el: any) => {
   el.style.transform = 'translateX(-100px)'
@@ -119,6 +122,7 @@ const sample = () => {
 }
 
 const gotoHome = () => {
+  _pagewithtable.pagewithtable = false
   router.push('/')
 }
 </script>

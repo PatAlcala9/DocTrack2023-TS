@@ -3,12 +3,16 @@
 q-layout(view="hHh lpR lFr")
   q-page-container.page
     img(src="../assets/cabinet.svg" alt="Cabinet").cabinet
-    img(src="../assets/davao.svg" alt="Davao Logo").davaologo
+    img(v-show="_pagewithtable.pagewithtable === false" src="../assets/davao.svg" alt="Davao Logo").davaologo
     router-view
 
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { usePageWithTable } from 'stores/pagewithtable'
+
+const _pagewithtable = usePageWithTable()
+</script>
 
 <style lang="sass" scoped>
 .page
@@ -27,7 +31,7 @@ q-layout(view="hHh lpR lFr")
   right: 0
 
 .davaologo
-  position: sticky
+  position: absolute
   top: calc(100vh - 8rem)
   left: calc(100% - 20rem)
   width: 18rem

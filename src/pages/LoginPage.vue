@@ -41,7 +41,7 @@ q-page(padding)
     //- div.davao
     //-   img(src="../assets/davao.svg" alt="Davao Logo").davaologo
 
-  q-dialog(v-model="inquireReceived" persistent full-width full-height transition-show="scale" transition-hide="scale")
+  q-dialog(v-model="inquireReceived" persistent full-width full-height transition-show="scale" transition-hide="scale").dialog#dialog
     q-card.dialog-card.text-white
       q-card-section
         div.dialog-title-area.row.justify-between
@@ -77,8 +77,8 @@ q-page(padding)
             span Loading
             //- q-table(:rows="incomingList" :columns="incomingHeaderList" row-key="name" :table-header-style="{ backgroundColor: '#021926', color: '#ffffff', fontFamily: 'Raleway', fontSize: '12px' }" :table-style="{ backgroundColor: 'red' }")
 
-q-dialog(v-model="error" transition-show="flip-right" transition-hide="flip-left" @keypress.enter="error=false")
-  q-card.dialog-card.text-white.flex.flex-center
+q-dialog(v-model="error" transition-show="flip-right" transition-hide="flip-left" @keypress.enter="error=false").dialog#dialog
+  q-card.dialog-card.text-white.flex.flex-center#dialog
     q-card-section.dialog-card__section
       div.dialog-title-area.column.justify-center.items-center
         span.dialog-card__title {{errorMessage}}
@@ -95,6 +95,7 @@ import { gsap } from 'gsap'
 
 import { useEmployeeName } from 'stores/employeename'
 import { useUserID } from 'stores/userid'
+import { usePageWithTable } from 'stores/pagewithtable'
 
 import docButton from 'components/docButton.vue'
 import docInput from 'components/docInput.vue'
@@ -103,6 +104,7 @@ import docLabel from 'components/docLabel.vue'
 
 let _employeename = useEmployeeName()
 let _userid = useUserID()
+let _pagewithtable = usePageWithTable()
 
 let error = ref(false)
 let errorMessage = ref('')
@@ -140,10 +142,12 @@ const showLogin = async () => {
 }
 
 const inquireReceivedTrigger = async () => {
+  _pagewithtable.pagewithtable = true
   router.push('/received')
 }
 
 const inquireReleasedTrigger = async () => {
+  _pagewithtable.pagewithtable = true
   router.push('/released')
 }
 
@@ -167,6 +171,7 @@ const tempLogin = async () => {
 }
 
 const gotoRegister = async () => {
+  _pagewithtable.pagewithtable = false
   router.push('/register')
 }
 
@@ -238,6 +243,7 @@ const login = async () => {
     return
   }
 
+  _pagewithtable.pagewithtable = false
   router.push('/dashboard')
 }
 
@@ -258,14 +264,6 @@ const exitInquiry = async () => {
 const enterLogin = async () => {
   gsap.from('#login', { duration: 0.25, rotationY: 90, opacity: 0 })
 }
-
-// const beforeEnterInquiry = (el: any) => {
-//   el.style.rotateY = 'rotateY(90)'
-//   el.style.opacity = 0
-// }
-// const enterInquiry = (el: any) => {
-//   gsap.to(el, { duration: 0.8, rotationY: 0, opacity: 1 })
-// }
 </script>
 
 <style lang="sass" scoped>
@@ -293,14 +291,14 @@ const enterLogin = async () => {
   grid-auto-flow: row
   justify-items: end
   grid-template-areas: "title title title" ". login ." "inquiry . davao"
-  height: 100vh
+  height: calc(100vh - 2rem)
 
 .title
   grid-area: title
   justify-self: start
   align-self: stretch
   padding: 0 0 0 1rem
-  margin: -4rem 0 0rem 0
+  margin: 0 0 2rem 0
 
 .logo
   width: 11rem
