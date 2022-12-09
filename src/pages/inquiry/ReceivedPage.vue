@@ -31,7 +31,7 @@ q-page(padding)
               q-item-label SUBJECT
 
   div.flex.flex-center
-    section(v-if="incomingList.result.length > 0").dialog-content-table
+    section(v-if="incomingList.result !== ''").dialog-content-table
       table.table
         thead
           tr
@@ -108,7 +108,14 @@ const router = useRouter()
 
 let searchValue = ref('')
 let searchByValue = ref('')
-let incomingList: any = ref({})
+
+type Incoming = {
+  result: string,
+  result2: string,
+  result3: string,
+  result4: string,
+}
+let incomingList = ref({} as Incoming)
 let showText = ref(false)
 
 const getIncomingUsingValue = async () => {

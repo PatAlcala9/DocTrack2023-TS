@@ -35,7 +35,7 @@ q-page(padding)
               q-item-label DATE
 
   div.flex.flex-center
-    section(v-if="outgoingList.result.length > 0").dialog-content-table
+    section(v-if="outgoingList.result !== ''").dialog-content-table
       table.table
         thead
           tr
@@ -111,7 +111,15 @@ const router = useRouter()
 
 let searchValue = ref('')
 let searchByValue = ref('')
-let outgoingList: any = ref({})
+
+type Outgoing = {
+  result: string,
+  result2: string,
+  result3: string,
+  result4: string,
+  result5: string
+}
+let outgoingList = ref({} as Outgoing)
 let showText = ref(false)
 
 const gotoHome = async () => {
