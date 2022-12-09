@@ -9,8 +9,8 @@ q-page(padding)
           span.ocbo-title OCBO
           span.ocbo-text Doctrack System 2023
 
-    div(v-if="inquiry === false").login
-      div#login
+    div(v-if="inquiry === false").login#login
+      div
         section.username-area.column.wrap.justify-center.items-center.content-center
           component(:is="docLabel" text="Username")
           component(:is="docInput" v-model:value="usernameEntry")
@@ -25,18 +25,17 @@ q-page(padding)
         section.register.column.wrap.justify-center.items-center.content-center
           span(@click="gotoRegister") Create New Account
 
-    div(v-else).login
-      transition(appear @before-enter="beforeEnterInquiry" @enter="enterInquiry")
-        div
-          section.username-area.column.wrap.justify-center.items-center.content-center
-            span.inquiry-label Inquiry
-          section.button-area--inquiry.column.wrap.justify-center.items-center.content-center
-            component(:is="docButton" text="Received" @click="inquireReceivedTrigger")
-          section.button-area--inquiry.column.wrap.justify-center.items-center.content-center
-            component(:is="docButton" text="Released" @click="inquireReleasedTrigger")
+    div(v-else).login#inquiry
+      div
+        section.username-area.column.wrap.justify-center.items-center.content-center
+          span.inquiry-label Inquiry
+        section.button-area--inquiry.column.wrap.justify-center.items-center.content-center
+          component(:is="docButton" text="Received" @click="inquireReceivedTrigger")
+        section.button-area--inquiry.column.wrap.justify-center.items-center.content-center
+          component(:is="docButton" text="Released" @click="inquireReleasedTrigger")
 
     div.inquiry
-      span(v-if="inquiry" @click="inquiry = !inquiry").inquiry-text Login
+      span(v-if="inquiry" @click="showInquiry").inquiry-text Login
       span(v-else @click="showLogin").inquiry-text Inquire without logging In
 
     //- div.davao
@@ -130,9 +129,14 @@ let userid = 0
 let employeeName = null
 let loginSuccess = false
 
-const showLogin = () => {
-  exitLogin()
-  inquiry.value = !inquiry.value
+const showInquiry = async () => {
+  await exitInquiry()
+  await enterLogin()
+}
+
+const showLogin = async () => {
+  await exitLogin()
+  await enterInquiry()
 }
 
 const inquireReceivedTrigger = async () => {
@@ -237,16 +241,31 @@ const login = async () => {
   router.push('/dashboard')
 }
 
-const exitLogin = () => {
-  gsap.to('#login', { duration: 1, rotateY: 90, opacity: 0 })
+const exitLogin = async () => {
+  await gsap.to('#login', { duration: 0.25, rotationY: 90, opacity: 0 })
+  inquiry.value = true
 }
-const beforeEnterInquiry = (el: any) => {
-  el.style.transform = 'rotateY(90)'
-  el.style.opacity = 0
+
+const enterInquiry = async () => {
+  gsap.from('#inquiry', { duration: 0.25, rotationY: 90, opacity: 0 })
 }
-const enterInquiry = (el: any) => {
-  gsap.to(el, { duration: 0.8, rotateY: 0, opacity: 1 })
+
+const exitInquiry = async () => {
+  await gsap.to('#inquiry', { duration: 0.25, rotationY: 90, opacity: 0 })
+  inquiry.value = false
 }
+
+const enterLogin = async () => {
+  gsap.from('#login', { duration: 0.25, rotationY: 90, opacity: 0 })
+}
+
+// const beforeEnterInquiry = (el: any) => {
+//   el.style.rotateY = 'rotateY(90)'
+//   el.style.opacity = 0
+// }
+// const enterInquiry = (el: any) => {
+//   gsap.to(el, { duration: 0.8, rotationY: 0, opacity: 1 })
+// }
 </script>
 
 <style lang="sass" scoped>
@@ -256,7 +275,7 @@ const enterInquiry = (el: any) => {
   opacity: 0.05
 
 .ocbo-title
-  font-size: 5rem
+  font-size: 4.2rem
   font-family: 'RalewayBold'
   color: #ffffff
 
@@ -281,12 +300,12 @@ const enterInquiry = (el: any) => {
   justify-self: start
   align-self: stretch
   padding: 0 0 0 1rem
-  margin: 0 0 -2rem 0
+  margin: -4rem 0 0rem 0
 
 .logo
-  width: 12rem
+  width: 11rem
   height: auto
-  opacity: 0.9
+  opacity: 0.6
   margin-right: 2rem
 
 .name
@@ -308,8 +327,8 @@ const enterInquiry = (el: any) => {
 
 .inquiry
   grid-area: inquiry
-  justify-self: start
-  align-self: center
+  justify-self: left
+  align-self: left
 
 .inquiry-text
   font-family: 'Raleway'

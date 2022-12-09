@@ -27,7 +27,7 @@ q-layout(view="hHh lpR lFr")
   right: 0
 
 .davaologo
-  position: absolute
+  position: sticky
   top: calc(100vh - 8rem)
   left: calc(100% - 20rem)
   width: 18rem
