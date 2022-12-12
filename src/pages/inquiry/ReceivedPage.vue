@@ -60,18 +60,20 @@ q-dialog(v-model="details" maximized)
       section.full-width.row.justify-between
         span.detail-dialog__info--large {{entryCodeDetail}}
         span.detail-dialog__info--large {{dateReceivedDetail}}
-      span.detail-dialog__info {{nameDetail}}
+      span(style="padding: 2rem").detail-dialog__info {{nameDetail}}
       section.full-width.row
-        span.detail-dialog__info Subject: {{subjectDetail}}
+        span.detail-dialog__info Subject:
+          span.detail-dialog__info--detail {{space}} {{subjectDetail}}
       section.full-width.row
-        span.detail-dialog__info Details: {{detailsDetail}}
+        span.detail-dialog__info Details:
+          span.detail-dialog__info--detail {{space}} {{detailsDetail}}
 
     q-card-section.full-width.column.items-center
       section.full-width.column.justify-around
         span(v-if="attachmentDetail !== null").detail-dialog__info--subinfo Attachments: {{attachmentDetail}}
         span(v-if="noteDetail !== null").detail-dialog__info--subinfo Notes: {{noteDetail}}
 
-    q-card-section.full-width.column.items-center
+    q-card-section(v-if="doclogEmpty === false").doc-log-area.full-width.column.items-center
       span.detail-dialog__info Document Logs
       table.table
         thead
@@ -83,7 +85,10 @@ q-dialog(v-model="details" maximized)
             td {{item}}
             td {{doclogDetail.result2[index]}}
 
-    q-card-section.full-width.column.items-center
+    q-card-section(v-else).doc-log-area.full-width.column.items-center
+      span.detail-dialog__info No Document Logs Found
+
+    q-card-section(v-if="actionlogEmpty === false").full-width.column.items-center
       span.detail-dialog__info Actions Logs
       table.table
         thead
@@ -95,8 +100,11 @@ q-dialog(v-model="details" maximized)
             td {{item}}
             td {{actionlogDetail.result2[index]}}
 
-    q-card-actions(align="right")
-      q-btn(flat label="OK" color="primary" v-close-popup)
+    q-card-section(v-else).full-width.column.items-center
+      span.detail-dialog__info No Actions Logs Found
+
+    q-card-actions(align="center")
+      component(:is="docButton" text="Close" v-close-popup).detail-dialog__button
 </template>
 
 <script setup lang="ts">
@@ -104,16 +112,19 @@ import { ref } from 'vue'
 import { api } from 'boot/axios'
 import { useRouter } from 'vue-router'
 
+import docButton from 'components/docButton.vue'
+
 const router = useRouter()
 
 let searchValue = ref('')
 let searchByValue = ref('')
+let space = ref(' ')
 
 type Incoming = {
-  result: string,
-  result2: string,
-  result3: string,
-  result4: string,
+  result: string
+  result2: string
+  result3: string
+  result4: string
 }
 let incomingList = ref({} as Incoming)
 let showText = ref(false)
@@ -244,23 +255,36 @@ const getIncomingDetails = async () => {
   }
 }
 
+let doclogEmpty = ref(false)
 const getIncomingDocLog = async () => {
   try {
     const response = await api.get('/api/GetIncomingDocLog/' + entryCodeDetail.value)
     const data = response.data
-    if (data !== undefined) doclogDetail.value = data
+
+    if (data.result.length > 0) {
+      doclogDetail.value = data
+      doclogEmpty.value = false
+    }
+    else doclogEmpty.value = true
   } catch {
     doclogDetail.value = []
+    doclogEmpty.value = true
   }
 }
 
+let actionlogEmpty = ref(false)
 const getIncomingActionLog = async () => {
   try {
     const response = await api.get('/api/GetIncomingActionLog/' + entryCodeDetail.value)
     const data = response.data
-    if (data !== undefined) actionlogDetail.value = data
+    if (data.result.length > 0) {
+      actionlogDetail.value = data
+      actionlogEmpty.value = false
+    }
+    else actionlogEmpty.value = true
   } catch {
     actionlogDetail.value = []
+    actionlogEmpty.value = true
   }
 }
 
@@ -327,14 +351,30 @@ const getIncomingActionLog = async () => {
 
 .detail-dialog
   font-family: 'Raleway'
+  background-color: $background
+  color: #ffffff
+  margin: 1rem
+  border: 1px solid #2F5972
+  border-radius: 12rem
 
 .detail-dialog__info
-  font-size: 2rem
+  font-size: 1.4rem
+  font-family: 'OpenSans'
 
 .detail-dialog__info--large
   font-family: 'OpenSans'
-  font-size: 3rem
+  font-size: 2.2rem
 
 .detail-dialog__info--subinfo
   font-size: 1.2rem
+
+.detail-dialog__info--detail
+  font-size: 1.6rem
+  font-family: 'Raleway'
+
+.detail-dialog__button
+  margin-bottom: 2rem
+
+.doc-log-area
+  margin-top: 2rem
 </style>
