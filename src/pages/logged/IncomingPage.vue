@@ -4,7 +4,7 @@ q-page(padding)
     span.title Incoming Commmunications - New Entry
     q-btn(flat size="md" label="Back" @click="gotoMenu" icon="arrow_back").close-button
 
-  section.fit.row.items-center.justify-center
+  section.form-area.fit.row.items-center.justify-center
     div.column
       span.inputs__label Received Date:
       q-date(flat v-model="receivedDate" minimal color="$button" @click="sample").calendar
@@ -226,4 +226,7 @@ const gotoMenu = () => {
   cursor: pointer
   text-decoration: underline
   font-size: 1.2rem
+
+.form-area
+  margin-top: 2rem
 </style>

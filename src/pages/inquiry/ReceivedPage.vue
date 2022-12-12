@@ -60,18 +60,20 @@ q-dialog(v-model="details" maximized)
       section.full-width.row.justify-between
         span.detail-dialog__info--large {{entryCodeDetail}}
         span.detail-dialog__info--large {{dateReceivedDetail}}
-      span(style="padding: 2rem").detail-dialog__info {{nameDetail}}
+      span(style="padding: 2rem; font-weight: bold;").detail-dialog__info--large {{nameDetail}}
       section.full-width.row
         span.detail-dialog__info Subject:
-          span.detail-dialog__info--detail {{space}} {{subjectDetail}}
+          span.detail-dialog__info--detail {{subjectDetail}}
       section.full-width.row
         span.detail-dialog__info Details:
-          span.detail-dialog__info--detail {{space}} {{detailsDetail}}
+          span.detail-dialog__info--detail {{detailsDetail}}
 
     q-card-section.full-width.column.items-center
       section.full-width.column.justify-around
-        span(v-if="attachmentDetail !== null").detail-dialog__info--subinfo Attachments: {{attachmentDetail}}
-        span(v-if="noteDetail !== null").detail-dialog__info--subinfo Notes: {{noteDetail}}
+        span(v-if="attachmentDetail !== null").detail-dialog__info--subinfo Attachments:
+          span.detail-dialog__info--subdetail {{attachmentDetail}}
+        span(v-if="noteDetail !== null").detail-dialog__info--subinfo Notes:
+          span.detail-dialog__info--subdetail {{noteDetail}}
 
     q-card-section(v-if="doclogEmpty === false").doc-log-area.full-width.column.items-center
       span.detail-dialog__info Document Logs
@@ -118,7 +120,6 @@ const router = useRouter()
 
 let searchValue = ref('')
 let searchByValue = ref('')
-let space = ref(' ')
 
 type Incoming = {
   result: string
@@ -371,6 +372,13 @@ const getIncomingActionLog = async () => {
 .detail-dialog__info--detail
   font-size: 1.6rem
   font-family: 'Raleway'
+  font-weight: bold
+  margin-left:1rem
+
+.detail-dialog__info--subdetail
+  font-size: 1.4rem
+  font-family: 'Raleway'
+  margin-left:1rem
 
 .detail-dialog__button
   margin-bottom: 2rem

@@ -66,9 +66,9 @@ q-dialog(v-model="details" maximized)
       section.full-width.column.justify-between
         span.detail-dialog__info--large {{referenceDetail}}
         span.detail-dialog__info Respondent Name:
-          a(style="font-weight: bold; margin-left:1rem;") {{respondentDetail}}
+          a.detail-dialog__info--detail {{respondentDetail}}
         span.detail-dialog__info Address:
-          a(style="font-weight: bold; margin-left:1rem;") {{addressDetail}}
+          a.detail-dialog__info--detail {{addressDetail}}
         br
         span(v-if="subjectDetail !== null").detail-dialog__info--subinfo Subject: {{subjectDetail}}
         span(v-if="detailsDetail !== null").detail-dialog__info--subinfo Details: {{detailsDetail}}
@@ -98,14 +98,16 @@ q-dialog(v-model="details" maximized)
             td {{item}}
             td {{actionlogDetail.result2[index]}}
 
-    q-card-actions(align="right")
-      q-btn(flat label="OK" color="primary" v-close-popup)
+    q-card-actions(align="center")
+      component(:is="docButton" text="Close" v-close-popup).detail-dialog__button
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import { api } from 'boot/axios'
 import { useRouter } from 'vue-router'
+
+import docButton from 'components/docButton.vue'
 
 const router = useRouter()
 
@@ -131,8 +133,57 @@ const searchByReference = async () => {
   searchByValue.value = 'REFERENCE NUMBER'
 }
 
+const getOutgoingUsingValue = async () => {
+  if (searchValue.value.length > 0) {
+    switch (searchByValue.value) {
+      case 'REFERENCE NUMBER':
+        // getIncomingByEntryCode()
+        break
+      case 'RESPONDENT':
+        // getIncomingBySourceName()
+        break
+      case 'ADDRESS':
+        // getIncomingBySubject()
+        break
+      case 'SUBJECT':
+        // getIncomingBySubject()
+        break
+      case 'DATE RELEASED':
+        // getIncomingBySubject()
+        break
+    }
+  } else getOutgoing()
+}
+
 const getOutgoing = async () => {
   const response = await api.get('/api/GetOutgoing')
+  const data = response.data
+
+  if (data !== undefined) {
+    outgoingList.value = data
+  }
+}
+
+const getOutgoingByReference = async () => {
+  const response = await api.get('/api/GetOutgoingByReference')
+  const data = response.data
+
+  if (data !== undefined) {
+    outgoingList.value = data
+  }
+}
+
+const getOutgoingByRespondent = async () => {
+  const response = await api.get('/api/GetOutgoingByRespondent')
+  const data = response.data
+
+  if (data !== undefined) {
+    outgoingList.value = data
+  }
+}
+
+const getOutgoingByAddress = async () => {
+  const response = await api.get('/api/GetOutgoingByAddress')
   const data = response.data
 
   if (data !== undefined) {
@@ -264,14 +315,30 @@ const getOutgoingActionLog = async () => {
 
 .detail-dialog
   font-family: 'Raleway'
+  background-color: $background
+  color: #ffffff
+  margin: 1rem
+  border: 1px solid #2F5972
+  border-radius: 12rem
 
 .detail-dialog__info
-  font-size: 2rem
+  font-size: 1.4rem
+  font-family: 'OpenSans'
 
 .detail-dialog__info--large
   font-family: 'OpenSans'
-  font-size: 3rem
+  font-size: 2.2rem
 
 .detail-dialog__info--subinfo
   font-size: 1.2rem
+
+.detail-dialog__info--detail
+  font-size: 1.6rem
+  font-family: 'Raleway'
+  font-weight: bold
+  margin-left: 1rem
+
+.detail-dialog__button
+  margin-bottom: 2rem
+
 </style>

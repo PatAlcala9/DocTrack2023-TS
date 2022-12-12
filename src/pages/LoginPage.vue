@@ -4,7 +4,7 @@ q-page(padding)
   div.grid
     section.title.full-width.row.justify-between
       div.column
-        img(src="../assets/ocbologo.svg" alt="OCBO Logo").logo
+        img(src="../assets/ocbologo.avif" alt="OCBO Logo").logo
         section.name.fit.column.wrap.justify-start.items-start.content-start
           span.ocbo-title OCBO
           span.ocbo-text Doctrack System 2023
