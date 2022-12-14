@@ -35,7 +35,6 @@ import docButton from 'components/docButton.vue'
 
 import { useEmployeeName } from 'stores/employeename'
 import { useAccess } from 'stores/access'
-import { useIsIncoming } from 'stores/isincoming'
 
 const router = useRouter()
 const quasar = useQuasar()
