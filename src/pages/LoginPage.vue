@@ -93,6 +93,7 @@ import { gsap } from 'gsap'
 import { useEmployeeName } from 'stores/employeename'
 import { useUserID } from 'stores/userid'
 import { usePageWithTable } from 'stores/pagewithtable'
+import { useAccess } from 'stores/access'
 
 import docButton from 'components/docButton.vue'
 import docInput from 'components/docInput.vue'
@@ -102,6 +103,7 @@ import docLabel from 'components/docLabel.vue'
 let _employeename = useEmployeeName()
 let _userid = useUserID()
 let _pagewithtable = usePageWithTable()
+let _access = useAccess()
 
 let error = ref(false)
 let errorMessage = ref('')
@@ -203,6 +205,12 @@ const getUserDetails = async () => {
     if (data !== undefined) {
       _userid.userid = data.result
       _employeename.employeename = data.result2
+
+      if (data.result3 === '1') _access.access.push('incoming')
+      if (data.result4 === '1') _access.access.push('outgoing')
+      if (data.result5 === '1') _access.access.push('releasing')
+      if (data.result6 === '1') _access.access.push('inventory')
+      if (data.result7 === '1') _access.access.push('otherdocuments')
       detailsAllowed = true
     }
   } catch {

@@ -502,9 +502,9 @@ func connect() {
 			})
 
     } else if method == "GetUserDetails" {
-      var result2 string
+      var result2, result3, result4, result5, result6, result7 string
 
-      err = db.QueryRow("SELECT userid AS result, employeeName AS result2 FROM user WHERE username = ?", data).Scan(&result, &result2)
+      err = db.QueryRow("SELECT userid AS result, employeeName AS result2, is_incoming AS result3, is_outgoing AS result4, is_releasing AS result5, is_inventory AS result6, is_otherdocuments AS result7 FROM user WHERE username = ?", data).Scan(&result, &result2, &result3, &result4, &result5, &result6, &result7)
       if err != nil {
         panic(err.Error())
       }
@@ -512,6 +512,11 @@ func connect() {
 			c.JSON(http.StatusOK, gin.H{
 				"result": result,
         "result2": result2,
+        "result3": result3,
+        "result4": result4,
+        "result5": result5,
+        "result6": result6,
+        "result7": result7,
 			})
 
     } else if method == "GetMaxEntrycode" {

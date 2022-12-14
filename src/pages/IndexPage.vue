@@ -13,15 +13,15 @@ q-page(padding).full-width.column.items-start.content-center
 
   div.button-area.fit.row.justify-evenly.content-start
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
-      component(:is="docButton" text="Incoming" @click="gotoPage('incoming')")
+      component(v-if="_access.access.includes('incoming')" :is="docButton" text="Incoming" @click="gotoPage('incoming')")
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
-      component(:is="docButton" text="Outgoing")
+      component(v-if="_access.access.includes('outgoing')" :is="docButton" text="Outgoing")
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
-      component(:is="docButton" text="Releasing")
+      component(v-if="_access.access.includes('releasing')" :is="docButton" text="Releasing")
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
-      component(:is="docButton" text="Inventory")
+      component(v-if="_access.access.includes('inventory')" :is="docButton" text="Inventory")
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
-      component(:is="docButton" text="Other Docs")
+      component(v-if="_access.access.includes('otherdocuments')" :is="docButton" text="Other Docs")
 
   </template>
 
@@ -34,10 +34,13 @@ import { useRouter } from 'vue-router'
 import docButton from 'components/docButton.vue'
 
 import { useEmployeeName } from 'stores/employeename'
+import { useAccess } from 'stores/access'
+import { useIsIncoming } from 'stores/isincoming'
 
 const router = useRouter()
 const quasar = useQuasar()
 let _employeename = useEmployeeName()
+let _access = useAccess()
 
 const setName = async () => {
   if (_employeename.employeename !== '') quasar.sessionStorage.set('EmployeeName', _employeename.employeename)
@@ -81,10 +84,9 @@ const enterButton = (el: any) => {
   gsap.to(el, { delay: 0.1, duration: 0.8, y: 0, opacity: 1 })
 }
 
-
-
 const logout = async () => {
   quasar.sessionStorage.remove('EmployeeName')
+  _access.access = []
   gotoPage('/')
 }
 
