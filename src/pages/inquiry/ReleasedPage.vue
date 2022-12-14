@@ -8,7 +8,7 @@ q-page(padding)
   div.fit.row.wrap.justify-start.items-start.content-start.search-area
     section.column
       span Search
-      q-input(dense filled v-model="searchValue" bg-color="white" :input-style="{ fontSize: '1.2rem', fontFamily: 'OpenSans' }")
+      q-input(dense filled v-model="searchValue" bg-color="white" :input-style="{ fontSize: '1.2rem', fontFamily: 'OpenSans' }" @keydown.enter="getOutgoingUsingValue")
     section.column
       span Search By
       //- input
@@ -18,9 +18,9 @@ q-page(padding)
             q-item-section
               q-item-label REFERENCE NUMBER
 
-          q-item(clickable v-close-popup @click="searchByValue = 'REPONDANT'")
+          q-item(clickable v-close-popup @click="searchByValue = 'RESPONDENT'")
             q-item-section
-              q-item-label REPONDANT
+              q-item-label RESPONDENT
 
           q-item(clickable v-close-popup @click="searchByValue = 'ADDRESS'")
             q-item-section
@@ -137,16 +137,17 @@ const getOutgoingUsingValue = async () => {
   if (searchValue.value.length > 0) {
     switch (searchByValue.value) {
       case 'REFERENCE NUMBER':
-        // getIncomingByEntryCode()
+        getOutgoingByReference()
         break
       case 'RESPONDENT':
-        // getIncomingBySourceName()
+        console.log(searchByValue.value)
+        getOutgoingByRespondent()
         break
       case 'ADDRESS':
-        // getIncomingBySubject()
+        getOutgoingByAddress()
         break
       case 'SUBJECT':
-        // getIncomingBySubject()
+        getOutgoingBySubject()
         break
       case 'DATE RELEASED':
         // getIncomingBySubject()
@@ -165,7 +166,7 @@ const getOutgoing = async () => {
 }
 
 const getOutgoingByReference = async () => {
-  const response = await api.get('/api/GetOutgoingByReference')
+  const response = await api.get('/api/GetOutgoingByReference/' + searchValue.value)
   const data = response.data
 
   if (data !== undefined) {
@@ -174,7 +175,7 @@ const getOutgoingByReference = async () => {
 }
 
 const getOutgoingByRespondent = async () => {
-  const response = await api.get('/api/GetOutgoingByRespondent')
+  const response = await api.get('/api/GetOutgoingByRespondent/' + searchValue.value)
   const data = response.data
 
   if (data !== undefined) {
@@ -183,7 +184,16 @@ const getOutgoingByRespondent = async () => {
 }
 
 const getOutgoingByAddress = async () => {
-  const response = await api.get('/api/GetOutgoingByAddress')
+  const response = await api.get('/api/GetOutgoingByAddress/' + searchValue.value)
+  const data = response.data
+
+  if (data !== undefined) {
+    outgoingList.value = data
+  }
+}
+
+const getOutgoingBySubject = async () => {
+  const response = await api.get('/api/GetOutgoingBySubject/' + searchValue.value)
   const data = response.data
 
   if (data !== undefined) {
