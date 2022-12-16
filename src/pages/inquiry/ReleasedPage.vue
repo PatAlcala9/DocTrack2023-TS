@@ -115,10 +115,10 @@ let searchValue = ref('')
 let searchByValue = ref('')
 
 type Outgoing = {
-  result: string,
-  result2: string,
-  result3: string,
-  result4: string,
+  result: string
+  result2: string
+  result3: string
+  result4: string
   result5: string
 }
 let outgoingList = ref({} as Outgoing)
@@ -276,12 +276,12 @@ const getOutgoingActionLog = async () => {
   margin-top: 3rem
 
 .table
-  font-family: 'OpenSans'
-  font-size: 0.9rem
+  font-family: 'Montserrat'
+  font-size: 0.8rem
   text-transform: uppercase
   border-collapse: collapse
   margin: 2rem 0
-  min-width: 25rem
+  min-width: 24rem
   border-radius: 1rem 1rem 0 0
   overflow: hidden
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.2)
@@ -324,7 +324,7 @@ const getOutgoingActionLog = async () => {
   box-shadow: none
 
 .detail-dialog
-  font-family: 'Raleway'
+  font-family: 'Montserrat'
   background-color: $background
   color: #ffffff
   margin: 1rem
@@ -333,7 +333,7 @@ const getOutgoingActionLog = async () => {
 
 .detail-dialog__info
   font-size: 1.4rem
-  font-family: 'OpenSans'
+  font-family: 'Montserrat'
 
 .detail-dialog__info--large
   font-family: 'OpenSans'
@@ -344,11 +344,10 @@ const getOutgoingActionLog = async () => {
 
 .detail-dialog__info--detail
   font-size: 1.6rem
-  font-family: 'Raleway'
+  font-family: 'Montserrat'
   font-weight: bold
   margin-left: 1rem
 
 .detail-dialog__button
   margin-bottom: 2rem
-
 </style>

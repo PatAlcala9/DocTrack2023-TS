@@ -303,8 +303,8 @@ const getIncomingActionLog = async () => {
   margin-top: 3rem
 
 .table
-  font-family: 'OpenSans'
-  font-size: 0.9rem
+  font-family: 'Montserrat'
+  font-size: 0.8rem
   text-transform: uppercase
   border-collapse: collapse
   margin: 2rem 0
@@ -351,7 +351,6 @@ const getIncomingActionLog = async () => {
   box-shadow: none
 
 .detail-dialog
-  font-family: 'Raleway'
   background-color: $background
   color: #ffffff
   margin: 1rem
@@ -360,24 +359,25 @@ const getIncomingActionLog = async () => {
 
 .detail-dialog__info
   font-size: 1.4rem
-  font-family: 'OpenSans'
+  font-family: 'Montserrat'
 
 .detail-dialog__info--large
-  font-family: 'OpenSans'
+  font-family: 'Montserrat'
   font-size: 2.2rem
 
 .detail-dialog__info--subinfo
+  font-family: 'Montserrat'
   font-size: 1.2rem
 
 .detail-dialog__info--detail
   font-size: 1.6rem
-  font-family: 'Raleway'
+  font-family: 'Montserrat'
   font-weight: bold
   margin-left:1rem
 
 .detail-dialog__info--subdetail
   font-size: 1.4rem
-  font-family: 'Raleway'
+  font-family: 'Montserrat'
   margin-left:1rem
 
 .detail-dialog__button

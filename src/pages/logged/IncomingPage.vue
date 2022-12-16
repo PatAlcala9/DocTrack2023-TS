@@ -13,32 +13,37 @@ q-page(padding)
 
     div.inputs.column
       span.inputs__label Source:
-      //- input.inputs__input
-      component(:is="docInput" width="40" alignment="left" transform="initial")
+      component(:is="docInput" width="40" alignment="left" transform="initial" v-model:value="inSource")
 
       span.inputs__label Subject:
-      //- input.inputs__input
-      component(:is="docInput" width="40" alignment="left" transform="initial")
+      component(:is="docInput" width="40" alignment="left" transform="initial" v-model:value="inSubject")
 
       span.inputs__label Details:
-      //- input.inputs__input
-      component(:is="docTextArea" width="40")
+      component(:is="docTextArea" width="40" v-model:value="inDetails")
 
       span.inputs__label Attachments:
-      //- input.inputs__input
-      component(:is="docTextArea" width="40")
+      component(:is="docTextArea" width="40" v-model:value="inAttachments")
 
   section.button-area.fit.row.items-center.justify-center
-    component(:is="docButton" text="Save")
+    doc-button(text="Save" @click="saveNewIncoming")
 
   section.list-area.column.text-center
     span.list-area__span Show List of Incomings
+
+q-dialog(v-model="dialog" transition-show="flip-right" transition-hide="flip-left")
+  q-card.dialog-card.text-white
+    q-card-section.dialog-card__section.flex.flex-center
+      div.dialog-title-area.row.justify-between
+        span.dialog-title {{dialogMessage}}
+        span.dialog-subtitle {{dialogSubMessage}}
+        component(:is="docButton" text="OK" v-close-popup)
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import { date } from 'quasar'
 import { useRouter } from 'vue-router'
+import { api } from 'boot/axios'
 
 import docButton from 'components/docButton.vue'
 import docTextArea from 'components/docTextArea.vue'
@@ -48,12 +53,139 @@ let router = useRouter()
 let receivedDate = ref('')
 let formattedReceivedDate = ref('')
 
+let inSource = ref('')
+let inSubject = ref('')
+let inDetails = ref('')
+let inAttachments = ref('')
+
+let dialog = ref(false)
+let dialogMessage = ref('')
+let dialogSubMessage = ref('')
+
 const sample = () => {
   formattedReceivedDate.value = date.formatDate(Date.parse(receivedDate.value), 'MMMM D, YYYY')
 }
 
 const gotoMenu = () => {
   router.push('/dashboard')
+}
+
+let entryLast = ''
+const getMaxEntryCode = async () => {
+  const today = Date.now()
+  const yy = date.formatDate(today, 'YY')
+
+  try {
+    const response = await api.get(`/api/GetMaxEntryCode/${yy}`)
+    const data = response.data
+    entryLast = data.result
+  } catch {
+    entryLast = ''
+  }
+}
+
+let newEntryCode = ''
+const generateNewEntryCode = async () => {
+  const today = Date.now()
+  const yy = date.formatDate(today, 'YY')
+
+  const series = parseInt(entryLast.substring(3))
+  newEntryCode = yy + '-' + (series + 1).toString()
+}
+
+const saveIncoming = async () => {
+  const incomingDate = date.formatDate(receivedDate.value, 'YYYY-MM-DD HH:mm:ss')
+  let data: string
+  try {
+    const post = await api.post(`/api/SaveIncoming/${newEntryCode}/${incomingDate}/${inSource.value}/${inSubject.value}/${inDetails.value}/${inAttachments.value}`)
+    data = post.data
+  } catch {
+    data = ''
+  }
+
+  if (data.includes('Success')) {
+    dialog.value = true
+    dialogMessage.value = 'Successfully Saved New Incoming'
+    dialogSubMessage.value = `Entry Code: ${newEntryCode}`
+  } else {
+    dialog.value = true
+    dialogMessage.value = 'Failed on Saving Incoming'
+    dialogSubMessage.value = ''
+  }
+}
+
+let missingItems: any = ref([])
+const checkData = async () => {
+  if (receivedDate.value === '') missingItems.value.push('ReceivedDate')
+  else {
+    for (let i in missingItems.value) {
+      if (missingItems.value[i] === 'ReceivedDate') missingItems.value.splice(i, 1)
+    }
+  }
+
+  if (inSource.value === '') missingItems.value.push('Source')
+  else {
+    for (let i in missingItems.value) {
+      if (missingItems.value[i] === 'Source') missingItems.value.splice(i, 1)
+    }
+  }
+
+  if (inSubject.value === '') missingItems.value.push('Subject')
+  else {
+    for (let i in missingItems.value) {
+      if (missingItems.value[i] === 'Subject') missingItems.value.splice(i, 1)
+    }
+  }
+
+  if (inDetails.value === '') missingItems.value.push('Details')
+  else {
+    for (let i in missingItems.value) {
+      if (missingItems.value[i] === 'Details') missingItems.value.splice(i, 1)
+    }
+  }
+
+  if (inAttachments.value === '') missingItems.value.push('Attachments')
+  else {
+    for (let i in missingItems.value) {
+      if (missingItems.value[i] === 'Attachments') missingItems.value.splice(i, 1)
+    }
+  }
+}
+
+let missingItemString = ''
+const notifyMissingData = async () => {
+  if (missingItems.value.length > 0) {
+    dialog.value = true
+    dialogMessage.value = 'Missing Data'
+
+    for (let item of missingItems.value) {
+      missingItemString = missingItemString + item
+    }
+
+    dialogSubMessage.value = missingItemString
+  }
+}
+
+let connectionOK = false
+const checkConnection = async () => {
+  const response = await api.get('/api/CheckConnection')
+  const data = response.data
+  connectionOK = data.result === '1' ? true : false
+}
+
+const saveNewIncoming = async () => {
+  await checkConnection()
+
+  if (connectionOK === true) {
+    await getMaxEntryCode()
+    await checkData()
+    await notifyMissingData()
+
+    if (missingItemString === '') {
+      await generateNewEntryCode()
+      await saveIncoming()
+    }
+  }
 }
 </script>
 
@@ -168,6 +300,10 @@ const gotoMenu = () => {
 .dialog-title
   font-family: 'Raleway'
   font-size: 1.4rem
+
+.dialog-subtitle
+  font-family: 'Raleway'
+  font-size: 1.2rem
 
 .dialog-card
   background-color: #021926

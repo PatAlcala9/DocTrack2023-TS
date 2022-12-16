@@ -21,14 +21,14 @@ q-page(padding)
     span.login__username--label Access
     q-option-group(dark v-model="accessList" :options="accessOption" color="indigo-9" type="checkbox").login__username--option
 
-    q-btn(outline padding="0.4rem 3rem" rounded color="white" label="Register" size="lg" @click="saveAccount")
+    doc-button(text="Register" @click="saveAccount")
 
 q-dialog(v-model="dialog" transition-show="flip-right" transition-hide="flip-left")
   q-card.dialog-card.text-white
     q-card-section.dialog-card__section.flex.flex-center
       div.dialog-title-area.row.justify-between
         span.dialog-title {{dialogMessage}}
-        component(:is="docButton" text="OK" @click="error=false")
+        component(:is="docButton" text="OK" v-close-popup)
 
 </template>
 
@@ -43,6 +43,7 @@ import { usePageWithTable } from 'stores/pagewithtable'
 
 import docInput from 'components/docInput.vue'
 import docInputPassword from 'components/docInputPassword.vue'
+import docButton from 'components/docButton.vue'
 
 const router = useRouter()
 const _pagewithtable = usePageWithTable()
@@ -136,19 +137,12 @@ const gotoHome = () => {
 .detail-dialog__info
   font-size: 2rem
 
-.detail-dialog__info--large
-  font-family: 'OpenSans'
-  font-size: 3rem
-
-.detail-dialog__info--subinfo
-  font-size: 1.2rem
-
 .login
   margin: 1rem
-  font-family: 'Raleway'
+  font-family: 'Montserrat'
 
 .login__username--label
-  font-family: 'Raleway'
+  font-family: 'Montserrat'
   font-size: 1.4rem
 
 .login__username--input

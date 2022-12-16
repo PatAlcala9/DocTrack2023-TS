@@ -1,7 +1,7 @@
 <template lang="pug">
 
 div
-  q-btn(outline padding="0.2rem 2rem" rounded color="white" :label="text" size="lg" @click="$emit('click')")
+  q-btn(outline padding="0.2rem 2rem" rounded color="white" :label="text" size="lg" @click="$emit('click')").button
 
 </template>
 
@@ -15,4 +15,7 @@ const props = withDefaults(defineProps<Props>(), {
 })
 </script>
 
-<style lang="sass" scoped></style>
+<style lang="sass" scoped>
+.button
+  font-family: 'Raleway',
+</style>
