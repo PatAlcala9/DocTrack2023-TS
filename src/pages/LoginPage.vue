@@ -437,20 +437,4 @@ const enterLogin = async () => {
 .register:hover
   text-decoration: underline
 
-.dialog-card
-  font-family: "OpenSans"
-  background-color: rgba(2, 25, 38, 0.8)
-  backdrop-filter: blur(16px)
-  border: 1px solid rgba(255, 255, 255, 0.125)
-  border-radius: 12px
-  width: 40%
-  height: 40%
-
-.dialog-card__title
-  font-size: 2.2rem
-  margin-bottom: 2rem
-
-.dialog-card__info
-  font-size: 1rem
-  margin-bottom: 2rem
 </style>

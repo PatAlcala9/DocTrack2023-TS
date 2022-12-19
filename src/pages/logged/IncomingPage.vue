@@ -7,35 +7,40 @@ q-page(padding)
   section.form-area.fit.row.items-center.justify-center
     div.column
       span.inputs__label Received Date:
+        span.requiredWarning {{ missingDate }}
       q-date(flat v-model="receivedDate" minimal color="$button" @click="sample").calendar
       span(v-if="formattedReceivedDate.length > 0").inputs__label--date {{ formattedReceivedDate }}
       span(v-else).inputs__label--date No Date Selected
 
     div.inputs.column
       span.inputs__label Source:
+        span.requiredWarning {{ missingSource }}
       component(:is="docInput" width="40" alignment="left" transform="initial" v-model:value="inSource")
 
       span.inputs__label Subject:
+        span.requiredWarning {{ missingSubject }}
       component(:is="docInput" width="40" alignment="left" transform="initial" v-model:value="inSubject")
 
       span.inputs__label Details:
+        span.requiredWarning {{ missingDetails }}
       component(:is="docTextArea" width="40" v-model:value="inDetails")
 
       span.inputs__label Attachments:
+        span.requiredWarning {{ missingAttachments }}
       component(:is="docTextArea" width="40" v-model:value="inAttachments")
 
   section.button-area.fit.row.items-center.justify-center
-    doc-button(text="Save" @click="saveNewIncoming")
+    doc-button(text="Save" type="submit" @click="saveNewIncoming")
 
   section.list-area.column.text-center
     span.list-area__span Show List of Incomings
 
 q-dialog(v-model="dialog" transition-show="flip-right" transition-hide="flip-left")
-  q-card.dialog-card.text-white
-    q-card-section.dialog-card__section.flex.flex-center
-      div.dialog-title-area.row.justify-between
-        span.dialog-title {{dialogMessage}}
-        span.dialog-subtitle {{dialogSubMessage}}
+  q-card.dialog-card.text-white.flex.flex-center
+    q-card-section.dialog-card__section
+      div.dialog-title-area.column.justify-center.items-center
+        span.dialog-card__title {{dialogMessage}}
+        span.dialog-card__info {{dialogSubMessage}}
         component(:is="docButton" text="OK" v-close-popup)
 </template>
 
@@ -57,6 +62,12 @@ let inSource = ref('')
 let inSubject = ref('')
 let inDetails = ref('')
 let inAttachments = ref('')
+
+let missingDate = ref('')
+let missingSource = ref('')
+let missingSubject = ref('')
+let missingDetails = ref('')
+let missingAttachments = ref('')
 
 let dialog = ref(false)
 let dialogMessage = ref('')
@@ -105,7 +116,7 @@ const saveIncoming = async () => {
 
   if (data.includes('Success')) {
     dialog.value = true
-    dialogMessage.value = 'Successfully Saved New Incoming'
+    dialogMessage.value = 'Successfully Saved'
     dialogSubMessage.value = `Entry Code: ${newEntryCode}`
   } else {
     dialog.value = true
@@ -116,53 +127,62 @@ const saveIncoming = async () => {
 
 let missingItems: any = ref([])
 const checkData = async () => {
-  if (receivedDate.value === '') missingItems.value.push('ReceivedDate')
-  else {
+  if (receivedDate.value === '') {
+    missingItems.value.push('ReceivedDate')
+    missingDate.value = ' (**required**)'
+  } else {
     for (let i in missingItems.value) {
       if (missingItems.value[i] === 'ReceivedDate') missingItems.value.splice(i, 1)
     }
+    missingDate.value = ''
   }
 
-  if (inSource.value === '') missingItems.value.push('Source')
-  else {
+  if (inSource.value === '') {
+    missingItems.value.push('Source')
+    missingSource.value = ' (**required**)'
+  } else {
     for (let i in missingItems.value) {
       if (missingItems.value[i] === 'Source') missingItems.value.splice(i, 1)
     }
+    missingSource.value = ''
   }
 
-  if (inSubject.value === '') missingItems.value.push('Subject')
-  else {
+  if (inSubject.value === '') {
+    missingItems.value.push('Subject')
+    missingSubject.value = ' (**required**)'
+  } else {
     for (let i in missingItems.value) {
       if (missingItems.value[i] === 'Subject') missingItems.value.splice(i, 1)
     }
+    missingSubject.value = ''
   }
 
-  if (inDetails.value === '') missingItems.value.push('Details')
-  else {
+  if (inDetails.value === '') {
+    missingItems.value.push('Details')
+    missingDetails.value = ' (**required**)'
+  } else {
     for (let i in missingItems.value) {
       if (missingItems.value[i] === 'Details') missingItems.value.splice(i, 1)
     }
+    missingDetails.value = ''
   }
 
-  if (inAttachments.value === '') missingItems.value.push('Attachments')
-  else {
+  if (inAttachments.value === '') {
+    missingItems.value.push('Attachments')
+    missingAttachments.value = ' (**required**)'
+  } else {
     for (let i in missingItems.value) {
       if (missingItems.value[i] === 'Attachments') missingItems.value.splice(i, 1)
     }
+    missingAttachments.value = ''
   }
 }
 
-let missingItemString = ''
 const notifyMissingData = async () => {
   if (missingItems.value.length > 0) {
     dialog.value = true
     dialogMessage.value = 'Missing Data'
-
-    for (let item of missingItems.value) {
-      missingItemString = missingItemString + item
-    }
-
-    dialogSubMessage.value = missingItemString
+    dialogSubMessage.value = 'Please Input Missing Data'
   }
 }
 
@@ -181,7 +201,7 @@ const saveNewIncoming = async () => {
     await checkData()
     await notifyMissingData()
 
-    if (missingItemString === '') {
+    if (missingItems.value.length === 0) {
       await generateNewEntryCode()
       await saveIncoming()
     }
@@ -305,32 +325,6 @@ const saveNewIncoming = async () => {
   font-family: 'Raleway'
   font-size: 1.2rem
 
-.dialog-card
-  background-color: #021926
-
-.dialog-content
-  display: grid
-  grid-template-columns: 1fr 1fr 1fr
-  grid-template-rows: 1fr 1fr
-  gap: 0px 0px
-  grid-template-areas: "search search search" "table table table"
-  // justify-items: end
-
-.dialog-content-search
-  font-family: 'Raleway'
-  grid-area: search
-  justify-self: stretch
-  align-self: start
-  height: 4em
-
-
-.dialog-content-table
-  // grid-area: table
-  // justify-self: center
-  // align-self: center
-  margin-top: 2rem
-
-
 .inputs
   margin-left: 2rem
 
@@ -365,4 +359,7 @@ const saveNewIncoming = async () => {
 
 .form-area
   margin-top: 2rem
+
+.requiredWarning
+  color: red
 </style>
