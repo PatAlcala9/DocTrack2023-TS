@@ -19,7 +19,7 @@ const props = withDefaults(defineProps<Props>(), {
   value: '',
   width: 16,
   alignment: 'center',
-  transform: 'uppercase'
+  transform: 'uppercase',
 })
 const emit = defineEmits(['update:value'])
 
@@ -52,4 +52,9 @@ const styleComponent = computed(() => {
   border: 1px solid #ffffff
   background-color: #274c62
   color: #ffffff
+
+@media screen and (max-width: 500px)
+  .input
+    font-size: 1.2rem
+    width: var(--width)
 </style>

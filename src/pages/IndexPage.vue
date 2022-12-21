@@ -13,11 +13,20 @@ q-page(padding).full-width.column.items-start.content-center
 
   div.button-area.fit.row.justify-evenly.content-start
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
-      component(v-if="_access.access.includes('incoming')" :is="docButton" text="Incoming" @click="gotoPage('incoming')")
+      section(v-if="_access.access.includes('incoming')" @click="gotoPage('incoming')").column.items-center
+        q-icon(name="keyboard_double_arrow_down" size="xl").icon
+        component(:is="docButton" text="Incoming")
+
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
-      component(v-if="_access.access.includes('outgoing')" :is="docButton" text="Outgoing")
+      section(v-if="_access.access.includes('outgoing')" @click="gotoPage('outgoing')").column.items-center
+        q-icon(name="keyboard_double_arrow_up" size="xl").icon
+        component(:is="docButton" text="Outgoing")
+
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
-      component(v-if="_access.access.includes('releasing')" :is="docButton" text="Releasing")
+      section(v-if="_access.access.includes('releasing')").column.items-center
+        q-icon(name="start" size="xl").icon
+        component(:is="docButton" text="Releasing")
+
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
       component(v-if="_access.access.includes('inventory')" :is="docButton" text="Inventory")
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
@@ -130,4 +139,8 @@ const gotoPage = (page: string) => {
   top: 0
   right: 0
   /* margin-top: -5.5rem */
+
+.icon
+  padding: 0.8rem
+  cursor: pointer
 </style>

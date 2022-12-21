@@ -1,4 +1,5 @@
 <template lang="pug">
+
 q-page(padding)
   div.full-width.row.justify-between
     span.title Incoming Commmunications - New Entry
@@ -223,8 +224,6 @@ const saveNewIncoming = async () => {
     // padding-right: 0.5rem
   ::v-deep .block
     font-size: 1.25rem
-
-
 
 
 .title

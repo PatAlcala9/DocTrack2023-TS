@@ -13,11 +13,13 @@ q-page(padding)
       div
         section.username-area.column.wrap.justify-center.items-center.content-center
           doc-label(text="Username")
-          doc-input(v-model:value="usernameEntry")
+          component(v-if="$q.screen.width <=500" :is="docInput" v-model:value="usernameEntry" width="10")
+          doc-input(v-else v-model:value="usernameEntry")
 
         section.password-area.column.wrap.justify-center.items-center.content-center
           doc-label(text="Password")
-          doc-input-password(v-model:value="passwordEntry" @keypress.enter="login")
+          component(v-if="$q.screen.width <=500" :is="docInputPassword" v-model:value="passwordEntry" @keypress.enter="login" width="10")
+          doc-input-password(v-else v-model:value="passwordEntry" @keypress.enter="login")
 
         section.button-area.column.wrap.justify-center.items-center.content-center
           doc-button(text="login" @click="login")
@@ -272,10 +274,10 @@ const enterLogin = async () => {
 </script>
 
 <style lang="sass" scoped>
-.cabinet
-  width: 25rem
-  height: auto
-  opacity: 0.05
+// .cabinet
+//   width: 25rem
+//   height: auto
+//   opacity: 0.05
 
 .ocbo-title
   font-size: 4.2rem
@@ -387,7 +389,6 @@ const enterLogin = async () => {
   grid-template-rows: 1fr 1fr
   gap: 0px 0px
   grid-template-areas: "search search search" "table table table"
-  // justify-items: end
 
 .dialog-content-search
   font-family: 'Raleway'
@@ -437,4 +438,37 @@ const enterLogin = async () => {
 .register:hover
   text-decoration: underline
 
+
+@media screen and (max-width: 900px)
+  .logo
+    width: 9rem
+
+  .ocbo-title
+    font-size: 3.2rem
+
+  .ocbo-text
+    font-size: 2.5rem
+    margin-top: -1rem
+
+  .register
+    font-size: 1.1rem
+
+@media screen and (max-width: 500px)
+  .logo
+    width: 5rem
+    opacity: 0.6
+
+  .ocbo-title
+    font-size: 2.2rem
+
+  .ocbo-text
+    font-size: 1.2rem
+
+  .login
+    margin-top: -5rem
+    width: 14rem
+    height: 22rem
+
+  .register
+    font-size: 0.9rem
 </style>

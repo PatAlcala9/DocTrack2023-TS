@@ -12,7 +12,8 @@ const routes: RouteRecordRaw[] = [
       { path: '/dashboard', component: () => import('pages/IndexPage.vue') },
       { path: '/register', component: () => import('pages/RegisterPage.vue') },
 
-      { path: '/incoming', component: () => import('pages/logged/IncomingPage.vue') }
+      { path: '/incoming', component: () => import('pages/logged/IncomingPage.vue') },
+      { path: '/outgoing', component: () => import('pages/logged/OutgoingPage.vue') }
     ],
   },
 
