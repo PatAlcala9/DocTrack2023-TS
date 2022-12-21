@@ -440,6 +440,8 @@ const enterLogin = async () => {
 
 
 @media screen and (max-width: 900px)
+  .grid
+    grid-template-areas: "title title title" "login login login" "inquiry inquiry ."
   .logo
     width: 9rem
 
@@ -453,7 +455,12 @@ const enterLogin = async () => {
   .register
     font-size: 1.1rem
 
+  .inquiry-text
+    font-size: 1.1rem
+
 @media screen and (max-width: 500px)
+  .grid
+    grid-template-areas: "title title title" "login login login" "inquiry inquiry inquiry"
   .logo
     width: 5rem
     opacity: 0.6
@@ -471,4 +478,11 @@ const enterLogin = async () => {
 
   .register
     font-size: 0.9rem
+
+  .inquiry
+    margin-top: 1.2rem
+    justify-self: center
+
+  .inquiry-text
+    font-size: 1.1rem
 </style>
