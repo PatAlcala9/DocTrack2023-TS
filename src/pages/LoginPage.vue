@@ -4,11 +4,14 @@ q-page(padding)
   div.grid
     section.title.full-width.row.justify-between
       div.column
-        img(src="../assets/ocbologo.avif" alt="OCBO Logo").logo
-        section.name.fit.column.wrap.justify-start.items-start.content-start
-          span.ocbo-title OCBO
-          span.ocbo-text Doctrack System 2023
+        transition(appear @before-enter="beforeEnterLogo" @enter="enterLogo")
+          img(src="../assets/ocbologo.avif" alt="OCBO Logo").logo
+        transition(appear @before-enter="beforeEnterTitle" @enter="enterTitle")
+          section.name.fit.column.wrap.justify-start.items-start.content-start
+            span.ocbo-title OCBO
+            span.ocbo-text Doctrack System 2023
 
+    //- transition( appear @before-enter="beforeEnterForm" @enter="enterForm")
     div(v-if="inquiry === false").login#login
       div
         section.username-area.column.wrap.justify-center.items-center.content-center
@@ -36,9 +39,10 @@ q-page(padding)
         section.button-area--inquiry.column.wrap.justify-center.items-center.content-center
           doc-button(text="Released" @click="inquireReleasedTrigger")
 
-    div.inquiry
-      span(v-if="inquiry" @click="showInquiry").inquiry-text Login
-      span(v-else @click="showLogin").inquiry-text Inquire without logging In
+    transition(appear @before-enter="beforeEnterSwitch" @enter="enterSwitch")
+      div.inquiry
+        span(v-if="inquiry" @click="showInquiry").inquiry-text Login
+        span(v-else @click="showLogin").inquiry-text Inquire without logging In
 
   //- q-dialog(v-model="inquireReceived" persistent full-width full-height transition-show="scale" transition-hide="scale").dialog#dialog
   //-   q-card.dialog-card.text-white
@@ -270,6 +274,36 @@ const exitInquiry = async () => {
 
 const enterLogin = async () => {
   gsap.from('#login', { duration: 0.25, rotationY: 90, opacity: 0 })
+}
+
+const beforeEnterLogo = (el: any) => {
+  el.style.scale = 0
+}
+const enterLogo = (el: any) => {
+  gsap.to(el, { duration: 1, scale: 1, ease: 'elastic.out(1, 0.5)' })
+}
+
+const beforeEnterTitle = (el: any) => {
+  el.style.transform = 'translateX(100px)'
+  el.style.opacity = 0
+}
+const enterTitle = (el: any) => {
+  gsap.to(el, { duration: 0.8, x: 1, opacity: 1 })
+}
+
+const beforeEnterForm = (el: any) => {
+  el.style.scale = 0
+}
+const enterForm = (el: any) => {
+  gsap.to(el, { duration: 0.6, scale: 1, ease: 'back.out(1.6)'})
+}
+
+const beforeEnterSwitch = (el: any) => {
+  el.style.transform = 'translateX(-100px)'
+  el.style.opacity = 0
+}
+const enterSwitch = (el: any) => {
+  gsap.to(el, { duration: 0.8, x: 1, opacity: 1})
 }
 </script>
 

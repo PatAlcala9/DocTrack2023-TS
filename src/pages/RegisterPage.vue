@@ -9,19 +9,21 @@ q-page(padding)
 
   //- transition(appear @before-enter="beforeEnterPage" @enter="enterPage")
   section.login.column.items-center
-    span.login__username--label Fullname
-    component(:is="docInput" v-model:value="ifullname" width="30").login__username--input
+    transition(appear @before-enter="beforeEnterInputs" @enter="enterInputs")
+      div.column.items-center
+        span.login__username--label Fullname
+        component(:is="docInput" v-model:value="ifullname" width="30").login__username--input
 
-    span.login__username--label Username
-    component(:is="docInput" v-model:value="iusername").login__username--input
+        span.login__username--label Username
+        component(:is="docInput" v-model:value="iusername").login__username--input
 
-    span.login__username--label Password
-    component(:is="docInputPassword" v-model:value="ipassword").login__username--input
+        span.login__username--label Password
+        component(:is="docInputPassword" v-model:value="ipassword").login__username--input
 
-    span.login__username--label Access
-    q-option-group(dark v-model="accessList" :options="accessOption" color="indigo-9" type="checkbox").login__username--option
-
-    doc-button(text="Register" @click="saveAccount")
+        span.login__username--label Access
+        q-option-group(dark v-model="accessList" :options="accessOption" color="indigo-9" type="checkbox").login__username--option
+    transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
+      doc-button(text="Register" @click="saveAccount")
 
 q-dialog(v-model="dialog" transition-show="flip-right" transition-hide="flip-left")
   q-card.dialog-card.text-white
@@ -64,9 +66,22 @@ const enterClose = (el: any) => {
   gsap.to(el, { duration: 0.8, x: 0, opacity: 1 })
 }
 
-const enterPage = (el: any) => {
+const beforeEnterInputs = (el: any) => {
+  el.style.transform = 'translateY(-90px)'
+  el.style.opacity = 0
+}
+const enterInputs = (el: any) => {
+  gsap.to(el, { delay: 0.1, duration: 1, y: 0, opacity: 1 })
+}
+
+const beforeEnterButton = (el: any) => {
+  el.style.transform = 'translateY(90px)'
+  el.style.opacity = 0
+}
+const enterButton = (el: any) => {
   gsap.to(el, { duration: 1, y: 0, opacity: 1 })
 }
+
 
 let ifullname = ref('')
 let iusername = ref('')

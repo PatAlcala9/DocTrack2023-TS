@@ -3,8 +3,6 @@ package main
 import (
 	"database/sql"
 	"net/http"
-  // "html/template"
-  // "encoding/json"
 
   "github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -15,7 +13,7 @@ import (
 var connection string = "root:superuser@tcp(localhost:3306)/ocbodoctracksys"
 
 // SERVER
-// var connection string = "iips:iipsuser@tcp(192.168.7.100:3306)/iips"
+// var connection string = "iips:iipsuser@tcp(192.168.7.100:3306)/ocbodoctracksys"
 
 func main() {
 	connect()
@@ -520,7 +518,7 @@ func connect() {
 			})
 
     } else if method == "GetMaxEntryCode" {
-      err = db.QueryRow("SELECT MAX(entryCodeNo) AS result FROM incoming WHERE substring(entrycodeNo, 1, 2) = ?", data).Scan(&result)
+      err = db.QueryRow("SELECT MAX(entryCodeNo) AS result FROM incoming WHERE SUBSTRING(entrycodeNo, 1, 2) = ?", data).Scan(&result)
       if err != nil {
         panic(err.Error())
       }

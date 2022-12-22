@@ -6,19 +6,83 @@ q-page(padding)
     q-btn(flat size="md" label="Back" @click="gotoMenu" icon="arrow_back").close-button
 
   section.form-area.fit.row.items-center.justify-center
-    div.column
-      //- span.inputs__label Received Date:
-      //-   span.requiredWarning {{ missingDate }}
-      //- q-date(flat v-model="receivedDate" minimal color="$button" @click="sample").calendar
-      //- span(v-if="formattedReceivedDate.length > 0").inputs__label--date {{ formattedReceivedDate }}
-      //- span(v-else).inputs__label--date No Date Selected
+    div.inputs.column
+      span.inputs__label Respondent:
+        span.requiredWarning {{ missingRespondent }}
+      component(:is="docInput" width="40" alignment="left" transform="initial" v-model:value="outRespondent")
+
+      span.inputs__label Address:
+        span.requiredWarning {{ missingAddress }}
+      component(:is="docInput" width="40" alignment="left" transform="initial" v-model:value="outAddress")
+
+      span.inputs__label From:
+        span.requiredWarning {{ missingFrom }}
+      component(:is="docInput" width="40" v-model:value="outFrom" alignment="left")
+
+      span.inputs__label Attachments:
+        span.requiredWarning {{ missingAttachments }}
+      component(:is="docTextArea" width="40" v-model:value="outAttachments")
+
+      span.inputs__label Subject:
+        span.requiredWarning {{ missingSubject }}
+      component(:is="docInput" width="40" v-model:value="outSubject" alignment="left")
+
+      span.inputs__label Details:
+        span.requiredWarning {{ missingDetails }}
+      component(:is="docTextArea" width="40" v-model:value="outDetails")
+
+    section.button-area.fit.row.items-center.justify-center
+      doc-button(text="Save" type="submit" @click="showContents")
+
+    section.list-area.column.text-center
+      span.list-area__span Show List of Outgoings
+
+//- q-dialog(v-model="dialog" transition-show="flip-right" transition-hide="flip-left")
+//-   q-card.dialog-card.text-white.flex.flex-center
+//-     q-card-section.dialog-card__section
+//-       div.dialog-title-area.column.justify-center.items-center
+//-         span.dialog-card__title {{dialogMessage}}
+//-         span.dialog-card__info {{dialogSubMessage}}
+//-         component(:is="docButton" text="OK" v-close-popup)
 
 </template>
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
+import { ref } from 'vue'
+import { date } from 'quasar'
+import { api } from 'boot/axios'
 
-const router = useRouter()
+import docButton from 'components/docButton.vue'
+import docTextArea from 'components/docTextArea.vue'
+import docInput from 'components/docInput.vue'
+
+let router = useRouter()
+let receivedDate = ref('')
+let formattedReceivedDate = ref('')
+
+let outRespondent = ref('')
+let outAddress = ref('')
+let outFrom = ref('')
+let outAttachments = ref('')
+let outSubject = ref('')
+let outDetails = ref('')
+
+let missingRespondent = ref('')
+let missingAddress = ref('')
+let missingFrom = ref('')
+let missingAttachments = ref('')
+let missingSubject = ref('')
+let missingDetails = ref('')
+
+const showContents = async () => {
+  console.log('outRespondent', outRespondent.value)
+  console.log('outAddress', outAddress.value)
+  console.log('outFrom', outFrom.value)
+  console.log('outAttachments', outAttachments.value)
+  console.log('outSubject', outSubject.value)
+  console.log('outDetails', outDetails.value)
+}
 
 const gotoMenu = () => {
   router.push('/dashboard')
@@ -26,20 +90,18 @@ const gotoMenu = () => {
 </script>
 
 <style lang="sass" scoped>
-
-.calendar
-  background-color: rgba(8,25,35, 0.75)
-  border: 1px solid rgba(255, 255, 255, 0.525)
-  font-family: 'OpenSans'
-  font-size: 1.6rem
-  border-radius: 12px
-  ::v-deep .q-date__calendar-item
-    padding-top: 0.6rem
-    // padding-left: 0.5rem
-    // padding-right: 0.5rem
-  ::v-deep .block
-    font-size: 1.25rem
-
+// .calendar
+//   background-color: rgba(8,25,35, 0.75)
+//   border: 1px solid rgba(255, 255, 255, 0.525)
+//   font-family: 'OpenSans'
+//   font-size: 1.6rem
+//   border-radius: 12px
+//   ::v-deep .q-date__calendar-item
+//     padding-top: 0.6rem
+//     // padding-left: 0.5rem
+//     // padding-right: 0.5rem
+//   ::v-deep .block
+//     font-size: 1.25rem
 
 .title
   grid-area: title
