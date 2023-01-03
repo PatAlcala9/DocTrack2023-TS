@@ -314,12 +314,12 @@ const enterSwitch = (el: any) => {
 //   opacity: 0.05
 
 .ocbo-title
-  font-size: 4.2rem
+  font-size: 4rem
   font-family: 'RalewayBold'
   color: #ffffff
 
 .ocbo-text
-  font-size: 3.5rem
+  font-size: 3.3rem
   font-family: 'Montserrat'
   margin-top: -2rem
   color: #ffffff
@@ -338,11 +338,12 @@ const enterSwitch = (el: any) => {
   grid-area: title
   justify-self: start
   align-self: stretch
-  padding: 0 0 0 1rem
+  padding: 0 0 10rem 1rem
   margin: 0 0 2rem 0
+  overflow: hidden
 
 .logo
-  width: 11rem
+  width: 10rem
   height: auto
   opacity: 0.6
   margin-right: 2rem
@@ -360,7 +361,7 @@ const enterSwitch = (el: any) => {
   border: 1px solid rgba(255, 255, 255, 0.125)
   border-radius: 2rem
   background-color: #021926
-  margin-top: -10rem
+  margin-top: -1rem
   width: 22rem
   height: 22rem
 

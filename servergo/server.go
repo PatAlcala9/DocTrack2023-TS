@@ -10,10 +10,10 @@ import (
 )
 
 // DEV
-var connection string = "root:superuser@tcp(localhost:3306)/ocbodoctracksys"
+// var connection string = "root:superuser@tcp(localhost:3306)/ocbodoctracksys"
 
 // SERVER
-// var connection string = "iips:iipsuser@tcp(192.168.7.100:3306)/ocbodoctracksys"
+var connection string = "iips:iipsuser@tcp(192.168.7.100:3306)/ocbodoctracksys"
 
 func main() {
 	connect()
