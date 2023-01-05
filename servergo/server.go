@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"net/http"
+  // "html/template"
 
   "github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -10,10 +11,10 @@ import (
 )
 
 // DEV
-// var connection string = "root:superuser@tcp(localhost:3306)/ocbodoctracksys"
+var connection string = "root:superuser@tcp(localhost:3306)/ocbodoctracksys"
 
 // SERVER
-var connection string = "iips:iipsuser@tcp(192.168.7.100:3306)/ocbodoctracksys"
+// var connection string = "iips:iipsuser@tcp(192.168.7.100:3306)/ocbodoctracksys"
 
 func main() {
 	connect()
@@ -28,15 +29,14 @@ func connect() {
 
 	defer db.Close()
 
+  // gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
   router.Use(cors.Default())
-  router.LoadHTMLGlob("templates/*")
+  // router.LoadHTMLGlob("templates/**")
 
-  router.GET("/", func(c *gin.Context) {
-    c.HTML(http.StatusOK, "index.html", gin.H{
-      "content": "This is an index page...",
-    })
-  })
+  // router.GET("/", func(c *gin.Context) {
+  //   c.HTML(http.StatusOK, "index.html", gin.H{})
+  // })
 
   router.GET("/api/:method", func(c *gin.Context) {
     var result string

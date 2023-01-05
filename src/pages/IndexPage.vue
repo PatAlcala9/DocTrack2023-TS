@@ -23,7 +23,7 @@ q-page(padding).full-width.column.items-start.content-center
         component(:is="docButton" text="Outgoing")
 
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
-      section(v-if="_access.access.includes('releasing')").column.items-center
+      section(v-if="_access.access.includes('releasing')" @click="gotoPage('releasing')").column.items-center
         q-icon(name="start" size="xl").icon
         component(:is="docButton" text="Releasing")
 
