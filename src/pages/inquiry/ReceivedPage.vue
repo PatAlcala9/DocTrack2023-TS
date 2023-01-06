@@ -113,10 +113,12 @@ q-dialog(v-model="details" maximized)
 import { ref } from 'vue'
 import { api } from 'boot/axios'
 import { useRouter } from 'vue-router'
+import {useCurrentPage} from 'stores/currentpage'
 
 import docButton from 'components/docButton.vue'
 
 const router = useRouter()
+const _currentpage = useCurrentPage()
 
 let searchValue = ref('')
 let searchByValue = ref('')
@@ -182,9 +184,10 @@ const getIncomingBySubject = async () => {
   }
 }
 
-const gotoHome = async () => {
-  await router.push('/')
-  location.reload()
+const gotoHome = () => {
+  _currentpage.currentpage = '/'
+  router.push('/')
+  // location.reload()
 }
 
 const mouseHover = () => {

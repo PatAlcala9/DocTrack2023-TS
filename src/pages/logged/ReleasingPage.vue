@@ -60,10 +60,12 @@ q-page(padding)
 import { ref } from 'vue'
 import { api } from 'boot/axios'
 import { useRouter } from 'vue-router'
+import {useCurrentPage} from 'stores/currentpage'
 
 import docButton from 'components/docButton.vue'
 
 const router = useRouter()
+const _currentpage = useCurrentPage()
 
 let searchValue = ref('')
 let searchByValue = ref('')
@@ -78,6 +80,7 @@ let releasingList = ref({} as Releasing)
 let showText = ref(false)
 
 const gotoMenu = () => {
+  _currentpage.currentpage = 'dashboard'
   router.push('/dashboard')
 }
 

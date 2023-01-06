@@ -1,8 +1,8 @@
 {
   "name": "doctrack2023-ts",
   "version": "0.0.1",
-  "description": "A Quasar Project",
-  "productName": "Quasar App",
+  "description": "DocTrack System for OCBO",
+  "productName": "DocTrack System 2023",
   "author": "Patrick Alvin Alcala <45809622+PatCode9@users.noreply.github.com>",
   "private": true,
   "scripts": {

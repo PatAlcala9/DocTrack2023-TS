@@ -106,10 +106,12 @@ q-dialog(v-model="details" maximized)
 import { ref } from 'vue'
 import { api } from 'boot/axios'
 import { useRouter } from 'vue-router'
+import { useCurrentPage } from 'stores/currentpage'
 
 import docButton from 'components/docButton.vue'
 
 const router = useRouter()
+const _currentpage = useCurrentPage()
 
 let searchValue = ref('')
 let searchByValue = ref('')
@@ -124,8 +126,9 @@ type Outgoing = {
 let outgoingList = ref({} as Outgoing)
 let showText = ref(false)
 
-const gotoHome = async () => {
-  await router.push('/')
+const gotoHome = () => {
+  _currentpage.currentpage = '/'
+  router.push('/')
   // location.reload()
 }
 

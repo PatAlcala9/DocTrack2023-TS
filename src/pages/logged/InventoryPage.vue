@@ -9,10 +9,13 @@ q-page(padding)
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
+import {useCurrentPage} from 'stores/currentpage'
 
 const router = useRouter()
+const _currentpage = useCurrentPage()
 
 const gotoMenu = () => {
+  _currentpage.currentpage = 'dashboard'
   router.push('/dashboard')
 }
 </script>

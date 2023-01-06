@@ -41,14 +41,6 @@ module.exports = configure(function (ctx) {
 
     // https://github.com/quasarframework/quasar/tree/dev/extras
     extras: [
-      // 'ionicons-v4',
-      // 'mdi-v5',
-      // 'fontawesome-v6',
-      // 'eva-icons',
-      // 'themify',
-      // 'line-awesome',
-      // 'roboto-font-latin-ext', // this or either 'roboto-font', NEVER both!
-
       'roboto-font', // optional, you are not bound to it
       'material-icons', // optional, you are not bound to it
     ],
@@ -84,8 +76,6 @@ module.exports = configure(function (ctx) {
           .test(/\.pug$/)
           .use('pug-plain-loader')
           .loader('pug-plain-loader')
-
-        // chain.plugin('eslint-webpack-plugin').use(ESLintPlugin, [{ extensions: ['js', 'vue'] }])
 
         if (!ctx.dev && !ctx.debug) {
           chain.plugin('compression-webpack-plugin').use(CompressionPlugin, [

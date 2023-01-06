@@ -34,6 +34,20 @@ q-dialog(v-model="dialog" transition-show="flip-right" transition-hide="flip-lef
 
 </template>
 
+<!-- <script lang="ts">
+import { useCurrentPage } from 'stores/currentpage'
+
+export default {
+  preFetch({ redirect }) {
+    let _currentpage = useCurrentPage()
+
+    if (_currentpage.currentpage !== 'register') {
+      redirect({ path: '/login' })
+    }
+  },
+}
+</script> -->
+
 <script setup lang="ts">
 import { api } from 'boot/axios'
 import { ref } from 'vue'
@@ -42,6 +56,8 @@ import { useRouter } from 'vue-router'
 import { gsap } from 'gsap'
 
 import { usePageWithTable } from 'stores/pagewithtable'
+import { useCurrentPage } from 'stores/currentpage'
+
 
 import docInput from 'components/docInput.vue'
 import docInputPassword from 'components/docInputPassword.vue'
@@ -49,6 +65,8 @@ import docButton from 'components/docButton.vue'
 
 const router = useRouter()
 const _pagewithtable = usePageWithTable()
+const _currentpage = useCurrentPage()
+
 
 const beforeEnterTitle = (el: any) => {
   el.style.transform = 'translateX(-100px)'
@@ -81,7 +99,6 @@ const beforeEnterButton = (el: any) => {
 const enterButton = (el: any) => {
   gsap.to(el, { duration: 1, y: 0, opacity: 1 })
 }
-
 
 let ifullname = ref('')
 let iusername = ref('')
@@ -139,6 +156,7 @@ const sample = () => {
 
 const gotoHome = () => {
   _pagewithtable.pagewithtable = false
+  _currentpage.currentpage = '/'
   router.push('/')
 }
 </script>

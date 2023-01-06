@@ -51,11 +51,15 @@ import { date } from 'quasar'
 import { useRouter } from 'vue-router'
 import { api } from 'boot/axios'
 
+import { useCurrentPage } from 'stores/currentpage'
+
 import docButton from 'components/docButton.vue'
 import docTextArea from 'components/docTextArea.vue'
 import docInput from 'components/docInput.vue'
 
-let router = useRouter()
+const router = useRouter()
+let _currentpage = useCurrentPage()
+
 let receivedDate = ref('')
 let formattedReceivedDate = ref('')
 
@@ -79,6 +83,7 @@ const sample = () => {
 }
 
 const gotoMenu = () => {
+  _currentpage.currentpage = 'dashboard'
   router.push('/dashboard')
 }
 

@@ -89,17 +89,29 @@ q-dialog(v-model="error" transition-show="flip-right" transition-hide="flip-left
         doc-button(text="OK" @click="error=false")
 </template>
 
+<!-- <script lang="ts">
+export default {
+  preFetch({ redirect }) {
+    if (_currentpage.currentpage !== 'register') {
+      redirect({ path: '/login' })
+    }
+  },
+}
+</script> -->
+
 <script setup lang="ts">
 import { ref } from 'vue'
 import { api } from 'boot/axios'
 import { useRouter } from 'vue-router'
 import { comparePassword } from 'src/js/OCBO'
 import { gsap } from 'gsap'
+import { SessionStorage } from 'quasar'
 
 import { useEmployeeName } from 'stores/employeename'
 import { useUserID } from 'stores/userid'
 import { usePageWithTable } from 'stores/pagewithtable'
 import { useAccess } from 'stores/access'
+import { useCurrentPage } from 'stores/currentpage'
 
 import docButton from 'components/docButton.vue'
 import docInput from 'components/docInput.vue'
@@ -110,6 +122,7 @@ let _employeename = useEmployeeName()
 let _userid = useUserID()
 let _pagewithtable = usePageWithTable()
 let _access = useAccess()
+let _currentpage = useCurrentPage()
 
 let error = ref(false)
 let errorMessage = ref('')
@@ -148,11 +161,15 @@ const showLogin = async () => {
 
 const inquireReceivedTrigger = async () => {
   _pagewithtable.pagewithtable = true
+  SessionStorage.set('CurrentPage', 'received')
+  _currentpage.currentpage = 'received'
   router.push('/received')
 }
 
 const inquireReleasedTrigger = async () => {
   _pagewithtable.pagewithtable = true
+  SessionStorage.set('CurrentPage', 'released')
+  _currentpage.currentpage = 'released'
   router.push('/released')
 }
 
@@ -171,12 +188,16 @@ const tempLogin = async () => {
 
   if (usernameEntry.value === username && passwordEntry.value === password) {
     _employeename.employeename = 'JUAN DELA CRUZ'
+    SessionStorage.set('CurrentPage', 'dashboard')
+    _currentpage.currentpage = 'dashboard'
     router.push('/dashboard')
   }
 }
 
 const gotoRegister = async () => {
   _pagewithtable.pagewithtable = false
+  SessionStorage.set('CurrentPage', 'register')
+  _currentpage.currentpage = 'register'
   router.push('/register')
 }
 
@@ -255,6 +276,8 @@ const login = async () => {
   }
 
   _pagewithtable.pagewithtable = false
+  SessionStorage.set('CurrentPage', 'dashboard')
+  _currentpage.currentpage = 'dashboard'
   router.push('/dashboard')
 }
 
@@ -295,7 +318,7 @@ const beforeEnterForm = (el: any) => {
   el.style.scale = 0
 }
 const enterForm = (el: any) => {
-  gsap.to(el, { duration: 0.6, scale: 1, ease: 'back.out(1.6)'})
+  gsap.to(el, { duration: 0.6, scale: 1, ease: 'back.out(1.6)' })
 }
 
 const beforeEnterSwitch = (el: any) => {
@@ -303,8 +326,15 @@ const beforeEnterSwitch = (el: any) => {
   el.style.opacity = 0
 }
 const enterSwitch = (el: any) => {
-  gsap.to(el, { duration: 0.8, x: 1, opacity: 1})
+  gsap.to(el, { duration: 0.8, x: 1, opacity: 1 })
 }
+
+;(async () => {
+  if (_currentpage.currentpage !== undefined)
+    router.push(_currentpage.currentpage)
+  else
+    router.push('/')
+})()
 </script>
 
 <style lang="sass" scoped>
