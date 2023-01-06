@@ -28,9 +28,12 @@ q-page(padding).full-width.column.items-start.content-center
         component(:is="docButton" text="Releasing")
 
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
-      component(v-if="_access.access.includes('inventory')" :is="docButton" text="Inventory")
-    transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
-      component(v-if="_access.access.includes('otherdocuments')" :is="docButton" text="Other Docs")
+      section(v-if="_access.access.includes('inventory')" @click="gotoPage('inventory')").column.items-center
+        q-icon(name="topic" size="xl").icon
+        component(:is="docButton" text="Inventory")
+
+    //- transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
+    //-   component(v-if="_access.access.includes('otherdocuments')" :is="docButton" text="Other Docs")
 
   </template>
 

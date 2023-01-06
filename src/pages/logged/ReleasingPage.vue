@@ -1,54 +1,54 @@
 <template lang="pug">
 
 q-page(padding)
-  div.full-width.row.justify-between
-    span.title Releasing
-    q-btn(flat size="md" label="Back" @click="gotoMenu" icon="arrow_back").close-button
+  //- div.full-width.row.justify-between
+  //-   span.title Releasing
+  //-   q-btn(flat size="md" label="Back" @click="gotoMenu" icon="arrow_back").close-button
 
-  div.fit.row.wrap.justify-start.items-start.content-start.search-area
-    section.column
-      span Search
-      q-input(dense filled v-model="searchValue" bg-color="white" :input-style="{ fontSize: '1.2rem', fontFamily: 'OpenSans' }" @keydown.enter="getIncomingUsingValue")
-    section.column
-      span Search By
-      //- input
-      q-btn-dropdown(unelevated color="grey-10" :label="searchByValue" size="1rem" :content-style="{ fontSize: '1.2rem', fontFamily: 'Raleway' }")
-        q-list
-          q-item(clickable v-close-popup @click="searchByCode" @keypress="formatApplication($event)")
-            q-item-section
-              q-item-label ENTRY CODE
+  //- div.fit.row.wrap.justify-start.items-start.content-start.search-area
+  //-   section.column
+  //-     span Search
+  //-     q-input(dense filled v-model="searchValue" bg-color="white" :input-style="{ fontSize: '1.2rem', fontFamily: 'OpenSans' }" @keydown.enter="getIncomingUsingValue")
+  //-   section.column
+  //-     span Search By
+  //-     //- input
+  //-     q-btn-dropdown(unelevated color="grey-10" :label="searchByValue" size="1rem" :content-style="{ fontSize: '1.2rem', fontFamily: 'Raleway' }")
+  //-       q-list
+  //-         q-item(clickable v-close-popup @click="searchByCode" @keypress="formatApplication($event)")
+  //-           q-item-section
+  //-             q-item-label ENTRY CODE
 
-          q-item(clickable v-close-popup @click="searchByValue = 'DATE'")
-            q-item-section
-              q-item-label DATE
+  //-         q-item(clickable v-close-popup @click="searchByValue = 'DATE'")
+  //-           q-item-section
+  //-             q-item-label DATE
 
-          q-item(clickable v-close-popup @click="searchByValue = 'NAME'")
-            q-item-section
-              q-item-label NAME
+  //-         q-item(clickable v-close-popup @click="searchByValue = 'NAME'")
+  //-           q-item-section
+  //-             q-item-label NAME
 
-          q-item(clickable v-close-popup @click="searchByValue = 'SUBJECT'")
-            q-item-section
-              q-item-label SUBJECT
+  //-         q-item(clickable v-close-popup @click="searchByValue = 'SUBJECT'")
+  //-           q-item-section
+  //-             q-item-label SUBJECT
 
-  div.flex.flex-center
-    section(v-if="releasingList.result !== ''").dialog-content-table
-      table.table
-        thead
-          tr
-            th Entry Code
-            th Received Date
-            th Name
-            th Subject
-            th Details
-        tbody
-          tr(v-for="(item, index) in releasingList.result" :key="item").table-content-group
-            td {{item}}
-            td {{releasingList.result2[index]}}
-            td {{releasingList.result3[index]}}
-            td {{releasingList.result4[index]}}
-            td
-              q-btn(color="button" icon="visibility" :ripple="false" @click="openDetails(item, incomingList.result2[index], incomingList.result3[index], incomingList.result4[index])").button-view
-              //- q-btn(v-if="showText === false" v-else color="button" label="View" :ripple="false" @mouseleave="mouseLeave").button-view
+  //- div.flex.flex-center
+  //-   section(v-if="releasingList.result !== ''").dialog-content-table
+  //-     table.table
+  //-       thead
+  //-         tr
+  //-           th Entry Code
+  //-           th Received Date
+  //-           th Name
+  //-           th Subject
+  //-           th Details
+  //-       tbody
+  //-         tr(v-for="(item, index) in releasingList.result" :key="item").table-content-group
+  //-           td {{item}}
+  //-           td {{releasingList.result2[index]}}
+  //-           td {{releasingList.result3[index]}}
+  //-           td {{releasingList.result4[index]}}
+  //-           td
+  //-             q-btn(color="button" icon="visibility" :ripple="false" @click="openDetails(item, incomingList.result2[index], incomingList.result3[index], incomingList.result4[index])").button-view
+  //-             //- q-btn(v-if="showText === false" v-else color="button" label="View" :ripple="false" @mouseleave="mouseLeave").button-view
 
     section(v-else).table-loading.column.items-center
       span Loading Contents
@@ -90,17 +90,17 @@ let detailsDetail = ref('')
 let attachmentDetail = ref('')
 let noteDetail = ref('')
 
-const openDetails = async (entryCode: string, date: string, sourcename: string, subjectdetail: string) => {
-  details.value = true
-  entryCodeDetail.value = entryCode
-  dateReceivedDetail.value = date
-  nameDetail.value = sourcename
-  subjectDetail.value = subjectdetail
+// const openDetails = async (entryCode: string, date: string, sourcename: string, subjectdetail: string) => {
+//   details.value = true
+//   entryCodeDetail.value = entryCode
+//   dateReceivedDetail.value = date
+//   nameDetail.value = sourcename
+//   subjectDetail.value = subjectdetail
 
-  await getIncomingDetails()
-  await getIncomingDocLog()
-  await getIncomingActionLog()
-}
+//   await getIncomingDetails()
+//   await getIncomingDocLog()
+//   await getIncomingActionLog()
+// }
 </script>
 
 <style lang="sass" scoped>
