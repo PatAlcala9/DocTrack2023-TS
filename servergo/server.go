@@ -156,6 +156,35 @@ func connect() {
         "result6": array6,
         "result7": array7,
 			})
+
+    } else if method == "GetIncomingDesc" {
+      var result2, result3, result4 string
+      array := []string{}
+      array2 := []string{}
+      array3 := []string{}
+      array4 := []string{}
+
+      results, err := db.Query("SELECT IFNULL(entryCodeNo, '') AS result, IFNULL(receivedDate, '') AS result2, IFNULL(sourceName, '') AS result3, IFNULL(subjectInfo, '') AS result4 FROM incoming ORDER BY entryCodeNo DESC LIMIT 100")
+      if err != nil {
+        panic(err.Error())
+      }
+
+      for results.Next() {
+				err = results.Scan(&result, &result2, &result3, &result4)
+				if err != nil {
+					panic(err.Error())
+				}
+				array = append(array, result)
+        array2 = append(array2, result2)
+        array3 = append(array3, result3)
+        array4 = append(array4, result4)
+			}
+			c.JSON(http.StatusOK, gin.H{
+				"result": array,
+        "result2": array2,
+        "result3": array3,
+        "result4": array4,
+			})
     }
   })
 

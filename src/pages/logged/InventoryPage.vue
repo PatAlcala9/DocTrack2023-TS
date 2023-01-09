@@ -10,6 +10,8 @@ q-page(padding)
     doc-button(text="Update Outgoing Document").button
 
   div.flex.flex-center
+    doc-label(text="Filed Received Documents")
+    span.title Show
     section(v-if="fileReceivedDocList.result !== ''").dialog-content-table
       table.table
         thead
@@ -33,8 +35,6 @@ q-page(padding)
             //- td
               //- q-btn(color="button" icon="visibility" :ripple="false" @click="openDetails(item, incomingList.result2[index], incomingList.result3[index], incomingList.result4[index])").button-view
               //- q-btn(v-if="showText === false" v-else color="button" label="View" :ripple="false" @mouseleave="mouseLeave").button-view
-
-
 </template>
 
 <script setup lang="ts">
@@ -42,11 +42,14 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { api } from 'boot/axios'
 import { useCurrentPage } from 'stores/currentpage'
+import { usePageWithTable } from 'stores/pagewithtable'
 
 import docButton from 'components/docButton.vue'
+import docLabel from 'components/docLabel.vue'
 
 const router = useRouter()
 const _currentpage = useCurrentPage()
+const _pagewithtable = usePageWithTable()
 
 type FileReceived = {
   result: string
@@ -75,6 +78,7 @@ const getFileReceivedDoc = async () => {
 }
 
 const gotoMenu = () => {
+  _pagewithtable.pagewithtable = false
   _currentpage.currentpage = 'dashboard'
   router.push('/dashboard')
 }
@@ -260,7 +264,7 @@ const gotoMenu = () => {
   font-weight: bold
 
 .table th, .table td
-  padding: 1rem 4rem
+  padding: 1rem 1rem
   width: 20rem
 
 .table tbody tr

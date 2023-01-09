@@ -34,7 +34,25 @@ q-page(padding)
     doc-button(text="Save" type="submit" @click="saveNewIncoming")
 
   section.list-area.column.text-center
-    span.list-area__span Show List of Incomings
+    span.list-area__span(v-if="!showList" @click="showListTrigger").inquiry-text Show List of Incomings
+    span.list-area__span(v-else @click="showListTrigger").inquiry-text Hide List of Incomings
+
+  section(v-if="showList === true" style="margin-top: -3rem")
+    table.table
+      thead
+        tr
+          th Entry Code
+          th Received Date
+          th Source
+          th Subject
+          th Details
+      tbody
+        tr(v-for="(item, index) in incomingList.result" :key="item").table-content-group
+          td {{item}}
+          td {{incomingList.result2[index]}}
+          td {{incomingList.result3[index]}}
+          td {{incomingList.result4[index]}}
+          td
 
 q-dialog(v-model="dialog" transition-show="flip-right" transition-hide="flip-left")
   q-card.dialog-card.text-white.flex.flex-center
@@ -78,8 +96,34 @@ let dialog = ref(false)
 let dialogMessage = ref('')
 let dialogSubMessage = ref('')
 
+let showList = ref(false)
+type Incoming = {
+  result: string
+  result2: string
+  result3: string
+  result4: string
+}
+let incomingList = ref({} as Incoming)
+
+const showListTrigger = async () => {
+  showList.value = !showList.value
+
+  if (showList.value === true) {
+    await getIncomingDesc()
+  }
+}
+
 const sample = () => {
   formattedReceivedDate.value = date.formatDate(Date.parse(receivedDate.value), 'MMMM D, YYYY')
+}
+
+const getIncomingDesc = async () => {
+  const response = await api.get('/api/GetIncomingDesc')
+  const data = response.data
+
+  if (data !== undefined) {
+    incomingList.value = data
+  }
 }
 
 const gotoMenu = () => {
@@ -371,4 +415,34 @@ const saveNewIncoming = async () => {
 
 .requiredWarning
   color: red
+
+.table
+  font-family: 'Montserrat'
+  font-size: 0.8rem
+  text-transform: uppercase
+  border-collapse: collapse
+  margin: 2rem 0
+  min-width: 25rem
+  border-radius: 1rem 1rem 0 0
+  overflow: hidden
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2)
+
+.table thead tr
+  background-color: #000406
+  color: #ffffff
+  text-align: left
+  font-weight: bold
+
+.table th, .table td
+  padding: 1rem 1rem
+  width: 20rem
+
+.table tbody tr
+  border-bottom: 1px solid #dddddd
+
+.table tbody tr:nth-of-type(even)
+  background-color: #1C4157
+
+.table tbody tr:last-of-type
+  border-bottom: 2px solid #000406
 </style>

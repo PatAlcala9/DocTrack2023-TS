@@ -48,12 +48,14 @@ import docButton from 'components/docButton.vue'
 import { useEmployeeName } from 'stores/employeename'
 import { useAccess } from 'stores/access'
 import { useCurrentPage } from 'stores/currentpage'
+import { usePageWithTable } from 'stores/pagewithtable'
 
 const router = useRouter()
 const quasar = useQuasar()
-let _employeename = useEmployeeName()
-let _access = useAccess()
-let _currentpage = useCurrentPage()
+const _employeename = useEmployeeName()
+const _access = useAccess()
+const _currentpage = useCurrentPage()
+const _pagewithtable = usePageWithTable()
 
 const setName = async () => {
   if (_employeename.employeename !== '') SessionStorage.set('EmployeeName', _employeename.employeename)
@@ -98,12 +100,14 @@ const enterButton = (el: any) => {
 }
 
 const logout = async () => {
+  _pagewithtable.pagewithtable = false
   quasar.sessionStorage.remove('EmployeeName')
   _access.access = []
   gotoPage('/')
 }
 
 const gotoPage = (page: string) => {
+  _pagewithtable.pagewithtable = true
   _currentpage.currentpage = page
   router.push(page)
 }
