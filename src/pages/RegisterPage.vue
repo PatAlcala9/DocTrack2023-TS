@@ -58,7 +58,6 @@ import { gsap } from 'gsap'
 import { usePageWithTable } from 'stores/pagewithtable'
 import { useCurrentPage } from 'stores/currentpage'
 
-
 import docInput from 'components/docInput.vue'
 import docInputPassword from 'components/docInputPassword.vue'
 import docButton from 'components/docButton.vue'
@@ -66,7 +65,6 @@ import docButton from 'components/docButton.vue'
 const router = useRouter()
 const _pagewithtable = usePageWithTable()
 const _currentpage = useCurrentPage()
-
 
 const beforeEnterTitle = (el: any) => {
   el.style.transform = 'translateX(-100px)'
@@ -159,6 +157,11 @@ const gotoHome = () => {
   _currentpage.currentpage = '/'
   router.push('/')
 }
+
+;(async () => {
+  if (_currentpage.currentpage !== undefined) router.push(_currentpage.currentpage)
+  else router.push('/register')
+})()
 </script>
 
 <style lang="sass" scoped>

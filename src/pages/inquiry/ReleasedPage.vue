@@ -268,7 +268,12 @@ const getOutgoingActionLog = async () => {
 ;(async () => {
   await getOutgoing()
   await searchByReference()
+
+  if (_currentpage.currentpage !== undefined) router.push(_currentpage.currentpage)
+  else router.push('/released')
 })()
+
+
 </script>
 
 <style lang="sass" scoped>

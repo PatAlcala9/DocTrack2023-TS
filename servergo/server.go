@@ -118,6 +118,44 @@ func connect() {
         "result4": array4,
         "result5": array5,
 			})
+
+    } else if method == "GetFileReceivedDoc" {
+      var result2, result3, result4, result5, result6, result7 string
+      array := []string{}
+      array2 := []string{}
+      array3 := []string{}
+      array4 := []string{}
+      array5 := []string{}
+      array6 := []string{}
+      array7 := []string{}
+
+      results, err := db.Query("SELECT IFNULL(folder_no, '') AS result, IFNULL(page_no, '') AS result2, IFNULL(entryCodeNo, '') AS result3, IFNULL(comType, '') AS result4, IFNULL(sourceName, '') AS result5, IFNULL(subjectInfo, '') AS result6, IFNULL(receivedDate, '') AS result7 FROM incoming WHERE folder_no IS NOT NULL AND folder_no <> '' LIMIT 100")
+      if err != nil {
+        panic(err.Error())
+      }
+
+      for results.Next() {
+				err = results.Scan(&result, &result2, &result3, &result4, &result5, &result6, &result7)
+				if err != nil {
+					panic(err.Error())
+				}
+				array = append(array, result)
+        array2 = append(array2, result2)
+        array3 = append(array3, result3)
+        array4 = append(array4, result4)
+        array5 = append(array5, result5)
+        array6 = append(array6, result6)
+        array7 = append(array7, result7)
+			}
+			c.JSON(http.StatusOK, gin.H{
+				"result": array,
+        "result2": array2,
+        "result3": array3,
+        "result4": array4,
+        "result5": array5,
+        "result6": array6,
+        "result7": array7,
+			})
     }
   })
 

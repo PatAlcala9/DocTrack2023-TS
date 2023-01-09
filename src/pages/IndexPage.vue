@@ -39,7 +39,7 @@ q-page(padding).full-width.column.items-start.content-center
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useQuasar } from 'quasar'
+import { useQuasar, SessionStorage } from 'quasar'
 import { gsap } from 'gsap'
 import { useRouter } from 'vue-router'
 
@@ -47,7 +47,7 @@ import docButton from 'components/docButton.vue'
 
 import { useEmployeeName } from 'stores/employeename'
 import { useAccess } from 'stores/access'
-import {useCurrentPage} from 'stores/currentpage'
+import { useCurrentPage } from 'stores/currentpage'
 
 const router = useRouter()
 const quasar = useQuasar()
@@ -56,12 +56,12 @@ let _access = useAccess()
 let _currentpage = useCurrentPage()
 
 const setName = async () => {
-  if (_employeename.employeename !== '') quasar.sessionStorage.set('EmployeeName', _employeename.employeename)
+  if (_employeename.employeename !== '') SessionStorage.set('EmployeeName', _employeename.employeename)
 }
 
 const getName = async () => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const session: string = quasar.sessionStorage.getItem('EmployeeName')!
+  const session: string = SessionStorage.getItem('EmployeeName')!
   if (session !== '') _employeename.employeename = session
 }
 
@@ -111,6 +111,9 @@ const gotoPage = (page: string) => {
 ;(async () => {
   await setName()
   await getName()
+
+  if (_currentpage.currentpage !== undefined) router.push(_currentpage.currentpage)
+  else router.push('/dashboard')
 })()
 </script>
 

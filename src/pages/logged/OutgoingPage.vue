@@ -53,7 +53,7 @@ import { ref } from 'vue'
 import { date } from 'quasar'
 import { api } from 'boot/axios'
 
-import {useCurrentPage} from 'stores/currentpage'
+import { useCurrentPage } from 'stores/currentpage'
 
 import docButton from 'components/docButton.vue'
 import docTextArea from 'components/docTextArea.vue'
@@ -92,6 +92,11 @@ const gotoMenu = () => {
   _currentpage.currentpage = 'dashboard'
   router.push('/dashboard')
 }
+
+;(async () => {
+  if (_currentpage.currentpage !== undefined) router.push(_currentpage.currentpage)
+  else router.push('/outgoing')
+})()
 </script>
 
 <style lang="sass" scoped>

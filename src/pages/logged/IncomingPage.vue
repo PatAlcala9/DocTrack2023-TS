@@ -213,6 +213,11 @@ const saveNewIncoming = async () => {
     }
   }
 }
+
+;(async () => {
+  if (_currentpage.currentpage !== undefined) router.push(_currentpage.currentpage)
+  else router.push('/incoming')
+})()
 </script>
 
 <style lang="sass" scoped>

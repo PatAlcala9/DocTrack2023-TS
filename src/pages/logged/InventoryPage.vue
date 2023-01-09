@@ -5,19 +5,85 @@ q-page(padding)
     span.title Inventory
     q-btn(flat size="md" label="Back" @click="gotoMenu" icon="arrow_back").close-button
 
+  div.buttons-area.full-width.row.justify-start
+    doc-button(text="File Document").button
+    doc-button(text="Update Outgoing Document").button
+
+  div.flex.flex-center
+    section(v-if="fileReceivedDocList.result !== ''").dialog-content-table
+      table.table
+        thead
+          tr
+            th Folder
+            th Page Number
+            th Entry Code
+            th Type of Communication
+            th Source
+            th Subject
+            th Date Received
+        tbody
+          tr(v-for="(item, index) in fileReceivedDocList.result" :key="item").table-content-group
+            td {{item}}
+            td {{fileReceivedDocList.result2[index]}}
+            td {{fileReceivedDocList.result3[index]}}
+            td {{fileReceivedDocList.result4[index]}}
+            td {{fileReceivedDocList.result5[index]}}
+            td {{fileReceivedDocList.result6[index]}}
+            td {{fileReceivedDocList.result7[index]}}
+            //- td
+              //- q-btn(color="button" icon="visibility" :ripple="false" @click="openDetails(item, incomingList.result2[index], incomingList.result3[index], incomingList.result4[index])").button-view
+              //- q-btn(v-if="showText === false" v-else color="button" label="View" :ripple="false" @mouseleave="mouseLeave").button-view
+
+
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import {useCurrentPage} from 'stores/currentpage'
+import { api } from 'boot/axios'
+import { useCurrentPage } from 'stores/currentpage'
+
+import docButton from 'components/docButton.vue'
 
 const router = useRouter()
 const _currentpage = useCurrentPage()
+
+type FileReceived = {
+  result: string
+  result2: string
+  result3: string
+  result4: string
+  result5: string
+  result6: string
+  result7: string
+}
+let fileReceivedDocList = ref({} as FileReceived)
+let fileReceivedDocEmpty = ref(false)
+
+const getFileReceivedDoc = async () => {
+  try {
+    const response = await api.get('/api/GetFileReceivedDoc')
+    const data = response.data
+    if (data.result.length > 0) {
+      fileReceivedDocList.value = data
+      fileReceivedDocEmpty.value = false
+    }
+    else fileReceivedDocEmpty.value = true
+  } catch {
+    fileReceivedDocEmpty.value = true
+  }
+}
 
 const gotoMenu = () => {
   _currentpage.currentpage = 'dashboard'
   router.push('/dashboard')
 }
+
+;(async () => {
+  await getFileReceivedDoc()
+  if (_currentpage.currentpage !== undefined) router.push(_currentpage.currentpage)
+  else router.push('/inventory')
+})()
 </script>
 
 <style lang="sass" scoped>
@@ -169,4 +235,40 @@ const gotoMenu = () => {
 
 .requiredWarning
   color: red
+
+.buttons-area
+  margin: 2rem 0
+
+.button
+  margin-left: 1rem
+
+.table
+  font-family: 'Montserrat'
+  font-size: 0.8rem
+  text-transform: uppercase
+  border-collapse: collapse
+  margin: 2rem 0
+  min-width: 25rem
+  border-radius: 1rem 1rem 0 0
+  overflow: hidden
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2)
+
+.table thead tr
+  background-color: #000406
+  color: #ffffff
+  text-align: left
+  font-weight: bold
+
+.table th, .table td
+  padding: 1rem 4rem
+  width: 20rem
+
+.table tbody tr
+  border-bottom: 1px solid #dddddd
+
+.table tbody tr:nth-of-type(even)
+  background-color: #1C4157
+
+.table tbody tr:last-of-type
+  border-bottom: 2px solid #000406
 </style>

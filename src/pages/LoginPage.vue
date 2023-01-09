@@ -330,10 +330,8 @@ const enterSwitch = (el: any) => {
 }
 
 ;(async () => {
-  if (_currentpage.currentpage !== undefined)
-    router.push(_currentpage.currentpage)
-  else
-    router.push('/')
+  if (_currentpage.currentpage !== undefined) router.push(_currentpage.currentpage)
+  else router.push('/')
 })()
 </script>
 

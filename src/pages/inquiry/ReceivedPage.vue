@@ -295,6 +295,9 @@ const getIncomingActionLog = async () => {
 ;(async () => {
   await getIncoming()
   await searchByCode()
+
+  if (_currentpage.currentpage !== undefined) router.push(_currentpage.currentpage)
+  else router.push('/received')
 })()
 </script>
 

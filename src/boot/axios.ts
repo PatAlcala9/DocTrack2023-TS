@@ -14,21 +14,21 @@ declare module '@vue/runtime-core' {
 // "export default () => {}" function below (which runs individually
 // for each client)
 
-// const api = axios.create({
-//   baseURL: '',
-//   headers: {
-//     'X-Requested-With': 'XMLHttpRequest',
-//     'X-OCBO-SecureConnection': 'ocbo',
-//   },
-// })
-
 const api = axios.create({
-  baseURL: 'http://192.168.7.160:8080/doctrackserver',
+  baseURL: '',
   headers: {
     'X-Requested-With': 'XMLHttpRequest',
     'X-OCBO-SecureConnection': 'ocbo',
   },
 })
+
+// const api = axios.create({
+//   baseURL: 'http://192.168.7.160:8080/doctrackserver',
+//   headers: {
+//     'X-Requested-With': 'XMLHttpRequest',
+//     'X-OCBO-SecureConnection': 'ocbo',
+//   },
+// })
 
 export default boot(({ app }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api
