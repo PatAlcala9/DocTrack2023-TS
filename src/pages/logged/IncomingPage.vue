@@ -140,6 +140,7 @@ const getMaxEntryCode = async () => {
     const response = await api.get(`/api/GetMaxEntryCode/${yy}`)
     const data = response.data
     entryLast = data.result
+    console.log(entryLast)
   } catch {
     entryLast = ''
   }
@@ -251,10 +252,10 @@ const saveNewIncoming = async () => {
     await checkData()
     await notifyMissingData()
 
-    if (missingItems.value.length === 0) {
-      await generateNewEntryCode()
-      await saveIncoming()
-    }
+    // if (missingItems.value.length === 0) {
+    //   await generateNewEntryCode()
+    //   await saveIncoming()
+    // }
   }
 }
 

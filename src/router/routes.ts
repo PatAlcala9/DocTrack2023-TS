@@ -15,7 +15,8 @@ const routes: RouteRecordRaw[] = [
       { path: '/incoming', component: () => import('pages/logged/IncomingPage.vue') },
       { path: '/outgoing', component: () => import('pages/logged/OutgoingPage.vue') },
       { path: '/releasing', component: () => import('pages/logged/ReleasingPage.vue') },
-      { path: '/inventory', component: () => import('pages/logged/InventoryPage.vue') }
+      { path: '/inventory', component: () => import('pages/logged/InventoryPage.vue') },
+      { path: '/inventoryfile', component: () => import('pages/logged/InventoryFileDocPage.vue') },
     ],
   },
 

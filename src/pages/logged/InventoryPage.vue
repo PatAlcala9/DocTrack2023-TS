@@ -6,7 +6,7 @@ q-page(padding)
     q-btn(flat size="md" label="Back" @click="gotoMenu" icon="arrow_back").close-button
 
   div.buttons-area.full-width.row.justify-start
-    doc-button(text="File Document").button
+    doc-button(text="File Document" @click="gotoFileDoc").button
     doc-button(text="Update Outgoing Document").button
 
   div.flex.flex-center
@@ -81,6 +81,12 @@ const gotoMenu = () => {
   _pagewithtable.pagewithtable = false
   _currentpage.currentpage = 'dashboard'
   router.push('/dashboard')
+}
+
+const gotoFileDoc = () => {
+  _pagewithtable.pagewithtable = false
+  _currentpage.currentpage = 'inventoryfile'
+  router.push('/inventoryfile')
 }
 
 ;(async () => {
