@@ -13,22 +13,22 @@ q-page(padding).full-width.column.items-start.content-center
 
   div.button-area.fit.row.justify-evenly.content-start
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
-      section(v-if="_access.access.includes('incoming')" @click="gotoPage('incoming')").column.items-center
+      section(v-if="_access.access.includes('incoming')" @click="gotoPage('incomingmain', false)").column.items-center
         q-icon(name="keyboard_double_arrow_down" size="xl").icon
         component(:is="docButton" text="Incoming")
 
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
-      section(v-if="_access.access.includes('outgoing')" @click="gotoPage('outgoing')").column.items-center
+      section(v-if="_access.access.includes('outgoing')" @click="gotoPage('outgoing', false)").column.items-center
         q-icon(name="keyboard_double_arrow_up" size="xl").icon
         component(:is="docButton" text="Outgoing")
 
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
-      section(v-if="_access.access.includes('releasing')" @click="gotoPage('releasing')").column.items-center
+      section(v-if="_access.access.includes('releasing')" @click="gotoPage('releasing', false)").column.items-center
         q-icon(name="start" size="xl").icon
         component(:is="docButton" text="Releasing")
 
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
-      section(v-if="_access.access.includes('inventory')" @click="gotoPage('inventory')").column.items-center
+      section(v-if="_access.access.includes('inventory')" @click="gotoPage('inventory', true)").column.items-center
         q-icon(name="topic" size="xl").icon
         component(:is="docButton" text="Inventory")
 
@@ -106,8 +106,8 @@ const logout = async () => {
   gotoPage('/')
 }
 
-const gotoPage = (page: string) => {
-  _pagewithtable.pagewithtable = true
+const gotoPage = (page: string, table: boolean) => {
+  _pagewithtable.pagewithtable = table
   _currentpage.currentpage = page
   router.push(page)
 }

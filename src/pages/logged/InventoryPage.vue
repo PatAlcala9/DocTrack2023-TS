@@ -10,9 +10,14 @@ q-page(padding)
     doc-button(text="Update Outgoing Document").button
 
   div.flex.flex-center
-    doc-label(text="Filed Received Documents")
-    span.title Show
-    section(v-if="fileReceivedDocList.result !== ''").dialog-content-table
+    section(v-if="tabSelected === 'incoming'")
+      span.tab__selected Filed Received Documents
+      span(@click="switchTab('incoming')").tab Filed Outgoing Documents
+    section(v-else)
+      span(@click="switchTab('outgoing')").tab Filed Received Documents
+      span.tab__selected Filed Outgoing Documents
+
+    section(v-if="tabSelected === 'incoming'").dialog-content-table
       table.table
         thead
           tr
@@ -32,9 +37,30 @@ q-page(padding)
             td {{fileReceivedDocList.result5[index]}}
             td {{fileReceivedDocList.result6[index]}}
             td {{fileReceivedDocList.result7[index]}}
-            //- td
-              //- q-btn(color="button" icon="visibility" :ripple="false" @click="openDetails(item, incomingList.result2[index], incomingList.result3[index], incomingList.result4[index])").button-view
-              //- q-btn(v-if="showText === false" v-else color="button" label="View" :ripple="false" @mouseleave="mouseLeave").button-view
+
+    section(v-else).dialog-content-table
+      table.table
+        thead
+          tr
+            th Folder
+            th Page Number
+            th Reference Code
+            th Type of Communication
+            th Respondent
+            th Subject
+            th Date Released
+            th Date Received
+        tbody
+          tr(v-for="(item, index) in fileOutgoingDocList.result" :key="item").table-content-group
+            td {{item}}
+            td {{fileOutgoingDocList.result2[index]}}
+            td {{fileOutgoingDocList.result3[index]}}
+            td {{fileOutgoingDocList.result4[index]}}
+            td {{fileOutgoingDocList.result5[index]}}
+            td {{fileOutgoingDocList.result6[index]}}
+            td {{fileOutgoingDocList.result7[index]}}
+            td {{fileOutgoingDocList.result8[index]}}
+
 </template>
 
 <script setup lang="ts">
@@ -50,6 +76,13 @@ import docLabel from 'components/docLabel.vue'
 const router = useRouter()
 const _currentpage = useCurrentPage()
 const _pagewithtable = usePageWithTable()
+
+let tabSelected = ref('incoming')
+
+const switchTab = (value: string) => {
+  if (value === 'incoming') tabSelected.value = 'outgoing'
+  else tabSelected.value = 'incoming'
+}
 
 type FileReceived = {
   result: string
@@ -70,10 +103,35 @@ const getFileReceivedDoc = async () => {
     if (data.result.length > 0) {
       fileReceivedDocList.value = data
       fileReceivedDocEmpty.value = false
-    }
-    else fileReceivedDocEmpty.value = true
+    } else fileReceivedDocEmpty.value = true
   } catch {
     fileReceivedDocEmpty.value = true
+  }
+}
+
+type FileOutgoing = {
+  result: string
+  result2: string
+  result3: string
+  result4: string
+  result5: string
+  result6: string
+  result7: string
+  result8: string
+}
+let fileOutgoingDocList = ref({} as FileOutgoing)
+let fileOutgoingDocEmpty = ref(false)
+
+const getFileOutgoingDoc = async () => {
+  try {
+    const response = await api.get('/api/GetFileOutgoingDoc')
+    const data = response.data
+    if (data.result.length > 0) {
+      fileOutgoingDocList.value = data
+      fileOutgoingDocEmpty.value = false
+    } else fileOutgoingDocEmpty.value = true
+  } catch {
+    fileOutgoingDocEmpty.value = true
   }
 }
 
@@ -84,13 +142,14 @@ const gotoMenu = () => {
 }
 
 const gotoFileDoc = () => {
-  _pagewithtable.pagewithtable = false
+  _pagewithtable.pagewithtable = true
   _currentpage.currentpage = 'inventoryfile'
   router.push('/inventoryfile')
 }
 
 ;(async () => {
   await getFileReceivedDoc()
+  await getFileOutgoingDoc()
   if (_currentpage.currentpage !== undefined) router.push(_currentpage.currentpage)
   else router.push('/inventory')
 })()
@@ -281,4 +340,19 @@ const gotoFileDoc = () => {
 
 .table tbody tr:last-of-type
   border-bottom: 2px solid #000406
+
+.tab-area
+  margin-top: 2rem
+
+.tab
+  font-family: 'Raleway'
+  font-size: 1.2rem
+  padding: 1rem
+  border: 1px solid white
+  cursor: pointer
+
+.tab__selected
+  @extend .tab
+  font-family: 'RalewayBold'
+  background-color: rgba(255, 255, 255, 0.1)
 </style>

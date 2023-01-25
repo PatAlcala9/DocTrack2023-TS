@@ -185,6 +185,76 @@ func connect() {
         "result3": array3,
         "result4": array4,
 			})
+
+    } else if method == "GetFileOutgoingDoc" {
+      var result2, result3, result4, result5, result6, result7, result8 string
+      array := []string{}
+      array2 := []string{}
+      array3 := []string{}
+      array4 := []string{}
+      array5 := []string{}
+      array6 := []string{}
+      array7 := []string{}
+      array8 := []string{}
+
+      results, err := db.Query("SELECT IFNULL(folder_no, '') AS result, IFNULL(page_no, '') AS result2, IFNULL(referenceNo, '') AS result3, IFNULL(comType, '') AS result4, IFNULL(respondent, '') AS result5, IFNULL(subjectInfo, '') AS result6, IFNULL(date_released, '') AS result7, IFNULL(date_received, '') AS result8 FROM outgoing WHERE folder_no IS NOT NULL AND folder_no <> '' LIMIT 100")
+      if err != nil {
+        panic(err.Error())
+      }
+
+      for results.Next() {
+				err = results.Scan(&result, &result2, &result3, &result4, &result5, &result6, &result7, &result8)
+				if err != nil {
+					panic(err.Error())
+				}
+				array = append(array, result)
+        array2 = append(array2, result2)
+        array3 = append(array3, result3)
+        array4 = append(array4, result4)
+        array5 = append(array5, result5)
+        array6 = append(array6, result6)
+        array7 = append(array7, result7)
+        array8 = append(array8, result8)
+			}
+			c.JSON(http.StatusOK, gin.H{
+				"result": array,
+        "result2": array2,
+        "result3": array3,
+        "result4": array4,
+        "result5": array5,
+        "result6": array6,
+        "result7": array7,
+        "result8": array8,
+			})
+
+    } else if method == "GetFileAddIncoming" {
+      var result2, result3, result4 string
+      array := []string{}
+      array2 := []string{}
+      array3 := []string{}
+      array4 := []string{}
+
+      results, err := db.Query("SELECT IFNULL(entryCodeNo, '') AS result, IFNULL(sourceName, '') AS result2, IFNULL(subjectInfo, '') AS result3, IFNULL(receivedDate, '') AS result4 FROM incoming WHERE folder_no IS NULL AND page_no = 0 OR folder_no = '' ORDER BY entryCodeNo DESC LIMIT 50")
+      if err != nil {
+        panic(err.Error())
+      }
+
+      for results.Next() {
+				err = results.Scan(&result, &result2, &result3, &result4)
+				if err != nil {
+					panic(err.Error())
+				}
+				array = append(array, result)
+        array2 = append(array2, result2)
+        array3 = append(array3, result3)
+        array4 = append(array4, result4)
+			}
+			c.JSON(http.StatusOK, gin.H{
+				"result": array,
+        "result2": array2,
+        "result3": array3,
+        "result4": array4,
+			})
     }
   })
 
@@ -592,6 +662,49 @@ func connect() {
 
 			c.JSON(http.StatusOK, gin.H{
 				"result": result,
+			})
+
+    } else if method == "SearchIncoming" {
+      var result2, result3, result4, result5, result6 string
+
+      err = db.QueryRow("SELECT IFNULL(receivedDate, '') AS result, IFNULL(sourceName, '') AS result2, IFNULL(subjectInfo, '') AS result3, IFNULL(subDetails, '') AS result4, IFNULL(attachments, '') AS result5, IFNULL(bo_notes, '') AS result6 from incoming where entryCodeNo = ?", data).Scan(&result, &result2, &result3, &result4, &result5, &result6)
+      if err != nil {
+        panic(err.Error())
+      }
+
+			c.JSON(http.StatusOK, gin.H{
+				"result": result,
+        "result2": result2,
+        "result3": result3,
+        "result4": result4,
+        "result5": result5,
+        "result6": result6,
+			})
+
+    } else if method == "SearchIncomingAction" {
+      var result2 string
+
+      err = db.QueryRow("SELECT IFNULL(action_date, '') AS result, IFNULL(actionMade, '') AS result2 FROM action_logs WHERE entryCodeNo = ?", data).Scan(&result, &result2)
+      if err != nil {
+        panic(err.Error())
+      }
+
+			c.JSON(http.StatusOK, gin.H{
+				"result": result,
+        "result2": result2,
+			})
+
+    } else if method == "SearchIncomingDocLog" {
+      var result2 string
+
+      err = db.QueryRow("SELECT IFNULL(date_forwarded, '') AS result, IFNULL(forwardedto_name, '') AS result2 FROM doc_logs WHERE entryCodeNo = ?", data).Scan(&result, &result2)
+      if err != nil {
+        panic(err.Error())
+      }
+
+			c.JSON(http.StatusOK, gin.H{
+				"result": result,
+        "result2": result2,
 			})
     }
   })

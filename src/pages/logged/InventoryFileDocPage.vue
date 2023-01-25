@@ -33,7 +33,7 @@ q-page(padding)
             td {{incomingList.result3[index]}}
             td {{incomingList.result4[index]}}
             td
-              q-btn(color="button" icon="visibility" :ripple="false").button-view
+              q-btn(color="button" icon="add" :ripple="false").button-view Add
               //- q-btn(v-if="showText === false" v-else color="button" label="View" :ripple="false" @mouseleave="mouseLeave").button-view
 
     section(v-else).dialog-content-table
@@ -53,7 +53,7 @@ q-page(padding)
             td {{outgoingList.result4[index]}}
             td {{outgoingList.result5[index]}}
             td
-              q-btn(color="button" icon="visibility" :ripple="false" @click="openDetails(item, outgoingList.result2[index], outgoingList.result3[index], outgoingList.result4[index])").button-view
+              q-btn(color="button" icon="add" :ripple="false" ).button-view Add
               //- q-btn(v-if="showText === false" v-else color="button" label="View" :ripple="false" @mouseleave="mouseLeave").button-view
 
 
@@ -83,6 +83,7 @@ type Incoming = {
   result4: string
 }
 let incomingList = ref({} as Incoming)
+let incomingListEmpty = ref(true)
 
 type Outgoing = {
   result: string
@@ -92,17 +93,36 @@ type Outgoing = {
   result5: string
 }
 let outgoingList = ref({} as Outgoing)
+let outgoingListEmpty = ref(true)
 
 const switchTab = (value: string) => {
   if (value === 'incoming') tabSelected.value = 'outgoing'
   else tabSelected.value = 'incoming'
 }
 
+const getFileAddIncoming = async () => {
+  try {
+    const response = await api.get('/api/GetFileAddIncoming')
+    const data = response.data
+    if (data.result.length > 0) {
+      incomingList.value = data
+      incomingListEmpty.value = false
+    }
+    incomingListEmpty.value = true
+  } catch {
+    incomingListEmpty.value = true
+  }
+}
+
 const gotoInventory = () => {
-  _pagewithtable.pagewithtable = false
+  _pagewithtable.pagewithtable = true
   _currentpage.currentpage = 'inventory'
   router.push('/inventory')
 }
+
+(async () => {
+  await getFileAddIncoming()
+})()
 </script>
 
 <style lang="sass" scoped>

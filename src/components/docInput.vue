@@ -38,7 +38,7 @@ const styleComponent = computed(() => {
 
 <style lang="sass" scoped>
 .input
-  font-family: 'Raleway'
+  font-family: 'OpenSans'
   font-size: 1.3rem
   border-radius: 0.6rem
   text-align: var(--alignment)
