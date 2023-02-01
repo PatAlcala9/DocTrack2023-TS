@@ -16,6 +16,6 @@ const props = defineProps<Props>()
 <style lang="sass" scoped>
 .label
   font-family: 'Raleway'
-  font-size: 1.4rem
+  font-size: 1.2rem
   color: #ffffff
 </style>

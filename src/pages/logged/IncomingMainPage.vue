@@ -11,34 +11,45 @@ q-page(padding)
 
   section(v-if="dataExist")
     div(v-if="sourceName").full-width.column.justify-start.information
-      section.row
+      section.column
         doc-label(text="Source Name:").information__label
         span.information__data {{ sourceName }}
 
     div(v-if="dateReceived").full-width.column.justify-start.information
-      section.row
+      section.column
         doc-label(text="Date Received:").information__label
         span.information__data {{ dateReceived }}
 
     div(v-if="subject").full-width.column.justify-start.information
-      section.row
+      section.column
         doc-label(text="Subject:").information__label
         span.information__data {{ subject }}
 
     div(v-if="details").full-width.column.justify-start.information
-      section.row
+      section.column
         doc-label(text="Details:").information__label
         span.information__data {{ details }}
 
+
     div(v-if="attachments").full-width.column.justify-start.information
-      section.row
+      section.column
         doc-label(text="Attachments:").information__label
         span.information__data {{ attachments }}
+
+    div(v-else).full-width.column.justify-start.information
+      section.column
+        doc-button(text="Add Attachment").information__label
+
 
     div(v-if="notes").full-width.column.justify-start.information
       section.row
         doc-label(text="Notes:").information__label
         span.information__data {{ notes }}
+
+    div(v-else).full-width.column.justify-start.information
+      section.column
+        doc-button(text="Add Notes").information__label
+
 
 
 </template>
@@ -72,20 +83,38 @@ const router = useRouter()
 let _currentpage = useCurrentPage()
 
 const searchIncoming = async () => {
-  const response = await api.get('/api/SearchIncoming/' + entryCode.value)
-  const data = response.data
+  try {
+    const response = await api.get('/api/SearchIncoming/' + entryCode.value)
+    const data = response.data
 
-  if (data.result.length > 0) {
-    const dateReceivied = data.result
+    if (data.result.length > 0) {
+      const dateReceivied = data.result
 
-    dataExist.value = true
-    dateReceived.value = date.formatDate(dateReceivied, 'MMMM D, YYYY')
-    sourceName.value = data.result2
-    subject.value = data.result3
-    details.value = data.result4
-    attachments.value = data.result5
-    notes.value = data.result6
+      dataExist.value = true
+      dateReceived.value = date.formatDate(dateReceivied, 'MMMM D, YYYY')
+      sourceName.value = data.result2
+      subject.value = data.result3
+      details.value = data.result4
+      attachments.value = data.result5
+      notes.value = data.result6
+    } else dataExist.value = false
+  } catch {
+    dataExist.value = false
   }
+}
+
+const searchIncomingAction = async () => {
+  try {
+    const response = await api.get('/api/SearchIncomingAction/' + entryCode.value)
+    const data = response.data
+
+    if (data.result.length > 0) {
+      // docLogsList
+    } else dataExist.value = false
+  } catch {
+
+  }
+
 }
 
 const gotoMenu = () => {
@@ -286,7 +315,7 @@ const showData = () => {
   border-bottom: 2px solid #000406
 
 .information
-  padding: 3rem 0 0 1rem
+  padding: 1rem 0 0 1rem
 
 .information__label
   margin-right: 0.6rem
@@ -295,6 +324,8 @@ const showData = () => {
   font-family: 'OpenSans'
   font-size: 1.2rem
   border: 1px solid white
-  padding: 0.5rem
-  margin-top: -0.5rem
+  padding: 0.3rem 0.5rem
+  // margin-top: -0.5rem
+
+.spaced
 </style>

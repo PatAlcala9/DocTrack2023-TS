@@ -683,28 +683,50 @@ func connect() {
 
     } else if method == "SearchIncomingAction" {
       var result2 string
+      array := []string{}
+      array2 := []string{}
 
-      err = db.QueryRow("SELECT IFNULL(action_date, '') AS result, IFNULL(actionMade, '') AS result2 FROM action_logs WHERE entryCodeNo = ?", data).Scan(&result, &result2)
+      results, err := db.Query("SELECT IFNULL(action_date, '') AS result, IFNULL(actionMade, '') AS result2 FROM action_logs WHERE entryCodeNo = ?", data)
       if err != nil {
         panic(err.Error())
       }
 
+      for results.Next() {
+				err = results.Scan(&result, &result2)
+				if err != nil {
+					panic(err.Error())
+				}
+				array = append(array, result)
+        array2 = append(array2, result2)
+			}
+
 			c.JSON(http.StatusOK, gin.H{
-				"result": result,
-        "result2": result2,
+				"result": array,
+        "result2": array2,
 			})
 
     } else if method == "SearchIncomingDocLog" {
       var result2 string
+      array := []string{}
+      array2 := []string{}
 
-      err = db.QueryRow("SELECT IFNULL(date_forwarded, '') AS result, IFNULL(forwardedto_name, '') AS result2 FROM doc_logs WHERE entryCodeNo = ?", data).Scan(&result, &result2)
+      results, err := db.Query("SELECT IFNULL(date_forwarded, '') AS result, IFNULL(forwardedto_name, '') AS result2 FROM doc_logs WHERE entryCodeNo = ?", data)
       if err != nil {
         panic(err.Error())
       }
 
+      for results.Next() {
+				err = results.Scan(&result, &result2)
+				if err != nil {
+					panic(err.Error())
+				}
+				array = append(array, result)
+        array2 = append(array2, result2)
+			}
+
 			c.JSON(http.StatusOK, gin.H{
-				"result": result,
-        "result2": result2,
+				"result": array,
+        "result2": array2,
 			})
     }
   })
