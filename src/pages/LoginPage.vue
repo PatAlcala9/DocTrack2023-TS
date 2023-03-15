@@ -5,7 +5,7 @@ q-page(padding)
     section.title.full-width.row.justify-between
       div.column
         transition(appear @before-enter="beforeEnterLogo" @enter="enterLogo")
-          img(src="../assets/ocbologo.avif" alt="OCBO Logo").logo
+          img(src="../assets/ocbologo.avif" alt="OCBO Logo" @click="test").logo
         transition(appear @before-enter="beforeEnterTitle" @enter="enterTitle")
           section.name.fit.column.wrap.justify-start.items-start.content-start
             span.ocbo-title OCBO
@@ -129,6 +129,18 @@ let errorMessage = ref('')
 let errorInformation = ref('')
 
 const router = useRouter()
+
+const run = async () => {
+  const wasmModule = await WebAssembly.instantiateStreaming(fetch('src/js/ocbo.wasm'))
+  const encrypt = wasmModule.instance.exports.encrypt as CallableFunction
+  const encryptedMessage = await encrypt('hello', 'hello', 1, 128)
+  return encryptedMessage
+}
+
+const test = async () => {
+  const result = await run()
+  console.log(result)
+}
 
 let inquiry = ref(false)
 let inquireReceived = ref(false)
