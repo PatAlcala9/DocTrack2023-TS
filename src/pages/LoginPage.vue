@@ -229,7 +229,7 @@ const checkPassword = async () => {
   try {
     const response = await api.get('/api/CheckPassword/' + usernameEntry.value.toUpperCase())
     const data = response.data
-    if (data !== undefined && comparePassword(data.result, passwordEntry.value.toUpperCase())) passwordAccepted = true
+    if (data !== undefined && comparePassword(data.result, passwordEntry.value.toUpperCase(), 'doctrack2023', 3, 128)) passwordAccepted = true
   } catch {
     passwordAccepted = false
   }

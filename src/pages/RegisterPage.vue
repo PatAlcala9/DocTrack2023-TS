@@ -129,7 +129,7 @@ let dialog = ref(false)
 let dialogMessage = ref('')
 
 const saveAccount = async () => {
-  let ipasswordEncrypted = await encrypt(ipassword.value.toUpperCase())
+  let ipasswordEncrypted = await encrypt(ipassword.value.toUpperCase(), 'doctrack2023', 3, 128)
   let iincoming = accessList.value.includes('is_incoming') ? 1 : 0
   let ioutgoing = accessList.value.includes('is_outgoing') ? 1 : 0
   let ireleasing = accessList.value.includes('is_releasing') ? 1 : 0

@@ -1,9 +1,9 @@
-import * as GenerateMD5 from 'md5'
+const GenerateMD5 = require('md5')
 
-export function encrypt(Password: string, salt: string, iteration: number = 1, bits: 128 | 256 | 512 | 1024 | 2048) {
+export function encrypt(Password: string, salt: string, iteration = 1, bits: 128 | 256 | 512 | 1024 | 2048) {
   let expandedSalt = ''
   for (let i = 0; i < iteration; i++) {
-    expandedSalt += salt;
+    expandedSalt += salt
   }
 
   const md51 = GenerateMD5(expandedSalt + Password + expandedSalt)
@@ -14,7 +14,6 @@ export function encrypt(Password: string, salt: string, iteration: number = 1, b
   const p2 = md51.toString().substr(8, 8)
   const p3 = md51.toString().substr(16, 8)
   const p4 = md51.toString().substr(24, 8)
-
 
   for (let x = 0; x < iteration; x++) {
     for (let i = 0; i < Password.length; i++) {
@@ -44,8 +43,8 @@ export function encrypt(Password: string, salt: string, iteration: number = 1, b
 
   if (outputLength > 1) {
     const xtra = (consCount * outputLength).toString() + (vowelCount * outputLength).toString()
-    const newConsCount = (consCount * outputLength) * parseInt(xtra)
-    const newVowelCount = (vowelCount * outputLength) * parseInt(xtra)
+    const newConsCount = consCount * outputLength * parseInt(xtra)
+    const newVowelCount = vowelCount * outputLength * parseInt(xtra)
     const newValue = result + newConsCount + newVowelCount
     const md53 = GenerateMD5(newValue)
     const md54 = GenerateMD5(newConsCount.toString() + newVowelCount.toString())
@@ -62,11 +61,11 @@ export function encrypt(Password: string, salt: string, iteration: number = 1, b
 
     result = result + p32x + p32 + p31x + p31 + p34x + p34 + p33x + p33
   }
-  
+
   if (outputLength > 2) {
     const xtra = (consCount * outputLength).toString() + (vowelCount * outputLength).toString()
-    const newConsCount = (consCount * outputLength) * parseInt(xtra)
-    const newVowelCount = (vowelCount * outputLength) * parseInt(xtra)
+    const newConsCount = consCount * outputLength * parseInt(xtra)
+    const newVowelCount = vowelCount * outputLength * parseInt(xtra)
     const newValue = result + newConsCount + newVowelCount
     const md55 = GenerateMD5(newValue)
     const md56 = GenerateMD5(newConsCount.toString() + newVowelCount.toString())
@@ -86,8 +85,8 @@ export function encrypt(Password: string, salt: string, iteration: number = 1, b
 
   if (outputLength > 3) {
     const xtra = (consCount * outputLength).toString() + (vowelCount * outputLength).toString()
-    const newConsCount = (consCount * outputLength) * parseInt(xtra)
-    const newVowelCount = (vowelCount * outputLength) * parseInt(xtra)
+    const newConsCount = consCount * outputLength * parseInt(xtra)
+    const newVowelCount = vowelCount * outputLength * parseInt(xtra)
     const newValue = result + newConsCount + newVowelCount
     const md57 = GenerateMD5(newValue)
     const md58 = GenerateMD5(newConsCount.toString() + newVowelCount.toString())
@@ -107,8 +106,8 @@ export function encrypt(Password: string, salt: string, iteration: number = 1, b
 
   if (outputLength > 4) {
     const xtra = (consCount * outputLength).toString() + (vowelCount * outputLength).toString()
-    const newConsCount = (consCount * outputLength) * parseInt(xtra)
-    const newVowelCount = (vowelCount * outputLength) * parseInt(xtra)
+    const newConsCount = consCount * outputLength * parseInt(xtra)
+    const newVowelCount = vowelCount * outputLength * parseInt(xtra)
     const newValue = result + newConsCount + newVowelCount
     const md59 = GenerateMD5(newValue)
     const md510 = GenerateMD5(newConsCount.toString() + newVowelCount.toString())
@@ -129,16 +128,14 @@ export function encrypt(Password: string, salt: string, iteration: number = 1, b
   return result
 }
 
-// export function comparePassword(dbPassword: string, strPassword: string) {
-//   let result
-//   const estrPassword = encrypt(strPassword)
+export function comparePassword(dbPassword: string, strPassword: string, salt: string, iteration = 1, bits: 128 | 256 | 512 | 1024 | 2048) {
+  let result
+  const estrPassword = encrypt(strPassword, salt, iteration, bits)
 
-//   if (dbPassword === estrPassword) {
-//     result = true
-//   } else {
-//     result = false
-//   }
-//   return result
-// }
-
-console.log(encrypt("hello", "ocbo123456", 4,  512))
+  if (dbPassword === estrPassword) {
+    result = true
+  } else {
+    result = false
+  }
+  return result
+}

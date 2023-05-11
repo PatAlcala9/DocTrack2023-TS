@@ -6,11 +6,11 @@
 //   return true
 // }
 
-export function fullName(firstname: string, middlename: string, lastname: string, occfirstname: string, occmiddlename: string, occlastname: string) {
-  let result
-  let fname
-  let mname
-  let lname
+export function fullName(firstname: string, middlename: string, lastname: string, occfirstname: string, occmiddlename: string, occlastname: string): string {
+  let result = ''
+  let fname = ''
+  let mname = ''
+  let lname = ''
 
   if (occfirstname === null) {
     if (firstname === '') {
@@ -40,16 +40,15 @@ export function fullName(firstname: string, middlename: string, lastname: string
     lname = occlastname
   }
 
-  // eslint-disable-next-line prefer-const
   result = fname + mname + lname
   return result
 }
 
-export function fullAddress(block: string, lot: string, address: string, occblock: string, occlot: string, occaddress: string) {
-  let result
-  let blk
-  let lt
-  let addrss
+export function fullAddress(block: string, lot: string, address: string, occblock: string, occlot: string, occaddress: string): string {
+  let result = ''
+  let blk = ''
+  let lt = ''
+  let addrss = ''
 
   if (occblock === '0') {
     if (block === '0' || block === null || block === undefined) {
@@ -81,15 +80,14 @@ export function fullAddress(block: string, lot: string, address: string, occbloc
     addrss = occaddress
   }
 
-  // eslint-disable-next-line prefer-const
   result = blk + lt + addrss
   return result
 }
 
 // const aLength = await this.address === null ? 0 : this.address.length
 
-export function isNotEmpty(object: string) {
-  let result
+export function isNotEmpty(object: string): boolean {
+  let result = false
   const elength: number = object === null ? 0 : object.length
 
   if (elength === 0) {
@@ -101,8 +99,8 @@ export function isNotEmpty(object: string) {
   return result
 }
 
-export function constructApplication(year: string, series: string, division: string) {
-  let result
+export function constructApplication(year: string, series: string, division: string): string {
+  let result = ''
 
   if (division === 'Building') {
     if (series.length === 1) {
@@ -123,7 +121,7 @@ export function constructApplication(year: string, series: string, division: str
   return result
 }
 
-export function todayDate() {
+export function todayDate(): string {
   const now = new Date()
   const month = now.getMonth()
   const day = now.getDate()

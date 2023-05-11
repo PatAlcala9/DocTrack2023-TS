@@ -106,7 +106,7 @@ const logout = async () => {
   gotoPage('/')
 }
 
-const gotoPage = (page: string, table: boolean) => {
+const gotoPage = (page: string, table = false) => {
   _pagewithtable.pagewithtable = table
   _currentpage.currentpage = page
   router.push(page)
