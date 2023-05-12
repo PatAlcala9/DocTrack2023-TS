@@ -107,7 +107,7 @@ import { api } from 'boot/axios'
 import { useRouter } from 'vue-router'
 import { comparePassword } from 'src/js/OCBO'
 import { gsap } from 'gsap'
-import { SessionStorage } from 'quasar'
+import { SessionStorage, Platform } from 'quasar'
 
 import { useEmployeeName } from 'stores/employeename'
 import { useUserID } from 'stores/userid'
@@ -351,6 +351,13 @@ const beforeEnterSwitch = (el: any) => {
 }
 const enterSwitch = (el: any) => {
   gsap.to(el, { duration: 0.8, x: 1, opacity: 1 })
+}
+
+let browserName = ''
+let browserVersion = 0
+const detectBrowser = () => {
+  browserName = Platform.is.name
+  browserVersion = Platform.is.version ?? Platform.is.version : 0
 }
 
 ;(async () => {
