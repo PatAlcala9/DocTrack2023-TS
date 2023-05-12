@@ -637,9 +637,9 @@ func connect() {
 			})
 
     } else if method == "GetUserDetails" {
-      var result2, result3, result4, result5, result6, result7 string
+      var result2, result3, result4, result5, result6, result7, result8 string
 
-      err = db.QueryRow("SELECT userid AS result, employeeName AS result2, is_incoming AS result3, is_outgoing AS result4, is_releasing AS result5, is_inventory AS result6, is_otherdocuments AS result7 FROM user WHERE username = ?", data).Scan(&result, &result2, &result3, &result4, &result5, &result6, &result7)
+      err = db.QueryRow("SELECT userid AS result, employeeName AS result2, is_incoming AS result3, is_outgoing AS result4, is_releasing AS result5, is_inventory AS result6, is_otherdocuments AS result7, is_complaint AS result8 FROM user WHERE username = ?", data).Scan(&result, &result2, &result3, &result4, &result5, &result6, &result7, &result8)
       if err != nil {
         panic(err.Error())
       }
@@ -652,6 +652,7 @@ func connect() {
         "result5": result5,
         "result6": result6,
         "result7": result7,
+        "result8": result8,
 			})
 
     } else if method == "GetMaxEntryCode" {

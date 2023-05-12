@@ -135,7 +135,8 @@ const saveAccount = async () => {
   let ireleasing = accessList.value.includes('is_releasing') ? 1 : 0
   let iinventory = accessList.value.includes('is_inventory') ? 1 : 0
   let iothers = accessList.value.includes('is_otherdocuments') ? 1 : 0
-  const response = await api.post('/api/SaveAccount/' + ifullname.value.toUpperCase() + '/' + iusername.value.toUpperCase() + '/' + ipasswordEncrypted + '/' + iincoming + '/' + ioutgoing + '/' + ireleasing + '/' + iinventory + '/' + iothers)
+  let icomplaint = accessList.value.includes('is_complaint') ? 1 : 0
+  const response = await api.post('/api/SaveAccount/' + ifullname.value.toUpperCase() + '/' + iusername.value.toUpperCase() + '/' + ipasswordEncrypted + '/' + iincoming + '/' + ioutgoing + '/' + ireleasing + '/' + iinventory + '/' + iothers + '/' + icomplaint)
   const data = response.data
 
   if (data.includes('Success')) {

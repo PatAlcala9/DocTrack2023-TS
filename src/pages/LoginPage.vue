@@ -38,6 +38,8 @@ q-page(padding)
           doc-button(text="Received" @click="inquireReceivedTrigger")
         section.button-area--inquiry.column.wrap.justify-center.items-center.content-center
           doc-button(text="Released" @click="inquireReleasedTrigger")
+        section.button-area--inquiry.column.wrap.justify-center.items-center.content-center
+          doc-button(text="Scan using QR" @click="qrScannerTrigger")
 
     transition(appear @before-enter="beforeEnterSwitch" @enter="enterSwitch")
       div.inquiry
@@ -185,6 +187,13 @@ const inquireReleasedTrigger = async () => {
   router.push('/released')
 }
 
+const qrScannerTrigger = async () => {
+  _pagewithtable.pagewithtable = false
+  SessionStorage.set('CurrentPage', 'qrscanner')
+  _currentpage.currentpage = 'qrscanner'
+  router.push('/qrscanner')
+}
+
 const getIncoming = async () => {
   const response = await api.get('/api/GetIncoming')
   const data = response.data.length !== 0 ? response.data : null
@@ -218,7 +227,9 @@ const checkUsername = async () => {
   try {
     const response = await api.get('/api/CheckUsername/' + usernameEntry.value.toUpperCase())
     const data = response.data
-    if (data !== undefined) usernameAccepted = data.result === '1' ? true : false
+    const dataNum = parseInt(data.result)
+    console.log(data)
+    if (data !== undefined) usernameAccepted = dataNum > 0 ? true : false
   } catch {
     usernameAccepted = false
   }
@@ -250,6 +261,7 @@ const getUserDetails = async () => {
       if (data.result5 === '1') _access.access.push('releasing')
       if (data.result6 === '1') _access.access.push('inventory')
       if (data.result7 === '1') _access.access.push('otherdocuments')
+      if (data.result8 === '1') _access.access.push('complaint')
       detailsAllowed = true
     }
   } catch {

@@ -32,6 +32,11 @@ q-page(padding).full-width.column.items-start.content-center
         q-icon(name="topic" size="xl").icon
         component(:is="docButton" text="Inventory")
 
+    transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
+      section(v-if="_access.access.includes('complaint')" @click="gotoPage('complaint', true)").column.items-center
+        q-icon(name="topic" size="xl").icon
+        component(:is="docButton" text="Complaint")
+
     //- transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
     //-   component(v-if="_access.access.includes('otherdocuments')" :is="docButton" text="Other Docs")
 
