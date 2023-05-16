@@ -12,7 +12,7 @@ q-page(padding)
     transition(appear @before-enter="beforeEnterInputs" @enter="enterInputs")
       div.column.items-center
         span.login__username--label Fullname
-        component(:is="docInput" v-model:value="ifullname" width="30").login__username--input
+        component(:is="docInput" v-model:value="ifullname" width=30 mobileWidth=15).login__username--input
 
         span.login__username--label Username
         component(:is="docInput" v-model:value="iusername").login__username--input
@@ -176,11 +176,13 @@ const gotoHome = () => {
 
 .login
   margin: 1rem
-  font-family: 'Montserrat'
+  font-family: 'Inter'
+  font-weight: 310
 
 .login__username--label
-  font-family: 'Montserrat'
-  font-size: 1.4rem
+  font-family: 'Inter'
+  font-weight: 400
+  font-size: 1.2rem
 
 .login__username--input
   margin-bottom: 1.4rem

@@ -16,12 +16,12 @@ q-page(padding)
       div
         section.username-area.column.wrap.justify-center.items-center.content-center
           doc-label(text="Username")
-          component(v-if="$q.screen.width <=500" :is="docInput" v-model:value="usernameEntry" width="10")
+          component(v-if="$q.screen.width <=500" :is="docInput" v-model:value="usernameEntry" :width=mobileWidth)
           doc-input(v-else v-model:value="usernameEntry")
 
         section.password-area.column.wrap.justify-center.items-center.content-center
           doc-label(text="Password")
-          component(v-if="$q.screen.width <=500" :is="docInputPassword" v-model:value="passwordEntry" @keypress.enter="login" width="10")
+          component(v-if="$q.screen.width <=500" :is="docInputPassword" v-model:value="passwordEntry" @keypress.enter="login")
           doc-input-password(v-else v-model:value="passwordEntry" @keypress.enter="login")
 
         section.button-area.column.wrap.justify-center.items-center.content-center
@@ -39,7 +39,7 @@ q-page(padding)
         section.button-area--inquiry.column.wrap.justify-center.items-center.content-center
           doc-button(text="Released" @click="inquireReleasedTrigger")
         section.button-area--inquiry.column.wrap.justify-center.items-center.content-center
-          doc-button(text="Scan using QR" @click="qrScannerTrigger")
+          doc-button(text="QR" @click="qrScannerTrigger")
 
     transition(appear @before-enter="beforeEnterSwitch" @enter="enterSwitch")
       div.inquiry
@@ -129,6 +129,8 @@ let _currentpage = useCurrentPage()
 let error = ref(false)
 let errorMessage = ref('')
 let errorInformation = ref('')
+
+const mobileWidth = ref(10)
 
 const router = useRouter()
 
@@ -354,15 +356,17 @@ const enterSwitch = (el: any) => {
 }
 
 let browserName = ''
-let browserVersion = 0
+let browserVersion 
 const detectBrowser = () => {
   browserName = Platform.is.name
-  browserVersion = Platform.is.version ?? Platform.is.version : 0
+  browserVersion = Platform.is.version ?? 0
 }
 
 ;(async () => {
   if (_currentpage.currentpage !== undefined) router.push(_currentpage.currentpage)
   else router.push('/')
+
+  detectBrowser()
 })()
 </script>
 
@@ -430,7 +434,8 @@ const detectBrowser = () => {
   align-self: left
 
 .inquiry-text
-  font-family: 'Raleway'
+  font-family: 'Inter'
+  font-weight: 300
   font-size: 1.2rem
   text-decoration: underline
   padding: 2rem
@@ -567,7 +572,7 @@ const detectBrowser = () => {
 
   .login
     margin-top: -5rem
-    width: 14rem
+    width: 90%
     height: 22rem
 
   .register

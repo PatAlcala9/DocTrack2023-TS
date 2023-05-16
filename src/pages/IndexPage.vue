@@ -161,4 +161,9 @@ const gotoPage = (page: string, table = false) => {
 .icon
   padding: 0.8rem
   cursor: pointer
+
+@media screen and (max-width: 500px)
+  .name
+    font-size: 2rem
+    margin-top: 2rem
 </style>

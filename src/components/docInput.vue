@@ -13,6 +13,7 @@ export interface Props {
   width: number
   alignment: string
   transform: string
+  mobileWidth: number
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -20,6 +21,7 @@ const props = withDefaults(defineProps<Props>(), {
   width: 16,
   alignment: 'center',
   transform: 'uppercase',
+  mobileWidth: 16
 })
 const emit = defineEmits(['update:value'])
 
@@ -32,6 +34,7 @@ const styleComponent = computed(() => {
     '--width': props.width + 'rem',
     '--alignment': props.alignment,
     '--transform': props.transform,
+    '--mobileWidth': props.mobileWidth,
   }
 })
 </script>
@@ -56,5 +59,6 @@ const styleComponent = computed(() => {
 @media screen and (max-width: 500px)
   .input
     font-size: 1.2rem
-    width: var(--width)
+    width: var(--mobileWidth)
+
 </style>

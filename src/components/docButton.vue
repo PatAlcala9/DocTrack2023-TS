@@ -17,5 +17,6 @@ const props = withDefaults(defineProps<Props>(), {
 
 <style lang="sass" scoped>
 .button
-  font-family: 'Raleway',
+  font-family: 'Inter'
+  font-weight: 100 200
 </style>

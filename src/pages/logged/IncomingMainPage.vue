@@ -50,8 +50,6 @@ q-page(padding)
       section.column
         doc-button(text="Add Notes").information__label
 
-
-
 </template>
 
 <script setup lang="ts">
@@ -111,10 +109,7 @@ const searchIncomingAction = async () => {
     if (data.result.length > 0) {
       // docLogsList
     } else dataExist.value = false
-  } catch {
-
-  }
-
+  } catch {}
 }
 
 const gotoMenu = () => {
