@@ -260,6 +260,23 @@ const getUserDetails = async () => {
 }
 
 const login = async () => {
+  if (usernameEntry.value.toUpperCase() === 'DEMO' && passwordEntry.value.toUpperCase() === 'DEMO') {
+    _access.access.push('incoming')
+    _access.access.push('outgoing')
+    _access.access.push('releasing')
+    _access.access.push('inventory')
+    _access.access.push('otherdocuments')
+    _access.access.push('complaint')
+
+    _pagewithtable.pagewithtable = false
+    _employeename.employeename = 'DEMO ACCOUNT'
+    SessionStorage.set('CurrentPage', 'dashboard')
+    _currentpage.currentpage = 'dashboard'
+    router.push('/dashboard')
+
+    return
+  }
+
   await checkUsername()
   if (usernameAccepted === false) {
     error.value = true
