@@ -23,7 +23,7 @@ q-page(padding)
         span.login__username--label Access
         q-option-group(dark v-model="accessList" :options="accessOption" color="indigo-9" type="checkbox").login__username--option
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
-      doc-button(text="Register" @click="saveAccount")
+      doc-button.register-button(text="Register" @click="saveAccount")
 
 q-dialog(v-model="dialog" transition-show="flip-right" transition-hide="flip-left")
   q-card.dialog-card.text-white
@@ -200,4 +200,7 @@ const gotoHome = () => {
 .dialog-card__section
   padding: 2rem
   font-size: 2rem
+
+.register-button
+  padding-top: 3rem
 </style>
