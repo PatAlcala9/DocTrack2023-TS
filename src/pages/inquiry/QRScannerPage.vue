@@ -6,7 +6,8 @@ q-page(padding)
     q-btn(flat size="md" label="Back" @click="gotoHome" icon="arrow_back").close-button
 
   div.full-width.column.wrap.justify-center.items-center.content-center
-    component.scanner(:is="QrStream" @decode="handleDecode" @error="handleError")
+    section.scanner
+      component(:is="QrStream" @decode="handleDecode" @error="handleError")
     span {{ decodedText }}
 
 </template>
@@ -15,7 +16,7 @@ q-page(padding)
 import { QrStream } from 'vue3-qr-reader'
 
 import { ref } from 'vue'
-import { api } from 'boot/axios'
+// import { api } from 'boot/axios'
 import { useRouter } from 'vue-router'
 import { useCurrentPage } from 'stores/currentpage'
 
@@ -40,6 +41,6 @@ const gotoHome = () => {
 
 <style lang="sass">
 .scanner
-  border: 1px solid #ffffff
-  border-radius: 5rem
+  margin-top: 2rem
+  border: 1px solid rgba(255, 255, 255, 0.125)
 </style>

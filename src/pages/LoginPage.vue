@@ -415,6 +415,7 @@ const detectBrowser = () => {
   height: auto
   opacity: 0.6
   margin-right: 2rem
+  filter: grayscale(100%) invert(90%)
 
 .name
   grid-area: name
@@ -458,7 +459,7 @@ const detectBrowser = () => {
   padding-top: 1rem
 
 .button-area--inquiry
-  padding-top: 2rem
+  padding-top: 1.6rem
 
 .davao
   grid-area: davao
