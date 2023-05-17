@@ -5,6 +5,39 @@ q-page(padding)
     span.title Complaint Tracking
     q-btn(flat size="md" label="Back" @click="gotoMenu" icon="arrow_back").close-button
 
+  div.fit.row.wrap.justify-start.items-start.content-start.search-area
+    section.column
+      span Search
+      q-input(dense filled v-model="searchValue" bg-color="white" :input-style="{ fontSize: '1.2rem', fontFamily: 'OpenSans' }" @keydown.enter="getIncomingUsingValue")
+    section.column
+      span Search By
+      //- input
+      q-btn-dropdown(unelevated color="grey-10" :label="searchByValue" size="1rem" :content-style="{ fontSize: '0.9rem', fontFamily: 'Inter' }")
+        q-list
+          q-item(clickable v-close-popup @click="searchByValue = 'CODE'")
+            q-item-section
+              q-item-label COMPLAINT CODE
+
+          q-item(clickable v-close-popup @click="searchByValue = 'RESPONDENT'")
+            q-item-section
+              q-item-label RESPONDENT
+
+          q-item(clickable v-close-popup @click="searchByValue = 'INSPECTOR'")
+            q-item-section
+              q-item-label INSPECTOR
+
+          q-item(clickable v-close-popup @click="searchByValue = 'LOCATION'")
+            q-item-section
+              q-item-label LOCATION
+
+          q-item(clickable v-close-popup @click="searchByValue = 'STATUS'")
+            q-item-section
+              q-item-label STATUS
+
+          q-item(clickable v-close-popup @click="searchByValue = 'REMAINING DAYS'")
+            q-item-section
+              q-item-label REMAINING DAYS
+
   div.flex.flex-center
     section(v-if="complaintList.result !== ''").dialog-content-table
       table.table
@@ -27,7 +60,6 @@ q-page(padding)
             td {{complaintList.result6[index]}}
             td
               q-btn(color="button" icon="visibility" :ripple="false" ).button-view
-            //-   //- q-btn(v-if="showText === false" v-else color="button" label="View" :ripple="false" @mouseleave="mouseLeave").button-view
 </template>
 
 <script setup lang="ts">
@@ -45,17 +77,8 @@ import docTextArea from 'components/docTextArea.vue'
 import docInput from 'components/docInput.vue'
 import docLabel from 'components/docLabel.vue'
 
-let entryCode = ref('')
-let dataExist = ref(false)
-
-let sourceName = ref('')
-let dateReceived = ref('')
-let subject = ref('')
-let details = ref('')
-let attachments = ref('')
-let notes = ref('')
-let docLogsList = []
-let actionMadeList = []
+let searchValue = ref('')
+let searchByValue = ref('')
 
 type Complaint = {
   result: string
