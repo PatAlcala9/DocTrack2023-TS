@@ -1,4 +1,7 @@
 const GenerateMD5 = require('md5')
+const CryptoJS = require('crypto-js')
+
+// declare module 'crypto-js'
 
 export function encrypt(Password: string, salt: string, iteration = 1, bits: 128 | 256 | 512 | 1024 | 2048) {
   let expandedSalt = ''
@@ -138,4 +141,18 @@ export function comparePassword(dbPassword: string, strPassword: string, salt: s
     result = false
   }
   return result
+}
+
+export function encryptAES(text: string) {
+  const key = encrypt('OCBODocTrack2023', 'AES', 4, 256)
+  const encrypted = CryptoJS.AES.encrypt(text, key).toString()
+
+  return encrypted
+}
+
+export function decryptAES(ciphertext: string) {
+  const key = encrypt('OCBODocTrack2023', 'AES', 4, 256)
+  const decrypted = CryptoJS.AES.decrypt(ciphertext, key).toString(CryptoJS.enc.Utf8)
+
+  return decrypted
 }

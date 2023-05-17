@@ -8,8 +8,9 @@ q-page(padding)
           img(src="../assets/ocbologo.avif" alt="OCBO Logo").logo
         transition(appear @before-enter="beforeEnterTitle" @enter="enterTitle")
           section.name.fit.column.wrap.justify-start.items-start.content-start
-            span.ocbo-title OCBO
+            span.ocbo-title(@click="sampleAES") OCBO
             span.ocbo-text Doctrack System 2023
+
 
     //- transition( appear @before-enter="beforeEnterForm" @enter="enterForm")
     div(v-if="inquiry === false").login#login
@@ -29,6 +30,7 @@ q-page(padding)
 
         section.register.column.wrap.justify-center.items-center.content-center
           span(@click="gotoRegister") Create New Account
+          component(:is="vueQr" text="Hello world!" qid="testid")
 
     div(v-else).login#inquiry
       div
@@ -105,9 +107,11 @@ export default {
 import { ref } from 'vue'
 import { api } from 'boot/axios'
 import { useRouter } from 'vue-router'
-import { comparePassword } from 'src/js/OCBO'
+import { comparePassword, encryptAES, decryptAES, encrypt } from 'src/js/OCBO'
 import { gsap } from 'gsap'
 import { SessionStorage, Platform } from 'quasar'
+
+import vueQr from 'vue-qr/src/packages/vue-qr.vue'
 
 import { useEmployeeName } from 'stores/employeename'
 import { useUserID } from 'stores/userid'
@@ -365,6 +369,13 @@ let browserVersion
 const detectBrowser = () => {
   browserName = Platform.is.name
   browserVersion = Platform.is.version ?? 0
+}
+
+const sampleAES = () => {
+  console.log(encryptAES(usernameEntry.value))
+  console.log(decryptAES('U2FsdGVkX1+daw2odL+0lzbX0U3z14XGkBxvKK5Cte562nWBbWAlZNzhWCeMBrF/qRwAqnmwWcRJ0iq22Mj7XQ=='))
+
+
 }
 
 ;(async () => {
