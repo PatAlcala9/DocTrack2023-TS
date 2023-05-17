@@ -436,12 +436,13 @@ const detectBrowser = () => {
 .inquiry
   grid-area: inquiry
   justify-self: left
-  align-self: left
+  align-self: end
+  padding-bottom: 2rem
 
 .inquiry-text
   font-family: 'Inter'
   font-weight: 300
-  font-size: 1.2rem
+  font-size: 1.1rem
   text-decoration: underline
   padding: 2rem
   cursor: pointer
@@ -586,6 +587,7 @@ const detectBrowser = () => {
   .inquiry
     margin-top: 1.2rem
     justify-self: center
+    align-self: center
 
   .inquiry-text
     font-size: 1.1rem
