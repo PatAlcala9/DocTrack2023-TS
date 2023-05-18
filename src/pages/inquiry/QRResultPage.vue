@@ -64,7 +64,7 @@ const gotoHome = () => {
 })()
 </script>
 
-<style lang="sass">
+<style lang="sass" scoped>
 .section
   margin: 1.2rem
 

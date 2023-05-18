@@ -47,7 +47,7 @@ const gotoHome = () => {
 }
 </script>
 
-<style lang="sass">
+<style lang="sass" scoped>
 .scanner
   margin-top: 2rem
   border: 1px solid rgba(255, 255, 255, 0.125)
