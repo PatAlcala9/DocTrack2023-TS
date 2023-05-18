@@ -9,36 +9,31 @@ q-page(padding)
     section.scanner
       component(:is="QrStream" @decode="handleDecode" @error="handleError")
     span.scanner-message Place the QR on the screen
-    section(v-if="qr !== undefined")
-      component(:is="vueQr" text="qr")
 
 </template>
 
 <script setup lang="ts">
 import { QrStream } from 'vue3-qr-reader'
-
-import { ref } from 'vue'
-// import { api } from 'boot/axios'
 import { useRouter } from 'vue-router'
 import { useCurrentPage } from 'stores/currentpage'
 import { useQrValue } from 'stores/qrvalue'
-
-import vueQr from 'vue-qr/src/packages/vue-qr.vue'
-import { encryptAES } from 'src/js/OCBO'
+import { useQrError } from 'stores/qrerror'
 
 const router = useRouter()
 const _currentpage = useCurrentPage()
 const _qrvalue = useQrValue()
-
-let qr = ref('')
+const _qrerror = useQrError()
 
 const handleDecode = (text: string) => {
+  _qrerror.qrerror = ''
   _qrvalue.qrvalue = text
   gotoQrResult()
 }
 
-const handleError = () => {
-  console.log('error')
+const handleError = (error: string) => {
+  _qrerror.qrerror = error
+  _qrvalue.qrvalue = ''
+  gotoQrResult()
 }
 
 const gotoQrResult = () => {
@@ -50,12 +45,6 @@ const gotoHome = () => {
   _currentpage.currentpage = '/'
   router.push('/')
 }
-
-const createSampleQR = (text: string) => {
-  const prefix = '**SCAN ME USING OCBO DOCTRACK** QrID::'
-  const qrtext = encryptAES(text)
-  qr.value = prefix + qrtext
-}
 </script>
 
 <style lang="sass">
@@ -65,7 +54,7 @@ const createSampleQR = (text: string) => {
 
 .scanner-message
   font-family: 'Inter'
-  font-weight: 300
-  font-size: 1.2rem
+  font-weight: 400
+  font-size: 1.4rem
   padding: 1.5rem
 </style>

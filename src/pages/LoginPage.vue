@@ -8,8 +8,9 @@ q-page(padding)
           img(src="../assets/ocbologo.avif" alt="OCBO Logo").logo
         transition(appear @before-enter="beforeEnterTitle" @enter="enterTitle")
           section.name.fit.column.wrap.justify-start.items-start.content-start
-            span.ocbo-title OCBO
+            span.ocbo-title(@click="testQRResult") OCBO
             span.ocbo-text Doctrack System 2023
+
 
     //- transition( appear @before-enter="beforeEnterForm" @enter="enterForm")
     div(v-if="inquiry === false").login#login
@@ -29,6 +30,7 @@ q-page(padding)
 
         section.register.column.wrap.justify-center.items-center.content-center
           span(@click="gotoRegister") Create New Account
+
 
     div(v-else).login#inquiry
       div
@@ -360,18 +362,30 @@ const enterSwitch = (el: any) => {
   gsap.to(el, { duration: 0.8, x: 1, opacity: 1 })
 }
 
-let browserName = ''
-let browserVersion
-const detectBrowser = () => {
-  browserName = Platform.is.name
-  browserVersion = Platform.is.version ?? 0
+//- let browserName = ''
+//- let browserVersion
+//- const detectBrowser = () => {
+//-   browserName = Platform.is.name
+//-   browserVersion = Platform.is.version ?? 0
+//- }
+
+import { useQrValue } from 'stores/qrvalue'
+import { useQrError } from 'stores/qrerror'
+const _qrvalue = useQrValue()
+const _qrerror = useQrError()
+
+const testQRResult = () => {
+  _qrerror.qrerror = ''
+  _qrvalue.qrvalue = '**SCAN ME USING OCBO DOCTRACK** QrID::1as2d132as2d123sa123'
+  _currentpage.currentpage = 'qrresult'
+  router.push('/qrresult')
 }
 
 ;(async () => {
   if (_currentpage.currentpage !== undefined) router.push(_currentpage.currentpage)
   else router.push('/')
 
-  detectBrowser()
+  //- detectBrowser()
 })()
 </script>
 
