@@ -8,7 +8,7 @@ q-page(padding)
           img(src="../assets/ocbologo.avif" alt="OCBO Logo").logo
         transition(appear @before-enter="beforeEnterTitle" @enter="enterTitle")
           section.name.fit.column.wrap.justify-start.items-start.content-start
-            span.ocbo-title(@click="testQRResult") OCBO
+            span.ocbo-title OCBO
             span.ocbo-text Doctrack System 2023
 
 
@@ -369,17 +369,17 @@ const enterSwitch = (el: any) => {
 //-   browserVersion = Platform.is.version ?? 0
 //- }
 
-import { useQrValue } from 'stores/qrvalue'
-import { useQrError } from 'stores/qrerror'
-const _qrvalue = useQrValue()
-const _qrerror = useQrError()
+//- import { useQrValue } from 'stores/qrvalue'
+//- import { useQrError } from 'stores/qrerror'
+//- const _qrvalue = useQrValue()
+//- const _qrerror = useQrError()
 
-const testQRResult = () => {
-  _qrerror.qrerror = ''
-  _qrvalue.qrvalue = '**SCAN ME USING OCBO DOCTRACK** QrID::1as2d132as2d123sa123'
-  _currentpage.currentpage = 'qrresult'
-  router.push('/qrresult')
-}
+//- const testQRResult = () => {
+//-   _qrerror.qrerror = ''
+//-   _qrvalue.qrvalue = '**SCAN ME USING OCBO DOCTRACK** QrID::1as2d132as2d123sa123'
+//-   _currentpage.currentpage = 'qrresult'
+//-   router.push('/qrresult')
+//- }
 
 ;(async () => {
   if (_currentpage.currentpage !== undefined) router.push(_currentpage.currentpage)
