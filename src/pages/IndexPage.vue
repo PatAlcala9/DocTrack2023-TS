@@ -6,8 +6,8 @@ q-page(padding).full-width.column.items-start.content-center
   div.fit.column.text-center.main
     transition(appear @before-enter="beforeEnterTitle" @enter="enterTitle")
       span.name {{_employeename.employeename}}
-    transition(appear @before-enter="beforeEnterMenu" @enter="enterMenu")
-      span.menu Menu
+    //- transition(appear @before-enter="beforeEnterMenu" @enter="enterMenu")
+    //-   span.menu Menu
     transition(appear @before-enter="beforeEnterLogout" @enter="enterLogout")
       q-btn(flat size="md" label="Logout" @click="logout" icon="logout" ).logout-button
 
@@ -136,7 +136,7 @@ const gotoPage = (page: string, table = false) => {
   opacity: 0.05
 
 .name
-  font-size: 3.4rem
+  font-size: 3.2rem
   font-family: 'RalewayBold'
   color: #ffffff
 
@@ -164,6 +164,7 @@ const gotoPage = (page: string, table = false) => {
 
 @media screen and (max-width: 500px)
   .name
-    font-size: 2rem
+    font-size: 1.9rem
     margin-top: 2rem
+    padding-bottom: 1.2rem
 </style>
