@@ -1,7 +1,11 @@
 <template lang="pug">
 
-q-page(padding).full-width.column.items-start.content-center
-  img(src="../assets/ocbologo.svg" alt="OCBO Logo").logo
+q-page(padding)
+  section(v-if="quasar.screen.width > 500").full-width.column.items-start.content-center
+    img(src="../assets/ocbologo.svg" alt="OCBO Logo").logo
+
+  section(v-else).full-width.column.items-start.content-center.items-center
+    img(src="../assets/ocbologo.svg" alt="OCBO Logo").logo
 
   div.fit.column.text-center.main
     transition(appear @before-enter="beforeEnterTitle" @enter="enterTitle")
@@ -133,7 +137,8 @@ const gotoPage = (page: string, table = false) => {
   width: 16rem
   height: auto
   position: fixed
-  opacity: 0.05
+  opacity: 0.2
+  filter: grayscale(100) invert(90)
 
 .name
   font-size: 3.2rem

@@ -6,11 +6,11 @@ q-page(padding)
     q-btn(flat size="md" label="Back" @click="gotoMenu" icon="arrow_back").close-button
 
   div.fit.row.wrap.justify-start.items-start.content-start.search-area
-    section.column
-      span Search
+    section.column.section
+      component(:is="docLabel" text="Search")
       q-input(dense filled v-model="searchValue" bg-color="white" :input-style="{ fontSize: '1.2rem', fontFamily: 'OpenSans' }" @keydown.enter="getIncomingUsingValue")
-    section.column
-      span Search By
+    section.column.section
+      component(:is="docLabel" text="Search By")
       //- input
       q-btn-dropdown(unelevated color="grey-10" :label="searchByValue" size="1rem" :content-style="{ fontSize: '0.9rem', fontFamily: 'Inter' }")
         q-list
@@ -38,7 +38,20 @@ q-page(padding)
             q-item-section
               q-item-label REMAINING DAYS
 
-  div.flex.flex-center
+  div(v-if="quasar.screen.width <= 500").flex.flex-center
+    section(v-if="complaintList.result !== ''").dialog-content-table
+      table.table
+        thead
+          tr
+            th Complain Code
+            th Details
+        tbody
+          tr(v-for="(item, index) in complaintList.result" :key="item").table-content-group
+            td {{item}}
+            td
+              q-btn(color="button" icon="visibility" :ripple="false" ).button-view
+
+  div(v-else).flex.flex-center
     section(v-if="complaintList.result !== ''").dialog-content-table
       table.table
         thead
@@ -64,12 +77,13 @@ q-page(padding)
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { date } from 'quasar'
+import { date, useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
 import { api } from 'boot/axios'
 import { useCurrentPage } from 'stores/currentpage'
 
 const router = useRouter()
+const quasar = useQuasar()
 const _currentpage = useCurrentPage()
 
 import docButton from 'components/docButton.vue'
@@ -200,4 +214,11 @@ pushSampleData()
 
 .doc-log-area
   margin-top: 2rem
+
+.section
+  margin-bottom: 0
+
+@media screen and (max-width: 500px)
+  .section
+    margin-bottom: 1.2rem
 </style>
