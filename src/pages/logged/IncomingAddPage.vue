@@ -278,11 +278,11 @@ const saveNewIncoming = async () => {
   font-family: 'OpenSans'
   font-size: 1.6rem
   border-radius: 12px
-  ::v-deep .q-date__calendar-item
+  :deep .q-date__calendar-item
     padding-top: 0.6rem
     // padding-left: 0.5rem
     // padding-right: 0.5rem
-  ::v-deep .block
+  :deep .block
     font-size: 1.25rem
 
 
