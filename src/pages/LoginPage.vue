@@ -116,7 +116,8 @@ import { useUserID } from 'stores/userid'
 import { usePageWithTable } from 'stores/pagewithtable'
 import { useAccess } from 'stores/access'
 import { useCurrentPage } from 'stores/currentpage'
-import { useDemoMode } from 'stores/demomode'
+import { useIsDemo } from 'stores/isdemo'
+import { useIsLogged } from 'stores/islogged'
 
 import docButton from 'components/docButton.vue'
 import docInput from 'components/docInput.vue'
@@ -128,7 +129,8 @@ let _userid = useUserID()
 let _pagewithtable = usePageWithTable()
 let _access = useAccess()
 let _currentpage = useCurrentPage()
-let _demomode = useDemoMode()
+let _isdemo = useIsDemo()
+let _islogged = useIsLogged()
 
 let error = ref(false)
 let errorMessage = ref('')
@@ -260,7 +262,8 @@ const login = async () => {
     _access.access.push('inventory')
     _access.access.push('otherdocuments')
     _access.access.push('complaint')
-    _demomode.demomode = true
+    _isdemo.isdemo = true
+    _islogged.islogged = true
 
     _pagewithtable.pagewithtable = false
     _employeename.employeename = 'DEMO ACCOUNT'
@@ -271,7 +274,7 @@ const login = async () => {
     return
   }
 
-  _demomode.demomode = false
+  _isdemo.isdemo = false
   await checkUsername()
   if (usernameAccepted === false) {
     error.value = true
@@ -301,6 +304,7 @@ const login = async () => {
     return
   }
 
+  _islogged.islogged = true
   _pagewithtable.pagewithtable = false
   SessionStorage.set('CurrentPage', 'dashboard')
   _currentpage.currentpage = 'dashboard'

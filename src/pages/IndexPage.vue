@@ -58,6 +58,7 @@ import { useEmployeeName } from 'stores/employeename'
 import { useAccess } from 'stores/access'
 import { useCurrentPage } from 'stores/currentpage'
 import { usePageWithTable } from 'stores/pagewithtable'
+import { useIsLogged } from 'stores/islogged'
 
 const router = useRouter()
 const quasar = useQuasar()
@@ -65,6 +66,7 @@ const _employeename = useEmployeeName()
 const _access = useAccess()
 const _currentpage = useCurrentPage()
 const _pagewithtable = usePageWithTable()
+const _islogged = useIsLogged()
 
 const setName = async () => {
   if (_employeename.employeename !== '') SessionStorage.set('EmployeeName', _employeename.employeename)
@@ -109,6 +111,7 @@ const enterButton = (el: any) => {
 }
 
 const logout = async () => {
+  _islogged.islogged = false
   _pagewithtable.pagewithtable = false
   quasar.sessionStorage.remove('EmployeeName')
   _access.access = []

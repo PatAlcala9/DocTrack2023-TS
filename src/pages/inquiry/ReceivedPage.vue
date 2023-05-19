@@ -113,12 +113,14 @@ q-dialog(v-model="details" maximized)
 import { ref } from 'vue'
 import { api } from 'boot/axios'
 import { useRouter } from 'vue-router'
-import {useCurrentPage} from 'stores/currentpage'
+import { useCurrentPage } from 'stores/currentpage'
+import { useIsLogged } from 'stores/islogged'
 
 import docButton from 'components/docButton.vue'
 
 const router = useRouter()
 const _currentpage = useCurrentPage()
+const _islogged = useIsLogged()
 
 let searchValue = ref('')
 let searchByValue = ref('')
@@ -185,8 +187,14 @@ const getIncomingBySubject = async () => {
 }
 
 const gotoHome = () => {
-  _currentpage.currentpage = '/'
-  router.push('/')
+  let homepage = ''
+  if (_islogged.islogged === true) homepage = 'dashboard'
+  else homepage = '/'
+
+  console.log(_islogged.islogged)
+
+  _currentpage.currentpage = homepage
+  router.push(homepage)
   // location.reload()
 }
 
@@ -268,8 +276,7 @@ const getIncomingDocLog = async () => {
     if (data.result.length > 0) {
       doclogDetail.value = data
       doclogEmpty.value = false
-    }
-    else doclogEmpty.value = true
+    } else doclogEmpty.value = true
   } catch {
     doclogDetail.value = []
     doclogEmpty.value = true
@@ -284,8 +291,7 @@ const getIncomingActionLog = async () => {
     if (data.result.length > 0) {
       actionlogDetail.value = data
       actionlogEmpty.value = false
-    }
-    else actionlogEmpty.value = true
+    } else actionlogEmpty.value = true
   } catch {
     actionlogDetail.value = []
     actionlogEmpty.value = true
