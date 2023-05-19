@@ -323,5 +323,5 @@ const showData = () => {
   padding: 0.3rem 0.5rem
   // margin-top: -0.5rem
 
-.spaced
+// .spaced
 </style>

@@ -5,7 +5,7 @@ q-page(padding)
     section.title.full-width.row.justify-between
       div.column
         transition(appear @before-enter="beforeEnterLogo" @enter="enterLogo")
-          img(src="../assets/ocbologo.avif" alt="OCBO Logo").logo
+          img(src="../assets/ocbologobw.avif" alt="OCBO Logo").logo
         transition(appear @before-enter="beforeEnterTitle" @enter="enterTitle")
           section.name.fit.column.wrap.justify-start.items-start.content-start
             span.ocbo-title OCBO
@@ -426,7 +426,7 @@ const enterSwitch = (el: any) => {
   height: auto
   opacity: 0.6
   margin-right: 2rem
-  filter: grayscale(100%) invert(90%)
+  // filter: invert(100%)
 
 .name
   grid-area: name
