@@ -2,8 +2,8 @@
 
 q-page(padding)
   div.full-width.row.justify-between
-    span.title Incoming Commmunications - New Entry
-    q-btn(flat size="md" label="Back" @click="gotoMenu" icon="arrow_back").close-button
+    span.title Incomings - New Entry
+    q-btn(flat size="md" label="Back" @click="gotoIncomingDashboard" icon="arrow_back").close-button
 
   section.form-area.fit.row.items-center.justify-center
     div.column
@@ -33,26 +33,26 @@ q-page(padding)
   section.button-area.fit.row.items-center.justify-center
     doc-button(text="Save" type="submit" @click="saveNewIncoming")
 
-  section.list-area.column.text-center
-    span.list-area__span(v-if="!showList" @click="showListTrigger").inquiry-text Show List of Incomings
-    span.list-area__span(v-else @click="showListTrigger").inquiry-text Hide List of Incomings
+  //- section.list-area.column.text-center
+  //-   span.list-area__span(v-if="!showList" @click="showListTrigger").inquiry-text Show List of Incomings
+  //-   span.list-area__span(v-else @click="showListTrigger").inquiry-text Hide List of Incomings
 
-  section(v-if="showList === true" style="margin-top: -3rem")
-    table.table
-      thead
-        tr
-          th Entry Code
-          th Received Date
-          th Source
-          th Subject
-          th Details
-      tbody
-        tr(v-for="(item, index) in incomingList.result" :key="item").table-content-group
-          td {{item}}
-          td {{incomingList.result2[index]}}
-          td {{incomingList.result3[index]}}
-          td {{incomingList.result4[index]}}
-          td
+  //- section(v-if="showList === true" style="margin-top: -3rem")
+  //-   table.table
+  //-     thead
+  //-       tr
+  //-         th Entry Code
+  //-         th Received Date
+  //-         th Source
+  //-         th Subject
+  //-         th Details
+  //-     tbody
+  //-       tr(v-for="(item, index) in incomingList.result" :key="item").table-content-group
+  //-         td {{item}}
+  //-         td {{incomingList.result2[index]}}
+  //-         td {{incomingList.result3[index]}}
+  //-         td {{incomingList.result4[index]}}
+  //-         td
 
 q-dialog(v-model="dialog" transition-show="flip-right" transition-hide="flip-left")
   q-card.dialog-card.text-white.flex.flex-center
@@ -129,6 +129,11 @@ const getIncomingDesc = async () => {
 const gotoMenu = () => {
   _currentpage.currentpage = 'dashboard'
   router.push('/dashboard')
+}
+
+const gotoIncomingDashboard = () => {
+  _currentpage.currentpage = 'incoming'
+  router.push('/incoming')
 }
 
 let entryLast = ''

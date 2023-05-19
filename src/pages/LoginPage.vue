@@ -116,6 +116,7 @@ import { useUserID } from 'stores/userid'
 import { usePageWithTable } from 'stores/pagewithtable'
 import { useAccess } from 'stores/access'
 import { useCurrentPage } from 'stores/currentpage'
+import { useDemoMode } from 'stores/demomode'
 
 import docButton from 'components/docButton.vue'
 import docInput from 'components/docInput.vue'
@@ -127,6 +128,7 @@ let _userid = useUserID()
 let _pagewithtable = usePageWithTable()
 let _access = useAccess()
 let _currentpage = useCurrentPage()
+let _demomode = useDemoMode()
 
 let error = ref(false)
 let errorMessage = ref('')
@@ -195,17 +197,6 @@ const getIncoming = async () => {
   }
 }
 
-const tempLogin = async () => {
-  const username = 'test'
-  const password = 'doctrack'
-
-  if (usernameEntry.value === username && passwordEntry.value === password) {
-    _employeename.employeename = 'JUAN DELA CRUZ'
-    SessionStorage.set('CurrentPage', 'dashboard')
-    _currentpage.currentpage = 'dashboard'
-    router.push('/dashboard')
-  }
-}
 
 const gotoRegister = async () => {
   _pagewithtable.pagewithtable = false
@@ -269,6 +260,7 @@ const login = async () => {
     _access.access.push('inventory')
     _access.access.push('otherdocuments')
     _access.access.push('complaint')
+    _demomode.demomode = true
 
     _pagewithtable.pagewithtable = false
     _employeename.employeename = 'DEMO ACCOUNT'
@@ -279,6 +271,7 @@ const login = async () => {
     return
   }
 
+  _demomode.demomode = false
   await checkUsername()
   if (usernameAccepted === false) {
     error.value = true

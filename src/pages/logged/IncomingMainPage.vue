@@ -5,6 +5,7 @@ q-page(padding)
     span.title Incoming Commmunications
     q-btn(flat size="md" label="Back" @click="gotoMenu" icon="arrow_back").close-button
 
+
   div.full-width.column.items-center.content-center
     doc-label(text="Entry Code Number" )
     doc-input(v-model:value="entryCode" @keypress.enter = "searchIncoming")

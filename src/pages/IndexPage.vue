@@ -17,7 +17,7 @@ q-page(padding)
 
   div.button-area.fit.row.justify-evenly.content-start
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
-      section(v-if="_access.access.includes('incoming')" @click="gotoPage('incomingmain', false)").column.items-center
+      section(v-if="_access.access.includes('incoming')" @click="gotoPage('incoming', false)").column.items-center
         q-icon(name="keyboard_double_arrow_down" size="xl").icon
         component(:is="docButton" text="Incoming")
 
