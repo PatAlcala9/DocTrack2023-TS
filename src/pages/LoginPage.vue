@@ -10,6 +10,7 @@ q-page(padding)
           section.name.fit.column.wrap.justify-start.items-start.content-start
             span.ocbo-title OCBO
             span.ocbo-text Doctrack System 2023
+            component(:is="docPDF")
 
 
     //- transition( appear @before-enter="beforeEnterForm" @enter="enterForm")
@@ -123,6 +124,7 @@ import docButton from 'components/docButton.vue'
 import docInput from 'components/docInput.vue'
 import docInputPassword from 'components/docInputPassword.vue'
 import docLabel from 'components/docLabel.vue'
+import docPDF from 'components/docPDF.vue'
 
 let _employeename = useEmployeeName()
 let _userid = useUserID()
