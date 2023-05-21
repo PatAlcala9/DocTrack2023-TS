@@ -45,12 +45,23 @@ const _currentpage = useCurrentPage()
 const _qrvalue = useQrValue()
 const _qrerror = useQrError()
 
-const qrPrefix = '**SCAN ME USING OCBO DOCTRACK** QrID::'
+const qrPrefix = '**SCAN ME USING OCBO DOCTRACK** QrId::'
 
 let validQR = ref(0)
 const checkQR = () => {
   if ((_qrerror.qrerror === '' || _qrerror.qrerror == undefined) && _qrvalue.qrvalue.includes(qrPrefix) === true) validQR.value = 2
   else validQR.value = 1
+}
+
+const extractData = () => {
+  const codeLoc = _qrvalue.qrvalue.indexOf('::')
+  const codeData = _qrvalue.qrvalue.slice(codeLoc + 5)
+
+  const statusLoc = _qrvalue.qrvalue.indexOf('??')
+  const statusData = _qrvalue.qrvalue.slice(statusLoc)
+
+  code.value = codeData
+  status.value = statusData
 }
 
 const gotoHome = () => {

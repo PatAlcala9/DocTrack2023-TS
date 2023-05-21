@@ -5,13 +5,11 @@ q-page(padding)
     section.title.full-width.row.justify-between
       div.column
         transition(appear @before-enter="beforeEnterLogo" @enter="enterLogo")
-          img(src="../assets/ocbologobw.avif" alt="OCBO Logo").logo
+          img(src="../assets/ocbologobw.avif" alt="OCBO Logo" @click="sampleMode = !sampleMode").logo
         transition(appear @before-enter="beforeEnterTitle" @enter="enterTitle")
           section.name.fit.column.wrap.justify-start.items-start.content-start
             span.ocbo-title OCBO
             span.ocbo-text Doctrack System 2023
-            component(:is="docPDF")
-
 
     //- transition( appear @before-enter="beforeEnterForm" @enter="enterForm")
     div(v-if="inquiry === false").login#login
@@ -48,6 +46,7 @@ q-page(padding)
       div.inquiry
         span(v-if="inquiry" @click="showInquiry").inquiry-text Login
         span(v-else @click="showLogin").inquiry-text Inquire without logging In
+        component(v-if="sampleMode" :is="docPDF")
 
   //- q-dialog(v-model="inquireReceived" persistent full-width full-height transition-show="scale" transition-hide="scale").dialog#dialog
   //-   q-card.dialog-card.text-white
@@ -139,6 +138,7 @@ let errorMessage = ref('')
 let errorInformation = ref('')
 
 const mobileWidth = ref(10)
+const sampleMode = ref(false)
 
 const router = useRouter()
 

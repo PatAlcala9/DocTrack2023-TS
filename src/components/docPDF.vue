@@ -1,12 +1,18 @@
 <template lang="pug">
 
-div
-  q-btn(@click="createPDF" label="PDF")
+div.flex.flex-center
+  component(:is="docButton" @click="createPDF" text="Create Sample PDF")
+  component(:is="docQR" :text="sampleQR" :size=qrSize)
 
 </template>
 
 <script setup lang="ts">
 import { PDFDocument, StandardFonts, PageSizes } from 'pdf-lib'
+import { decryptAES, encryptAES } from 'src/js/OCBO'
+import docQR from 'components/docQR.vue'
+import docButton from 'components/docButton.vue'
+import { ref } from 'vue'
+// import htmlToImage from 'html-to-image'
 
 export interface Props {
   title: string
@@ -16,7 +22,22 @@ const props = withDefaults(defineProps<Props>(), {
   title: 'Generated Document',
 })
 
-const fileName = 'hello-world.pdf'
+const randomData1 = encryptAES(Math.random().toString()).substring(4, 10)
+const randomData2 = encryptAES('some random string').substring(25)
+const sampleQR = ref(encryptAES(`**SCAN ME USING OCBO DOCTRACK** QrId::${encryptAES(randomData1)}??${encryptAES(randomData2)}`))
+const qrSize = 200
+
+// htmlToImage.toPng(#qr)
+// .then((dataUrl) => {
+//   const link = document.createElement('a');
+//   link.download = 'my-component.png'; // replace with your desired file name
+//   link.href = dataUrl;
+//   link.click();
+// });
+
+// const createRandomData = () => {
+
+// }
 
 const createPDF = async () => {
   const pdfDoc = await PDFDocument.create()
@@ -36,6 +57,6 @@ const createPDF = async () => {
   const pdfBlob = new Blob([pdfBytes], { type: 'application/pdf' })
   const link = document.createElement('a')
   link.href = URL.createObjectURL(pdfBlob)
-  window.open(link.href, fileName)
+  window.open(link.href)
 }
 </script>
