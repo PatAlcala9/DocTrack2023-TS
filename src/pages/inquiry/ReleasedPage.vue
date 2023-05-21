@@ -35,30 +35,33 @@ q-page(padding)
               q-item-label DATE
 
   div.flex.flex-center
-    section(v-if="outgoingList.result !== ''").dialog-content-table
-      table.table
-        thead
-          tr
-            th Reference Number
-            th Respondent
-            th Address
-            th Subject
-            th Date Released
-            th Details
-        tbody
-          tr(v-for="(item, index) in outgoingList.result" :key="item").table-content-group
-            td {{item}}
-            td {{outgoingList.result2[index]}}
-            td {{outgoingList.result3[index]}}
-            td {{outgoingList.result4[index]}}
-            td {{outgoingList.result5[index]}}
-            td
-              q-btn(color="button" icon="visibility" :ripple="false" @click="openDetails(item, outgoingList.result2[index], outgoingList.result3[index], outgoingList.result4[index])").button-view
-              //- q-btn(v-if="showText === false" v-else color="button" label="View" :ripple="false" @mouseleave="mouseLeave").button-view
+    //- section(v-if="outgoingList.result !== ''").dialog-content-table
+    //-   table.table
+    //-     thead
+    //-       tr
+    //-         th Reference Number
+    //-         th Respondent
+    //-         th Address
+    //-         th Subject
+    //-         th Date Released
+    //-         th Details
+    //-     tbody
+    //-       tr(v-for="(item, index) in outgoingList.result" :key="item").table-content-group
+    //-         td {{item}}
+    //-         td {{outgoingList.result2[index]}}
+    //-         td {{outgoingList.result3[index]}}
+    //-         td {{outgoingList.result4[index]}}
+    //-         td {{outgoingList.result5[index]}}
+    //-         td
+    //-           q-btn(color="button" icon="visibility" :ripple="false" @click="openDetails(item, outgoingList.result2[index], outgoingList.result3[index], outgoingList.result4[index])").button-view
+    //-           //- q-btn(v-if="showText === false" v-else color="button" label="View" :ripple="false" @mouseleave="mouseLeave").button-view
 
-    section(v-else).table-loading.column.items-center
-      span Loading Contents
-      q-spinner-orbit(color="white" size="4em" style="margin-top: 2rem")
+    //- section(v-else).table-loading.column.items-center
+    //-   span Loading Contents
+    //-   q-spinner-orbit(color="white" size="4em" style="margin-top: 2rem")
+    section.column.text-center(style="font-size: 1.2rem")
+      span Cannot display table
+      span No Connection on Server
 
 q-dialog(v-model="details" maximized)
   q-card.detail-dialog
