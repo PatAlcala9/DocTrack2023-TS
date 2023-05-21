@@ -144,15 +144,35 @@ export function comparePassword(dbPassword: string, strPassword: string, salt: s
 }
 
 export function encryptAES(text: string) {
-  const key = encrypt('OCBODocTrack2023', 'AES', 4, 256)
-  const encrypted = CryptoJS.AES.encrypt(text, key).toString()
+  const key = CryptoJS.enc.Utf8.parse(encrypt('OCBODocTrack2023', 'AESKey', 4, 128))
+  const iv = CryptoJS.enc.Utf8.parse(encrypt('OCBODocTrack2023', 'AESIV', 6, 128))
+  const encrypted = CryptoJS.AES.encrypt(text, key, {
+    mode: CryptoJS.mode.CTR,
+    padding: CryptoJS.pad.Iso10126,
+    iv: iv
+  }).toString()
 
-  return encrypted
+  const countEqual = encrypted.match(/=/g).length;
+  const removeEqual = encrypted.slice(0, - countEqual)
+  const newEncrypted = removeEqual + countEqual
+
+  return newEncrypted
 }
 
 export function decryptAES(ciphertext: string) {
-  const key = encrypt('OCBODocTrack2023', 'AES', 4, 256)
-  const decrypted = CryptoJS.AES.decrypt(ciphertext, key).toString(CryptoJS.enc.Utf8)
+  const key = CryptoJS.enc.Utf8.parse(encrypt('OCBODocTrack2023', 'AESKey', 4, 128))
+  const iv = CryptoJS.enc.Utf8.parse(encrypt('OCBODocTrack2023', 'AESIV', 6, 128))
+
+  const lastDigit = ciphertext.slice(-1)
+  const removeLastDigit = ciphertext.slice(0, - 1)
+  const equalString = lastDigit === '2' ? '==' : '='
+  const newCiphertext = removeLastDigit + equalString
+
+  const decrypted = CryptoJS.AES.decrypt(newCiphertext, key, {
+    mode: CryptoJS.mode.CTR,
+    padding: CryptoJS.pad.Iso10126,
+    iv: iv
+  }).toString(CryptoJS.enc.Utf8)
 
   return decrypted
 }

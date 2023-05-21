@@ -201,7 +201,6 @@ const getIncoming = async () => {
   }
 }
 
-
 const gotoRegister = async () => {
   _pagewithtable.pagewithtable = false
   SessionStorage.set('CurrentPage', 'register')
