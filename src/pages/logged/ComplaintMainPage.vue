@@ -3,7 +3,7 @@
 q-page(padding)
   div.full-width.row.justify-between
     span.title Complaint Tracking
-    q-btn(flat size="md" label="Back" @click="gotoMenu" icon="arrow_back").close-button
+    q-btn(flat size="md" label="Back" @click="gotoComplaint" icon="arrow_back").close-button
 
   div.fit.row.wrap.justify-start.items-start.content-start.search-area
     section.column.section
@@ -104,9 +104,9 @@ type Complaint = {
 }
 let complaintList = ref({} as Complaint)
 
-const gotoMenu = () => {
-  _currentpage.currentpage = 'dashboard'
-  router.push('/dashboard')
+const gotoComplaint = () => {
+  _currentpage.currentpage = 'complaint'
+  router.push('/complaint')
 }
 
 const pushSampleData = () => {

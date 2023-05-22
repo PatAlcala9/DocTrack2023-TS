@@ -21,7 +21,9 @@ const routes: RouteRecordRaw[] = [
       { path: '/releasing', component: () => import('pages/logged/ReleasingPage.vue') },
       { path: '/inventory', component: () => import('pages/logged/InventoryPage.vue') },
       { path: '/inventoryfile', component: () => import('pages/logged/InventoryFileDocPage.vue') },
-      { path: '/complaint', component: () => import('pages/logged/ComplaintPage.vue') },
+      { path: '/complaint', component: () => import('pages/logged/ComplaintDashboardPage.vue') },
+      { path: '/complaintmain', component: () => import('pages/logged/ComplaintMainPage.vue') },
+      { path: '/complaintadd', component: () => import('pages/logged/ComplaintAddPage.vue') },
     ],
   },
 
