@@ -12,7 +12,6 @@ import { decryptAES, encryptAES } from 'src/js/OCBO'
 import docQR from 'components/docQR.vue'
 import docButton from 'components/docButton.vue'
 import { ref } from 'vue'
-import { readFile, writeFile } from 'fs/promises'
 // import htmlToImage from 'html-to-image'
 
 export interface Props {
@@ -41,8 +40,9 @@ const qrSize = 200
 // }
 
 const createPDF = async () => {
-  const pdfDoc = await PDFDocument.load(await readFile('src/assets/wso.pdf'))
-  //- const pdfDoc = await PDFDocument.create()
+  const url = 'assets/wso.pdf'
+  const existingPdfBytes = await fetch(url).then(res => res.arrayBuffer())
+  const pdfDoc = await PDFDocument.load(existingPdfBytes)
   const page = pdfDoc.addPage(PageSizes.Letter)
 
   const font = await pdfDoc.embedFont(StandardFonts.Helvetica)
@@ -60,6 +60,5 @@ const createPDF = async () => {
   const link = document.createElement('a')
   link.href = URL.createObjectURL(pdfBlob)
   window.open(link.href)
-  //- await writeFile('sample.pdf', pdfBytes)
 }
 </script>
