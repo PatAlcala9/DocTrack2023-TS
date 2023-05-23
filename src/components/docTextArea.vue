@@ -29,8 +29,8 @@ const widthComponent = computed(() => {
 
 <style lang="sass" scoped>
 .textarea
-  font-family: 'Raleway'
-  font-size: 1.3rem
+  font-family: 'OpenSans'
+  font-size: 1.1rem
   border-radius: 0.6rem
   text-align: left
   text-transform: initial

@@ -28,41 +28,40 @@ q-page(padding)
                 q-item-label WALK-IN
                 div.full-width.row.justify-between
 
-      section.fit.column.wrap.justify-start.items-center.content-center
-        component(:is="docLabel" text="Received Date Received:").label--spaced
-          //- span.requiredWarning {{ missingDate }}
+      section.label-and-input
+        component(:is="docLabel" text="Date Received:").label--spaced
         q-date(flat v-model="receivedDate" minimal color="$button" @click="formatDate").calendar
         component(v-if="formattedReceivedDate.length > 0" :is="docLabel" :text="formattedReceivedDate").inputs__label--date
         component(v-else :is="docLabel" text="No Date Selected").inputs__label--date
 
-      section.fit.row.wrap.justify-center.items-center.content-center
+      section.label-and-input
         component(:is="docLabel" text="Complaint Name:").label--spaced
-        component(:is="docInput" v-model="complaintName" )
+        component(:is="docInputEntry" v-model="complaintName" )
 
-      section.fit.row.wrap.justify-center.items-center.content-center
+      section.label-and-input
         component(:is="docLabel" text="Complaint Contact:").label--spaced
-        component(:is="docInput" v-model="complaintContact" )
+        component(:is="docInputEntry" v-model="complaintContact" )
 
-      section.fit.row.wrap.justify-center.items-center.content-center
+      section.label-and-input
         component(:is="docLabel" text="Complaint Location:").label--spaced
-        component(:is="docInput" v-model="complaintLocation" )
+        component(:is="docInputEntry" v-model="complaintLocation" )
 
-      section.fit.row.wrap.justify-center.items-center.content-center
+      section.label-and-input
         component(:is="docLabel" text="Detail of Complaint:").label--spaced
         component(:is="docTextArea" v-model="complaintDetail" )
 
     div.respondent-group
-      section.fit.row.wrap.justify-start.items-center.content-center
+      section.label-and-input
         component(:is="docLabel" text="Respondent Name:").label--spaced
-        component(:is="docInput" v-model="respondentName")
+        component(:is="docInputEntry" v-model="respondentName")
 
-      section.fit.row.wrap.justify-start.items-center.content-center
+      section.label-and-input
         component(:is="docLabel" text="Respondent Contact:").label--spaced
-        component(:is="docInput" v-model="respondentContact")
+        component(:is="docInputEntry" v-model="respondentContact")
 
-      section.fit.row.wrap.justify-start.items-center.content-center
+      section.label-and-input
         component(:is="docLabel" text="Respondent Location:").label--spaced
-        component(:is="docInput" v-model="respondentLocation")
+        component(:is="docInputEntry" v-model="respondentLocation")
 </template>
 
 <script setup lang="ts">
@@ -75,7 +74,7 @@ import { useCurrentPage } from 'stores/currentpage'
 
 import docButton from 'components/docButton.vue'
 import docTextArea from 'components/docTextArea.vue'
-import docInput from 'components/docInput.vue'
+import docInputEntry from 'components/docInput.vue'
 import docLabel from 'components/docLabel.vue'
 
 let sourceEntryList = ref<Array<string>>([])
@@ -132,6 +131,7 @@ const gotoComplaintDashboard = () => {
 <style lang="sass" scoped>
 .entry-group
   display: flex
+  flex-direction: column
   flex-wrap: wrap
   justify-content: center
   align-items: center
@@ -140,12 +140,26 @@ const gotoComplaintDashboard = () => {
 
 .complaint-group
   flex-grow: 1
+  padding: 2rem
+  // border: 1px solid white
+
+.respondent-group
+  flex-grow: 1
 
 .label--spaced
   padding-right: 1rem
 
 .row
   margin-bottom: 0.9rem
+
+.label-and-input
+  display: flex
+  flex-direction: column
+  flex-wrap: wrap
+  justify-content: center
+  align-items: center
+  align-content: center
+  padding-bottom: 1rem
 
 @media screen and (max-width: 500px)
   .entry-group
