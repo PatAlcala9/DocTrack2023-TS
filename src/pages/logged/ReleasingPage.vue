@@ -107,18 +107,7 @@ let noteDetail = ref('')
 </script>
 
 <style lang="sass" scoped>
-// .calendar
-//   background-color: rgba(8,25,35, 0.75)
-//   border: 1px solid rgba(255, 255, 255, 0.525)
-//   font-family: 'OpenSans'
-//   font-size: 1.6rem
-//   border-radius: 12px
-//   ::v-deep .q-date__calendar-item
-//     padding-top: 0.6rem
-//     // padding-left: 0.5rem
-//     // padding-right: 0.5rem
-//   ::v-deep .block
-//     font-size: 1.25rem
+
 
 .title
   grid-area: title

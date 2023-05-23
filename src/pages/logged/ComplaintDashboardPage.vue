@@ -19,10 +19,12 @@ q-page(padding)
   <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { useCurrentPage } from 'stores/currentpage'
+import { usePageWithTable } from 'stores/pagewithtable';
 import docButton from 'components/docButton.vue'
 
 const router = useRouter()
 let _currentpage = useCurrentPage()
+let _pagewithtable = usePageWithTable()
 
 const gotoComplaintInquire = () => {
   _currentpage.currentpage = 'complaintmain'
@@ -30,6 +32,7 @@ const gotoComplaintInquire = () => {
 }
 
 const gotoComplaintAdd = () => {
+  _pagewithtable.pagewithtable = true
   _currentpage.currentpage = 'complaintadd'
   router.push('/complaintadd')
 }

@@ -5,7 +5,8 @@ q-page(padding)
     section.title.full-width.row.justify-between
       div.column
         transition(appear @before-enter="beforeEnterLogo" @enter="enterLogo")
-          img(src="../assets/ocbologobw.avif" alt="OCBO Logo" @click="sampleMode = !sampleMode").logo
+          img(src="../assets/ocbologobw.avif" alt="OCBO Logo" ).logo
+          //- @click="sampleMode = !sampleMode"
         transition(appear @before-enter="beforeEnterTitle" @enter="enterTitle")
           section.name.fit.column.wrap.justify-start.items-start.content-start
             span.ocbo-title OCBO
@@ -382,8 +383,6 @@ const enterSwitch = (el: any) => {
 ;(async () => {
   if (_currentpage.currentpage !== undefined) router.push(_currentpage.currentpage)
   else router.push('/')
-
-  //- detectBrowser()
 })()
 </script>
 
