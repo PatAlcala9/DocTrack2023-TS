@@ -255,6 +255,26 @@ func connect() {
         "result3": array3,
         "result4": array4,
 			})
+
+    } else if method == "GetSources" {
+      array := []string{}
+
+      results, err := db.Query("SELECT source_desc AS result FROM source_complaint ORDER BY source_desc ASC")
+      if err != nil {
+        panic(err.Error())
+      }
+
+      for results.Next() {
+				err = results.Scan(&result)
+				if err != nil {
+					panic(err.Error())
+				}
+				array = append(array, result)
+			}
+
+			c.JSON(http.StatusOK, gin.H{
+				"result": array,
+			})
     }
   })
 
@@ -729,6 +749,7 @@ func connect() {
 				"result": array,
         "result2": array2,
 			})
+
     }
   })
 
