@@ -1,11 +1,11 @@
 <template lang="pug">
 
-  div
-    input(:value="props.value" @input="updateValue($event.target.value)" :style="styleComponent").input
+div
+  input(:value="props.value" @input="updateValue($event.target.value)" :style="styleComponent").input
 
-  </template>
+</template>
 
-  <script setup lang="ts">
+<script setup lang="ts">
 import { computed } from 'vue'
 
 export interface Props {

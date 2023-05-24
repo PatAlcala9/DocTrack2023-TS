@@ -750,6 +750,15 @@ func connect() {
         "result2": array2,
 			})
 
+    } else if method == "GetSourceID" {
+      err = db.QueryRow("SELECT source_complaintid FROM source_complaint WHERE source_desc = ?", data).Scan(&result)
+      if err != nil {
+        panic(err.Error())
+      }
+
+			c.JSON(http.StatusOK, gin.H{
+				"result": result,
+			})
     }
   })
 
@@ -834,5 +843,82 @@ func connect() {
     }
   })
 
+
+  router.POST("/api/PostRespondent/:data/:data2/:data3", func(c *gin.Context) {
+    data := c.Param("data")
+    data2 := c.Param("data2")
+    data3 := c.Param("data3")
+
+    c.Writer.Header().Set("X-XSS-Protection", "1; mode=block")
+    c.Writer.Header().Set("X-Content-Type-Options", "nosniff")
+    c.Writer.Header().Set("X-DNS-Prefetch-Control", "off")
+    c.Writer.Header().Set("X-Frame-Options", "DENY")
+    c.Writer.Header().Set("X-Download-Options", "noopen")
+    c.Writer.Header().Set("Referrer-Policy", "no-referrer")
+
+    dbpost, err := db.Prepare("INSERT INTO respondent_info (respondent_infoid, respondent_name, respondent_contact, respondent_location) VALUES (NULL, ?, ?, ?)")
+    if err != nil {
+      panic(err.Error())
+    }
+    defer dbpost.Close()
+
+    exec, err := dbpost.Exec(data, data2, data3)
+    if err != nil {
+      panic(err.Error())
+    }
+
+    affect, err := exec.RowsAffected()
+    if err != nil {
+      panic(err.Error())
+    }
+
+    if affect > 0 {
+      c.String(http.StatusOK, "Success on Saving Respondent")
+    } else {
+      c.String(http.StatusInternalServerError, "Failed on Saving Respondent")
+    }
+  })
+
+
+  // router.POST("/api/SaveComplaint/:data/:data2/:data3/:data4/:data5/:data6/:data7/:data8/:data9", func(c *gin.Context) {
+  //   data := c.Param("data")
+  //   data2 := c.Param("data2")
+  //   data3 := c.Param("data3")
+  //   data4 := c.Param("data4")
+  //   data5 := c.Param("data5")
+  //   data6 := c.Param("data6")
+  //   data7 := c.Param("data7")
+  //   data8 := c.Param("data8")
+  //   data9 := c.Param("data9")
+
+  //   c.Writer.Header().Set("X-XSS-Protection", "1; mode=block")
+  //   c.Writer.Header().Set("X-Content-Type-Options", "nosniff")
+  //   c.Writer.Header().Set("X-DNS-Prefetch-Control", "off")
+  //   c.Writer.Header().Set("X-Frame-Options", "DENY")
+  //   c.Writer.Header().Set("X-Download-Options", "noopen")
+  //   c.Writer.Header().Set("Referrer-Policy", "no-referrer")
+
+  //   dbpost, err := db.Prepare("INSERT INTO incoming (entryCodeNo, receivedDate, comType, sourceName, subjectInfo, subDetails, attachments, bo_notes, tag_filing, page_no, folder_no) VALUES (?, ?, '', ?, ?, ?, ?, '', 0, 0, '')")
+  //   if err != nil {
+  //     panic(err.Error())
+  //   }
+  //   defer dbpost.Close()
+
+  //   exec, err := dbpost.Exec(data, data2, data3, data4, data5, data6)
+  //   if err != nil {
+  //     panic(err.Error())
+  //   }
+
+  //   affect, err := exec.RowsAffected()
+  //   if err != nil {
+  //     panic(err.Error())
+  //   }
+
+  //   if affect > 0 {
+  //     c.String(http.StatusOK, "Success on Saving Incoming")
+  //   } else {
+  //     c.String(http.StatusInternalServerError, "Failed on Saving Incoming")
+  //   }
+  // })
   router.Run(":8081")
 }
