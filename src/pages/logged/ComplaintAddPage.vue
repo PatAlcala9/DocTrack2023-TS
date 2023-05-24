@@ -11,9 +11,9 @@ q-page(padding)
         component(:is="docLabel" text="Source Type:").label--spaced
         q-btn-dropdown(unelevated color="grey-10" :label="sourceEntry" size="1rem" :content-style="{ fontSize: '1.2rem', fontFamily: 'Inter' }")
           q-list
-            q-item(clickable v-close-popup @click="sourceEntry = 'DCR or 888'")
+            q-item(clickable v-close-popup @click="sourceEntry = 'DCR/888'")
               q-item-section
-                q-item-label DCR or 888
+                q-item-label DCR/888
 
             q-item(clickable v-close-popup @click="sourceEntry = 'EMAIL'")
               q-item-section
@@ -30,7 +30,7 @@ q-page(padding)
 
       section.label-and-input
         component(:is="docLabel" text="Date Received:").label--spaced
-        q-date(flat v-model:value="receivedDate" minimal color="$button" @click="formatDate").calendar
+        q-date(flat v-model="receivedDate" minimal color="$button" @click="formatDate").calendar
         component(v-if="formattedReceivedDate.length > 0" :is="docLabel" :text="formattedReceivedDate").inputs__label--date
         component(v-else :is="docLabel" text="No Date Selected").inputs__label--date
 
@@ -116,7 +116,8 @@ const formatDate = () => {
 // }
 
 const getSourceIDFromDatabase = async () => {
-  const response = await api.get('/api/GetSourceID/' + sourceEntry.value)
+  const encodedSource = sourceEntry.value.replace('/', '-');
+  const response = await api.get('/api/GetSourceID/' + encodedSource)
   const data = response.data.length !== 0 ? response.data : null
 
   if (data !== null) {
@@ -124,20 +125,40 @@ const getSourceIDFromDatabase = async () => {
   }
 }
 
-const postRespodent = async () => {
-  console.log('respondentName:', respondentName.value)
-  // const response = await api.post('/api/PostRespondent/' + respondentName.value + '/' + respondentContact.value + '/' + respondentLocation.value)
-  // const data = response.data.length !== 0 ? response.data : null
+const postRespodent = async (): Promise<boolean> => {
+  const response = await api.post('/api/PostRespondent/' + respondentName.value + '/' + respondentContact.value + '/' + respondentLocation.value)
+  const data = response.data.length !== 0 ? response.data : null
 
-  // console.log(data)
+  if (data.includes('Success')) return true
+  else return false
+}
+
+const getLatestRespondent = async (): Promise<number> => {
+  const response = await api.get('/api/GetLatestRespondentID')
+  const data = response.data.length !== 0 ? response.data : null
+
+  if (data !== null) {
+    const result = data.result
+    return result > 0 ? result : 0
+  } else return 0
+}
+
+const getMaxComplaintCode = async (): Promise<string> => {
+  const response = await api.get('/api/GetMaxComplaintCode')
+  const data = response.data.length !== 0 ? response.data : null
+
+  if (data !== null) {
+    const result = data.result
+    return result
+  } else return ''
 }
 
 const saveData = async () => {
-  // if (sourceEntry.value !== 'Select Source') {
-  //   await getSourceIDFromDatabase()
-  //   postRespodent()
-  // }
-  postRespodent()
+  if (sourceEntry.value !== 'Select Source') {
+    await getSourceIDFromDatabase()
+    // postRespodent()
+  }
+  // postRespodent()
 }
 
 const gotoComplaintDashboard = () => {

@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"net/http"
+  "strings"
   // "html/template"
 
   "github.com/gin-contrib/cors"
@@ -274,6 +275,16 @@ func connect() {
 
 			c.JSON(http.StatusOK, gin.H{
 				"result": array,
+			})
+
+    } else if method == "GetLatestRespondentID" {
+      err = db.QueryRow("SELECT MAX(respondent_infoid) FROM respondent_info").Scan(&result)
+      if err != nil {
+        panic(err.Error())
+      }
+
+			c.JSON(http.StatusOK, gin.H{
+				"result": result,
 			})
     }
   })
@@ -751,7 +762,18 @@ func connect() {
 			})
 
     } else if method == "GetSourceID" {
-      err = db.QueryRow("SELECT source_complaintid FROM source_complaint WHERE source_desc = ?", data).Scan(&result)
+      decodedString := strings.Replace(data, "-", "/", -1)
+      err = db.QueryRow("SELECT source_complaintid FROM source_complaint WHERE source_desc = ?", decodedString).Scan(&result)
+      if err != nil {
+        panic(err.Error())
+      }
+
+			c.JSON(http.StatusOK, gin.H{
+				"result": result,
+			})
+
+    } else if method == "GetMaxComplaintCode" {
+      err = db.QueryRow("SELECT MAX(complaint_code) FROM complaint_info WHERE complaint_code LIKE ?", "%-" + data + "-%").Scan(&result)
       if err != nil {
         panic(err.Error())
       }
@@ -763,15 +785,22 @@ func connect() {
   })
 
 
-  router.POST("/api/SaveAccount/:data/:data2/:data3/:data4/:data5/:data6/:data7/:data8", func(c *gin.Context) {
-    data := c.Param("data")
-    data2 := c.Param("data2")
-    data3 := c.Param("data3")
-    data4 := c.Param("data4")
-    data5 := c.Param("data5")
-    data6 := c.Param("data6")
-    data7 := c.Param("data7")
-    data8 := c.Param("data8")
+  router.POST("/api/PostAccount", func(c *gin.Context) {
+    type accountData struct {
+      Data  string `json:"data"`
+      Data2 string `json:"data2"`
+      Data3 string `json:"data3"`
+      Data4 string `json:"data4"`
+      Data5 string `json:"data5"`
+      Data6 string `json:"data6"`
+      Data7 string `json:"data7"`
+      Data8 string `json:"data8"`
+    }
+    var accountData AccountData
+    if err := c.ShouldBindJSON(&accountData); err != nil {
+      c.String(http.StatusBadRequest, "Invalid request body")
+      return
+    }
 
     c.Writer.Header().Set("X-XSS-Protection", "1; mode=block")
     c.Writer.Header().Set("X-Content-Type-Options", "nosniff")
@@ -786,7 +815,7 @@ func connect() {
     }
     defer dbpost.Close()
 
-    exec, err := dbpost.Exec(data, data2, data3, data4, data5, data6, data7, data8)
+    exec, err := dbpost.Exec(accountData.Data, accountData.Data2, accountData.Data3, accountData.Data4, accountData.Data5, accountData.Data6, accountData.Data7, accountData.Data8)
     if err != nil {
       panic(err.Error())
     }
@@ -797,21 +826,28 @@ func connect() {
     }
 
     if affect > 0 {
-      c.String(http.StatusOK, "Success on Registering")
+      c.String(http.StatusOK, "Success on Saving Account")
     } else {
-      c.String(http.StatusInternalServerError, "Failed on Registering")
+      c.String(http.StatusInternalServerError, "Failed on Saving Account")
     }
   })
 
 
 
-  router.POST("/api/SaveIncoming/:data/:data2/:data3/:data4/:data5/:data6", func(c *gin.Context) {
-    data := c.Param("data")
-    data2 := c.Param("data2")
-    data3 := c.Param("data3")
-    data4 := c.Param("data4")
-    data5 := c.Param("data5")
-    data6 := c.Param("data6")
+  router.POST("/api/PostIncoming", func(c *gin.Context) {
+    type IncomingData struct {
+      Data  string `json:"data"`
+      Data2 string `json:"data2"`
+      Data3 string `json:"data3"`
+      Data4 string `json:"data4"`
+      Data5 string `json:"data5"`
+      Data6 string `json:"data6"`
+    }
+    var incomingData IncomingData
+    if err := c.ShouldBindJSON(&incomingData); err != nil {
+      c.String(http.StatusBadRequest, "Invalid request body")
+      return
+    }
 
     c.Writer.Header().Set("X-XSS-Protection", "1; mode=block")
     c.Writer.Header().Set("X-Content-Type-Options", "nosniff")
@@ -826,7 +862,7 @@ func connect() {
     }
     defer dbpost.Close()
 
-    exec, err := dbpost.Exec(data, data2, data3, data4, data5, data6)
+    exec, err := dbpost.Exec(incomingData.Data, incomingData.Data2, incomingData.Data3, incomingData.Data4, incomingData.Data5, incomingData.Data6)
     if err != nil {
       panic(err.Error())
     }
@@ -844,10 +880,17 @@ func connect() {
   })
 
 
-  router.POST("/api/PostRespondent/:data/:data2/:data3", func(c *gin.Context) {
-    data := c.Param("data")
-    data2 := c.Param("data2")
-    data3 := c.Param("data3")
+  router.POST("/api/PostRespondent", func(c *gin.Context) {
+    type RespondentData struct {
+      Data  string `json:"data"`
+      Data2 string `json:"data2"`
+      Data3 string `json:"data3"`
+    }
+    var respondentData RespondentData
+    if err := c.ShouldBindJSON(&respondentData); err != nil {
+      c.String(http.StatusBadRequest, "Invalid request body")
+      return
+    }
 
     c.Writer.Header().Set("X-XSS-Protection", "1; mode=block")
     c.Writer.Header().Set("X-Content-Type-Options", "nosniff")
@@ -862,7 +905,7 @@ func connect() {
     }
     defer dbpost.Close()
 
-    exec, err := dbpost.Exec(data, data2, data3)
+    exec, err := dbpost.Exec(respondentData.Data, respondentData.Data2, respondentData.Data3)
     if err != nil {
       panic(err.Error())
     }
@@ -880,45 +923,52 @@ func connect() {
   })
 
 
-  // router.POST("/api/SaveComplaint/:data/:data2/:data3/:data4/:data5/:data6/:data7/:data8/:data9", func(c *gin.Context) {
-  //   data := c.Param("data")
-  //   data2 := c.Param("data2")
-  //   data3 := c.Param("data3")
-  //   data4 := c.Param("data4")
-  //   data5 := c.Param("data5")
-  //   data6 := c.Param("data6")
-  //   data7 := c.Param("data7")
-  //   data8 := c.Param("data8")
-  //   data9 := c.Param("data9")
+  router.POST("/api/PostComplaint", func(c *gin.Context) {
+    type ComplaintData struct {
+      Data  string `json:"data"`
+      Data2 string `json:"data2"`
+      Data3 string `json:"data3"`
+      Data4 string `json:"data4"`
+      Data5 string `json:"data5"`
+      Data6 string `json:"data6"`
+      Data7 string `json:"data7"`
+      Data8 string `json:"data8"`
+    }
+    var complaintData ComplaintData
+    if err := c.ShouldBindJSON(&complaintData); err != nil {
+      c.String(http.StatusBadRequest, "Invalid request body")
+      return
+    }
 
-  //   c.Writer.Header().Set("X-XSS-Protection", "1; mode=block")
-  //   c.Writer.Header().Set("X-Content-Type-Options", "nosniff")
-  //   c.Writer.Header().Set("X-DNS-Prefetch-Control", "off")
-  //   c.Writer.Header().Set("X-Frame-Options", "DENY")
-  //   c.Writer.Header().Set("X-Download-Options", "noopen")
-  //   c.Writer.Header().Set("Referrer-Policy", "no-referrer")
+    c.Writer.Header().Set("X-XSS-Protection", "1; mode=block")
+    c.Writer.Header().Set("X-Content-Type-Options", "nosniff")
+    c.Writer.Header().Set("X-DNS-Prefetch-Control", "off")
+    c.Writer.Header().Set("X-Frame-Options", "DENY")
+    c.Writer.Header().Set("X-Download-Options", "noopen")
+    c.Writer.Header().Set("Referrer-Policy", "no-referrer")
 
-  //   dbpost, err := db.Prepare("INSERT INTO incoming (entryCodeNo, receivedDate, comType, sourceName, subjectInfo, subDetails, attachments, bo_notes, tag_filing, page_no, folder_no) VALUES (?, ?, '', ?, ?, ?, ?, '', 0, 0, '')")
-  //   if err != nil {
-  //     panic(err.Error())
-  //   }
-  //   defer dbpost.Close()
+    dbpost, err := db.Prepare("INSERT INTO complaint_info (complaint_infoid, complaint_code, source_complaintid, complaintant_name, complaintant_contact, date_received, locationOfconstruction, details, respondent_infoid) VALUES(NULL, ?, ?, ?, ?, ?, ?, ?, ?)")
+    if err != nil {
+      panic(err.Error())
+    }
+    defer dbpost.Close()
 
-  //   exec, err := dbpost.Exec(data, data2, data3, data4, data5, data6)
-  //   if err != nil {
-  //     panic(err.Error())
-  //   }
+    exec, err := dbpost.Exec(complaintData.Data, complaintData.Data2, complaintData.Data3, complaintData.Data4, complaintData.Data5, complaintData.Data6, complaintData.Data7, complaintData.Data8)
+    if err != nil {
+      panic(err.Error())
+    }
 
-  //   affect, err := exec.RowsAffected()
-  //   if err != nil {
-  //     panic(err.Error())
-  //   }
+    affect, err := exec.RowsAffected()
+    if err != nil {
+      panic(err.Error())
+    }
 
-  //   if affect > 0 {
-  //     c.String(http.StatusOK, "Success on Saving Incoming")
-  //   } else {
-  //     c.String(http.StatusInternalServerError, "Failed on Saving Incoming")
-  //   }
-  // })
+    if affect > 0 {
+      c.String(http.StatusOK, "Success on Saving Complaint")
+    } else {
+      c.String(http.StatusInternalServerError, "Failed on Saving Complaint")
+    }
+  })
+
   router.Run(":8081")
 }
