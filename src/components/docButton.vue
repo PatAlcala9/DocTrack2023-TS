@@ -1,7 +1,7 @@
 <template lang="pug">
 
 div
-  q-btn(outline padding="0.2rem 2rem" rounded color="white" :label="text" size="lg" @click="$emit('click')").button
+  q-btn(outline padding="0.2rem 2rem" rounded color="white" :label="text" size="lg" @click="('click')" ).button
 
 </template>
 
