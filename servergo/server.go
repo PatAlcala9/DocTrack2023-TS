@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"net/http"
   "strings"
-  // "html/template"
 
   "github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -762,7 +761,7 @@ func connect() {
 			})
 
     } else if method == "GetSourceID" {
-      decodedString := strings.Replace(data, "-", "/", -1)
+      decodedString := strings.Replace(data, "~", "/", -1)
       err = db.QueryRow("SELECT source_complaintid FROM source_complaint WHERE source_desc = ?", decodedString).Scan(&result)
       if err != nil {
         panic(err.Error())
@@ -786,7 +785,7 @@ func connect() {
 
 
   router.POST("/api/PostAccount", func(c *gin.Context) {
-    type accountData struct {
+    type AccountData struct {
       Data  string `json:"data"`
       Data2 string `json:"data2"`
       Data3 string `json:"data3"`

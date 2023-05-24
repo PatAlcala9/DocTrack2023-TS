@@ -116,7 +116,7 @@ const formatDate = () => {
 // }
 
 const getSourceIDFromDatabase = async () => {
-  const encodedSource = sourceEntry.value.replace('/', '-');
+  const encodedSource = sourceEntry.value.replace('/', '~')
   const response = await api.get('/api/GetSourceID/' + encodedSource)
   const data = response.data.length !== 0 ? response.data : null
 
@@ -153,10 +153,23 @@ const getMaxComplaintCode = async (): Promise<string> => {
   } else return ''
 }
 
+const postComplaint = async () => {
+  const response = await api.post('/api/PostComplaint', {
+    data: '23-1-0099',
+    data2: '3',
+    data3: '3',
+    data4: '3',
+    data5: '2022-01-01',
+    data6: '3',
+    data7: '3',
+    data8: '3',
+  })
+}
+
 const saveData = async () => {
   if (sourceEntry.value !== 'Select Source') {
     await getSourceIDFromDatabase()
-    // postRespodent()
+    postComplaint()
   }
   // postRespodent()
 }
