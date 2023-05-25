@@ -82,12 +82,10 @@ import docInputEntry from 'components/docInputEntry.vue'
 import docInput from 'components/docInput.vue'
 import docLabel from 'components/docLabel.vue'
 
-// let sourceEntryList = ref<Array<string>>([])
 let sourceEntry = ref('Select Source')
 let sourceEntryID = ref(0)
 let receivedDate = ref('')
 let formattedReceivedDate = ref('')
-// let showCalendar = ref(false)
 let complaintName = ref('')
 let complaintContact = ref('')
 let complaintLocation = ref('')
@@ -102,6 +100,24 @@ let _pagewithtable = usePageWithTable()
 
 const formatDate = () => {
   formattedReceivedDate.value = date.formatDate(Date.parse(receivedDate.value), 'MMMM D, YYYY')
+}
+
+let missingDetails: string[] = []
+const checkComplete = () => {
+  missingDetails = []
+
+  if (!sourceEntry.value || sourceEntry.value === 'Select Source') missingDetails.push('source type')
+  if (!receivedDate.value) missingDetails.push('date received')
+  if (!complaintName.value) missingDetails.push('complaint name')
+  if (!complaintContact.value) missingDetails.push('complaint contact')
+  if (!complaintDetail.value) missingDetails.push('complaint detail')
+  if (!complaintLocation.value) missingDetails.push('complaint location')
+  if (!respondentName.value) missingDetails.push('respondent name')
+  if (!respondentContact.value) missingDetails.push('respondent contact')
+  if (!respondentLocation.value) missingDetails.push('respondent location')
+
+  if (missingDetails.length > 0) return true
+  else return false
 }
 
 // const getSourcesFromDatabase = async () => {
@@ -125,8 +141,12 @@ const getSourceIDFromDatabase = async () => {
   }
 }
 
-const postRespodent = async (): Promise<boolean> => {
-  const response = await api.post('/api/PostRespondent/' + respondentName.value + '/' + respondentContact.value + '/' + respondentLocation.value)
+const postRespondent = async (name: string, contact: string, location: string): Promise<boolean> => {
+  const response = await api.post('/api/PostRespondent', {
+    data: name,
+    data2: contact,
+    data3: location
+  })
   const data = response.data.length !== 0 ? response.data : null
 
   if (data.includes('Success')) return true
@@ -147,31 +167,45 @@ const getMaxComplaintCode = async (): Promise<string> => {
   const response = await api.get('/api/GetMaxComplaintCode')
   const data = response.data.length !== 0 ? response.data : null
 
-  if (data !== null) {
-    const result = data.result
-    return result
-  } else return ''
+  if (data !== null) return data.result
+  else return ''
 }
 
-const postComplaint = async () => {
+const generateNewComplaintCode = async () => {
+  const today = new Date()
+  const currentYear = date.formatDate(today, 'YY')
+  const series = parseInt((await getMaxComplaintCode()).substring(5)) + 1
+  const newSeries = series.toString().padStart(4, '0')
+
+  return `${currentYear}-${sourceEntryID.value}-${newSeries}`
+}
+
+const postComplaint = async (code: string, complaintid: number, complaintname: string, complaintcontact: string, datereceived: string, location:string, details:string, infoid: number) => {
   const response = await api.post('/api/PostComplaint', {
-    data: '23-1-0099',
-    data2: '3',
-    data3: '3',
-    data4: '3',
-    data5: '2022-01-01',
-    data6: '3',
-    data7: '3',
-    data8: '3',
+    data: code,
+    data2: complaintid,
+    data3: complaintname,
+    data4: complaintcontact,
+    data5: datereceived,
+    data6: location,
+    data7: details,
+    data8: infoid,
   })
 }
 
 const saveData = async () => {
-  if (sourceEntry.value !== 'Select Source') {
+  if (checkComplete() === false) {
     await getSourceIDFromDatabase()
-    postComplaint()
+
+    if (await postRespondent(respondentName.value, respondentContact.value, respondentLocation.value) === true) {
+      const latestRespondent = await getLatestRespondent()
+      const maxComplaint = await getMaxComplaintCode()
+      const newComplaint = await generateNewComplaintCode()
+
+      postComplaint(newComplaint, )
+    }
   }
-  // postRespodent()
+  await getSourceIDFromDatabase()
 }
 
 const gotoComplaintDashboard = () => {

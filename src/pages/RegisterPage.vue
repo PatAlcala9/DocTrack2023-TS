@@ -7,7 +7,6 @@ q-page(padding)
     transition(appear @before-enter="beforeEnterClose" @enter="enterClose")
       q-btn(flat size="md" label="Back" @click="gotoHome" icon="arrow_back" ).close-button
 
-  //- transition(appear @before-enter="beforeEnterPage" @enter="enterPage")
   section.login.column.items-center
     transition(appear @before-enter="beforeEnterInputs" @enter="enterInputs")
       div.column.items-center
@@ -25,28 +24,15 @@ q-page(padding)
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
       doc-button.register-button(text="Register" @click="saveAccount")
 
-q-dialog(v-model="dialog" transition-show="flip-right" transition-hide="flip-left")
-  q-card.dialog-card.text-white
-    q-card-section.dialog-card__section.flex.flex-center
-      div.dialog-title-area.row.justify-between
-        span.dialog-title {{dialogMessage}}
+q-dialog(v-model="dialog" transition-show="flip-right" transition-hide="flip-left").dialog
+  q-card.dialog-card.text-white.flex.flex-center
+    q-card-section.dialog-card__section
+      div.dialog-title-area.column.justify-center.items-center
+        span.dialog-card__title {{dialogTitle}}
+        span.dialog-card__info {{dialogMessage}}
         component(:is="docButton" text="OK" v-close-popup)
 
 </template>
-
-<!-- <script lang="ts">
-import { useCurrentPage } from 'stores/currentpage'
-
-export default {
-  preFetch({ redirect }) {
-    let _currentpage = useCurrentPage()
-
-    if (_currentpage.currentpage !== 'register') {
-      redirect({ path: '/login' })
-    }
-  },
-}
-</script> -->
 
 <script setup lang="ts">
 import { api } from 'boot/axios'
@@ -102,7 +88,7 @@ let ifullname = ref('')
 let iusername = ref('')
 let ipassword = ref('')
 let ipasswordEncrypted = ref('')
-let accessList: any = ref([])
+let accessList = ref<string[]>([])
 let accessOption = ref([
   {
     label: 'Incoming',
@@ -130,31 +116,50 @@ let accessOption = ref([
   },
 ])
 let dialog = ref(false)
+let dialogTitle = ref('')
 let dialogMessage = ref('')
 
-const saveAccount = async () => {
-  let ipasswordEncrypted = await encrypt(ipassword.value.toUpperCase(), 'doctrack2023', 3, 128)
-  let iincoming = accessList.value.includes('is_incoming') ? 1 : 0
-  let ioutgoing = accessList.value.includes('is_outgoing') ? 1 : 0
-  let ireleasing = accessList.value.includes('is_releasing') ? 1 : 0
-  let iinventory = accessList.value.includes('is_inventory') ? 1 : 0
-  let iothers = accessList.value.includes('is_otherdocuments') ? 1 : 0
-  let icomplaint = accessList.value.includes('is_complaint') ? 1 : 0
-  const response = await api.post('/api/SaveAccount/' + ifullname.value.toUpperCase() + '/' + iusername.value.toUpperCase() + '/' + ipasswordEncrypted + '/' + iincoming + '/' + ioutgoing + '/' + ireleasing + '/' + iinventory + '/' + iothers + '/' + icomplaint)
-  const data = response.data
+let missingDetails: string[] = []
+const checkComplete = () => {
+  missingDetails = []
 
-  if (data.includes('Success')) {
-    dialog.value = true
-    dialogMessage.value = 'Successfully Registered'
+  if (!ifullname.value) missingDetails.push('fullname')
+  if (!iusername.value) missingDetails.push('username')
+  if (!ipassword.value) missingDetails.push('password')
+  if (accessList.value.length === 0) missingDetails.push('access')
+
+  if (missingDetails.length > 0) return true
+  else return false
+}
+
+const saveAccount = async () => {
+  if (checkComplete() === false) {
+    let ipasswordEncrypted = encrypt(ipassword.value.toUpperCase(), 'doctrack2023', 3, 128)
+    let iincoming = accessList.value.includes('is_incoming') ? 1 : 0
+    let ioutgoing = accessList.value.includes('is_outgoing') ? 1 : 0
+    let ireleasing = accessList.value.includes('is_releasing') ? 1 : 0
+    let iinventory = accessList.value.includes('is_inventory') ? 1 : 0
+    let iothers = accessList.value.includes('is_otherdocuments') ? 1 : 0
+    let icomplaint = accessList.value.includes('is_complaint') ? 1 : 0
+    const response = await api.post('/api/SaveAccount/' + ifullname.value.toUpperCase() + '/' + iusername.value.toUpperCase() + '/' + ipasswordEncrypted + '/' + iincoming + '/' + ioutgoing + '/' + ireleasing + '/' + iinventory + '/' + iothers + '/' + icomplaint)
+    const data = response.data
+
+    if (data.includes('Success')) {
+      dialog.value = true
+      dialogMessage.value = 'Successfully Registered'
+    } else {
+      dialog.value = true
+      dialogMessage.value = 'Failed to Register'
+    }
   } else {
-    dialog.value = true
-    dialogMessage.value = 'Failed to Register'
+    showDialog('Cannot Register', `Missing ${missingDetails.toString().toUpperCase()}`)
   }
 }
 
-const sample = () => {
+const showDialog = (title: string, message: string) => {
   dialog.value = true
-  dialogMessage.value = 'Sample'
+  dialogTitle.value = title
+  dialogMessage.value = message
 }
 
 const gotoHome = () => {
@@ -172,11 +177,17 @@ const gotoHome = () => {
 <style lang="sass" scoped>
 
 .dialog
-  font-family: 'Raleway'
-  background-color: $button
+  width: 100vw
 
-.detail-dialog__info
-  font-size: 2rem
+.dialog-title-area
+  padding: 0.1rem 0  1rem 0.1rem
+
+.dialog-title
+  font-family: 'Raleway'
+  font-size: 1.4rem
+
+.dialog-card
+  background-color: #021926
 
 .login
   margin: 1rem

@@ -49,44 +49,8 @@ q-page(padding)
         span(v-else @click="showLogin").inquiry-text Inquire without logging In
         component(v-if="sampleMode" :is="docPDF")
 
-  //- q-dialog(v-model="inquireReceived" persistent full-width full-height transition-show="scale" transition-hide="scale").dialog#dialog
-  //-   q-card.dialog-card.text-white
-  //-     q-card-section
-  //-       div.dialog-title-area.row.justify-between
-  //-         span.dialog-title Inquiry for Received Documents
-  //-         q-btn(flat size="md" label="close" v-close-popup).dialog-close
-
-  //-     q-card-section
-  //-       div.fit.row.wrap.justify-start.items-start.content-start
-  //-         section.column
-  //-           span.dialog-content-label Search
-  //-           input.dialog-content-input
-  //-         section.column
-  //-           span.dialog-content-label Date
-  //-           input.dialog-content-input
-
-  //-         section(v-if="incomingList.length > 0").dialog-content-table
-  //-           table.table
-  //-             thead
-  //-               tr.table-header-group
-  //-                 th.table-header Entry Code
-  //-                 th.table-header Received Date
-  //-                 th.table-header Source
-  //-                 th.table-header Subject
-  //-                 th.table-header Details
-  //-             tbody
-  //-               tr(v-for="data in incomingList" :key="data").table-content-group
-  //-                 td.table-content {{data.entryCodeNo}}
-  //-                 td.table-content {{data.receivedDate}}
-  //-                 td.table-content {{data.sourceName}}
-  //-                 td.table-content {{data.subjectInfo}}
-  //-                 td.table-content View
-  //-         section(v-else).dialog-content-table
-  //-           span Loading
-  //-           //- q-table(:rows="incomingList" :columns="incomingHeaderList" row-key="name" :table-header-style="{ backgroundColor: '#021926', color: '#ffffff', fontFamily: 'Raleway', fontSize: '12px' }" :table-style="{ backgroundColor: 'red' }")
-
-q-dialog(v-model="error" transition-show="flip-right" transition-hide="flip-left" @keypress.enter="error=false").dialog#dialog
-  q-card.dialog-card.text-white.flex.flex-center#dialog
+q-dialog(v-model="error" transition-show="flip-right" transition-hide="flip-left" @keypress.enter="error=false").dialog
+  q-card.dialog-card.text-white.flex.flex-center
     q-card-section.dialog-card__section
       div.dialog-title-area.column.justify-center.items-center
         span.dialog-card__title {{errorMessage}}

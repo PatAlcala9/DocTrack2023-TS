@@ -285,6 +285,16 @@ func connect() {
 			c.JSON(http.StatusOK, gin.H{
 				"result": result,
 			})
+
+    } else if method == "GetMaxComplaintCode" {
+      err = db.QueryRow("SELECT MAX(complaint_code) FROM complaint_info").Scan(&result)
+      if err != nil {
+        panic(err.Error())
+      }
+
+			c.JSON(http.StatusOK, gin.H{
+				"result": result,
+			})
     }
   })
 
@@ -771,17 +781,9 @@ func connect() {
 				"result": result,
 			})
 
-    } else if method == "GetMaxComplaintCode" {
-      err = db.QueryRow("SELECT MAX(complaint_code) FROM complaint_info WHERE complaint_code LIKE ?", "%-" + data + "-%").Scan(&result)
-      if err != nil {
-        panic(err.Error())
-      }
-
-			c.JSON(http.StatusOK, gin.H{
-				"result": result,
-			})
     }
   })
+
 
 
   router.POST("/api/PostAccount", func(c *gin.Context) {
@@ -794,6 +796,7 @@ func connect() {
       Data6 string `json:"data6"`
       Data7 string `json:"data7"`
       Data8 string `json:"data8"`
+      Data9 string `json:"data9"`
     }
     var accountData AccountData
     if err := c.ShouldBindJSON(&accountData); err != nil {
@@ -808,13 +811,13 @@ func connect() {
     c.Writer.Header().Set("X-Download-Options", "noopen")
     c.Writer.Header().Set("Referrer-Policy", "no-referrer")
 
-    dbpost, err := db.Prepare("INSERT INTO user (userid, employeeName, username, password, is_incoming, is_outgoing, is_releasing, is_inventory, is_otherdocuments, is_monitoring, is_admin) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0)")
+    dbpost, err := db.Prepare("INSERT INTO user (userid, employeeName, username, password, is_incoming, is_outgoing, is_releasing, is_inventory, is_otherdocuments, is_monitoring, is_admin, is_complaint) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, ?)")
     if err != nil {
       panic(err.Error())
     }
     defer dbpost.Close()
 
-    exec, err := dbpost.Exec(accountData.Data, accountData.Data2, accountData.Data3, accountData.Data4, accountData.Data5, accountData.Data6, accountData.Data7, accountData.Data8)
+    exec, err := dbpost.Exec(accountData.Data, accountData.Data2, accountData.Data3, accountData.Data4, accountData.Data5, accountData.Data6, accountData.Data7, accountData.Data8, accountData.Data9)
     if err != nil {
       panic(err.Error())
     }
@@ -879,6 +882,7 @@ func connect() {
   })
 
 
+
   router.POST("/api/PostRespondent", func(c *gin.Context) {
     type RespondentData struct {
       Data  string `json:"data"`
@@ -920,6 +924,7 @@ func connect() {
       c.String(http.StatusInternalServerError, "Failed on Saving Respondent")
     }
   })
+
 
 
   router.POST("/api/PostComplaint", func(c *gin.Context) {
@@ -968,6 +973,7 @@ func connect() {
       c.String(http.StatusInternalServerError, "Failed on Saving Complaint")
     }
   })
+
 
   router.Run(":8081")
 }
