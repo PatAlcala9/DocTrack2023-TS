@@ -3,9 +3,9 @@ package main
 import (
 	"database/sql"
 	"net/http"
-  "strings"
+	"strings"
 
-  "github.com/gin-contrib/cors"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -297,13 +297,22 @@ func connect() {
 			})
 
     } else if method == "GetComplaintList" {
-      err = db.QueryRow("SELECT complaint_code AS result, source_complaintid AS result2, complaintant_name AS result3, complaintant_contact AS result4, date_received AS result5, locationOfconstruction AS result6, details AS result7, respondent_infoid AS result8 FROM complaint_info ORDER BY complaint_code").Scan(&result)
+      var result2, result3, result4, result5, result6, result7, result8 string
+
+      err = db.QueryRow("SELECT complaint_code AS result, source_complaintid AS result2, complaintant_name AS result3, complaintant_contact AS result4, date_received AS result5, locationOfconstruction AS result6, details AS result7, respondent_infoid AS result8 FROM complaint_info ORDER BY complaint_code").Scan(&result, &result2, &result3, &result4, &result5, &result6, &result7, &result8)
       if err != nil {
         panic(err.Error())
       }
 
 			c.JSON(http.StatusOK, gin.H{
 				"result": result,
+        "result2": result2,
+        "result3": result3,
+        "result4": result4,
+        "result5": result5,
+        "result6": result6,
+        "result7": result7,
+        "result8": result8,
 			})
     }
   })
@@ -782,7 +791,7 @@ func connect() {
 
     } else if method == "GetSourceID" {
       decodedString := strings.Replace(data, "~", "/", -1)
-      err = db.QueryRow("SELECT source_complaintid FROM source_complaint WHERE source_desc = ?", decodedString).Scan(&result)
+      err = db.QueryRow("SELECT source_complaintid AS result FROM source_complaint WHERE source_desc = ?", decodedString).Scan(&result)
       if err != nil {
         panic(err.Error())
       }
