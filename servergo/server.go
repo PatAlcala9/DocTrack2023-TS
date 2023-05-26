@@ -295,6 +295,16 @@ func connect() {
 			c.JSON(http.StatusOK, gin.H{
 				"result": result,
 			})
+
+    } else if method == "GetComplaintList" {
+      err = db.QueryRow("SELECT complaint_code AS result, source_complaintid AS result2, complaintant_name AS result3, complaintant_contact AS result4, date_received AS result5, locationOfconstruction AS result6, details AS result7, respondent_infoid AS result8 FROM complaint_info ORDER BY complaint_code").Scan(&result)
+      if err != nil {
+        panic(err.Error())
+      }
+
+			c.JSON(http.StatusOK, gin.H{
+				"result": result,
+			})
     }
   })
 

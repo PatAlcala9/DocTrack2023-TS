@@ -65,6 +65,14 @@ q-page(padding)
 
   div.flex.flex-center
     component(:is="docButton" text="Save" @click="saveData")
+
+q-dialog(v-model="dialog" transition-show="flip-right" transition-hide="flip-left" @keypress.enter="error=false").dialog
+  q-card.dialog-card.text-white.flex.flex-center
+    q-card-section.dialog-card__section
+      div.dialog-title-area.column.justify-center.items-center
+        span.dialog-card__title {{ dialogTitle }}
+        span.dialog-card__info {{ dialogMessage }}
+        doc-button(text="OK" @click="dialog=false")
 </template>
 
 <script setup lang="ts">
@@ -94,6 +102,10 @@ let respondentName = ref('')
 let respondentContact = ref('')
 let respondentLocation = ref('')
 
+let dialog = ref(false)
+let dialogTitle = ref('')
+let dialogMessage = ref('')
+
 const router = useRouter()
 let _currentpage = useCurrentPage()
 let _pagewithtable = usePageWithTable()
@@ -119,17 +131,6 @@ const checkComplete = () => {
   if (missingDetails.length > 0) return true
   else return false
 }
-
-// const getSourcesFromDatabase = async () => {
-//   const response = await api.get('/api/GetSources')
-//   const data = response.data.length !== 0 ? response.data : null
-
-//   if (data !== null) {
-//     sourceEntryList.value = data.result
-//   }
-
-//   console.log('sourceEntryList:', sourceEntryList.value[0])
-// }
 
 const getSourceIDFromDatabase = async () => {
   const encodedSource = sourceEntry.value.replace('/', '~')
@@ -180,7 +181,7 @@ const generateNewComplaintCode = async () => {
   return `${currentYear}-${sourceEntryID.value}-${newSeries}`
 }
 
-const postComplaint = async (code: string, complaintid: number, complaintname: string, complaintcontact: string, datereceived: string, location:string, details:string, infoid: number) => {
+const postComplaint = async (code: string, complaintid: number, complaintname: string, complaintcontact: string, datereceived: string, location:string, details:string, infoid: number): Promise<boolean> => {
   const response = await api.post('/api/PostComplaint', {
     data: code,
     data2: complaintid,
@@ -191,6 +192,10 @@ const postComplaint = async (code: string, complaintid: number, complaintname: s
     data7: details,
     data8: infoid,
   })
+  const data = response.data.length !== 0 ? response.data : null
+
+  if (data !== null) return true
+  else return false
 }
 
 const saveData = async () => {
@@ -202,10 +207,19 @@ const saveData = async () => {
       const maxComplaint = await getMaxComplaintCode()
       const newComplaint = await generateNewComplaintCode()
 
-      postComplaint(newComplaint, )
+      if (await postComplaint(newComplaint, sourceEntryID.value, complaintName.value, complaintDetail.value, receivedDate.value, complaintLocation.value, complaintDetail.value, latestRespondent))
+        openDialog('Success', 'Successfully Saved Complaint')
+      else openDialog('Error', 'Failed to Save Complaint')
+    } else {
+      openDialog('Error', 'Failed to Save Respondent')
     }
   }
-  await getSourceIDFromDatabase()
+}
+
+const openDialog = (title: string, message: string) => {
+  dialog.value = true
+  dialogTitle.value = title
+  dialogMessage.value = message
 }
 
 const gotoComplaintDashboard = () => {
@@ -213,10 +227,6 @@ const gotoComplaintDashboard = () => {
   _currentpage.currentpage = 'complaint'
   router.push('/complaint')
 }
-
-;(async () => {
-  // await getSourcesFromDatabase()
-})()
 </script>
 
 <style lang="sass" scoped>

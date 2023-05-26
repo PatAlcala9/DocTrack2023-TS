@@ -37,7 +37,6 @@ const gotoComplaintAdd = () => {
   router.push('/complaintadd')
 }
 
-
 const gotoMenu = () => {
   _currentpage.currentpage = 'dashboard'
   router.push('/dashboard')
