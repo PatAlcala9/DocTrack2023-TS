@@ -72,6 +72,7 @@ q-page(padding)
               td {{complaintList.result2[index]}}
               td {{complaintList.result3[index]}}
               td {{complaintList.result4[index]}}
+              td {{complaintList.result5[index]}}
               td
                 q-btn(color="button" icon="visibility" :ripple="false" ).button-view
 </template>
@@ -101,6 +102,7 @@ type Complaint = {
   result2: string
   result3: string
   result4: string
+  result5: string
 }
 let complaintList = ref({} as Complaint)
 
@@ -109,17 +111,6 @@ const gotoComplaint = () => {
   router.push('/complaint')
 }
 
-// const pushSampleData = () => {
-//   let sampleData = {
-//     result: ['23-1-0052', '23-2-0041'],
-//     result2: ['JUAN DELA CRUZ', 'HARRY POTTER'],
-//     result3: ['MR. BEAN', 'SPIDER-MAN'],
-//     result4: ['GOTHAM CITY', 'MARS'],
-//     result5: ['FOR NOTICE OF VIOLATION SERVING', 'FIRST NOTICE OF VIOLATION SERVED'],
-//     result6: ['5', '3'],
-//   }
-// }
-
 const getComplaintList = async () => {
   const response = await api.get('/api/GetComplaintList')
   const data = response.data.length !== 0 ? response.data : null
@@ -127,13 +118,47 @@ const getComplaintList = async () => {
   if (data !== null) {
     const result = data.result
     if (result.length > 0) {
+      let arrayRemainingDays: string[] = []
+
       complaintList.value.result = data.result
       complaintList.value.result2 = data.result2
       complaintList.value.result3 = data.result3
       complaintList.value.result4 = data.result4
+
+      for (let item of data.result5) {
+        const remainingDays = (await calculateRemainingDays(item)).toString()
+        arrayRemainingDays.push(data.result4.toString().includes('SERVED') ? remainingDays : '')
+      }
+
+      console.log('arrayRemainingDays:', arrayRemainingDays)
+      complaintList.value.result5 = arrayRemainingDays.toString()
+
       return true
     } else return false
   } else return false
+}
+
+const calculateRemainingDays = async (expiry: string): Promise<number> => {
+  const expiryDate = date.formatDate(expiry, 'DDD')
+  const today = date.formatDate(new Date(), 'DDD')
+
+  console.log('expiryDate:', expiryDate)
+  console.log('today:', today)
+
+  if (expiryDate > today) {
+    const remainingDays = parseInt(expiryDate) - parseInt(today)
+
+    const currentDayOfWeek = new Date().getDay()
+    const remainingWeekdays = Math.max(remainingDays - Math.floor(remainingDays / 7) * 2, 0)
+
+    let adjustedRemainingDays = remainingWeekdays
+    if (currentDayOfWeek === 6) {
+      adjustedRemainingDays = Math.max(remainingWeekdays - 1, 0)
+    } else if (currentDayOfWeek === 0) {
+      adjustedRemainingDays = Math.max(remainingWeekdays - 2, 0)
+    }
+    return adjustedRemainingDays
+  } else return 0
 }
 
 ;(async () => {

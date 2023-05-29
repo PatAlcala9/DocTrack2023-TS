@@ -297,19 +297,20 @@ func connect() {
 			})
 
     } else if method == "GetComplaintList" {
-      var result2, result3, result4 string
+      var result2, result3, result4, result5 string
       array := []string{}
       array2 := []string{}
       array3 := []string{}
       array4 := []string{}
+      array5 := []string{}
 
-			results, err := db.Query("SELECT c.complaint_code AS result, s.source_desc AS result2, c.locationOfconstruction AS result3, st.status AS result4 FROM complaint_info c, source_complaint s, complaint_status st WHERE c.source_complaintid = s.source_complaintid AND c.complaint_statusid = st.complaint_statusid")
+			results, err := db.Query("SELECT c.complaint_code AS result, s.source_desc AS result2, c.locationOfconstruction AS result3, st.status AS result4, st.date_transacted AS result5 FROM complaint_info c, source_complaint s, complaint_status st WHERE c.source_complaintid = s.source_complaintid AND c.complaint_statusid = st.complaint_statusid")
       if err != nil {
         panic(err.Error())
       }
 
       for results.Next() {
-				err = results.Scan(&result, &result2, &result3, &result4)
+				err = results.Scan(&result, &result2, &result3, &result4, &result5)
 				if err != nil {
 					panic(err.Error())
 				}
@@ -317,12 +318,14 @@ func connect() {
         array2 = append(array2, result2)
         array3 = append(array3, result3)
         array4 = append(array4, result4)
+        array5 = append(array5, result5)
 			}
 			c.JSON(http.StatusOK, gin.H{
 				"result": array,
         "result2": array2,
         "result3": array3,
         "result4": array4,
+        "result5": array5,
 			})
     }
   })
@@ -802,6 +805,16 @@ func connect() {
     } else if method == "GetSourceID" {
       decodedString := strings.Replace(data, "~", "/", -1)
       err = db.QueryRow("SELECT source_complaintid AS result FROM source_complaint WHERE source_desc = ?", decodedString).Scan(&result)
+      if err != nil {
+        panic(err.Error())
+      }
+
+			c.JSON(http.StatusOK, gin.H{
+				"result": result,
+			})
+
+    } else if method == "GetComplaintSpecific" {
+      err = db.QueryRow("SELECT source_complaintid AS result FROM source_complaint WHERE source_desc = ?", data).Scan(&result)
       if err != nil {
         panic(err.Error())
       }
