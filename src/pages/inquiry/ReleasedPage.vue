@@ -304,7 +304,7 @@ const getOutgoingActionLog = async () => {
   font-weight: bold
 
 .table th, .table td
-  padding: 1rem 4rem
+  padding: 1rem 2.5rem
   width: 20rem
 
 .table tbody tr

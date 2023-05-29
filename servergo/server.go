@@ -297,22 +297,32 @@ func connect() {
 			})
 
     } else if method == "GetComplaintList" {
-      var result2, result3, result4, result5, result6, result7, result8 string
+      var result2, result3, result4 string
+      array := []string{}
+      array2 := []string{}
+      array3 := []string{}
+      array4 := []string{}
 
-      err = db.QueryRow("SELECT complaint_code AS result, source_complaintid AS result2, complaintant_name AS result3, complaintant_contact AS result4, date_received AS result5, locationOfconstruction AS result6, details AS result7, respondent_infoid AS result8 FROM complaint_info ORDER BY complaint_code").Scan(&result, &result2, &result3, &result4, &result5, &result6, &result7, &result8)
+			results, err := db.Query("SELECT c.complaint_code AS result, s.source_desc AS result2, c.locationOfconstruction AS result3, st.status AS result4 FROM complaint_info c, source_complaint s, complaint_status st WHERE c.source_complaintid = s.source_complaintid AND c.complaint_statusid = st.complaint_statusid")
       if err != nil {
         panic(err.Error())
       }
 
+      for results.Next() {
+				err = results.Scan(&result, &result2, &result3, &result4)
+				if err != nil {
+					panic(err.Error())
+				}
+				array = append(array, result)
+        array2 = append(array2, result2)
+        array3 = append(array3, result3)
+        array4 = append(array4, result4)
+			}
 			c.JSON(http.StatusOK, gin.H{
-				"result": result,
-        "result2": result2,
-        "result3": result3,
-        "result4": result4,
-        "result5": result5,
-        "result6": result6,
-        "result7": result7,
-        "result8": result8,
+				"result": array,
+        "result2": array2,
+        "result3": array3,
+        "result4": array4,
 			})
     }
   })

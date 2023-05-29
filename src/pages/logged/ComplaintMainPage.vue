@@ -38,41 +38,42 @@ q-page(padding)
             q-item-section
               q-item-label REMAINING DAYS
 
-  div(v-if="quasar.screen.width <= 500").flex.flex-center
-    section(v-if="complaintList.result !== ''").dialog-content-table
-      table.table
-        thead
-          tr
-            th Complain Code
-            th Details
-        tbody
-          tr(v-for="(item, index) in complaintList.result" :key="item").table-content-group
-            td {{item}}
-            td
-              q-btn(color="button" icon="visibility" :ripple="false" ).button-view
+  div(v-if="nodata")
+    span No Data Found
 
-  div(v-else).flex.flex-center
-    section(v-if="complaintList.result !== ''").dialog-content-table
-      table.table
-        thead
-          tr
-            th Complain Code
-            th Respondent
-            th Inspector
-            th Location
-            th Status
-            th Remaining Days
-            th Details
-        tbody
-          tr(v-for="(item, index) in complaintList.result" :key="item").table-content-group
-            td {{item}}
-            td {{complaintList.result2[index]}}
-            td {{complaintList.result3[index]}}
-            td {{complaintList.result4[index]}}
-            td {{complaintList.result5[index]}}
-            td {{complaintList.result6[index]}}
-            td
-              q-btn(color="button" icon="visibility" :ripple="false" ).button-view
+  div(v-else)
+    section(v-if="quasar.screen.width <= 500").flex.flex-center
+      section(v-if="complaintList.result !== ''").dialog-content-table
+        table.table
+          thead
+            tr
+              th Complain Code
+              th Details
+          tbody
+            tr(v-for="(item, index) in complaintList.result" :key="item").table-content-group
+              td {{item}}
+              td
+                q-btn(color="button" icon="visibility" :ripple="false" ).button-view
+
+    section(v-else).flex.flex-center
+      section(v-if="complaintList.result !== ''").dialog-content-table
+        table.table
+          thead
+            tr
+              th Complain Code
+              th Type
+              th Location
+              th Status
+              th Remaining Days
+              th Details
+          tbody
+            tr(v-for="(item, index) in complaintList.result" :key="item").table-content-group
+              td {{item}}
+              td {{complaintList.result2[index]}}
+              td {{complaintList.result3[index]}}
+              td {{complaintList.result4[index]}}
+              td
+                q-btn(color="button" icon="visibility" :ripple="false" ).button-view
 </template>
 
 <script setup lang="ts">
@@ -93,14 +94,13 @@ import docLabel from 'components/docLabel.vue'
 
 let searchValue = ref('')
 let searchByValue = ref('')
+let nodata = ref(true)
 
 type Complaint = {
   result: string
   result2: string
   result3: string
   result4: string
-  result5: string
-  result6: string
 }
 let complaintList = ref({} as Complaint)
 
@@ -109,18 +109,37 @@ const gotoComplaint = () => {
   router.push('/complaint')
 }
 
-const pushSampleData = () => {
-  let sampleData = {
-    result: ['23-1-0052', '23-2-0041'],
-    result2: ['JUAN DELA CRUZ', 'HARRY POTTER'],
-    result3: ['MR. BEAN', 'SPIDER-MAN'],
-    result4: ['GOTHAM CITY', 'MARS'],
-    result5: ['FOR NOTICE OF VIOLATION SERVING', 'FIRST NOTICE OF VIOLATION SERVED'],
-    result6: ['5', '3'],
-  }
-  complaintList.value = sampleData
+// const pushSampleData = () => {
+//   let sampleData = {
+//     result: ['23-1-0052', '23-2-0041'],
+//     result2: ['JUAN DELA CRUZ', 'HARRY POTTER'],
+//     result3: ['MR. BEAN', 'SPIDER-MAN'],
+//     result4: ['GOTHAM CITY', 'MARS'],
+//     result5: ['FOR NOTICE OF VIOLATION SERVING', 'FIRST NOTICE OF VIOLATION SERVED'],
+//     result6: ['5', '3'],
+//   }
+// }
+
+const getComplaintList = async () => {
+  const response = await api.get('/api/GetComplaintList')
+  const data = response.data.length !== 0 ? response.data : null
+
+  if (data !== null) {
+    const result = data.result
+    if (result.length > 0) {
+      complaintList.value.result = data.result
+      complaintList.value.result2 = data.result2
+      complaintList.value.result3 = data.result3
+      complaintList.value.result4 = data.result4
+      return true
+    } else return false
+  } else return false
 }
-pushSampleData()
+
+;(async () => {
+  if (await getComplaintList()) nodata.value = false
+  else nodata.value = true
+})()
 </script>
 
 <style lang="sass" scoped>
@@ -148,12 +167,12 @@ pushSampleData()
   font-weight: bold
 
 .table th, .table td
-  padding: 1rem 4rem
+  padding: 1rem 2.5rem
   width: 20rem
 
 .table tbody tr
   border-bottom: 1px solid #dddddd
-  font-weight: 250
+  font-weight: 350
 
 .table tbody tr:nth-of-type(even)
   background-color: #1C4157
