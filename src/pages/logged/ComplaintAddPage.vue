@@ -66,7 +66,7 @@ q-page(padding)
   div.flex.flex-center
     component(:is="docButton" text="Save" @click="saveData")
 
-q-dialog(v-model="dialog" transition-show="flip-right" transition-hide="flip-left" @keypress.enter="error=false").dialog
+q-dialog(v-model="dialog" transition-show="flip-right" transition-hide="flip-left").dialog
   q-card.dialog-card.text-white.flex.flex-center
     q-card-section.dialog-card__section
       div.dialog-title-area.column.justify-center.items-center
