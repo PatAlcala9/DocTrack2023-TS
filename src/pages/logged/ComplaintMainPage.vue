@@ -82,10 +82,33 @@ q-dialog(v-model="dialog" transition-show="flip-right" transition-hide="flip-lef
       div.dialog-title-area.column.justify-center.items-center
         span.dialog-card__label Complaint Code:
         span.dialog-card__data {{ dialogCode }}
-        span.dialog-card__label Complaintant Type:
+        span.dialog-card__label Complaint Type:
         span.dialog-card__data {{ dialogType }}
-        span.dialog-card__label Complaintant Name:
+        span.dialog-card__label Received Date:
+        span.dialog-card__data {{ dialogReceivedDate }}
+
+        span.dialog-card__label Complaintant:
         span.dialog-card__data {{ dialogName }}
+        span.dialog-card__label Complaintant Contact:
+        span.dialog-card__data {{ dialogContact }}
+        span.dialog-card__label Complaintant Location:
+        span.dialog-card__data {{ dialogLocation }}
+        span.dialog-card__label Details:
+        span.dialog-card__data {{ dialogDetails }}
+
+        span.dialog-card__label Details:
+        span.dialog-card__data {{ dialogDetails }}
+
+        span.dialog-card__label Transaction Date :
+        span.dialog-card__data {{ dialogDateTransacted }}
+
+        span.dialog-card__label Respodent:
+        span.dialog-card__data {{ dialogRespondentName }}
+        span.dialog-card__label Respodent Location:
+        span.dialog-card__data {{ dialogRespondentLocation }}
+        span.dialog-card__label Respodent Contact:
+        span.dialog-card__data {{ dialogRespondentContact }}
+
         doc-button(text="OK" @click="dialog=false")
 </template>
 
@@ -113,6 +136,15 @@ let dialog = ref(false)
 let dialogCode = ref('')
 let dialogType = ref('')
 let dialogName = ref('')
+let dialogContact = ref('')
+let dialogReceivedDate = ref('')
+let dialogLocation = ref('')
+let dialogDetails = ref('')
+let dialogRespondentName = ref('')
+let dialogRespondentContact = ref('')
+let dialogRespondentLocation = ref('')
+let dialogStatus = ref('')
+let dialogDateTransacted = ref('')
 
 type Complaint = {
   result: string
@@ -183,6 +215,15 @@ const getComplaintSpecific = async (code: string) => {
     dialogCode.value = code
     dialogType.value = data.result
     dialogName.value = data.result2
+    dialogContact.value = data.result3
+    dialogLocation.value = data.result4
+    dialogReceivedDate.value = data.result5
+    dialogDetails.value = data.result6
+    dialogRespondentName.value = data.result7
+    dialogRespondentContact.value = data.result8
+    dialogRespondentLocation.value = data.result9
+    dialogStatus.value = data.result10
+    dialogDateTransacted.value = data.result11
 
     dialog.value = true
   }
@@ -250,44 +291,19 @@ const getComplaintSpecific = async (code: string) => {
   height: 2rem
   box-shadow: none
 
-.detail-dialog
-  background-color: $background
-  color: #ffffff
-  margin: 1rem
-  border: 1px solid #2F5972
-  border-radius: 12rem
-
-.detail-dialog__info
-  font-size: 1.4rem
-  font-family: 'Montserrat'
-
-.detail-dialog__info--large
-  font-family: 'Montserrat'
-  font-size: 2.2rem
-
-.detail-dialog__info--subinfo
-  font-family: 'Montserrat'
-  font-size: 1.2rem
-
-.detail-dialog__info--detail
-  font-size: 1.6rem
-  font-family: 'Montserrat'
-  font-weight: bold
-  margin-left:1rem
-
-.detail-dialog__info--subdetail
-  font-size: 1.4rem
-  font-family: 'Montserrat'
-  margin-left:1rem
-
-.detail-dialog__button
-  margin-bottom: 2rem
 
 .doc-log-area
   margin-top: 2rem
 
 .section
   margin-bottom: 0
+
+.dialog
+  width: 100vw
+
+.dialog-card
+  width: 100vw
+  height: 100vh
 
 .dialog-card__label
   font-family: 'Inter'
