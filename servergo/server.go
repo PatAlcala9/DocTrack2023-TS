@@ -304,7 +304,7 @@ func connect() {
       array4 := []string{}
       array5 := []string{}
 
-			results, err := db.Query("SELECT c.complaint_code AS result, s.source_desc AS result2, c.locationOfconstruction AS result3, st.status AS result4, st.date_transacted AS result5 FROM complaint_info c, source_complaint s, complaint_status st WHERE c.source_complaintid = s.source_complaintid AND c.complaint_statusid = st.complaint_statusid")
+			results, err := db.Query("SELECT c.complaint_code AS result, s.source_desc AS result2, c.complaintant_name AS result3, st.status AS result4, st.date_transacted AS result5 FROM complaint_info c, source_complaint s, complaint_status st WHERE c.source_complaintid = s.source_complaintid AND c.complaint_statusid = st.complaint_statusid")
       if err != nil {
         panic(err.Error())
       }
@@ -814,15 +814,26 @@ func connect() {
 			})
 
     } else if method == "GetComplaintSpecific" {
-      err = db.QueryRow("SELECT source_complaintid AS result FROM source_complaint WHERE source_desc = ?", data).Scan(&result)
+      var result2, result3, result4, result5, result6, result7, result8, result9, result10, result11 string
+      
+      err = db.QueryRow("SELECT s.source_desc AS result, c.complaintant_name AS result2, c.complaintant_contact AS result3, c.locationOfconstruction AS result4, c.date_received AS result5, c.details AS result6, r.respondent_name AS result7, r.respondent_contact AS result8, r.respondent_location AS result9, st.status AS result10, st.date_transacted AS result11 FROM complaint_info c, source_complaint s, respondent_info r, complaint_status st WHERE c.source_complaintid = s.source_complaintid AND c.respondent_infoid = r.respondent_infoid AND c.complaint_code = st.complaint_code AND c.complaint_code = ?", data).Scan(&result, &result2, &result3, &result4, &result5, &result6, &result7, &result8, &result9, &result10, &result11)
       if err != nil {
         panic(err.Error())
       }
 
 			c.JSON(http.StatusOK, gin.H{
 				"result": result,
+        "result2": result2,
+        "result3": result3,
+        "result4": result4,
+        "result5": result5,
+        "result6": result6,
+        "result7": result7,
+        "result8": result8,
+        "result9": result9,
+        "result10": result10,
+        "result11": result11,
 			})
-
     }
   })
 

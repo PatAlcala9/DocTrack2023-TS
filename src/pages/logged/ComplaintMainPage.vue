@@ -62,7 +62,7 @@ q-page(padding)
             tr
               th Complain Code
               th Type
-              th Location
+              th Name
               th Status
               th Remaining Days
               th Details
@@ -74,7 +74,19 @@ q-page(padding)
               td {{complaintList.result4[index]}}
               td {{complaintList.result5[index]}}
               td
-                q-btn(color="button" icon="visibility" :ripple="false" ).button-view
+                q-btn(color="button" icon="visibility" :ripple="false" @click="getComplaintSpecific(item)").button-view
+
+q-dialog(v-model="dialog" transition-show="flip-right" transition-hide="flip-left").dialog
+  q-card.dialog-card.text-white.flex.flex-center
+    q-card-section.dialog-card__section
+      div.dialog-title-area.column.justify-center.items-center
+        span.dialog-card__label Complaint Code:
+        span.dialog-card__data {{ dialogCode }}
+        span.dialog-card__label Complaintant Type:
+        span.dialog-card__data {{ dialogType }}
+        span.dialog-card__label Complaintant Name:
+        span.dialog-card__data {{ dialogName }}
+        doc-button(text="OK" @click="dialog=false")
 </template>
 
 <script setup lang="ts">
@@ -96,6 +108,11 @@ import docLabel from 'components/docLabel.vue'
 let searchValue = ref('')
 let searchByValue = ref('')
 let nodata = ref(true)
+
+let dialog = ref(false)
+let dialogCode = ref('')
+let dialogType = ref('')
+let dialogName = ref('')
 
 type Complaint = {
   result: string
@@ -142,9 +159,6 @@ const calculateRemainingDays = async (expiry: string): Promise<number> => {
   const expiryDate = date.formatDate(expiry, 'DDD')
   const today = date.formatDate(new Date(), 'DDD')
 
-  console.log('expiryDate:', expiryDate)
-  console.log('today:', today)
-
   if (expiryDate > today) {
     const remainingDays = parseInt(expiryDate) - parseInt(today)
 
@@ -159,6 +173,19 @@ const calculateRemainingDays = async (expiry: string): Promise<number> => {
     }
     return adjustedRemainingDays
   } else return 0
+}
+
+const getComplaintSpecific = async (code: string) => {
+  const response = await api.get('/api/GetComplaintSpecific/' + code)
+  const data = response.data.length !== 0 ? response.data : null
+
+  if (data !== null) {
+    dialogCode.value = code
+    dialogType.value = data.result
+    dialogName.value = data.result2
+
+    dialog.value = true
+  }
 }
 
 ;(async () => {
@@ -261,6 +288,17 @@ const calculateRemainingDays = async (expiry: string): Promise<number> => {
 
 .section
   margin-bottom: 0
+
+.dialog-card__label
+  font-family: 'Inter'
+  font-weight: 300
+  font-size: 1rem
+
+.dialog-card__data
+  font-family: 'Inter'
+  font-weight: 500
+  font-size: 1.1rem
+  padding-bottom: 2rem
 
 @media screen and (max-width: 500px)
   .section
