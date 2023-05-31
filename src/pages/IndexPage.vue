@@ -140,7 +140,7 @@ const gotoPage = (page: string, table = false) => {
   width: 16rem
   height: auto
   position: fixed
-  opacity: 0.2
+  opacity: 0.1
   // filter: invert(100)
 
 .name
