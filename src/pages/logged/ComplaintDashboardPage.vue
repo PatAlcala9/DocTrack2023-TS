@@ -1,6 +1,9 @@
 <template lang="pug">
 
 q-page(padding)
+  section.online
+    q-icon(name="circle" size="1rem" :color="onlineColor")
+
   div.full-width.row.justify-between
     span.title Complaints
     q-btn(flat size="md" label="Back" @click="gotoMenu" icon="arrow_back").close-button
@@ -16,15 +19,27 @@ q-page(padding)
 
   </template>
 
-  <script setup lang="ts">
+<script setup lang="ts">
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCurrentPage } from 'stores/currentpage'
-import { usePageWithTable } from 'stores/pagewithtable';
+import { usePageWithTable } from 'stores/pagewithtable'
+import { useIsDemo } from 'stores/isdemo'
 import docButton from 'components/docButton.vue'
 
 const router = useRouter()
-let _currentpage = useCurrentPage()
-let _pagewithtable = usePageWithTable()
+const _currentpage = useCurrentPage()
+const _pagewithtable = usePageWithTable()
+const _isdemo = useIsDemo()
+
+let onlineColor = ref('')
+
+const checkOnline = () => {
+  if (_isdemo.isdemo) onlineColor.value = 'red'
+  else {
+    onlineColor.value = 'green'
+  }
+}
 
 const gotoComplaintInquire = () => {
   _currentpage.currentpage = 'complaintmain'
@@ -41,6 +56,13 @@ const gotoMenu = () => {
   _currentpage.currentpage = 'dashboard'
   router.push('/dashboard')
 }
+
+;(async () => {
+  if (_currentpage.currentpage !== undefined) router.push(_currentpage.currentpage)
+  else router.push('/dashboard')
+
+  checkOnline()
+})()
 </script>
 
 <style lang="sass" scoped>

@@ -1,6 +1,9 @@
 <template lang="pug">
 
 q-page(padding)
+  section.online
+    q-icon(name="circle" size="1rem" :color="onlineColor")
+
   div.full-width.row.justify-between
     span.title Complaint Tracking
     q-btn(flat size="md" label="Back" @click="gotoComplaint" icon="arrow_back").close-button
@@ -118,10 +121,14 @@ import { date, useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
 import { api } from 'boot/axios'
 import { useCurrentPage } from 'stores/currentpage'
+import { useIsDemo } from 'stores/isdemo'
 
 const router = useRouter()
 const quasar = useQuasar()
 const _currentpage = useCurrentPage()
+const _isdemo = useIsDemo()
+
+let onlineColor = ref('')
 
 import docButton from 'components/docButton.vue'
 import docTextArea from 'components/docTextArea.vue'
@@ -229,9 +236,36 @@ const getComplaintSpecific = async (code: string) => {
   }
 }
 
+const checkOnline = () => {
+  if (_isdemo.isdemo) onlineColor.value = 'red'
+  else {
+    onlineColor.value = 'green'
+  }
+}
+
+const fillupOffline = () => {
+  // dialogCode.value = code
+  // dialogType.value = data.result
+  // dialogName.value = data.result2
+  // dialogContact.value = data.result3
+  // dialogLocation.value = data.result4
+  // dialogReceivedDate.value = data.result5
+  // dialogDetails.value = data.result6
+  // dialogRespondentName.value = data.result7
+  // dialogRespondentContact.value = data.result8
+  // dialogRespondentLocation.value = data.result9
+  // dialogStatus.value = data.result10
+  // dialogDateTransacted.value = data.result11
+}
+
 ;(async () => {
-  if (await getComplaintList()) nodata.value = false
-  else nodata.value = true
+  checkOnline()
+
+  if (_isdemo) fillupOffline()
+  else {
+    if (await getComplaintList()) nodata.value = false
+    else nodata.value = true
+  }
 })()
 </script>
 

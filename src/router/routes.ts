@@ -6,8 +6,8 @@ const routes: RouteRecordRaw[] = [
     component: () => import('src/layouts/DoctrackLayout.vue'),
     children: [
       { path: '', component: () => import('pages/LoginPage.vue') },
-      { path: '/received', component: () => import('pages/inquiry/ReceivedPage.vue') },
-      { path: '/released', component: () => import('pages/inquiry/ReleasedPage.vue') },
+      { path: '/incominginquire', component: () => import('pages/inquiry/IncomingInquirePage.vue') },
+      { path: '/outgoinginquire', component: () => import('pages/inquiry/OutgoingInquirePage.vue') },
       { path: '/qrscanner', component: () => import('pages/inquiry/QRScannerPage.vue') },
       { path: '/qrresult', component: () => import('pages/inquiry/QRResultPage.vue') },
 

@@ -1,9 +1,9 @@
 <template lang="pug">
 
 q-page(padding)
-  //- div.full-width.row.justify-between
-  //-   span.title Releasing
-  //-   q-btn(flat size="md" label="Back" @click="gotoMenu" icon="arrow_back").close-button
+  div.full-width.row.justify-between
+    span.title Releasing
+    q-btn(flat size="md" label="Back" @click="gotoMenu" icon="arrow_back").close-button
 
   //- div.fit.row.wrap.justify-start.items-start.content-start.search-area
   //-   section.column

@@ -273,7 +273,7 @@ const getOutgoingActionLog = async () => {
   await searchByReference()
 
   if (_currentpage.currentpage !== undefined) router.push(_currentpage.currentpage)
-  else router.push('/released')
+  else router.push('/outgoinginquire')
 })()
 
 

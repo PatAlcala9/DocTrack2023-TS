@@ -1,6 +1,9 @@
 <template lang="pug">
 
 q-page(padding)
+  section.online-main
+    q-icon(name="circle" size="1rem" :color="onlineColor")
+
   section(v-if="quasar.screen.width > 500").full-width.column.items-start.content-center
     img(src="../assets/ocbologobw.avif" alt="OCBO Logo").logo
 
@@ -59,6 +62,7 @@ import { useAccess } from 'stores/access'
 import { useCurrentPage } from 'stores/currentpage'
 import { usePageWithTable } from 'stores/pagewithtable'
 import { useIsLogged } from 'stores/islogged'
+import { useIsDemo } from 'stores/isdemo'
 
 const router = useRouter()
 const quasar = useQuasar()
@@ -67,6 +71,9 @@ const _access = useAccess()
 const _currentpage = useCurrentPage()
 const _pagewithtable = usePageWithTable()
 const _islogged = useIsLogged()
+const _isdemo = useIsDemo()
+
+let onlineColor = ref('')
 
 const setName = async () => {
   if (_employeename.employeename !== '') SessionStorage.set('EmployeeName', _employeename.employeename)
@@ -124,12 +131,21 @@ const gotoPage = (page: string, table = false) => {
   router.push(page)
 }
 
+const checkOnline = () => {
+  if (_isdemo.isdemo) onlineColor.value = 'red'
+  else {
+    onlineColor.value = 'green'
+  }
+}
+
 ;(async () => {
   await setName()
   await getName()
 
   if (_currentpage.currentpage !== undefined) router.push(_currentpage.currentpage)
   else router.push('/dashboard')
+
+  checkOnline()
 })()
 </script>
 

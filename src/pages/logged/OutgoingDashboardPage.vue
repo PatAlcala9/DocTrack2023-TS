@@ -25,8 +25,8 @@ const router = useRouter()
 let _currentpage = useCurrentPage()
 
 const gotoIncomingInquire = () => {
-  _currentpage.currentpage = 'received'
-  router.push('/received')
+  _currentpage.currentpage = 'incominginquire'
+  router.push('/incominginquire')
 }
 
 const gotoIncomingAdd = () => {

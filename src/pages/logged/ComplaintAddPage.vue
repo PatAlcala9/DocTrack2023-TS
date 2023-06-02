@@ -1,6 +1,9 @@
 <template lang="pug">
 
 q-page(padding)
+  section.online
+    q-icon(name="circle" size="1rem" :color="onlineColor")
+
   div.full-width.row.justify-between
     span.title Complaint - Add New
     q-btn(flat size="md" label="Back" @click="gotoComplaintDashboard" icon="arrow_back").close-button
@@ -77,12 +80,13 @@ q-dialog(v-model="dialog" transition-show="flip-right" transition-hide="flip-lef
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { date } from 'quasar'
+import { date, LocalStorage } from 'quasar'
 import { useRouter } from 'vue-router'
 import { api } from 'boot/axios'
 
 import { useCurrentPage } from 'stores/currentpage'
 import { usePageWithTable } from 'stores/pagewithtable'
+import { useIsDemo } from 'stores/isdemo'
 
 import docButton from 'components/docButton.vue'
 import docTextArea from 'components/docTextArea.vue'
@@ -109,6 +113,9 @@ let dialogMessage = ref('')
 const router = useRouter()
 let _currentpage = useCurrentPage()
 let _pagewithtable = usePageWithTable()
+const _isdemo = useIsDemo()
+
+let onlineColor = ref('')
 
 const formatDate = () => {
   formattedReceivedDate.value = date.formatDate(Date.parse(receivedDate.value), 'MMMM D, YYYY')
@@ -142,16 +149,43 @@ const getSourceIDFromDatabase = async () => {
   }
 }
 
+const getSourceIDFromLOCAL = async () => {
+  switch (sourceEntry.value) {
+    case 'Email':
+      sourceEntryID.value = 1
+      break
+    case 'DCR/888':
+      sourceEntryID.value = 2
+      break
+    case 'Walk-In':
+      sourceEntryID.value = 3
+      break
+    default:
+      sourceEntryID.value = 4
+  }
+}
+
 const postRespondent = async (name: string, contact: string, location: string): Promise<boolean> => {
   const response = await api.post('/api/PostRespondent', {
     data: name,
     data2: contact,
-    data3: location
+    data3: location,
   })
   const data = response.data.length !== 0 ? response.data : null
 
   if (data.includes('Success')) return true
   else return false
+}
+
+const postRespodentLOCAL = async (name: string, contact: string, location: string): Promise<boolean> => {
+  const respodentData = {
+    respondentname: name,
+    respondentcontact: contact,
+    respondentlocation: location,
+  }
+  LocalStorage.set('respondent', respodentData)
+
+  return true
 }
 
 const getLatestRespondent = async (): Promise<number> => {
@@ -172,16 +206,24 @@ const getMaxComplaintCode = async (): Promise<string> => {
   else return ''
 }
 
-const generateNewComplaintCode = async () => {
+const getMaxComplaintCodeLOCAL = async (): Promise<string> => {
+  const response = LocalStorage.getItem('complaintcode')
+  const data = response?.toString() ?? ''
+
+  if (data !== null) return data
+  else return ''
+}
+
+const generateNewComplaintCode = async (code: string) => {
   const today = new Date()
   const currentYear = date.formatDate(today, 'YY')
-  const series = parseInt((await getMaxComplaintCode()).substring(5)) + 1
+  const series = parseInt(code.substring(5)) + 1
   const newSeries = series.toString().padStart(4, '0')
 
   return `${currentYear}-${sourceEntryID.value}-${newSeries}`
 }
 
-const postComplaint = async (code: string, complaintid: number, complaintname: string, complaintcontact: string, datereceived: string, location:string, details:string, infoid: number): Promise<boolean> => {
+const postComplaint = async (code: string, complaintid: number, complaintname: string, complaintcontact: string, datereceived: string, location: string, details: string, infoid: number): Promise<boolean> => {
   const response = await api.post('/api/PostComplaint', {
     data: code,
     data2: complaintid,
@@ -198,20 +240,51 @@ const postComplaint = async (code: string, complaintid: number, complaintname: s
   else return false
 }
 
+const postComplaintLOCAL = async (code: string, complaintid: number, complaintname: string, complaintcontact: string, datereceived: string, location: string, details: string, infoid: number): Promise<boolean> => {
+  const response = {
+    code: code,
+    complaintid: complaintid,
+    complaintname: complaintname,
+    complaintcontact: complaintcontact,
+    datereceived: datereceived,
+    location: location,
+    details: details,
+    infoid: infoid,
+  }
+  LocalStorage.set('complaint', response)
+
+  return true
+}
+
 const saveData = async () => {
   if (checkComplete() === false) {
-    await getSourceIDFromDatabase()
+    if (_isdemo) {
+      await getSourceIDFromLOCAL()
 
-    if (await postRespondent(respondentName.value, respondentContact.value, respondentLocation.value) === true) {
-      const latestRespondent = await getLatestRespondent()
-      const maxComplaint = await getMaxComplaintCode()
-      const newComplaint = await generateNewComplaintCode()
+      if ((await postRespodentLOCAL(respondentName.value, respondentContact.value, respondentLocation.value)) === true) {
+        console.log('1')
+        const latestRespondent = 0
+        const maxComplaint = await getMaxComplaintCodeLOCAL()
+        const newComplaint = await generateNewComplaintCode(maxComplaint)
 
-      if (await postComplaint(newComplaint, sourceEntryID.value, complaintName.value, complaintDetail.value, receivedDate.value, complaintLocation.value, complaintDetail.value, latestRespondent))
-        openDialog('Success', 'Successfully Saved Complaint')
-      else openDialog('Error', 'Failed to Save Complaint')
+        if (await postComplaintLOCAL(newComplaint, sourceEntryID.value, complaintName.value, complaintDetail.value, receivedDate.value, complaintLocation.value, complaintDetail.value, latestRespondent)) openDialog('Success', 'Successfully Saved Complaint')
+        else openDialog('Error', 'Failed to Save Complaint')
+      } else {
+        openDialog('Error', 'Failed to Save Respondent')
+      }
     } else {
-      openDialog('Error', 'Failed to Save Respondent')
+      await getSourceIDFromDatabase()
+
+      if ((await postRespondent(respondentName.value, respondentContact.value, respondentLocation.value)) === true) {
+        const latestRespondent = await getLatestRespondent()
+        const maxComplaint = await getMaxComplaintCode()
+        const newComplaint = await generateNewComplaintCode(maxComplaint)
+
+        if (await postComplaint(newComplaint, sourceEntryID.value, complaintName.value, complaintDetail.value, receivedDate.value, complaintLocation.value, complaintDetail.value, latestRespondent)) openDialog('Success', 'Successfully Saved Complaint')
+        else openDialog('Error', 'Failed to Save Complaint')
+      } else {
+        openDialog('Error', 'Failed to Save Respondent')
+      }
     }
   }
 }
@@ -222,11 +295,25 @@ const openDialog = (title: string, message: string) => {
   dialogMessage.value = message
 }
 
+const checkOnline = () => {
+  if (_isdemo.isdemo) onlineColor.value = 'red'
+  else {
+    onlineColor.value = 'green'
+  }
+}
+
 const gotoComplaintDashboard = () => {
   _pagewithtable.pagewithtable = false
   _currentpage.currentpage = 'complaint'
   router.push('/complaint')
 }
+
+;(async () => {
+  if (_currentpage.currentpage !== undefined) router.push(_currentpage.currentpage)
+  else router.push('/dashboard')
+
+  checkOnline()
+})()
 </script>
 
 <style lang="sass" scoped>

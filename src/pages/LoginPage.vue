@@ -37,16 +37,16 @@ q-page(padding)
         section.username-area.column.wrap.justify-center.items-center.content-center
           span.inquiry-label Inquiry
         section.button-area--inquiry.column.wrap.justify-center.items-center.content-center
-          doc-button(text="Received" @click="inquireReceivedTrigger")
+          doc-button(text="Incoming" @click="inquireReceivedTrigger")
         section.button-area--inquiry.column.wrap.justify-center.items-center.content-center
-          doc-button(text="Released" @click="inquireReleasedTrigger")
+          doc-button(text="Outgoing" @click="inquireReleasedTrigger")
         section.button-area--inquiry.column.wrap.justify-center.items-center.content-center
           doc-button(text="QR" @click="qrScannerTrigger")
 
     transition(appear @before-enter="beforeEnterSwitch" @enter="enterSwitch")
       div.inquiry
         span(v-if="inquiry" @click="showInquiry").inquiry-text Login
-        span(v-else @click="showLogin").inquiry-text Inquire without logging In
+        span(v-else @click="showLogin").inquiry-text Inquire
         component(v-if="sampleMode" :is="docPDF")
 
 q-dialog(v-model="error" transition-show="flip-right" transition-hide="flip-left" @keypress.enter="error=false").dialog
@@ -57,16 +57,6 @@ q-dialog(v-model="error" transition-show="flip-right" transition-hide="flip-left
         span.dialog-card__info {{errorInformation}}
         doc-button(text="OK" @click="error=false")
 </template>
-
-<!-- <script lang="ts">
-export default {
-  preFetch({ redirect }) {
-    if (_currentpage.currentpage !== 'register') {
-      redirect({ path: '/login' })
-    }
-  },
-}
-</script> -->
 
 <script setup lang="ts">
 import { ref } from 'vue'
@@ -138,16 +128,16 @@ const showLogin = async () => {
 
 const inquireReceivedTrigger = async () => {
   _pagewithtable.pagewithtable = true
-  SessionStorage.set('CurrentPage', 'received')
-  _currentpage.currentpage = 'received'
-  router.push('/received')
+  SessionStorage.set('CurrentPage', 'incominginquire')
+  _currentpage.currentpage = 'incominginquire'
+  router.push('/incominginquire')
 }
 
 const inquireReleasedTrigger = async () => {
   _pagewithtable.pagewithtable = true
-  SessionStorage.set('CurrentPage', 'released')
-  _currentpage.currentpage = 'released'
-  router.push('/released')
+  SessionStorage.set('CurrentPage', 'outgoinginquire')
+  _currentpage.currentpage = 'outgoinginquire'
+  router.push('/outgoinginquire')
 }
 
 const qrScannerTrigger = async () => {

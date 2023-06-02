@@ -54,3 +54,22 @@
     // padding-right: 0.5rem
   :deep .block
     font-size: 1.25rem
+
+.online-main
+  position: fixed
+  top: 0
+  left: 0
+  padding: 1rem
+
+.online
+  position: fixed
+  top: 0
+  left: 90%
+  padding-top: 1.5rem
+
+@media screen and (max-width: 500px)
+  .online
+    position: fixed
+    top: 0
+    left: calc(90% - 5rem)
+    padding-top: calc(1.5rem - 2.2vw)
