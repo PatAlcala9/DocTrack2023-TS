@@ -394,10 +394,13 @@ const enterSwitch = (el: any) => {
   padding: 1.4rem
   border: 1px solid rgba(255, 255, 255, 0.125)
   border-radius: 2rem
-  background-color: #021926
+  // background-color: #021926
   margin-top: -1rem
   width: 22rem
   height: 22rem
+  backdrop-filter: blur(16px) saturate(173%)
+  -webkit-backdrop-filter: blur(16px) saturate(173%)
+  background-color: rgba(17, 25, 40, 0.65)
 
 .inquiry
   grid-area: inquiry

@@ -16,8 +16,9 @@ const _pagewithtable = usePageWithTable()
 
 <style lang="sass" scoped>
 .page
-  background: #000c13
-  background: linear-gradient(83deg,#000c13 0%, #305b74 80%)
+  // background: #000c13
+  // background: linear-gradient(83deg,#000c13 0%, #305b74 80%)
+  background-image: url('../assets/background.avif')
   font-family: 'Raleway'
   color: #ffffff
 
@@ -37,4 +38,5 @@ const _pagewithtable = usePageWithTable()
   width: 18rem
   height: auto
   opacity: 0.4
+
 </style>
