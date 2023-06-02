@@ -117,7 +117,7 @@ q-dialog(v-model="dialog" transition-show="flip-right" transition-hide="flip-lef
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { date, useQuasar } from 'quasar'
+import { date, useQuasar, LocalStorage } from 'quasar'
 import { useRouter } from 'vue-router'
 import { api } from 'boot/axios'
 import { useCurrentPage } from 'stores/currentpage'
@@ -256,6 +256,8 @@ const fillupOffline = () => {
   // dialogRespondentLocation.value = data.result9
   // dialogStatus.value = data.result10
   // dialogDateTransacted.value = data.result11
+  const complaint = LocalStorage.getItem('complaint')
+  console.log(complaint)
 }
 
 ;(async () => {
