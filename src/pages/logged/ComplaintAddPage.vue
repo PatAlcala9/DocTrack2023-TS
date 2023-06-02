@@ -83,6 +83,7 @@ import { ref } from 'vue'
 import { date, LocalStorage } from 'quasar'
 import { useRouter } from 'vue-router'
 import { api } from 'boot/axios'
+import Dexie from 'dexie'
 
 import { useCurrentPage } from 'stores/currentpage'
 import { usePageWithTable } from 'stores/pagewithtable'
@@ -116,6 +117,10 @@ let _pagewithtable = usePageWithTable()
 const _isdemo = useIsDemo()
 
 let onlineColor = ref('')
+
+
+
+
 
 const formatDate = () => {
   formattedReceivedDate.value = date.formatDate(Date.parse(receivedDate.value), 'MMMM D, YYYY')
@@ -210,6 +215,8 @@ const getMaxComplaintCodeLOCAL = async (): Promise<string> => {
   const response = LocalStorage.getItem('complaintcode')
   const data = response?.toString() ?? ''
 
+  console.log(response)
+
   if (data !== null) return data
   else return ''
 }
@@ -289,6 +296,79 @@ const saveData = async () => {
   }
 }
 
+const createLOCALDATABASE = async () => {
+  const db = new Dexie('ocbodoctracksys')
+
+  interface source_complaint {
+    source_complaintid: number;
+    source_desc: string;
+  }
+
+  // interface complaint_info {
+  //   complaint_infoid: number;
+  //   complaint_code: string;
+  //   source_complaintid: string;
+  //   complaintant_name: string;
+  //   complaintant_contact: number
+  //   date_received: string;
+  //   locationOfconstruction: string;
+  //   details: string;
+  //   respondent_infoid: number;
+  //   complaintant_statusid: number;
+  // }
+
+  interface complaint_whereabouts {
+    complaint_whereaboutsid: number;
+    whereabout: string;
+    tagword: string;
+    tagcode: string;
+  }
+
+  db.version(1).stores({
+    source_complaint: 'source_complaintid, source_desc',
+    complaint_info: 'complaint_infoid, complaint_code, source_complaintid, complaintant_name, complaintant_contact, date_received, locationOfconstruction, details, respondent_infoid, complaintant_statusid',
+    complaint_status: 'complaint_statusid, complaint_code, date_transacted, status, tagcode, tagword, received_by, remarks',
+    respondent_info: 'respondent_infoid, respondent_name, respondent_contact, respondent_location',
+    complaint_whereabouts: 'complaint_whereaboutsid, whereabout, tagword, tagcode'
+  })
+
+  db.open().then(() => {
+    const source_complaintData = db.table<source_complaint, number>('source_complaint')
+    const source_complaintRows = [
+      { source_complaintid: 1, source_desc: 'Email' },
+      { source_complaintid: 2, source_desc: 'DCR/888' },
+      { source_complaintid: 3, source_desc: 'Walk-In' },
+      { source_complaintid: 4, source_desc: 'Motu Proprio' },
+    ]
+    source_complaintData.bulkPut(source_complaintRows)
+
+    const complaint_whereaboutsData = db.table<complaint_whereabouts, number>('complaint_whereabouts')
+    const complaint_whereaboutsRows = [
+      { complaint_whereaboutsid: 1, whereabout: 'FOR INSPECTION AND VERIFICATION', tagword:'INSPECTION', tagcode: '01' },
+      { complaint_whereaboutsid: 2, whereabout: 'FIRST NOTICE OF VIOLATION SERVING', tagword:'1STNOVSERVING', tagcode: '02' },
+      { complaint_whereaboutsid: 3, whereabout: 'FIRST NOTICE OF VIOLATION SERVED', tagword:'1STNOVSERVED', tagcode: '03' },
+      { complaint_whereaboutsid: 4, whereabout: 'SECOND NOTICE OF VIOLATION AND WORK STOPPAGE ORDER SERVING', tagword:'2NDNOVSERVING', tagcode: '04' },
+      { complaint_whereaboutsid: 5, whereabout: 'SECOND NOTICE OF VIOLATION AND WORK STOPPAGE ORDER SERVED', tagword:'2NDNOVSERVED', tagcode: '05' },
+      { complaint_whereaboutsid: 6, whereabout: 'CALL OF DIALOGUE', tagword:'1STDIALOGUE', tagcode: '06' },
+      { complaint_whereaboutsid: 7, whereabout: 'FOR NOTICE OF HEARING', tagword:'NOTICEHEARING', tagcode: '07' },
+      { complaint_whereaboutsid: 8, whereabout: 'NOTICE OF HEARING SCHEDULED', tagword:'HEARINGSCHED', tagcode: '08' },
+      { complaint_whereaboutsid: 9, whereabout: 'HEARING', tagword:'HEARING', tagcode: '09' },
+      { complaint_whereaboutsid: 10, whereabout: 'RESOLUTION/ORDER', tagword:'RESORDER', tagcode: '10' },
+      { complaint_whereaboutsid: 11, whereabout: 'FOR FILING OF CASE', tagword:'FILINGCASE', tagcode: '11' },
+      { complaint_whereaboutsid: 12, whereabout: 'CASE FILED', tagword:'CASEFILED', tagcode: '12' },
+      { complaint_whereaboutsid: 13, whereabout: 'ON GOING CASE', tagword:'ONGOING', tagcode: '13' },
+      { complaint_whereaboutsid: 14, whereabout: 'CASE CLOSED', tagword:'CLOSED', tagcode: '14' },
+      { complaint_whereaboutsid: 15, whereabout: 'ENCODED TO SYSTEM', tagword:'ENCODED', tagcode: '15' },
+    ]
+    complaint_whereaboutsData.bulkPut(complaint_whereaboutsRows)
+
+
+    return true
+  }).catch(() => {
+    return false
+  })
+}
+
 const openDialog = (title: string, message: string) => {
   dialog.value = true
   dialogTitle.value = title
@@ -313,6 +393,7 @@ const gotoComplaintDashboard = () => {
   else router.push('/dashboard')
 
   checkOnline()
+  createLOCALDATABASE()
 })()
 </script>
 
