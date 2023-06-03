@@ -341,11 +341,6 @@ const enterSwitch = (el: any) => {
 </script>
 
 <style lang="sass" scoped>
-// .cabinet
-//   width: 25rem
-//   height: auto
-//   opacity: 0.05
-
 .ocbo-title
   font-size: 4rem
   font-family: 'RalewayBold'
@@ -454,34 +449,6 @@ const enterSwitch = (el: any) => {
   font-family: 'Raleway'
   font-size: 1.4rem
 
-.dialog-card
-  background-color: #021926
-
-.dialog-content
-  display: grid
-  grid-template-columns: 1fr 1fr 1fr
-  grid-template-rows: 1fr 1fr
-  gap: 0px 0px
-  grid-template-areas: "search search search" "table table table"
-
-.dialog-content-search
-  font-family: 'Raleway'
-  grid-area: search
-  justify-self: stretch
-  align-self: start
-  height: 4em
-
-.dialog-content-input
-  font-family: 'Raleway'
-  font-size: 1.3rem
-  border-radius: 0.6rem
-  text-align: center
-
-.dialog-content-table
-  // grid-area: table
-  // justify-self: center
-  // align-self: center
-  margin-top: 2rem
 
 .table
   width: 93vw
