@@ -23,7 +23,6 @@ export interface Props {
   icon: string
   modelValue: string[]
   options: Array<{ label: string; value: string }>
-
   // width: number
   // alignment: string
   // mobileWidth: number
