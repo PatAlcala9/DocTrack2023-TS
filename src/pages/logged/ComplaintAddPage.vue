@@ -4,6 +4,7 @@ q-page(padding)
   section.online
     q-icon(name="circle" size="1rem" :color="onlineColor")
 
+
   div.full-width.row.justify-between
     span.title Complaint - Add New
     q-btn(flat size="md" label="Back" @click="gotoComplaintDashboard" icon="arrow_back").close-button

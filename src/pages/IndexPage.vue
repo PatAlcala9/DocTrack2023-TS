@@ -1,8 +1,7 @@
 <template lang="pug">
 
 q-page(padding)
-  section.online-main
-    q-icon(name="circle" size="1rem" :color="onlineColor")
+  component(:is="docOnline" :state="online" )
 
   section(v-if="quasar.screen.width > 500").full-width.column.items-start.content-center
     img(src="../assets/ocbologobw.avif" alt="OCBO Logo").logo
@@ -56,6 +55,7 @@ import { gsap } from 'gsap'
 import { useRouter } from 'vue-router'
 
 import docButton from 'components/docButton.vue'
+import docOnline from 'components/docOnline.vue'
 
 import { useEmployeeName } from 'stores/employeename'
 import { useAccess } from 'stores/access'
@@ -74,6 +74,7 @@ const _islogged = useIsLogged()
 const _isdemo = useIsDemo()
 
 let onlineColor = ref('')
+let online = ref('OFFLINE')
 
 const setName = async () => {
   if (_employeename.employeename !== '') SessionStorage.set('EmployeeName', _employeename.employeename)
@@ -135,6 +136,7 @@ const checkOnline = () => {
   if (_isdemo.isdemo) onlineColor.value = 'red'
   else {
     onlineColor.value = 'green'
+    online.value = 'ONLINE'
   }
 }
 
@@ -174,7 +176,7 @@ const checkOnline = () => {
   margin-top: 4.2rem
 
 .logout-button
-  font-family: 'Montserrat'
+  font-family: 'Inter'
   font-weight: bold
   padding: 1.6rem
   position: absolute
