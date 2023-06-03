@@ -1,6 +1,9 @@
 <template lang="pug">
 
-div
+div(v-if="$q.screen.width > 500")
+  q-btn(outline padding="0.2rem 2rem" rounded color="white" :label="text" size="md" @click="('click')" ).button
+
+div(v-else)
   q-btn(outline padding="0.2rem 2rem" rounded color="white" :label="text" size="lg" @click="('click')" ).button
 
 </template>
