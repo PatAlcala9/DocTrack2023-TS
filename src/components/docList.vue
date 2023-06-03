@@ -5,14 +5,14 @@ div(v-if="$q.screen.width > 500")
     q-icon(:name="icon" size="2.5rem").icon
     section.column
       span.label {{ text }}:
-      q-option-group(dark :modelValue="props.modelValue" @update:modelValue="updateValue" :options="props.options" color="indigo-9" type="checkbox").list
+      q-option-group(dark :modelValue="props.modelValue" @update:modelValue="updateValue" :options="props.options" color="blue-10" type="checkbox").list
 
 div(v-else)
   section.full-width.column.inline.wrap.justify-center.items-center.content-center.section
     q-icon(:name="icon" size="3rem").icon
-    section.column.wrap.justify-center.items-center.content-center
+    section.column.wrap.justify-center.items-center.content-center.text-start
       span.label {{ text }}
-      q-option-group(dark :modelValue="props.modelValue" @update:modelValue="updateValue" :options="props.options" color="indigo-9" type="checkbox" )
+      q-option-group(dark :modelValue="props.modelValue" @update:modelValue="updateValue" :options="props.options" color="blue-10" type="checkbox").list
 </template>
 
 <script setup lang="ts">
@@ -72,4 +72,7 @@ const updateValue = (value: string[]) => {
 
   .section
     padding: 1rem 1rem 2rem 1rem
+
+  .list
+    width: 16rem
 </style>
