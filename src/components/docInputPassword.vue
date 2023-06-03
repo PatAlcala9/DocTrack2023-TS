@@ -45,7 +45,7 @@ const styleComponent = computed(() => {
 .input:focus
   outline: none
   border: 1px solid #ffffff
-  background-color: #274c62
+  background-color: transparent
   color: #ffffff
 
 @media screen and (max-width: 500px)

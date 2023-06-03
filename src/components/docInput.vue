@@ -1,7 +1,7 @@
 <template lang="pug">
 
 div
-  input(:value="props.value" @input="updateValue($event.target.value)" :style="styleComponent").input
+  input(:value="props.value" @input="updateValue(($event.target as HTMLInputElement)?.value)" :style="styleComponent").input
 
 </template>
 
@@ -26,6 +26,7 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits(['update:value'])
 
 const updateValue = (value: string) => {
+  // const newValue = target.value
   emit('update:value', value)
 }
 
@@ -53,7 +54,7 @@ const styleComponent = computed(() => {
 .input:focus
   outline: none
   border: 1px solid #ffffff
-  background-color: #274c62
+  background-color: transparent
   color: #ffffff
 
 @media screen and (max-width: 500px)
