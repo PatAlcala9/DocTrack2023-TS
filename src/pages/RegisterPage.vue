@@ -10,22 +10,13 @@ q-page(padding)
   section.login.column.items-center
     transition(appear @before-enter="beforeEnterInputs" @enter="enterInputs")
       div.column.items-center
-        //- span.login__username--label Fullname
-        //- component(:is="docInput" v-model:value="ifullname" :width=30 :mobileWidth=15).login__username--input
         component(:is="docForm" text="Fullname" v-model:value="ifullname" :width=30 :mobileWidth=16 icon="badge").login__username--input
-
-        //- span.login__username--label Username
-        //- component(:is="docInput" v-model:value="iusername").login__username--input
         component(:is="docForm" text="Username" v-model:value="iusername" :width=30 :mobileWidth=16 icon="edit").login__username--input
+        component(:is="docForm" text="Password" v-model:value="ipassword" :width=30 :mobileWidth=16 icon="lock" type="password").login__username--input
+        component(:is="docList" text="Access" v-model:modelValue="accessList" icon="format_list_bulleted" :options="accessOption").login__username--input
 
-        //- span.login__username--label Password
-        //- component(:is="docInputPassword" v-model:value="ipassword").login__username--input
-        component(:is="docForm" text="Username" v-model:value="ipassword" :width=30 :mobileWidth=16 icon="lock" type="password").login__username--input
-
-        //- component(:is="docForm" text="Sample" v-model:value="ifullname" :width=30 :mobileWidth=16 icon="badge").login__username--input
-
-        span.login__username--label Access
-        q-option-group(dark v-model="accessList" :options="accessOption" color="indigo-9" type="checkbox").login__username--option
+        //- span.login__username--label Access
+        //- q-option-group(dark v-model="accessList" :options="accessOption" color="indigo-9" type="checkbox").login__username--option
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
       doc-button.register-button(text="Register" @click="saveAccount")
 
@@ -53,6 +44,7 @@ import docInput from 'components/docInput.vue'
 import docInputPassword from 'components/docInputPassword.vue'
 import docButton from 'components/docButton.vue'
 import docForm from 'components/docForm.vue'
+import docList from 'components/docList.vue'
 
 const router = useRouter()
 const _pagewithtable = usePageWithTable()
@@ -93,7 +85,6 @@ const enterButton = (el: any) => {
 let ifullname = ref('')
 let iusername = ref('')
 let ipassword = ref('')
-let ipasswordEncrypted = ref('')
 let accessList = ref<string[]>([])
 let accessOption = ref([
   {

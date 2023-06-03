@@ -2,7 +2,7 @@
 
 div(v-if="$q.screen.width > 500")
   label(:for="text").full-width.row.inline.wrap.justify-start.items-start.content-start.section
-    q-icon(:name="icon" size="3rem").icon
+    q-icon(:name="icon" size="2.5rem").icon
     section.column
       span.label {{text}}:
       input(:value="props.value" @input="updateValue(($event.target as HTMLInputElement)?.value)" :style="styleComponent" :id="text" :type="type").input
@@ -45,7 +45,6 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits(['update:value'])
 
 const updateValue = (value: string) => {
-  // const newValue = target.value
   emit('update:value', value)
 }
 
@@ -83,8 +82,10 @@ const styleComponent = computed(() => {
   color: #ffffff
 
 .section
-  backdrop-filter: blur(16px) saturate(180%)
-  background-color: rgba(10, 10, 35, 0.52)
+  backdrop-filter: blur(16px) saturate(173%)
+  // background-color: rgba(10, 10, 35, 0.52)
+  // background-color: rgba(17, 25, 40, 0.82)
+  background-color: rgba(17, 25, 40, 0.65)
   border-radius: 0.6rem
   border: 1px solid rgba(255, 255, 255, 0.125)
   padding: 1.2rem 2rem 1.2rem 1.2rem

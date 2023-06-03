@@ -394,7 +394,6 @@ const enterSwitch = (el: any) => {
   width: 22rem
   height: 22rem
   backdrop-filter: blur(16px) saturate(173%)
-  -webkit-backdrop-filter: blur(16px) saturate(173%)
   background-color: rgba(17, 25, 40, 0.65)
 
 .inquiry
