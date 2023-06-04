@@ -9,7 +9,7 @@ div(v-if="$q.screen.width > 500")
 
 div(v-else)
   section.full-width.column.inline.wrap.justify-center.items-center.content-center.section
-    q-icon(:name="icon" size="2.4rem").icon
+    q-icon(:name="icon" size="2.1rem").icon
     section.column.wrap.justify-center.items-center.content-center.text-start
       span.label {{ text }}
       q-option-group(dark :modelValue="props.modelValue" @update:modelValue="updateValue" :options="props.options" color="blue-10" type="checkbox").list
@@ -66,7 +66,7 @@ const updateValue = (value: string[]) => {
 @media screen and (max-width: 500px)
   .label
     font-weight: 300
-    font-size: 1.4rem
+    font-size: 1.2rem
 
   .section
     padding: 1rem 1rem 2rem 1rem

@@ -8,8 +8,8 @@ div(v-if="$q.screen.width > 500")
       input(:value="props.value" @input="updateValue(($event.target as HTMLInputElement)?.value)" :style="styleComponent" :id="text" :type="type").input
 
 div(v-else)
-  section.full-width.column.inline.wrap.justify-center.items-center.content-center.section
-    q-icon(:name="icon" size="2.2rem").icon
+  section.fit.column.wrap.justify-center.items-center.content-center.section
+    q-icon(:name="icon" size="2.1rem").icon
     section.column.wrap.justify-center.items-center.content-center
       span.label {{text}}
       input(:value="props.value" @input="updateValue(($event.target as HTMLInputElement)?.value)" :style="styleComponent" :type="type").input
@@ -21,7 +21,6 @@ import { computed } from 'vue'
 export interface Props {
   text: string
   icon: string
-
   value: string
   width: number
   alignment: string
@@ -38,7 +37,7 @@ const props = withDefaults(defineProps<Props>(), {
   width: 16,
   alignment: 'center',
   transform: 'uppercase',
-  mobileWidth: 16,
+  mobileWidth: 14,
   type: 'input'
 })
 
@@ -96,10 +95,10 @@ const styleComponent = computed(() => {
 @media screen and (max-width: 500px)
   .label
     font-weight: 300
-    font-size: 1.4rem
+    font-size: 1.1rem
 
   .input
-    font-size: 1.2rem
+    font-size: 1.1rem
     width: var(--mobileWidth)
 
   .section
