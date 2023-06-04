@@ -6,45 +6,31 @@ q-page(padding)
   section(v-if="quasar.screen.width > 500").full-width.column.items-start.content-center
     img(src="../assets/ocbologobw.avif" alt="OCBO Logo").logo
 
-  section(v-else).full-width.column.items-start.content-center.items-center
+  section(v-else).full-width.column.content-center.items-center
     img(src="../assets/ocbologobw.avif" alt="OCBO Logo").logo
 
   div.fit.column.text-center.main
     transition(appear @before-enter="beforeEnterTitle" @enter="enterTitle")
       span.name {{_employeename.employeename}}
-    //- transition(appear @before-enter="beforeEnterMenu" @enter="enterMenu")
-    //-   span.menu Menu
+
     transition(appear @before-enter="beforeEnterLogout" @enter="enterLogout")
       q-btn(flat size="md" label="Logout" @click="logout" icon="logout" ).logout-button
 
-  div.button-area.fit.row.justify-evenly.content-start
+  div.button-area
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
-      section(v-if="_access.access.includes('incoming')" @click="gotoPage('incoming', false)").column.items-center
-        q-icon(name="keyboard_double_arrow_down" size="xl").icon
-        component(:is="docButton" text="Incoming")
+      component(:is="docMenu" text="Incoming" icon="description" v-if="_access.access.includes('incoming')" @click="gotoPage('incoming', false)" @mouseover="showDescription")
 
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
-      section(v-if="_access.access.includes('outgoing')" @click="gotoPage('outgoing', false)").column.items-center
-        q-icon(name="keyboard_double_arrow_up" size="xl").icon
-        component(:is="docButton" text="Outgoing")
+      component(:is="docMenu" text="Outgoing" icon="upload_file" v-if="_access.access.includes('outgoing')" @click="gotoPage('outgoing', false)")
 
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
-      section(v-if="_access.access.includes('releasing')" @click="gotoPage('releasing', false)").column.items-center
-        q-icon(name="start" size="xl").icon
-        component(:is="docButton" text="Releasing")
+      component(:is="docMenu" text="Releasing" icon="start" v-if="_access.access.includes('releasing')" @click="gotoPage('releasing', false)")
 
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
-      section(v-if="_access.access.includes('inventory')" @click="gotoPage('inventory', true)").column.items-center
-        q-icon(name="topic" size="xl").icon
-        component(:is="docButton" text="Inventory")
+      component(:is="docMenu" text="Inventory" icon="summarize" v-if="_access.access.includes('inventory')" @click="gotoPage('inventory', false)")
 
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
-      section(v-if="_access.access.includes('complaint')" @click="gotoPage('complaint', false)").column.items-center
-        q-icon(name="topic" size="xl").icon
-        component(:is="docButton" text="Complaint")
-
-    //- transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
-    //-   component(v-if="_access.access.includes('otherdocuments')" :is="docButton" text="Other Docs")
+      component(:is="docMenu" text="Complaint" icon="gavel" v-if="_access.access.includes('complaint')" @click="gotoPage('complaint', false)")
 
   </template>
 
@@ -54,8 +40,8 @@ import { useQuasar, SessionStorage } from 'quasar'
 import { gsap } from 'gsap'
 import { useRouter } from 'vue-router'
 
-import docButton from 'components/docButton.vue'
 import docOnline from 'components/docOnline.vue'
+import docMenu from 'components/docMenu.vue'
 
 import { useEmployeeName } from 'stores/employeename'
 import { useAccess } from 'stores/access'
@@ -79,11 +65,29 @@ let online = ref('OFFLINE')
 const setName = async () => {
   if (_employeename.employeename !== '') SessionStorage.set('EmployeeName', _employeename.employeename)
 }
-
 const getName = async () => {
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const session: string = SessionStorage.getItem('EmployeeName')!
-  if (session !== '') _employeename.employeename = session
+  const session: string | null = SessionStorage.getItem('EmployeeName')
+  _employeename.employeename = session ?? _employeename.employeename
+}
+
+const setAccess = async () => {
+  if (_access.access.length > 0) SessionStorage.set('Access', _access.access)
+}
+const getAccess = async () => {
+  const session: string | null = SessionStorage.getItem('Access')
+  _access.access = session ? [...session] : []
+}
+
+const setDemo = async () => {
+  if (_isdemo.isdemo) SessionStorage.set('Demo', _isdemo.isdemo)
+}
+const getDemo = async () => {
+  const session: string | null = SessionStorage.getItem('Demo')
+  _isdemo.isdemo = session ? true : false
+}
+
+const showDescription = () => {
+  console.log('yah')
 }
 
 const beforeEnterTitle = (el: any) => {
@@ -133,7 +137,10 @@ const gotoPage = (page: string, table = false) => {
 }
 
 const checkOnline = () => {
-  if (_isdemo.isdemo) onlineColor.value = 'red'
+  if (_isdemo.isdemo) {
+    onlineColor.value = 'red'
+    online.value = 'OFFLINE'
+  }
   else {
     onlineColor.value = 'green'
     online.value = 'ONLINE'
@@ -143,6 +150,12 @@ const checkOnline = () => {
 ;(async () => {
   await setName()
   await getName()
+
+  await setAccess()
+  await getAccess()
+
+  await setDemo()
+  await getDemo()
 
   if (_currentpage.currentpage !== undefined) router.push(_currentpage.currentpage)
   else router.push('/dashboard')
@@ -166,14 +179,13 @@ const checkOnline = () => {
   font-family: 'RalewayBold'
   color: #ffffff
 
-.menu
-  margin-top: 1rem
-  font-size: 1.8rem
-  font-family: 'RalewayBold'
-  color: #ffffff
-
 .button-area
-  margin-top: 4.2rem
+  display: flex
+  flex-wrap: wrap
+  justify-content: space-around
+  align-items: center
+  align-content: flex-end
+  padding-top: 30%
 
 .logout-button
   font-family: 'Inter'
@@ -184,13 +196,13 @@ const checkOnline = () => {
   right: 0
   /* margin-top: -5.5rem */
 
-.icon
-  padding: 0.8rem
-  cursor: pointer
 
 @media screen and (max-width: 500px)
   .name
     font-size: 1.9rem
     margin-top: 2rem
     padding-bottom: 1.2rem
+
+  .button-area
+    padding-top: 0
 </style>

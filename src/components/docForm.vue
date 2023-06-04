@@ -2,14 +2,14 @@
 
 div(v-if="$q.screen.width > 500")
   label(:for="text").full-width.row.inline.wrap.justify-start.items-start.content-start.section
-    q-icon(:name="icon" size="2.5rem").icon
+    q-icon(:name="icon" size="2rem").icon
     section.column
       span.label {{text}}:
       input(:value="props.value" @input="updateValue(($event.target as HTMLInputElement)?.value)" :style="styleComponent" :id="text" :type="type").input
 
 div(v-else)
   section.full-width.column.inline.wrap.justify-center.items-center.content-center.section
-    q-icon(:name="icon" size="3rem").icon
+    q-icon(:name="icon" size="2.2rem").icon
     section.column.wrap.justify-center.items-center.content-center
       span.label {{text}}
       input(:value="props.value" @input="updateValue(($event.target as HTMLInputElement)?.value)" :style="styleComponent" :type="type").input
@@ -82,10 +82,10 @@ const styleComponent = computed(() => {
   color: #ffffff
 
 .section
-  backdrop-filter: blur(16px) saturate(173%)
+  backdrop-filter: blur(1.6px) saturate(173%)
   // background-color: rgba(10, 10, 35, 0.52)
   // background-color: rgba(17, 25, 40, 0.82)
-  background-color: rgba(17, 25, 40, 0.65)
+  background-color: rgba(17, 25, 40, 0.8)
   border-radius: 0.6rem
   border: 1px solid rgba(255, 255, 255, 0.125)
   padding: 1.2rem 2rem 1.2rem 1.2rem

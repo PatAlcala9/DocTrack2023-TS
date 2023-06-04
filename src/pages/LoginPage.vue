@@ -525,5 +525,12 @@ const enterSwitch = (el: any) => {
     align-self: center
 
   .inquiry-text
+    font-family: 'Inter'
+    font-weight: 300
+    font-size: 1.1rem
+    text-decoration: underline
+    padding: 2rem
+    cursor: pointer
+    color: #ffffff
     font-size: 1.1rem
 </style>

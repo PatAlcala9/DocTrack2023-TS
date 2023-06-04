@@ -26,7 +26,6 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits(['update:value'])
 
 const updateValue = (value: string) => {
-  // const newValue = target.value
   emit('update:value', value)
 }
 

@@ -33,13 +33,13 @@ else color.value = '#279D21'
 
 <style lang="sass" scoped>
 .online-main
-  position: fixed
+  position: absolute
   top: 0
   left: 0
   padding: 1.6rem
 
 .online
-  position: fixed
+  position: absolute
   top: 0
   left: 90%
   padding-top: 1.5rem

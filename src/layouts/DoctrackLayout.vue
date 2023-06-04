@@ -2,7 +2,6 @@
 
 q-layout(view="hHh lpR lFr")
   q-page-container.page
-    //- img(src="../assets/cabinet.svg" alt="Cabinet").cabinet
     img(v-show="_pagewithtable.pagewithtable === false" src="../assets/davao2.avif" alt="Davao Logo").davaologo
     router-view
 
@@ -23,17 +22,17 @@ const _pagewithtable = usePageWithTable()
   font-family: 'Inter'
   color: #ffffff
 
-.cabinet
-  width: 20rem
-  height: auto
-  opacity: 0.05
-  position: absolute
-  margin-top: 2rem
-  margin-right: 2rem
-  right: 0
+// .cabinet
+//   width: 20rem
+//   height: auto
+//   opacity: 0.05
+//   position: absolute
+//   margin-top: 2rem
+//   margin-right: 2rem
+//   right: 0
 
 .davaologo
-  position: absolute
+  position: fixed
   top: calc(100vh - 5rem)
   left: calc(100% - 20rem)
   width: 18rem
