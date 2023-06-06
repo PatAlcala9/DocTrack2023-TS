@@ -16,21 +16,24 @@ q-page(padding)
     transition(appear @before-enter="beforeEnterLogout" @enter="enterLogout")
       q-btn(flat size="md" label="Logout" @click="logout" icon="logout" ).logout-button
 
+  div(v-if="$q.screen.width > 500").message-area
+    span {{ menuMessage }}
+
   div.button-area
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
-      component(:is="docMenu" text="Incoming" icon="description" v-if="_access.access.includes('incoming')" @click="gotoPage('incoming', false)" @mouseover="showDescription")
+      component(:is="docMenu" text="Incoming" icon="description" v-if="_access.access.includes('incoming')" @click="gotoPage('incoming', false)" @mouseover="setMessage('incoming')" @mouseout="returnDefault")
 
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
-      component(:is="docMenu" text="Outgoing" icon="upload_file" v-if="_access.access.includes('outgoing')" @click="gotoPage('outgoing', false)")
+      component(:is="docMenu" text="Outgoing" icon="upload_file" v-if="_access.access.includes('outgoing')" @click="gotoPage('outgoing', false)" @mouseover="setMessage('outgoing')" @mouseout="returnDefault")
 
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
-      component(:is="docMenu" text="Releasing" icon="start" v-if="_access.access.includes('releasing')" @click="gotoPage('releasing', false)")
+      component(:is="docMenu" text="Releasing" icon="start" v-if="_access.access.includes('releasing')" @click="gotoPage('releasing', false)" @mouseover="setMessage('releasing')" @mouseout="returnDefault")
 
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
-      component(:is="docMenu" text="Inventory" icon="summarize" v-if="_access.access.includes('inventory')" @click="gotoPage('inventory', false)")
+      component(:is="docMenu" text="Inventory" icon="summarize" v-if="_access.access.includes('inventory')" @click="gotoPage('inventory', false)" @mouseover="setMessage('inventory')" @mouseout="returnDefault")
 
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
-      component(:is="docMenu" text="Complaint" icon="gavel" v-if="_access.access.includes('complaint')" @click="gotoPage('complaint', false)")
+      component(:is="docMenu" text="Complaint" icon="gavel" v-if="_access.access.includes('complaint')" @click="gotoPage('complaint', false)" @mouseover="setMessage('complaint')" @mouseout="returnDefault")
 
   </template>
 
@@ -61,6 +64,8 @@ const _isdemo = useIsDemo()
 
 let onlineColor = ref('')
 let online = ref('OFFLINE')
+let menuMessage = ref('')
+const defaultMessage = 'Please make a selection from the menu'
 
 const setName = async () => {
   if (_employeename.employeename !== '') SessionStorage.set('EmployeeName', _employeename.employeename)
@@ -84,10 +89,6 @@ const setDemo = async () => {
 const getDemo = async () => {
   const session: string | null = SessionStorage.getItem('Demo')
   _isdemo.isdemo = session ? true : false
-}
-
-const showDescription = () => {
-  console.log('yah')
 }
 
 const beforeEnterTitle = (el: any) => {
@@ -140,14 +141,52 @@ const checkOnline = () => {
   if (_isdemo.isdemo) {
     onlineColor.value = 'red'
     online.value = 'OFFLINE'
-  }
-  else {
+  } else {
     onlineColor.value = 'green'
     online.value = 'ONLINE'
   }
 }
 
+const setDefault = async () => {
+  menuMessage.value = defaultMessage
+}
+
+const setMessage = (link: string) => {
+  switch (link) {
+    case 'incoming':
+      menuMessage.value = 'A records of internal government documents'
+      break
+    case 'outgoing':
+      menuMessage.value = 'I have no idea what this is'
+      break
+    case 'releasing':
+      menuMessage.value = 'Release the Kraken'
+    case 'inventory':
+      menuMessage.value = 'A list of Inventions'
+      break
+    case 'complaint':
+      menuMessage.value = 'Go to Complaints'
+      break
+    default:
+      break
+  }
+  rotateMessage()
+}
+const returnDefault = () => {
+  setDefault()
+  rotateMessageBack()
+}
+
+const rotateMessage = () => {
+  gsap.fromTo('.message-area', { rotationY: 0 }, { rotationY: 360, duration: 0.9 });
+}
+const rotateMessageBack = () => {
+  gsap.fromTo('.message-area', { rotationY: 0 }, { rotationY: -360, duration: 0.9 });
+}
+
 ;(async () => {
+  await setDefault()
+
   await setName()
   await getName()
 
@@ -185,7 +224,7 @@ const checkOnline = () => {
   justify-content: space-around
   align-items: center
   align-content: flex-end
-  padding-top: 30%
+  height: calc(100vh - 10rem)
 
 .logout-button
   font-family: 'Inter'
@@ -196,6 +235,26 @@ const checkOnline = () => {
   right: 0
   /* margin-top: -5.5rem */
 
+.message-area
+  position: absolute
+  top: 50%
+  left: 50%
+  transform: translate(-50%, -50%)
+  height: 100vh
+  display: flex
+  justify-content: center
+  align-items: center
+
+.message-area span
+  font-family: 'Inter'
+  font-weight: 300
+  font-size: 1.6rem
+  padding: 5rem
+  background-color: rgba(17, 25, 40, 0.8)
+  border-radius: 2rem
+  border: 1px solid rgba(255, 255, 255, 0.125)
+  display: inline-block
+  white-space: nowrap
 
 @media screen and (max-width: 500px)
   .name

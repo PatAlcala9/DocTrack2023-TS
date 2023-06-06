@@ -9,7 +9,7 @@ q-page(padding)
     q-btn(flat size="md" label="Back" @click="gotoMenu" icon="arrow_back").close-button
 
 
-  div.fit.row.wrap.justify-center.items-start.content-center.button-group
+  div.button-group
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
       component(:is="docMenu" text="View List" icon="fact_check" @click="gotoComplaintInquire")
 
@@ -80,6 +80,12 @@ const gotoMenu = () => {
 
 <style lang="sass" scoped>
 .button-group
+  display: flex
+  flex-wrap: wrap
+  justify-content: space-around
+  align-items: center
+  align-content: flex-end
+  padding-top: 30%
   margin-top: 8.5rem
 
 .button
