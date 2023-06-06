@@ -160,12 +160,13 @@ const setMessage = (link: string) => {
       menuMessage.value = 'I have no idea what this is'
       break
     case 'releasing':
-      menuMessage.value = 'Release the Kraken'
+      menuMessage.value = 'Release the Kraken,'
+      break
     case 'inventory':
-      menuMessage.value = 'A list of Inventions'
+      menuMessage.value = 'A list of Inventions, I guess'
       break
     case 'complaint':
-      menuMessage.value = 'Go to Complaints'
+      menuMessage.value = 'Listahan sa mga reklamador'
       break
     default:
       break
@@ -178,10 +179,10 @@ const returnDefault = () => {
 }
 
 const rotateMessage = () => {
-  gsap.fromTo('.message-area', { rotationY: 0 }, { rotationY: 360, duration: 0.9 });
+  gsap.fromTo('.message-area', { rotationY: 0 }, { rotationY: 360, duration: 0.9 })
 }
 const rotateMessageBack = () => {
-  gsap.fromTo('.message-area', { rotationY: 0 }, { rotationY: -360, duration: 0.9 });
+  gsap.fromTo('.message-area', { rotationY: 0 }, { rotationY: -360, duration: 0.9 })
 }
 
 ;(async () => {
