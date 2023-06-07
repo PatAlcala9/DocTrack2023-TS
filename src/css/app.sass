@@ -68,6 +68,41 @@
   left: 90%
   padding-top: 1.5rem
 
+.table
+  font-family: 'Inter'
+  font-size: 0.8rem
+  text-transform: uppercase
+  border-collapse: collapse
+  margin: 2rem 0
+  min-width: 25rem
+  border-radius: 1rem 1rem 0 0
+  overflow: hidden
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2)
+
+
+.table thead tr
+  // background-color: #000406
+  background-color: rgba(17, 25, 40, 0.8)
+  color: #ffffff
+  text-align: left
+
+.table th, .table td
+  font-family: 'Inter'
+  font-weight: 300
+  font-size: 0.9rem
+  padding: 1rem 2.5rem
+  width: 20rem
+
+.table tbody tr
+  border-bottom: 1px solid #dddddd
+  font-weight: 350
+
+.table tbody tr:nth-of-type(even)
+  background-color: #1C4157
+
+.table tbody tr:last-of-type
+  border-bottom: 2px solid #000406
+
 @media screen and (max-width: 500px)
   .online
     position: fixed

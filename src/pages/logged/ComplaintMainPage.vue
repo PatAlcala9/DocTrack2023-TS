@@ -8,43 +8,13 @@ q-page(padding)
     span.title Complaint Tracking
     q-btn(flat size="md" label="Back" @click="gotoComplaint" icon="arrow_back").close-button
 
-  div.fit.row.wrap.justify-start.items-start.content-start.search-area
-    section.column.section
-      component(:is="docLabel" text="Search")
-      q-input(dense filled v-model="searchValue" bg-color="white" :input-style="{ fontSize: '1.2rem', fontFamily: 'OpenSans' }" @keydown.enter="getIncomingUsingValue")
-    section.column.section
-      component(:is="docLabel" text="Search By")
-      //- input
-      q-btn-dropdown(unelevated color="grey-10" :label="searchByValue" size="1rem" :content-style="{ fontSize: '0.9rem', fontFamily: 'Inter' }")
-        q-list
-          q-item(clickable v-close-popup @click="searchByValue = 'CODE'")
-            q-item-section
-              q-item-label COMPLAINT CODE
+  div.fit.row.wrap.justify-center.search-area
+    component(:is="docForm" text="Search" v-model:value="searchValue" :width=30 :mobileWidth=14 icon="search")
 
-          q-item(clickable v-close-popup @click="searchByValue = 'RESPONDENT'")
-            q-item-section
-              q-item-label RESPONDENT
+  //- div(v-if="nodata").fit.row.wrap.justify-center
+  //-   span No Data Found
 
-          q-item(clickable v-close-popup @click="searchByValue = 'INSPECTOR'")
-            q-item-section
-              q-item-label INSPECTOR
-
-          q-item(clickable v-close-popup @click="searchByValue = 'LOCATION'")
-            q-item-section
-              q-item-label LOCATION
-
-          q-item(clickable v-close-popup @click="searchByValue = 'STATUS'")
-            q-item-section
-              q-item-label STATUS
-
-          q-item(clickable v-close-popup @click="searchByValue = 'REMAINING DAYS'")
-            q-item-section
-              q-item-label REMAINING DAYS
-
-  div(v-if="nodata")
-    span No Data Found
-
-  div(v-else)
+  div.fit.row.wrap.justify-center
     section(v-if="quasar.screen.width <= 500").flex.flex-center
       section(v-if="complaintList.result !== ''").dialog-content-table
         table.table
@@ -134,6 +104,7 @@ import docButton from 'components/docButton.vue'
 import docTextArea from 'components/docTextArea.vue'
 import docInput from 'components/docInput.vue'
 import docLabel from 'components/docLabel.vue'
+import docForm from 'components/docForm.vue'
 
 let searchValue = ref('')
 let searchByValue = ref('')
@@ -276,38 +247,6 @@ const fillupOffline = () => {
 .table-loading
   font-size: 2rem
   margin-top: 3rem
-
-.table
-  font-family: 'Inter'
-  font-weight: 100
-  font-size: 0.8rem
-  text-transform: uppercase
-  border-collapse: collapse
-  margin: 2rem 0
-  min-width: 25rem
-  border-radius: 1rem 1rem 0 0
-  overflow: hidden
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2)
-
-.table thead tr
-  background-color: #000406
-  color: #ffffff
-  text-align: left
-  font-weight: bold
-
-.table th, .table td
-  padding: 1rem 2.5rem
-  width: 20rem
-
-.table tbody tr
-  border-bottom: 1px solid #dddddd
-  font-weight: 350
-
-.table tbody tr:nth-of-type(even)
-  background-color: #1C4157
-
-.table tbody tr:last-of-type
-  border-bottom: 2px solid #000406
 
 .button-view
   width: 4rem
