@@ -31,6 +31,7 @@ q-page(padding)
               q-item-section
                 q-item-label WALK-IN
                 div.full-width.row.justify-between
+        component(:is="docSelection" text="Source Type" label="Select Type" :options="sourceEntryList" v-model:modelValue="sourceEntry")
 
       section.label-and-input
         component(:is="docLabel" text="Date Received:").label--spaced
@@ -95,7 +96,9 @@ import docTextArea from 'components/docTextArea.vue'
 import docInputEntry from 'components/docInputEntry.vue'
 import docInput from 'components/docInput.vue'
 import docLabel from 'components/docLabel.vue'
+import docSelection from 'components/docSelection.vue'
 
+const sourceEntryList = ['DCR/888', 'EMAIL', 'MOTU PROPRIO', 'WALK-IN']
 let sourceEntry = ref('Select Source')
 let sourceEntryID = ref(0)
 let receivedDate = ref('')
@@ -118,6 +121,8 @@ let _pagewithtable = usePageWithTable()
 const _isdemo = useIsDemo()
 
 let onlineColor = ref('')
+
+
 
 
 

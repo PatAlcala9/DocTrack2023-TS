@@ -4,8 +4,10 @@ div(v-if="$q.screen.width > 500")
   label(:for="text").full-width.row.inline.wrap.justify-start.items-start.content-start.section
     q-icon(:name="icon" size="2rem").icon
     section.column
-      span.label {{text}}:
-      input(:value="props.value" @input="updateValue(($event.target as HTMLInputElement)?.value)" :style="styleComponent" :id="text" :type="type").input
+      span.label {{text}}
+      q-date(flat v-model="date" minimal color="$button" @click="formatDate").calendar
+      component(v-if="formattedReceivedDate.length > 0" :is="docLabel" :text="formattedReceivedDate").inputs__label--date
+      component(v-else :is="docLabel" text="No Date Selected").inputs__label--date
 
 div(v-else)
   section.fit.column.wrap.justify-center.items-center.content-center.section
@@ -17,7 +19,7 @@ div(v-else)
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, date } from 'vue'
 
 export interface Props {
   text: string
@@ -29,6 +31,8 @@ export interface Props {
   mobileWidth: number
   type: string
 }
+
+let date = ref('')
 
 const props = withDefaults(defineProps<Props>(), {
   text: 'Label',

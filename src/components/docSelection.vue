@@ -1,18 +1,16 @@
 <template lang="pug">
 
 div(v-if="$q.screen.width > 500")
-  label(:for="text").full-width.row.inline.wrap.justify-start.items-start.content-start.section
-    q-icon(:name="icon" size="2rem").icon
+  section.full-width.row.inline.wrap.justify-start.items-start.content-start.section
     section.column
       span.label {{text}}:
-      input(:value="props.value" @input="updateValue(($event.target as HTMLInputElement)?.value)" :style="styleComponent" :id="text" :type="type").input
+      q-select(filled dark :modelValue="props.modelValue" @update:modelValue="updateValue" :label="props.label" :options="options" style="width: 250px" color="blue-10" behavior="menu" label-color="blue-1" item-aligned)
 
 div(v-else)
   section.fit.column.wrap.justify-center.items-center.content-center.section
-    q-icon(:name="icon" size="2.1rem").icon
     section.column.wrap.justify-center.items-center.content-center
       span.label {{text}}
-      input(:value="props.value" @input="updateValue(($event.target as HTMLInputElement)?.value)" :style="styleComponent" :type="type").input
+      q-select(filled dark :modelValue="props.modelValue" @update:modelValue="updateValue" :label="props.label" :options="options" style="width: 250px" color="blue-10" behavior="dialog" label-color="blue-1" item-aligned)
 
 </template>
 
@@ -21,8 +19,10 @@ import { computed } from 'vue'
 
 export interface Props {
   text: string
-  icon: string
-  value: string
+  label: string
+  modelValue: string
+  options: string[]
+
   width: number
   alignment: string
   transform: string
@@ -45,7 +45,7 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits(['update:value'])
 
 const updateValue = (value: string) => {
-  emit('update:value', value)
+  emit('update:modelValue', value)
 }
 
 const styleComponent = computed(() => {
@@ -88,10 +88,13 @@ const styleComponent = computed(() => {
   background-color: rgba(17, 25, 40, 0.8)
   border-radius: 0.6rem
   border: 1px solid rgba(255, 255, 255, 0.125)
-  padding: 1.2rem 2rem 1.2rem 1.2rem
+  padding: 1.2rem 2rem
 
 .icon
   padding: 1rem
+
+.aa
+  background-color: red
 
 @media screen and (max-width: 500px)
   .label
@@ -105,3 +108,4 @@ const styleComponent = computed(() => {
   .section
     padding: 1rem 1rem 2rem 1rem
 </style>
+

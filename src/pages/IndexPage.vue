@@ -154,7 +154,7 @@ const setDefault = async () => {
 const setMessage = (link: string) => {
   switch (link) {
     case 'incoming':
-      menuMessage.value = 'A records of internal government documents'
+      menuMessage.value = "Government's internal document record"
       break
     case 'outgoing':
       menuMessage.value = 'I have no idea what this is'
