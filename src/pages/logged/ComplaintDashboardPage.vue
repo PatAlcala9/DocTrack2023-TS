@@ -8,18 +8,14 @@ q-page(padding)
     span.title Complaints
     q-btn(flat size="md" label="Back" @click="gotoMenu" icon="arrow_back").close-button
 
-
   div.button-group
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
       component(:is="docMenu" text="View List" icon="fact_check" @click="gotoComplaintInquire")
 
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
       component(:is="docMenu" text="Add New" icon="add_box" @click="gotoComplaintAdd")
-      //- section.fit.column.wrap.justify-center.items-start.content-center.items-center
-      //-     q-icon(name="add_box" size="3rem")
-      //-     component.button(:is="docButton" text="Add New" )
 
-  </template>
+</template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
@@ -73,7 +69,6 @@ const gotoMenu = () => {
 ;(async () => {
   if (_currentpage.currentpage !== undefined) router.push(_currentpage.currentpage)
   else router.push('/dashboard')
-
   checkOnline()
 })()
 </script>
@@ -85,8 +80,7 @@ const gotoMenu = () => {
   justify-content: space-around
   align-items: center
   align-content: flex-end
-  padding-top: 30%
-  margin-top: 8.5rem
+  height: calc(100vh - 10rem)
 
 .button
   padding: 1.6rem
