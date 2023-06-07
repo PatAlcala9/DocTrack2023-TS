@@ -12,32 +12,33 @@ q-page(padding)
   div.entry-group
     div.complaint-group
       section.label-and-input
-        component(:is="docLabel" text="Source Type:").label--spaced
-        q-btn-dropdown(unelevated color="grey-10" :label="sourceEntry" size="1rem" :content-style="{ fontSize: '1.2rem', fontFamily: 'Inter' }")
-          q-list
-            q-item(clickable v-close-popup @click="sourceEntry = 'DCR/888'")
-              q-item-section
-                q-item-label DCR/888
+        //- component(:is="docLabel" text="Source Type:").label--spaced
+        //- q-btn-dropdown(unelevated color="grey-10" :label="sourceEntry" size="1rem" :content-style="{ fontSize: '1.2rem', fontFamily: 'Inter' }")
+        //-   q-list
+        //-     q-item(clickable v-close-popup @click="sourceEntry = 'DCR/888'")
+        //-       q-item-section
+        //-         q-item-label DCR/888
 
-            q-item(clickable v-close-popup @click="sourceEntry = 'EMAIL'")
-              q-item-section
-                q-item-label EMAIL
+        //-     q-item(clickable v-close-popup @click="sourceEntry = 'EMAIL'")
+        //-       q-item-section
+        //-         q-item-label EMAIL
 
-            q-item(clickable v-close-popup @click="sourceEntry = 'MOTU PROPRIO'")
-              q-item-section
-                q-item-label MOTU PROPRIO
+        //-     q-item(clickable v-close-popup @click="sourceEntry = 'MOTU PROPRIO'")
+        //-       q-item-section
+        //-         q-item-label MOTU PROPRIO
 
-            q-item(clickable v-close-popup @click="sourceEntry = 'WALK-IN'")
-              q-item-section
-                q-item-label WALK-IN
-                div.full-width.row.justify-between
+        //-     q-item(clickable v-close-popup @click="sourceEntry = 'WALK-IN'")
+        //-       q-item-section
+        //-         q-item-label WALK-IN
+        //-         div.full-width.row.justify-between
         component(:is="docSelection" text="Source Type" label="Select Type" :options="sourceEntryList" v-model:modelValue="sourceEntry")
 
       section.label-and-input
-        component(:is="docLabel" text="Date Received:").label--spaced
-        q-date(flat v-model="receivedDate" minimal color="$button" @click="formatDate").calendar
-        component(v-if="formattedReceivedDate.length > 0" :is="docLabel" :text="formattedReceivedDate").inputs__label--date
-        component(v-else :is="docLabel" text="No Date Selected").inputs__label--date
+        //- component(:is="docLabel" text="Date Received:").label--spaced
+        //- q-date(flat v-model="receivedDate" minimal color="$button" @click="formatDate").calendar
+        //- component(v-if="formattedReceivedDate.length > 0" :is="docLabel" :text="formattedReceivedDate").inputs__label--date
+        //- component(v-else :is="docLabel" text="No Date Selected").inputs__label--date
+        component(:is="docCalendar" text="Date Received" v-model:modelValue="receivedDate")
 
       section.label-and-input
         component(:is="docLabel" text="Complaint Name:").label--spaced
@@ -97,6 +98,7 @@ import docInputEntry from 'components/docInputEntry.vue'
 import docInput from 'components/docInput.vue'
 import docLabel from 'components/docLabel.vue'
 import docSelection from 'components/docSelection.vue'
+import docCalendar from 'components/docCalendar.vue'
 
 const sourceEntryList = ['DCR/888', 'EMAIL', 'MOTU PROPRIO', 'WALK-IN']
 let sourceEntry = ref('Select Source')
