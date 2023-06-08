@@ -214,5 +214,5 @@ const gotoHome = () => {
   font-size: 2rem
 
 .register-button
-  padding-top: 3rem
+  padding: 3rem 0rem 5rem 0rem
 </style>

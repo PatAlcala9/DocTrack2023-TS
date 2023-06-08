@@ -2,14 +2,14 @@
 
 div(v-if="$q.screen.width > 500")
   section.full-width.row.inline.wrap.justify-start.items-start.content-start.section
-    q-icon(:name="icon" size="2rem").icon
+    q-icon(:name="icon" size="1.9rem").icon
     section.column
       span.label {{ text }}:
       q-option-group(dark :modelValue="props.modelValue" @update:modelValue="updateValue" :options="props.options" color="blue-10" type="checkbox").list
 
 div(v-else)
   section.full-width.column.inline.wrap.justify-center.items-center.content-center.section
-    q-icon(:name="icon" size="2.1rem").icon
+    q-icon(:name="icon" size="2rem").icon
     section.column.wrap.justify-center.items-center.content-center.text-start
       span.label {{ text }}
       q-option-group(dark :modelValue="props.modelValue" @update:modelValue="updateValue" :options="props.options" color="blue-10" type="checkbox").list
@@ -48,7 +48,7 @@ const updateValue = (value: string[]) => {
 .label
   font-family: 'Inter'
   font-weight: 400
-  font-size: 1.1rem
+  font-size: 1rem
   color: #ffffff
 
 .section
@@ -56,7 +56,7 @@ const updateValue = (value: string[]) => {
   background-color: rgba(17, 25, 40, 0.8)
   border-radius: 0.6rem
   border: 1px solid rgba(255, 255, 255, 0.125)
-  padding: 1.2rem 2rem 1.2rem 1.2rem
+  padding: 0.9rem 1.6rem 0.9rem 0.9rem
 
 .list
   width: 30rem
@@ -69,7 +69,7 @@ const updateValue = (value: string[]) => {
     font-size: 1.2rem
 
   .section
-    padding: 1rem 1rem 2rem 1rem
+    padding: 0.3rem 0.8rem 1.4rem 0.8rem
 
   .list
     width: 16rem

@@ -2,14 +2,14 @@
 
 div(v-if="$q.screen.width > 500")
   label(:for="text").full-width.row.inline.wrap.justify-start.items-start.content-start.section
-    q-icon(:name="icon" size="2rem").icon
+    q-icon(:name="icon" size="1.9rem").icon
     section.column
       span.label {{text}}:
       input(:value="props.value" @input="updateValue(($event.target as HTMLInputElement)?.value)" :style="styleComponent" :id="text" :type="type").input
 
 div(v-else)
   section.fit.column.wrap.justify-center.items-center.content-center.section
-    q-icon(:name="icon" size="2.1rem").icon
+    q-icon(:name="icon" size="2rem").icon
     section.column.wrap.justify-center.items-center.content-center
       span.label {{text}}
       input(:value="props.value" @input="updateValue(($event.target as HTMLInputElement)?.value)" :style="styleComponent" :type="type").input
@@ -62,12 +62,12 @@ const styleComponent = computed(() => {
 .label
   font-family: 'Inter'
   font-weight: 400
-  font-size: 1.1rem
+  font-size: 1rem
   color: #ffffff
 
 .input
   font-family: 'Inter'
-  font-size: 1.3rem
+  font-size: 1.2rem
   border-radius: 0.6rem
   text-align: var(--alignment)
   text-transform: var(--transform)
@@ -88,7 +88,7 @@ const styleComponent = computed(() => {
   background-color: rgba(17, 25, 40, 0.8)
   border-radius: 0.6rem
   border: 1px solid rgba(255, 255, 255, 0.125)
-  padding: 1.2rem 2rem 1.2rem 1.2rem
+  padding: 0.9rem 1.6rem 0.9rem 0.9rem
 
 .icon
   padding: 1rem
@@ -103,5 +103,5 @@ const styleComponent = computed(() => {
     width: var(--mobileWidth)
 
   .section
-    padding: 1rem 1rem 2rem 1rem
+    padding: 0.3rem 0.8rem 1.4rem 0.8rem
 </style>
