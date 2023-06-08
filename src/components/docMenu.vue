@@ -28,7 +28,7 @@ const props = withDefaults(defineProps<Props>(), {
   background-color: rgba(17, 25, 40, 0.8)
   border-radius: 2rem
   border: 1px solid rgba(255, 255, 255, 0.125)
-  padding: 2rem
+  padding: 1.4rem
   cursor: pointer
 
 .icon

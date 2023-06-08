@@ -11,7 +11,7 @@ q-page(padding)
 
   div.entry-group
     div.complaint-group
-      section.label-and-input
+      section.form
         //- component(:is="docLabel" text="Source Type:").label--spaced
         //- q-btn-dropdown(unelevated color="grey-10" :label="sourceEntry" size="1rem" :content-style="{ fontSize: '1.2rem', fontFamily: 'Inter' }")
         //-   q-list
@@ -33,39 +33,41 @@ q-page(padding)
         //-         div.full-width.row.justify-between
         component(:is="docSelection" text="Source Type" label="Select Type" :options="sourceEntryList" v-model:modelValue="sourceEntry")
 
-      section.label-and-input
-        //- component(:is="docLabel" text="Date Received:").label--spaced
-        //- q-date(flat v-model="receivedDate" minimal color="$button" @click="formatDate").calendar
-        //- component(v-if="formattedReceivedDate.length > 0" :is="docLabel" :text="formattedReceivedDate").inputs__label--date
-        //- component(v-else :is="docLabel" text="No Date Selected").inputs__label--date
-        component(:is="docCalendar" text="Date Received" v-model:modelValue="receivedDate")
+      section.form
+        section.section
+          //- component(:is="docLabel" text="Date Received:").form--label
+          span.form--label Date Received
+          q-date(flat v-model="receivedDate" minimal color="$button" @click="formatDate").calendar
+          component(v-if="formattedReceivedDate.length > 0" :is="docLabel" :text="formattedReceivedDate").form--label
+          component(v-else :is="docLabel" text="No Date Selected").inputs__label--date.text-center
+          //- component(:is="docCalendar" text="Date Received" v-model:modelValue="formattedReceivedDate" @click="formatDate")
 
-      section.label-and-input
+      section.form
         component(:is="docLabel" text="Complaint Name:").label--spaced
         component(:is="docInputEntry" v-model:value="complaintName" )
 
-      section.label-and-input
+      section.form
         component(:is="docLabel" text="Complaint Contact:").label--spaced
         component(:is="docInputEntry" v-model:value="complaintContact" )
 
-      section.label-and-input
+      section.form
         component(:is="docLabel" text="Complaint Location:").label--spaced
         component(:is="docInputEntry" v-model:value="complaintLocation" )
 
-      section.label-and-input
+      section.form
         component(:is="docLabel" text="Detail of Complaint:").label--spaced
         component(:is="docTextArea" v-model:value="complaintDetail" )
 
     div.respondent-group
-      section.label-and-input
+      section.form
         component(:is="docLabel" text="Respondent Name:").label--spaced
         component(:is="docInputEntry" v-model:value="respondentName")
 
-      section.label-and-input
+      section.form
         component(:is="docLabel" text="Respondent Contact:").label--spaced
         component(:is="docInputEntry" v-model:value="respondentContact")
 
-      section.label-and-input
+      section.form
         component(:is="docLabel" text="Respondent Location:").label--spaced
         component(:is="docInputEntry" v-model:value="respondentLocation")
 
@@ -423,20 +425,48 @@ const gotoComplaintDashboard = () => {
 .respondent-group
   flex-grow: 1
 
-.label--spaced
-  padding-right: 1rem
-
 .row
   margin-bottom: 0.9rem
 
-.label-and-input
+.form
   display: flex
   flex-direction: column
   flex-wrap: wrap
   justify-content: center
   align-items: center
   align-content: center
+  text-align: center
   padding-bottom: 1rem
+
+.form--label
+  font-family: 'Inter'
+  font-weight: 300
+  font-size: 1.2rem
+  color: #ffffff
+  padding: 0.5rem
+
+.calendar
+  background-color: transparent
+  border: 1px solid rgba(255, 255, 255, 0.525)
+  font-family: 'Inter'
+  font-size: 1.4rem
+  border-radius: 12px
+  :deep .q-date__calendar-item
+    padding-top: 0.6rem
+  :deep .block
+    font-size: 1.1rem
+
+.section
+  display: flex
+  flex-direction: column
+  backdrop-filter: blur(1.6px) saturate(173%)
+  // background-color: rgba(10, 10, 35, 0.52)
+  // background-color: rgba(17, 25, 40, 0.82)
+  background-color: rgba(17, 25, 40, 0.8)
+  border-radius: 0.6rem
+  border: 1px solid rgba(255, 255, 255, 0.125)
+  padding: 1.2rem 2rem 1.2rem 1.2rem
+
 
 @media screen and (max-width: 500px)
   .entry-group

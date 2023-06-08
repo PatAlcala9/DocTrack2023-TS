@@ -19,7 +19,7 @@ q-page(padding)
   div(v-if="$q.screen.width > 500").message-area
     span {{ menuMessage }}
 
-  div.button-area
+  div.button-area.flex.flex-center
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
       component(:is="docMenu" text="Incoming" icon="description" v-if="_access.access.includes('incoming')" @click="gotoPage('incoming', false)" @mouseover="setMessage('incoming')" @mouseout="returnDefault")
 

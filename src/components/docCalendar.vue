@@ -5,7 +5,7 @@ div(v-if="$q.screen.width > 500")
     section.column
       span.label.text-center {{props.text}}
       q-date(flat :modelValue="props.modelValue" minimal color="$button" @click="('click')").calendar
-      span(v-if="props.modelValue.length > 0").label {{props.modelValue}}
+      span(v-if="props.modelValue.length > 0").label.text-center {{props.modelValue}}
       span(v-else).label.text-center No Date Selected
 
 div(v-else)
@@ -13,14 +13,14 @@ div(v-else)
     section.column.wrap.justify-center.items-center.content-center
       span.label.text-center {{props.text}}
       q-date(flat v-model="props.date" minimal color="$button" @click="('click')").calendar
-      span(v-if="props.modelValue.length > 0").label {{props.modelValue}}
+      span(v-if="props.modelValue.length > 0").label.text-center {{props.modelValue}}
       span(v-else).label.text-center No Date Selected
 
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
- 
+import { computed, ref } from 'vue'
+
 export interface Props {
   text: string
   icon: string
@@ -44,6 +44,12 @@ const props = withDefaults(defineProps<Props>(), {
   mobileWidth: 14,
   type: 'input',
 })
+
+let formattedReceivedDate = ref('')
+
+const formatDate = () => {
+  formattedReceivedDate.value = date.formatDate(Date.parse(receivedDate.value), 'MMMM D, YYYY')
+}
 
 const emit = defineEmits(['update:value'])
 

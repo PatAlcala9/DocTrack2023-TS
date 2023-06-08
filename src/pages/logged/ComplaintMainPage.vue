@@ -11,10 +11,10 @@ q-page(padding)
   div.fit.row.wrap.justify-center.search-area
     component(:is="docForm" text="Search" v-model:value="searchValue" :width=30 :mobileWidth=14 icon="search")
 
-  //- div(v-if="nodata").fit.row.wrap.justify-center
-  //-   span No Data Found
+  div(v-if="nodata").fit.row.wrap.justify-center
+    span.flex.flex-center.nodata--text No Data Found
 
-  div.fit.row.wrap.justify-center
+  div(v-else).fit.row.wrap.justify-center
     section(v-if="quasar.screen.width <= 500").flex.flex-center
       section(v-if="complaintList.result !== ''").dialog-content-table
         table.table
@@ -291,7 +291,23 @@ const fillupOffline = () => {
   font-size: 1.1rem
   padding-bottom: 2rem
 
+.nodata--text
+  font-family: 'Inter'
+  font-weight: 400
+  font-size: 1.6rem
+  margin-top: 6rem
+  background-color: rgba(17, 25, 40, 0.8)
+  border-radius: 0.6rem
+  border: 1px solid rgba(255, 255, 255, 0.125)
+  padding: 1.2rem 9rem
+
 @media screen and (max-width: 500px)
   .section
     margin-bottom: 1.2rem
+
+  .nodata--text
+    font-family: 'Inter'
+    font-weight: 300
+    font-size: 1.4rem
+    padding: 1rem 4.5rem
 </style>
