@@ -2,14 +2,14 @@
 
 div(v-if="$q.screen.width > 500")
   section.full-width.row.inline.wrap.justify-start.items-start.content-start.section
-    q-icon(:name="icon" size="1.9rem").icon
+    q-icon(:name="icon" size="1.6rem").icon
     section.column
       span.label {{ text }}:
       q-option-group(dark :modelValue="props.modelValue" @update:modelValue="updateValue" :options="props.options" color="blue-10" type="checkbox").list
 
 div(v-else)
   section.full-width.column.inline.wrap.justify-center.items-center.content-center.section
-    q-icon(:name="icon" size="2rem").icon
+    q-icon(:name="icon" size="1.8rem").icon
     section.column.wrap.justify-center.items-center.content-center.text-start
       span.label {{ text }}
       q-option-group(dark :modelValue="props.modelValue" @update:modelValue="updateValue" :options="props.options" color="blue-10" type="checkbox").list
@@ -52,8 +52,8 @@ const updateValue = (value: string[]) => {
   color: #ffffff
 
 .section
-  backdrop-filter: blur(1.6px) saturate(173%)
-  background-color: rgba(17, 25, 40, 0.8)
+  background-color: rgba(12, 21, 42, 0.45)
+  backdrop-filter: blur(9px) saturate(150%)
   border-radius: 0.6rem
   border: 1px solid rgba(255, 255, 255, 0.125)
   padding: 0.9rem 1.6rem 0.9rem 0.9rem

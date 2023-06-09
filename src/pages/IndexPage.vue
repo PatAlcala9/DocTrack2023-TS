@@ -251,7 +251,8 @@ const rotateMessageBack = () => {
   font-weight: 300
   font-size: 1.6rem
   padding: 5rem
-  background-color: rgba(17, 25, 40, 0.8)
+  background-color: rgba(12, 21, 42, 0.45)
+  backdrop-filter: blur(9px) saturate(150%)
   border-radius: 2rem
   border: 1px solid rgba(255, 255, 255, 0.125)
   display: inline-block

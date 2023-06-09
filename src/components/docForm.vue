@@ -2,14 +2,14 @@
 
 div(v-if="$q.screen.width > 500")
   label(:for="text").full-width.row.inline.wrap.justify-start.items-start.content-start.section
-    q-icon(:name="icon" size="1.9rem").icon
+    q-icon(:name="icon" size="1.6rem").icon
     section.column
       span.label {{text}}:
       input(:value="props.value" @input="updateValue(($event.target as HTMLInputElement)?.value)" :style="styleComponent" :id="text" :type="type").input
 
 div(v-else)
   section.fit.column.wrap.justify-center.items-center.content-center.section
-    q-icon(:name="icon" size="2rem").icon
+    q-icon(:name="icon" size="1.8rem").icon
     section.column.wrap.justify-center.items-center.content-center
       span.label {{text}}
       input(:value="props.value" @input="updateValue(($event.target as HTMLInputElement)?.value)" :style="styleComponent" :type="type").input
@@ -61,13 +61,13 @@ const styleComponent = computed(() => {
 <style lang="sass" scoped>
 .label
   font-family: 'Inter'
-  font-weight: 400
-  font-size: 1rem
+  font-weight: 300
+  font-size: 0.9rem
   color: #ffffff
 
 .input
   font-family: 'Inter'
-  font-size: 1.2rem
+  font-size: 1.1rem
   border-radius: 0.6rem
   text-align: var(--alignment)
   text-transform: var(--transform)
@@ -82,10 +82,12 @@ const styleComponent = computed(() => {
   color: #ffffff
 
 .section
-  backdrop-filter: blur(1.6px) saturate(173%)
+  backdrop-filter: blur(9px) saturate(173%)
   // background-color: rgba(10, 10, 35, 0.52)
   // background-color: rgba(17, 25, 40, 0.82)
   background-color: rgba(17, 25, 40, 0.8)
+  backdrop-filter: blur(9px) saturate(150%)
+  background-color: rgba(12, 21, 42, 0.45)
   border-radius: 0.6rem
   border: 1px solid rgba(255, 255, 255, 0.125)
   padding: 0.9rem 1.6rem 0.9rem 0.9rem
@@ -96,12 +98,12 @@ const styleComponent = computed(() => {
 @media screen and (max-width: 500px)
   .label
     font-weight: 300
-    font-size: 1.1rem
+    font-size: 1rem
 
   .input
     font-size: 1.1rem
     width: var(--mobileWidth)
 
   .section
-    padding: 0.3rem 0.8rem 1.4rem 0.8rem
+    padding: 0.1rem 0.8rem 1.1rem 0.8rem
 </style>

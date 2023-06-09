@@ -24,8 +24,8 @@ const props = withDefaults(defineProps<Props>(), {
   font-weight: 100 200
 
 .section
-  backdrop-filter: blur(1.6px) saturate(173%)
-  background-color: rgba(17, 25, 40, 0.8)
+  background-color: rgba(12, 21, 42, 0.45)
+  backdrop-filter: blur(9px) saturate(150%)
   border-radius: 2rem
   border: 1px solid rgba(255, 255, 255, 0.125)
   padding: 1.4rem

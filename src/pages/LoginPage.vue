@@ -3,7 +3,7 @@
 q-page(padding)
   div.grid
     section.title.full-width.row.justify-between
-      div.column
+      div.main-name.column
         transition(appear @before-enter="beforeEnterLogo" @enter="enterLogo")
           img(src="../assets/ocbologobw.avif" alt="OCBO Logo" ).logo
           //- @click="sampleMode = !sampleMode"
@@ -382,6 +382,13 @@ const enterSwitch = (el: any) => {
   justify-self: start
   align-self: center
 
+.main-name
+  backdrop-filter: blur(9px) saturate(150%)
+  background-color: rgba(12, 21, 42, 0.45)
+  border-radius: 0.6rem
+  border: 1px solid rgba(255, 255, 255, 0.125)
+  padding: 0rem 1rem 0.9rem 1rem
+
 .login
   grid-area: login
   justify-self: center
@@ -393,8 +400,8 @@ const enterSwitch = (el: any) => {
   margin-top: -1rem
   width: 22rem
   height: 22rem
-  backdrop-filter: blur(16px) saturate(173%)
-  background-color: rgba(17, 25, 40, 0.65)
+  backdrop-filter: blur(9px) saturate(150%)
+  background-color: rgba(12, 21, 42, 0.45)
 
 .inquiry
   grid-area: inquiry
