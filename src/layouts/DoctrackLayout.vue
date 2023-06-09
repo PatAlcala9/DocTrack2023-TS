@@ -21,6 +21,8 @@ const _pagewithtable = usePageWithTable()
   background-size: cover
   font-family: 'Inter'
   color: #ffffff
+  background-attachment: fixed
+  overflow-y: hidden
 
 // .cabinet
 //   width: 20rem
