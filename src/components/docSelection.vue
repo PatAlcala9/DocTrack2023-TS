@@ -4,13 +4,13 @@ div(v-if="$q.screen.width > 500")
   section.full-width.row.inline.wrap.justify-start.items-start.content-start.section
     section.column
       span.label {{text}}:
-      q-select(filled dark :modelValue="props.modelValue" @update:modelValue="updateValue" :label="props.label" :options="options" style="width: 250px" color="blue-10" behavior="menu" label-color="blue-1" item-aligned)
+      q-select(filled dark :modelValue="props.modelValue" @update:modelValue="updateValue" :options="options" style="width: 250px" color="blue-10" behavior="menu" label-color="blue-1" item-aligned)
 
 div(v-else)
   section.fit.column.wrap.justify-center.items-center.content-center.section
     section.column.wrap.justify-center.items-center.content-center
       span.label {{text}}
-      q-select(filled dark :modelValue="props.modelValue" @update:modelValue="updateValue" :label="props.label" :options="options" style="width: 250px" color="blue-10" behavior="dialog" label-color="blue-1" item-aligned)
+      q-select(filled dark :modelValue="props.modelValue" @update:modelValue="updateValue" :options="options" style="width: 250px" color="blue-10" behavior="dialog" label-color="blue-1" item-aligned)
 
 </template>
 
@@ -19,33 +19,19 @@ import { computed } from 'vue'
 
 export interface Props {
   text: string
-  label: string
   modelValue: string
   options: string[]
-
-  width: number
-  alignment: string
-  transform: string
-  mobileWidth: number
-  type: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
   text: 'Label',
-  icon: '',
-
-  value: '',
-  width: 16,
-  alignment: 'center',
-  transform: 'uppercase',
-  mobileWidth: 14,
-  type: 'input'
+  modelValue: ''
 })
 
 const emit = defineEmits(['update:value'])
 
-const updateValue = (value: string) => {
-  emit('update:modelValue', value)
+const updateValue = (modelValue: string) => {
+  emit('update:modelValue', modelValue)
 }
 
 const styleComponent = computed(() => {
@@ -82,19 +68,11 @@ const styleComponent = computed(() => {
   color: #ffffff
 
 .section
-  backdrop-filter: blur(1.6px) saturate(173%)
-  // background-color: rgba(10, 10, 35, 0.52)
-  // background-color: rgba(17, 25, 40, 0.82)
-  background-color: rgba(17, 25, 40, 0.8)
+  backdrop-filter: blur(9px) saturate(150%)
+  background-color: rgba(12, 21, 42, 0.45)
   border-radius: 0.6rem
   border: 1px solid rgba(255, 255, 255, 0.125)
   padding: 1.2rem 2rem
-
-.icon
-  padding: 1rem
-
-.aa
-  background-color: red
 
 @media screen and (max-width: 500px)
   .label
@@ -108,4 +86,3 @@ const styleComponent = computed(() => {
   .section
     padding: 1rem 1rem 2rem 1rem
 </style>
-

@@ -3,7 +3,7 @@
 q-page(padding)
   div.grid
     section.title.full-width.row.justify-between
-      div.main-name.column
+      div.column
         transition(appear @before-enter="beforeEnterLogo" @enter="enterLogo")
           img(src="../assets/ocbologobw.avif" alt="OCBO Logo" ).logo
           //- @click="sampleMode = !sampleMode"
@@ -29,7 +29,7 @@ q-page(padding)
           doc-button(text="login" @click="login")
 
         section.register.column.wrap.justify-center.items-center.content-center
-          span(@click="gotoRegister") Create New Account
+          span.register--text(@click="gotoRegister") Create New Account
 
 
     div(v-else).login#inquiry
@@ -454,8 +454,6 @@ const enterSwitch = (el: any) => {
 .dialog-title
   font-family: 'Raleway'
   font-size: 1.4rem
-
-
 .table
   width: 93vw
 
@@ -478,13 +476,15 @@ const enterSwitch = (el: any) => {
   color: #ffffff
 
 .register
-  padding-top: 1.2rem
-  font-size: 1.2rem
+  padding-top: 1.5rem
   cursor: pointer
 
 .register:hover
   text-decoration: underline
 
+.register--text
+  font-family: 'Inter'
+  font-family: 0.6rem
 
 @media screen and (max-width: 900px)
   .grid
@@ -499,9 +499,8 @@ const enterSwitch = (el: any) => {
     font-size: 2.5rem
     margin-top: -1rem
 
-  .register
-    font-size: 1.1rem
-
+  .register--text
+    font-size: 1rem
   .inquiry-text
     font-size: 1.1rem
 
@@ -523,7 +522,7 @@ const enterSwitch = (el: any) => {
     width: 90%
     height: 22rem
 
-  .register
+  .register--text
     font-size: 0.9rem
 
   .inquiry

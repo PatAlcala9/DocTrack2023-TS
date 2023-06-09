@@ -1659,6 +1659,13 @@
   dependencies:
     "@volar/source-map" "1.4.1"
 
+"@volar/language-core@1.5.4":
+  version "1.5.4"
+  resolved "https://registry.yarnpkg.com/@volar/language-core/-/language-core-1.5.4.tgz#482b77d5fddeb1943e1a04cfc3efb67c84bdb7d1"
+  integrity sha512-l0pmKb/DPPjcD2IUwK3myYuTQW7qLLfXYBHKSGVZ7cnC168V55ecpddTA5a9AYsbCFSWx8neRj5r4JWq93QpZQ==
+  dependencies:
+    "@volar/source-map" "1.5.4"
+
 "@volar/language-service@1.4.1":
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/@volar/language-service/-/language-service-1.4.1.tgz#2e7f75ab7c21e7b40c72fd5c61933783a6881859"
@@ -1673,10 +1680,31 @@
     vscode-languageserver-textdocument "^1.0.8"
     vscode-uri "^3.0.7"
 
+"@volar/language-service@1.5.4":
+  version "1.5.4"
+  resolved "https://registry.yarnpkg.com/@volar/language-service/-/language-service-1.5.4.tgz#ecb9d6c58e68eb0b86b7b3e39f17e4994bb70d02"
+  integrity sha512-a1LsiQ60JAZVAdE6Xuw5xjiIMAUZGG7rmHq/uciWd8iB+Yty4stwSBOhuUtFdyGphkdcuspPrTa+QG+JDNTLSw==
+  dependencies:
+    "@volar/language-core" "1.5.4"
+    "@volar/source-map" "1.5.4"
+    typescript-auto-import-cache "^0.2.1"
+    vscode-html-languageservice "^5.0.4"
+    vscode-json-languageservice "^5.2.0"
+    vscode-languageserver-protocol "^3.17.3"
+    vscode-languageserver-textdocument "^1.0.8"
+    vscode-uri "^3.0.7"
+
 "@volar/source-map@1.4.1":
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/@volar/source-map/-/source-map-1.4.1.tgz#e3b561775c742508e5e1f28609a4787c98056715"
   integrity sha512-bZ46ad72dsbzuOWPUtJjBXkzSQzzSejuR3CT81+GvTEI2E994D8JPXzM3tl98zyCNnjgs4OkRyliImL1dvJ5BA==
+  dependencies:
+    muggle-string "^0.2.2"
+
+"@volar/source-map@1.5.4":
+  version "1.5.4"
+  resolved "https://registry.yarnpkg.com/@volar/source-map/-/source-map-1.5.4.tgz#b305c9da07bc5aa106151694310b7f9eeb7acffe"
+  integrity sha512-BkvouUYFFLPxof2q6kKAZtyUKRqlS2O/WZKmzTVfPIo5uqqmZTR0+SwN1Xa1qpuezMVUOg61wkqmWP7cY2ezJg==
   dependencies:
     muggle-string "^0.2.2"
 
@@ -1740,6 +1768,15 @@
   version "6.5.0"
   resolved "https://registry.yarnpkg.com/@vue/devtools-api/-/devtools-api-6.5.0.tgz#98b99425edee70b4c992692628fa1ea2c1e57d07"
   integrity sha512-o9KfBeaBmCKl10usN4crU53fYtC1r7jJwdGKjPT24t348rHxgfpZ0xL3Xm/gLUYnc0oTp8LAmrxOeLyu6tbk2Q==
+
+"@vue/language-plugin-pug@^1.7.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@vue/language-plugin-pug/-/language-plugin-pug-1.7.0.tgz#f9a1f8865f6bf5f2b9e3147581fbb7dd6f0ed61f"
+  integrity sha512-4fWX9n6cpGsIgT+uMPUMC8mF06SyLA+N8UxqrH8Jcm5ZSER1ecjQxjxO4Txan22sigOZFT5EXqZKcE7RyLPkxw==
+  dependencies:
+    "@volar/language-service" "1.5.4"
+    "@volar/source-map" "1.5.4"
+    volar-service-pug "0.0.2"
 
 "@vue/reactivity-transform@3.3.4":
   version "3.3.4"
@@ -6247,6 +6284,28 @@ void-elements@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/void-elements/-/void-elements-3.1.0.tgz#614f7fbf8d801f0bb5f0661f5b2f5785750e4f09"
   integrity sha512-Dhxzh5HZuiHQhbvTW9AMetFfBHDMYpo23Uo9btPXgdYP+3T5S+p+jgNy7spra+veYhBP2dCSgxR/i2Y02h5/6w==
+
+volar-service-html@0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/volar-service-html/-/volar-service-html-0.0.2.tgz#d5ce2931f76b8703009930fbb08bc7fba28dfc14"
+  integrity sha512-OJWZBTBaqNq70YPlN8K4JJGcN5vDJynB4M/8xAGQYyNhWThLdLCKzYJRTrtkCGKr1tmEM845YCFmg23dAtOFBw==
+  dependencies:
+    vscode-html-languageservice "^5.0.4"
+    vscode-languageserver-protocol "^3.17.3"
+    vscode-languageserver-textdocument "^1.0.8"
+
+volar-service-pug@0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/volar-service-pug/-/volar-service-pug-0.0.2.tgz#5a597d079b2b25f378e561bdfd6579bc97cd0878"
+  integrity sha512-wScsIW+nlssAVY6WvA+90ofQEW8uxTy6A0Th4I6mGFVk2Qk5q4bmyr5sGPPuYEDLENrYRe73o7UQsADUOhjDOw==
+  dependencies:
+    muggle-string "^0.2.2"
+    pug-lexer "^5.0.1"
+    pug-parser "^6.0.0"
+    volar-service-html "0.0.2"
+    vscode-html-languageservice "^5.0.4"
+    vscode-languageserver-textdocument "^1.0.8"
+    vscode-languageserver-types "^3.17.2"
 
 vscode-html-languageservice@^5.0.4:
   version "5.0.5"

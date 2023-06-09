@@ -16,7 +16,7 @@ const props = defineProps<Props>()
 <style lang="sass" scoped>
 .label
   font-family: 'Inter'
-  font-weight: bold
-  font-size: 1.2rem
+  font-weight: 500
+  font-size: 1.1rem
   color: #ffffff
 </style>

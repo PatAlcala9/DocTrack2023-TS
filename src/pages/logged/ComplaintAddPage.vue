@@ -12,7 +12,9 @@ q-page(padding)
   div.entry-group
     div.complaint-group
       section.form
-        //- component(:is="docLabel" text="Source Type:").label--spaced
+        section
+          //- component(:is="docLabel" text="Source Type:").form--label
+          component(:is="docSelection" text="Source Type" label="Select Type" :options="sourceEntryList" v-model:modelValue="sourceEntry")
         //- q-btn-dropdown(unelevated color="grey-10" :label="sourceEntry" size="1rem" :content-style="{ fontSize: '1.2rem', fontFamily: 'Inter' }")
         //-   q-list
         //-     q-item(clickable v-close-popup @click="sourceEntry = 'DCR/888'")
@@ -31,11 +33,9 @@ q-page(padding)
         //-       q-item-section
         //-         q-item-label WALK-IN
         //-         div.full-width.row.justify-between
-        component(:is="docSelection" text="Source Type" label="Select Type" :options="sourceEntryList" v-model:modelValue="sourceEntry")
 
       section.form
         section.section
-          //- component(:is="docLabel" text="Date Received:").form--label
           span.form--label Date Received
           q-date(flat v-model="receivedDate" minimal color="$button" @click="formatDate").calendar
           component(v-if="formattedReceivedDate.length > 0" :is="docLabel" :text="formattedReceivedDate").form--label
@@ -43,33 +43,40 @@ q-page(padding)
           //- component(:is="docCalendar" text="Date Received" v-model:modelValue="formattedReceivedDate" @click="formatDate")
 
       section.form
-        component(:is="docLabel" text="Complaint Name:").label--spaced
-        component(:is="docInputEntry" v-model:value="complaintName" )
+        section.section
+          component(:is="docLabel" text="Complaint Name:").label--spaced
+          component(:is="docInputEntry" v-model:value="complaintName" )
 
       section.form
-        component(:is="docLabel" text="Complaint Contact:").label--spaced
-        component(:is="docInputEntry" v-model:value="complaintContact" )
+        section.section
+          component(:is="docLabel" text="Complaint Contact:").label--spaced
+          component(:is="docInputEntry" v-model:value="complaintContact" )
 
       section.form
-        component(:is="docLabel" text="Complaint Location:").label--spaced
-        component(:is="docInputEntry" v-model:value="complaintLocation" )
+        section.section
+          component(:is="docLabel" text="Complaint Location:").label--spaced
+          component(:is="docInputEntry" v-model:value="complaintLocation" )
 
       section.form
-        component(:is="docLabel" text="Detail of Complaint:").label--spaced
-        component(:is="docTextArea" v-model:value="complaintDetail" )
+        section.section
+          component(:is="docLabel" text="Detail of Complaint:").label--spaced
+          component(:is="docTextArea" v-model:value="complaintDetail" )
 
     div.respondent-group
       section.form
-        component(:is="docLabel" text="Respondent Name:").label--spaced
-        component(:is="docInputEntry" v-model:value="respondentName")
+        section.section
+          component(:is="docLabel" text="Respondent Name:").label--spaced
+          component(:is="docInputEntry" v-model:value="respondentName")
 
       section.form
-        component(:is="docLabel" text="Respondent Contact:").label--spaced
-        component(:is="docInputEntry" v-model:value="respondentContact")
+        section.section
+          component(:is="docLabel" text="Respondent Contact:").label--spaced
+          component(:is="docInputEntry" v-model:value="respondentContact")
 
       section.form
-        component(:is="docLabel" text="Respondent Location:").label--spaced
-        component(:is="docInputEntry" v-model:value="respondentLocation")
+        section.section
+          component(:is="docLabel" text="Respondent Location:").label--spaced
+          component(:is="docInputEntry" v-model:value="respondentLocation")
 
   div.flex.flex-center
     component(:is="docButton" text="Save" @click="saveData")
