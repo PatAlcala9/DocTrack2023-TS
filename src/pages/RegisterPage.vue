@@ -125,6 +125,8 @@ const checkComplete = () => {
   if (!ipassword.value) missingDetails.push('password')
   if (accessList.value.length === 0) missingDetails.push('access')
 
+  // console.log('accessList:', accessList.value)
+  // console.log('missingDetails:', missingDetails)
   if (missingDetails.length > 0) return true
   else return false
 }
@@ -138,8 +140,30 @@ const saveAccount = async () => {
     let iinventory = accessList.value.includes('is_inventory') ? 1 : 0
     let iothers = accessList.value.includes('is_otherdocuments') ? 1 : 0
     let icomplaint = accessList.value.includes('is_complaint') ? 1 : 0
-    const response = await api.post('/api/SaveAccount/' + ifullname.value.toUpperCase() + '/' + iusername.value.toUpperCase() + '/' + ipasswordEncrypted + '/' + iincoming + '/' + ioutgoing + '/' + ireleasing + '/' + iinventory + '/' + iothers + '/' + icomplaint)
-    const data = response.data
+
+    // console.log(ifullname.value.toUpperCase())
+    // console.log(iusername.value.toUpperCase())
+    // console.log(ipasswordEncrypted)
+    // console.log(iincoming)
+    // console.log(ioutgoing)
+    // console.log(ireleasing)
+    // console.log(iinventory)
+    // console.log(iothers)
+    // console.log(icomplaint)
+
+    const response = await api.post('/api/PostAccount', {
+      data: ifullname.value.toUpperCase(),
+      data2: iusername.value.toUpperCase(),
+      data3: ipasswordEncrypted,
+      data4: iincoming,
+      data5: ioutgoing,
+      data6: ireleasing,
+      data7: iinventory,
+      data8: iothers,
+      data9: icomplaint,
+    })
+
+    const data = await response.data
 
     if (data.includes('Success')) {
       dialog.value = true

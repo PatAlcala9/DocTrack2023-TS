@@ -844,12 +844,12 @@ func connect() {
       Data  string `json:"data"`
       Data2 string `json:"data2"`
       Data3 string `json:"data3"`
-      Data4 string `json:"data4"`
-      Data5 string `json:"data5"`
-      Data6 string `json:"data6"`
-      Data7 string `json:"data7"`
-      Data8 string `json:"data8"`
-      Data9 string `json:"data9"`
+      Data4 int `json:"data4"`
+      Data5 int `json:"data5"`
+      Data6 int `json:"data6"`
+      Data7 int `json:"data7"`
+      Data8 int `json:"data8"`
+      Data9 int `json:"data9"`
     }
     var accountData AccountData
     if err := c.ShouldBindJSON(&accountData); err != nil {
