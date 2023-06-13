@@ -36,6 +36,7 @@ import { ref } from 'vue'
 import { encrypt } from 'src/js/OCBO'
 import { useRouter } from 'vue-router'
 import { gsap } from 'gsap'
+import { checkConnection } from 'src/js/functions'
 
 import { usePageWithTable } from 'stores/pagewithtable'
 import { useCurrentPage } from 'stores/currentpage'
@@ -131,16 +132,16 @@ const checkComplete = () => {
   else return false
 }
 
-const checkConnection = async (): Promise<boolean> => {
-  try {
-    const response = await api.get('/api/CheckConnection')
-    const data = response.data
-    if (data !== undefined && data.result === '1') return true
-  } catch {
-    return false
-  }
-  return false
-}
+// const checkConnection = async (): Promise<boolean> => {
+//   try {
+//     const response = await api.get('/api/CheckConnection')
+//     const data = response.data
+//     if (data !== undefined && data.result === '1') return true
+//   } catch {
+//     return false
+//   }
+//   return false
+// }
 
 const saveAccount = async () => {
   if (await checkConnection()) {
@@ -178,11 +179,9 @@ const saveAccount = async () => {
       const data = response.data
 
       if (data.includes('Success')) {
-        dialog.value = true
-        dialogMessage.value = 'Successfully Registered'
+        showDialog('Successfully Register', `You can now login as ${iusername.value.toUpperCase()}`)
       } else {
-        dialog.value = true
-        dialogMessage.value = 'Failed to Register'
+        showDialog('Failed to Register', 'Something went wrong. Please try again')
       }
     } else {
       showDialog('Cannot Register', `Missing ${missingDetails.toString().toUpperCase()}`)
