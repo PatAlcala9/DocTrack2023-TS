@@ -228,7 +228,6 @@ const fillupOffline = () => {
   // dialogStatus.value = data.result10
   // dialogDateTransacted.value = data.result11
   const complaint = LocalStorage.getItem('complaint')
-  console.log(complaint)
 }
 
 ;(async () => {
