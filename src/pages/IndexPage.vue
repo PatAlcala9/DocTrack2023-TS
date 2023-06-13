@@ -84,7 +84,7 @@ const getAccess = async () => {
 }
 
 const setDemo = async () => {
-  if (_isdemo.isdemo) SessionStorage.set('Demo', _isdemo.isdemo)
+  SessionStorage.set('Demo', _isdemo.isdemo)
 }
 const getDemo = async () => {
   const session: string | null = SessionStorage.getItem('Demo')
