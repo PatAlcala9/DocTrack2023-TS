@@ -1,3 +1,5 @@
+import { api } from 'boot/axios'
+
 // export function isNumberKey(evt: any) {
 //   const charCode = evt.which ? evt.which : event.keyCode
 //   if (charCode > 31 && (charCode < 48 || charCode > 57)) {
@@ -133,4 +135,20 @@ export function todayDate(): string {
   const fixDay = day < 10 ? '0' + day : day
 
   return year + '/' + fixMonth + '/' + fixDay + ' ' + hour + ':' + minutes
+}
+
+export function checkConnection(): Promise<boolean> {
+  return new Promise<boolean>(async (resolve, reject) => {
+    try {
+      const response = await api.get('/api/CheckConnection');
+      const data = response.data;
+      if (data !== undefined && data.result === '1') {
+        resolve(true);
+      } else {
+        resolve(false);
+      }
+    } catch (error) {
+      resolve(false);
+    }
+  });
 }
