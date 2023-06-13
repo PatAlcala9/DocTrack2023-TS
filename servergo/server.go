@@ -287,7 +287,7 @@ func connect() {
 			})
 
     } else if method == "GetMaxComplaintCode" {
-      err = db.QueryRow("SELECT COALESCE(MAX(complaint_code)) AS result FROM complaint_info").Scan(&result)
+      err = db.QueryRow("SELECT COALESCE(MAX(complaint_code), '') AS result FROM complaint_info").Scan(&result)
       if err != nil {
         panic(err.Error())
       }
@@ -836,7 +836,7 @@ func connect() {
 			})
 
     } else if method == "GetLatestStatus" {
-      err = db.QueryRow("SELECT COALESCE(MAX(complaint_statusid)) AS result FROM complaint_status WHERE complaint_code = ?", data).Scan(&result)
+      err = db.QueryRow("SELECT COALESCE(MAX(complaint_statusid), '') AS result FROM complaint_status WHERE complaint_code = ?", data).Scan(&result)
       if err != nil {
         panic(err.Error())
       }
