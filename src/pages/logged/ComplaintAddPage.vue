@@ -94,6 +94,7 @@ import { ref } from 'vue'
 import { date, LocalStorage } from 'quasar'
 import { useRouter } from 'vue-router'
 import { api } from 'boot/axios'
+import { checkConnection } from 'src/js/functions'
 import Dexie from 'dexie'
 
 import { useCurrentPage } from 'stores/currentpage'
@@ -231,8 +232,6 @@ const getMaxComplaintCodeLOCAL = async (): Promise<string> => {
   const response = LocalStorage.getItem('complaintcode')
   const data = response?.toString() ?? ''
 
-  console.log(response)
-
   if (data !== null) return data
   else return ''
 }
@@ -240,10 +239,13 @@ const getMaxComplaintCodeLOCAL = async (): Promise<string> => {
 const generateNewComplaintCode = async (code: string) => {
   const today = new Date()
   const currentYear = date.formatDate(today, 'YY')
-  const series = parseInt(code.substring(5)) + 1
-  const newSeries = series.toString().padStart(4, '0')
 
-  return `${currentYear}-${sourceEntryID.value}-${newSeries}`
+  if (code !== '') {
+    const series = parseInt(code.substring(5)) + 1
+    const newSeries = series.toString().padStart(4, '0')
+
+    return `${currentYear}-${sourceEntryID.value}-${newSeries}`
+  } else return `${currentYear}-${sourceEntryID.value}-0001`
 }
 
 const postComplaint = async (code: string, complaintid: number, complaintname: string, complaintcontact: string, datereceived: string, location: string, details: string, infoid: number): Promise<boolean> => {
@@ -279,34 +281,64 @@ const postComplaintLOCAL = async (code: string, complaintid: number, complaintna
   return true
 }
 
+const postStatus = async (code: string, date: string, status: string, tagcode: string, tagword: string, receivedby: string, details: string) => {
+  const today = new Date()
+  const response = await api.post('/api/PostComplaint', {
+    data: code,
+    data2: date,
+    data3: status,
+    data4: tagcode,
+    data5: tagword,
+    data6: receivedby,
+    data7: details,
+  })
+  const data = response.data.length !== 0 ? response.data : null
+
+  if (data !== null) return true
+  else return false
+}
+
+const showDialog = (title: string, message: string) => {
+  dialog.value = true
+  dialogTitle.value = title
+  dialogMessage.value = message
+}
+
 const saveData = async () => {
   if (checkComplete() === false) {
-    if (_isdemo) {
+    if (_isdemo.isdemo) {
       await getSourceIDFromLOCAL()
 
       if ((await postRespodentLOCAL(respondentName.value, respondentContact.value, respondentLocation.value)) === true) {
-        console.log('1')
         const latestRespondent = 0
         const maxComplaint = await getMaxComplaintCodeLOCAL()
         const newComplaint = await generateNewComplaintCode(maxComplaint)
 
-        if (await postComplaintLOCAL(newComplaint, sourceEntryID.value, complaintName.value, complaintDetail.value, receivedDate.value, complaintLocation.value, complaintDetail.value, latestRespondent)) openDialog('Success', 'Successfully Saved Complaint')
-        else openDialog('Error', 'Failed to Save Complaint')
+        if (await postComplaintLOCAL(newComplaint, sourceEntryID.value, complaintName.value, complaintDetail.value, receivedDate.value, complaintLocation.value, complaintDetail.value, latestRespondent)) showDialog('Success', 'Successfully Saved Complaint')
+        else showDialog('Error', 'Failed to Save Complaint')
       } else {
-        openDialog('Error', 'Failed to Save Respondent')
+        showDialog('Error', 'Failed to Save Respondent')
       }
     } else {
-      await getSourceIDFromDatabase()
+      if (await checkConnection()) {
+        try {
+          await getSourceIDFromDatabase()
 
-      if ((await postRespondent(respondentName.value, respondentContact.value, respondentLocation.value)) === true) {
-        const latestRespondent = await getLatestRespondent()
-        const maxComplaint = await getMaxComplaintCode()
-        const newComplaint = await generateNewComplaintCode(maxComplaint)
+          if ((await postRespondent(respondentName.value, respondentContact.value, respondentLocation.value)) === true) {
+            const latestRespondent = await getLatestRespondent()
+            const maxComplaint = await getMaxComplaintCode()
+            const newComplaint = await generateNewComplaintCode(maxComplaint)
 
-        if (await postComplaint(newComplaint, sourceEntryID.value, complaintName.value, complaintDetail.value, receivedDate.value, complaintLocation.value, complaintDetail.value, latestRespondent)) openDialog('Success', 'Successfully Saved Complaint')
-        else openDialog('Error', 'Failed to Save Complaint')
-      } else {
-        openDialog('Error', 'Failed to Save Respondent')
+            console.log(sourceEntryID.value)
+            
+            if (await postComplaint(newComplaint, sourceEntryID.value, complaintName.value, complaintDetail.value, receivedDate.value, complaintLocation.value, complaintDetail.value, latestRespondent)) {
+              if (await postStatus(newComplaint, receivedDate.value, 'ENCODED TO SYSTEM', '15', 'ENCODED', complaintName.value, '')) showDialog('Success', 'Successfully Saved Complaint')
+              else showDialog('Error', 'Failed to Save Complaint')
+            }  else showDialog('Error', 'Failed to Save Complaint')
+          } else showDialog('Error', 'Failed to Save Respondent')
+        } catch {
+          showDialog('Error', 'Failed to Save Respondent')
+        }
       }
     }
   }
@@ -383,12 +415,6 @@ const createLOCALDATABASE = async () => {
   }).catch(() => {
     return false
   })
-}
-
-const openDialog = (title: string, message: string) => {
-  dialog.value = true
-  dialogTitle.value = title
-  dialogMessage.value = message
 }
 
 const checkOnline = () => {

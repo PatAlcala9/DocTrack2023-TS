@@ -983,13 +983,13 @@ func connect() {
   router.POST("/api/PostComplaint", func(c *gin.Context) {
     type ComplaintData struct {
       Data  string `json:"data"`
-      Data2 string `json:"data2"`
+      Data2 int `json:"data2"`
       Data3 string `json:"data3"`
       Data4 string `json:"data4"`
       Data5 string `json:"data5"`
       Data6 string `json:"data6"`
       Data7 string `json:"data7"`
-      Data8 string `json:"data8"`
+      Data8 int `json:"data8"`
     }
     var complaintData ComplaintData
     if err := c.ShouldBindJSON(&complaintData); err != nil {
@@ -1024,6 +1024,54 @@ func connect() {
       c.String(http.StatusOK, "Success on Saving Complaint")
     } else {
       c.String(http.StatusInternalServerError, "Failed on Saving Complaint")
+    }
+  })
+
+
+
+  router.POST("/api/PostStatus", func(c *gin.Context) {
+    type StatusData struct {
+      Data  string `json:"data"`
+      Data2 string `json:"data2"`
+      Data3 string `json:"data3"`
+      Data4 string `json:"data4"`
+      Data5 string `json:"data5"`
+      Data6 string `json:"data6"`
+      Data7 string `json:"data7"`
+    }
+    var statusData StatusData
+    if err := c.ShouldBindJSON(&statusData); err != nil {
+      c.String(http.StatusBadRequest, "Invalid request body")
+      return
+    }
+
+    c.Writer.Header().Set("X-XSS-Protection", "1; mode=block")
+    c.Writer.Header().Set("X-Content-Type-Options", "nosniff")
+    c.Writer.Header().Set("X-DNS-Prefetch-Control", "off")
+    c.Writer.Header().Set("X-Frame-Options", "DENY")
+    c.Writer.Header().Set("X-Download-Options", "noopen")
+    c.Writer.Header().Set("Referrer-Policy", "no-referrer")
+
+    dbpost, err := db.Prepare("INSERT INTO complaint_status (complaint_statusid, complaint_code, date_transacted, status, tagcode, tagword, received_by, remarks) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?)")
+    if err != nil {
+      panic(err.Error())
+    }
+    defer dbpost.Close()
+
+    exec, err := dbpost.Exec(statusData.Data, statusData.Data2, statusData.Data3, statusData.Data4, statusData.Data5, statusData.Data6, statusData.Data7)
+    if err != nil {
+      panic(err.Error())
+    }
+
+    affect, err := exec.RowsAffected()
+    if err != nil {
+      panic(err.Error())
+    }
+
+    if affect > 0 {
+      c.String(http.StatusOK, "Success on Saving Status")
+    } else {
+      c.String(http.StatusInternalServerError, "Failed on Saving Status")
     }
   })
 
