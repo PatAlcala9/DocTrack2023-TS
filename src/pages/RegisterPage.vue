@@ -131,49 +131,64 @@ const checkComplete = () => {
   else return false
 }
 
+const checkConnection = async (): Promise<boolean> => {
+  try {
+    const response = await api.get('/api/CheckConnection')
+    const data = response.data
+    if (data !== undefined && data.result === '1') return true
+  } catch {
+    return false
+  }
+  return false
+}
+
 const saveAccount = async () => {
-  if (checkComplete() === false) {
-    let ipasswordEncrypted = encrypt(ipassword.value.toUpperCase(), 'doctrack2023', 3, 128)
-    let iincoming = accessList.value.includes('is_incoming') ? 1 : 0
-    let ioutgoing = accessList.value.includes('is_outgoing') ? 1 : 0
-    let ireleasing = accessList.value.includes('is_releasing') ? 1 : 0
-    let iinventory = accessList.value.includes('is_inventory') ? 1 : 0
-    let iothers = accessList.value.includes('is_otherdocuments') ? 1 : 0
-    let icomplaint = accessList.value.includes('is_complaint') ? 1 : 0
+  if (await checkConnection()) {
+    if (checkComplete() === false) {
+      let ipasswordEncrypted = encrypt(ipassword.value.toUpperCase(), 'doctrack2023', 3, 128)
+      let iincoming = accessList.value.includes('is_incoming') ? 1 : 0
+      let ioutgoing = accessList.value.includes('is_outgoing') ? 1 : 0
+      let ireleasing = accessList.value.includes('is_releasing') ? 1 : 0
+      let iinventory = accessList.value.includes('is_inventory') ? 1 : 0
+      let iothers = accessList.value.includes('is_otherdocuments') ? 1 : 0
+      let icomplaint = accessList.value.includes('is_complaint') ? 1 : 0
 
-    // console.log(ifullname.value.toUpperCase())
-    // console.log(iusername.value.toUpperCase())
-    // console.log(ipasswordEncrypted)
-    // console.log(iincoming)
-    // console.log(ioutgoing)
-    // console.log(ireleasing)
-    // console.log(iinventory)
-    // console.log(iothers)
-    // console.log(icomplaint)
+      // console.log(ifullname.value.toUpperCase())
+      // console.log(iusername.value.toUpperCase())
+      // console.log(ipasswordEncrypted)
+      // console.log(iincoming)
+      // console.log(ioutgoing)
+      // console.log(ireleasing)
+      // console.log(iinventory)
+      // console.log(iothers)
+      // console.log(icomplaint)
 
-    const response = await api.post('/api/PostAccount', {
-      data: ifullname.value.toUpperCase(),
-      data2: iusername.value.toUpperCase(),
-      data3: ipasswordEncrypted,
-      data4: iincoming,
-      data5: ioutgoing,
-      data6: ireleasing,
-      data7: iinventory,
-      data8: iothers,
-      data9: icomplaint,
-    })
+      const response = await api.post('/api/PostAccount', {
+        data: ifullname.value.toUpperCase(),
+        data2: iusername.value.toUpperCase(),
+        data3: ipasswordEncrypted,
+        data4: iincoming,
+        data5: ioutgoing,
+        data6: ireleasing,
+        data7: iinventory,
+        data8: iothers,
+        data9: icomplaint,
+      })
 
-    const data = await response.data
+      const data = response.data
 
-    if (data.includes('Success')) {
-      dialog.value = true
-      dialogMessage.value = 'Successfully Registered'
+      if (data.includes('Success')) {
+        dialog.value = true
+        dialogMessage.value = 'Successfully Registered'
+      } else {
+        dialog.value = true
+        dialogMessage.value = 'Failed to Register'
+      }
     } else {
-      dialog.value = true
-      dialogMessage.value = 'Failed to Register'
+      showDialog('Cannot Register', `Missing ${missingDetails.toString().toUpperCase()}`)
     }
   } else {
-    showDialog('Cannot Register', `Missing ${missingDetails.toString().toUpperCase()}`)
+    showDialog('Cannot Register', 'No Connection on Server')
   }
 }
 
@@ -207,8 +222,8 @@ const gotoHome = () => {
   font-family: 'Raleway'
   font-size: 1.4rem
 
-.dialog-card
-  background-color: #021926
+// .dialog-card
+//   background-color: #021926
 
 .login
   margin: 1rem
@@ -227,15 +242,15 @@ const gotoHome = () => {
   @extend .login__username--input
   text-transform: capitalize
 
-.dialog-card
-  font-family: "OpenSans"
-  background-color: rgba(2,25,38, 0.7)
-  width: 50%
-  height: 50%
+// .dialog-card
+//   font-family: "OpenSans"
+//   background-color: rgba(2,25,38, 0.7)
+//   width: 50%
+//   height: 50%
 
-.dialog-card__section
-  padding: 2rem
-  font-size: 2rem
+// .dialog-card__section
+//   padding: 2rem
+//   font-size: 2rem
 
 .register-button
   padding: 3rem 0rem 5rem 0rem
