@@ -287,7 +287,7 @@ func connect() {
 			})
 
     } else if method == "GetMaxComplaintCode" {
-      err = db.QueryRow("SELECT IFNULL('', MAX(complaint_code)) AS result FROM complaint_info").Scan(&result)
+      err = db.QueryRow("SELECT COALESCE(MAX(complaint_code)) AS result FROM complaint_info").Scan(&result)
       if err != nil {
         panic(err.Error())
       }
@@ -834,6 +834,16 @@ func connect() {
         "result10": result10,
         "result11": result11,
 			})
+
+    } else if method == "GetLatestStatus" {
+      err = db.QueryRow("SELECT COALESCE(MAX(complaint_statusid)) AS result FROM complaint_status WHERE complaint_code = ?", data).Scan(&result)
+      if err != nil {
+        panic(err.Error())
+      }
+
+			c.JSON(http.StatusOK, gin.H{
+				"result": result,
+			})
     }
   })
 
@@ -983,13 +993,14 @@ func connect() {
   router.POST("/api/PostComplaint", func(c *gin.Context) {
     type ComplaintData struct {
       Data  string `json:"data"`
-      Data2 int `json:"data2"`
+      Data2 string `json:"data2"`
       Data3 string `json:"data3"`
       Data4 string `json:"data4"`
       Data5 string `json:"data5"`
       Data6 string `json:"data6"`
       Data7 string `json:"data7"`
-      Data8 int `json:"data8"`
+      Data8 string `json:"data8"`
+      Data9 string `json:"data9"`
     }
     var complaintData ComplaintData
     if err := c.ShouldBindJSON(&complaintData); err != nil {
@@ -1004,13 +1015,13 @@ func connect() {
     c.Writer.Header().Set("X-Download-Options", "noopen")
     c.Writer.Header().Set("Referrer-Policy", "no-referrer")
 
-    dbpost, err := db.Prepare("INSERT INTO complaint_info (complaint_infoid, complaint_code, source_complaintid, complaintant_name, complaintant_contact, date_received, locationOfconstruction, details, respondent_infoid) VALUES(NULL, ?, ?, ?, ?, ?, ?, ?, ?)")
+    dbpost, err := db.Prepare("INSERT INTO complaint_info (complaint_infoid, complaint_code, source_complaintid, complaintant_name, complaintant_contact, date_received, locationOfconstruction, details, respondent_infoid, complaint_statusid) VALUES(NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
     if err != nil {
       panic(err.Error())
     }
     defer dbpost.Close()
 
-    exec, err := dbpost.Exec(complaintData.Data, complaintData.Data2, complaintData.Data3, complaintData.Data4, complaintData.Data5, complaintData.Data6, complaintData.Data7, complaintData.Data8)
+    exec, err := dbpost.Exec(complaintData.Data, complaintData.Data2, complaintData.Data3, complaintData.Data4, complaintData.Data5, complaintData.Data6, complaintData.Data7, complaintData.Data8, complaintData.Data9)
     if err != nil {
       panic(err.Error())
     }

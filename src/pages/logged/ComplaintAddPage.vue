@@ -109,7 +109,7 @@ import docLabel from 'components/docLabel.vue'
 import docSelection from 'components/docSelection.vue'
 import docCalendar from 'components/docCalendar.vue'
 
-const sourceEntryList = ['DCR/888', 'EMAIL', 'MOTU PROPRIO', 'WALK-IN']
+const sourceEntryList = ['DCR/888', 'EMAIL', 'MOTU PROPRIO', 'LETTER']
 let sourceEntry = ref('Select Source')
 let sourceEntryID = ref(0)
 let receivedDate = ref('')
@@ -132,12 +132,6 @@ let _pagewithtable = usePageWithTable()
 const _isdemo = useIsDemo()
 
 let onlineColor = ref('')
-
-
-
-
-
-
 
 const formatDate = () => {
   formattedReceivedDate.value = date.formatDate(Date.parse(receivedDate.value), 'MMMM D, YYYY')
@@ -248,16 +242,17 @@ const generateNewComplaintCode = async (code: string) => {
   } else return `${currentYear}-${sourceEntryID.value}-0001`
 }
 
-const postComplaint = async (code: string, complaintid: number, complaintname: string, complaintcontact: string, datereceived: string, location: string, details: string, infoid: number): Promise<boolean> => {
+const postComplaint = async (code: string, complaintid: number, complaintname: string, complaintcontact: string, datereceived: string, location: string, details: string, infoid: number, statusid: number): Promise<boolean> => {
   const response = await api.post('/api/PostComplaint', {
     data: code,
-    data2: complaintid,
+    data2: complaintid.toString(),
     data3: complaintname,
     data4: complaintcontact,
     data5: datereceived,
     data6: location,
     data7: details,
-    data8: infoid,
+    data8: infoid.toString(),
+    data9: statusid.toString(),
   })
   const data = response.data.length !== 0 ? response.data : null
 
@@ -265,7 +260,7 @@ const postComplaint = async (code: string, complaintid: number, complaintname: s
   else return false
 }
 
-const postComplaintLOCAL = async (code: string, complaintid: number, complaintname: string, complaintcontact: string, datereceived: string, location: string, details: string, infoid: number): Promise<boolean> => {
+const postComplaintLOCAL = async (code: string, complaintid: number, complaintname: string, complaintcontact: string, datereceived: string, location: string, details: string, infoid: number, statusid: number): Promise<boolean> => {
   const response = {
     code: code,
     complaintid: complaintid,
@@ -275,6 +270,7 @@ const postComplaintLOCAL = async (code: string, complaintid: number, complaintna
     location: location,
     details: details,
     infoid: infoid,
+    statusid: statusid,
   }
   LocalStorage.set('complaint', response)
 
@@ -282,8 +278,7 @@ const postComplaintLOCAL = async (code: string, complaintid: number, complaintna
 }
 
 const postStatus = async (code: string, date: string, status: string, tagcode: string, tagword: string, receivedby: string, details: string) => {
-  const today = new Date()
-  const response = await api.post('/api/PostComplaint', {
+  const response = await api.post('/api/PostStatus', {
     data: code,
     data2: date,
     data3: status,
@@ -296,6 +291,19 @@ const postStatus = async (code: string, date: string, status: string, tagcode: s
 
   if (data !== null) return true
   else return false
+}
+
+const getLatestStatus = async (code: string): Promise<number> => {
+  try {
+    const response = await api.get('/api/GetLatestStatus/' + code)
+    const data = response.data.length !== 0 ? response.data : null
+
+    if (data !== null) {
+      return data.result
+    } else return 0
+  } catch {
+    return 0
+  }
 }
 
 const showDialog = (title: string, message: string) => {
@@ -329,12 +337,12 @@ const saveData = async () => {
             const maxComplaint = await getMaxComplaintCode()
             const newComplaint = await generateNewComplaintCode(maxComplaint)
 
-            console.log(sourceEntryID.value)
-            
-            if (await postComplaint(newComplaint, sourceEntryID.value, complaintName.value, complaintDetail.value, receivedDate.value, complaintLocation.value, complaintDetail.value, latestRespondent)) {
-              if (await postStatus(newComplaint, receivedDate.value, 'ENCODED TO SYSTEM', '15', 'ENCODED', complaintName.value, '')) showDialog('Success', 'Successfully Saved Complaint')
+
+            if (await postStatus(newComplaint, receivedDate.value, 'ENCODED TO SYSTEM', '15', 'ENCODED', complaintName.value, '')) {
+              const newStatusID = await getLatestStatus(newComplaint)
+              if (await postComplaint(newComplaint, sourceEntryID.value, complaintName.value, complaintDetail.value, receivedDate.value, complaintLocation.value, complaintDetail.value, latestRespondent)) showDialog('Success', 'Successfully Saved Complaint')
               else showDialog('Error', 'Failed to Save Complaint')
-            }  else showDialog('Error', 'Failed to Save Complaint')
+            } else showDialog('Error', 'Failed to Save Complaint')
           } else showDialog('Error', 'Failed to Save Respondent')
         } catch {
           showDialog('Error', 'Failed to Save Respondent')
@@ -348,8 +356,8 @@ const createLOCALDATABASE = async () => {
   const db = new Dexie('ocbodoctracksys')
 
   interface source_complaint {
-    source_complaintid: number;
-    source_desc: string;
+    source_complaintid: number
+    source_desc: string
   }
 
   // interface complaint_info {
@@ -366,10 +374,10 @@ const createLOCALDATABASE = async () => {
   // }
 
   interface complaint_whereabouts {
-    complaint_whereaboutsid: number;
-    whereabout: string;
-    tagword: string;
-    tagcode: string;
+    complaint_whereaboutsid: number
+    whereabout: string
+    tagword: string
+    tagcode: string
   }
 
   db.version(1).stores({
@@ -377,44 +385,45 @@ const createLOCALDATABASE = async () => {
     complaint_info: 'complaint_infoid, complaint_code, source_complaintid, complaintant_name, complaintant_contact, date_received, locationOfconstruction, details, respondent_infoid, complaintant_statusid',
     complaint_status: 'complaint_statusid, complaint_code, date_transacted, status, tagcode, tagword, received_by, remarks',
     respondent_info: 'respondent_infoid, respondent_name, respondent_contact, respondent_location',
-    complaint_whereabouts: 'complaint_whereaboutsid, whereabout, tagword, tagcode'
+    complaint_whereabouts: 'complaint_whereaboutsid, whereabout, tagword, tagcode',
   })
 
-  db.open().then(() => {
-    const source_complaintData = db.table<source_complaint, number>('source_complaint')
-    const source_complaintRows = [
-      { source_complaintid: 1, source_desc: 'Email' },
-      { source_complaintid: 2, source_desc: 'DCR/888' },
-      { source_complaintid: 3, source_desc: 'Walk-In' },
-      { source_complaintid: 4, source_desc: 'Motu Proprio' },
-    ]
-    source_complaintData.bulkPut(source_complaintRows)
+  db.open()
+    .then(() => {
+      const source_complaintData = db.table<source_complaint, number>('source_complaint')
+      const source_complaintRows = [
+        { source_complaintid: 1, source_desc: 'Email' },
+        { source_complaintid: 2, source_desc: 'DCR/888' },
+        { source_complaintid: 3, source_desc: 'Letter' },
+        { source_complaintid: 4, source_desc: 'Motu Proprio' },
+      ]
+      source_complaintData.bulkPut(source_complaintRows)
 
-    const complaint_whereaboutsData = db.table<complaint_whereabouts, number>('complaint_whereabouts')
-    const complaint_whereaboutsRows = [
-      { complaint_whereaboutsid: 1, whereabout: 'FOR INSPECTION AND VERIFICATION', tagword:'INSPECTION', tagcode: '01' },
-      { complaint_whereaboutsid: 2, whereabout: 'FIRST NOTICE OF VIOLATION SERVING', tagword:'1STNOVSERVING', tagcode: '02' },
-      { complaint_whereaboutsid: 3, whereabout: 'FIRST NOTICE OF VIOLATION SERVED', tagword:'1STNOVSERVED', tagcode: '03' },
-      { complaint_whereaboutsid: 4, whereabout: 'SECOND NOTICE OF VIOLATION AND WORK STOPPAGE ORDER SERVING', tagword:'2NDNOVSERVING', tagcode: '04' },
-      { complaint_whereaboutsid: 5, whereabout: 'SECOND NOTICE OF VIOLATION AND WORK STOPPAGE ORDER SERVED', tagword:'2NDNOVSERVED', tagcode: '05' },
-      { complaint_whereaboutsid: 6, whereabout: 'CALL OF DIALOGUE', tagword:'1STDIALOGUE', tagcode: '06' },
-      { complaint_whereaboutsid: 7, whereabout: 'FOR NOTICE OF HEARING', tagword:'NOTICEHEARING', tagcode: '07' },
-      { complaint_whereaboutsid: 8, whereabout: 'NOTICE OF HEARING SCHEDULED', tagword:'HEARINGSCHED', tagcode: '08' },
-      { complaint_whereaboutsid: 9, whereabout: 'HEARING', tagword:'HEARING', tagcode: '09' },
-      { complaint_whereaboutsid: 10, whereabout: 'RESOLUTION/ORDER', tagword:'RESORDER', tagcode: '10' },
-      { complaint_whereaboutsid: 11, whereabout: 'FOR FILING OF CASE', tagword:'FILINGCASE', tagcode: '11' },
-      { complaint_whereaboutsid: 12, whereabout: 'CASE FILED', tagword:'CASEFILED', tagcode: '12' },
-      { complaint_whereaboutsid: 13, whereabout: 'ON GOING CASE', tagword:'ONGOING', tagcode: '13' },
-      { complaint_whereaboutsid: 14, whereabout: 'CASE CLOSED', tagword:'CLOSED', tagcode: '14' },
-      { complaint_whereaboutsid: 15, whereabout: 'ENCODED TO SYSTEM', tagword:'ENCODED', tagcode: '15' },
-    ]
-    complaint_whereaboutsData.bulkPut(complaint_whereaboutsRows)
+      const complaint_whereaboutsData = db.table<complaint_whereabouts, number>('complaint_whereabouts')
+      const complaint_whereaboutsRows = [
+        { complaint_whereaboutsid: 1, whereabout: 'FOR INSPECTION AND VERIFICATION', tagword: 'INSPECTION', tagcode: '01' },
+        { complaint_whereaboutsid: 2, whereabout: 'FIRST NOTICE OF VIOLATION SERVING', tagword: '1STNOVSERVING', tagcode: '02' },
+        { complaint_whereaboutsid: 3, whereabout: 'FIRST NOTICE OF VIOLATION SERVED', tagword: '1STNOVSERVED', tagcode: '03' },
+        { complaint_whereaboutsid: 4, whereabout: 'SECOND NOTICE OF VIOLATION AND WORK STOPPAGE ORDER SERVING', tagword: '2NDNOVSERVING', tagcode: '04' },
+        { complaint_whereaboutsid: 5, whereabout: 'SECOND NOTICE OF VIOLATION AND WORK STOPPAGE ORDER SERVED', tagword: '2NDNOVSERVED', tagcode: '05' },
+        { complaint_whereaboutsid: 6, whereabout: 'CALL OF DIALOGUE', tagword: '1STDIALOGUE', tagcode: '06' },
+        { complaint_whereaboutsid: 7, whereabout: 'FOR NOTICE OF HEARING', tagword: 'NOTICEHEARING', tagcode: '07' },
+        { complaint_whereaboutsid: 8, whereabout: 'NOTICE OF HEARING SCHEDULED', tagword: 'HEARINGSCHED', tagcode: '08' },
+        { complaint_whereaboutsid: 9, whereabout: 'HEARING', tagword: 'HEARING', tagcode: '09' },
+        { complaint_whereaboutsid: 10, whereabout: 'RESOLUTION/ORDER', tagword: 'RESORDER', tagcode: '10' },
+        { complaint_whereaboutsid: 11, whereabout: 'FOR FILING OF CASE', tagword: 'FILINGCASE', tagcode: '11' },
+        { complaint_whereaboutsid: 12, whereabout: 'CASE FILED', tagword: 'CASEFILED', tagcode: '12' },
+        { complaint_whereaboutsid: 13, whereabout: 'ON GOING CASE', tagword: 'ONGOING', tagcode: '13' },
+        { complaint_whereaboutsid: 14, whereabout: 'CASE CLOSED', tagword: 'CLOSED', tagcode: '14' },
+        { complaint_whereaboutsid: 15, whereabout: 'ENCODED TO SYSTEM', tagword: 'ENCODED', tagcode: '15' },
+      ]
+      complaint_whereaboutsData.bulkPut(complaint_whereaboutsRows)
 
-
-    return true
-  }).catch(() => {
-    return false
-  })
+      return true
+    })
+    .catch(() => {
+      return false
+    })
 }
 
 const checkOnline = () => {
