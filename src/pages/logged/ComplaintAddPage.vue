@@ -313,6 +313,7 @@ const showDialog = (title: string, message: string) => {
 }
 
 const saveData = async () => {
+  console.log('_isdemo.isdemo:', _isdemo.isdemo)
   if (checkComplete() === false) {
     if (_isdemo.isdemo) {
       await getSourceIDFromLOCAL()
@@ -328,6 +329,7 @@ const saveData = async () => {
         showDialog('Error', 'Failed to Save Respondent')
       }
     } else {
+      console.log('hehe')
       if (await checkConnection()) {
         try {
           await getSourceIDFromDatabase()
@@ -340,7 +342,7 @@ const saveData = async () => {
 
             if (await postStatus(newComplaint, receivedDate.value, 'ENCODED TO SYSTEM', '15', 'ENCODED', complaintName.value, '')) {
               const newStatusID = await getLatestStatus(newComplaint)
-              if (await postComplaint(newComplaint, sourceEntryID.value, complaintName.value, complaintDetail.value, receivedDate.value, complaintLocation.value, complaintDetail.value, latestRespondent)) showDialog('Success', 'Successfully Saved Complaint')
+              if (await postComplaint(newComplaint, sourceEntryID.value, complaintName.value, complaintDetail.value, receivedDate.value, complaintLocation.value, complaintDetail.value, latestRespondent, newStatusID)) showDialog('Success', 'Successfully Saved Complaint')
               else showDialog('Error', 'Failed to Save Complaint')
             } else showDialog('Error', 'Failed to Save Complaint')
           } else showDialog('Error', 'Failed to Save Respondent')
