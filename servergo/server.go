@@ -287,7 +287,7 @@ func connect() {
 			})
 
     } else if method == "GetMaxComplaintCode" {
-      err = db.QueryRow("SELECT MAX(complaint_code) FROM complaint_info").Scan(&result)
+      err = db.QueryRow("SELECT IFNULL('', MAX(complaint_code)) AS result FROM complaint_info").Scan(&result)
       if err != nil {
         panic(err.Error())
       }
