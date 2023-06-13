@@ -154,16 +154,6 @@ const saveAccount = async () => {
       let iothers = accessList.value.includes('is_otherdocuments') ? 1 : 0
       let icomplaint = accessList.value.includes('is_complaint') ? 1 : 0
 
-      // console.log(ifullname.value.toUpperCase())
-      // console.log(iusername.value.toUpperCase())
-      // console.log(ipasswordEncrypted)
-      // console.log(iincoming)
-      // console.log(ioutgoing)
-      // console.log(ireleasing)
-      // console.log(iinventory)
-      // console.log(iothers)
-      // console.log(icomplaint)
-
       const response = await api.post('/api/PostAccount', {
         data: ifullname.value.toUpperCase(),
         data2: iusername.value.toUpperCase(),
