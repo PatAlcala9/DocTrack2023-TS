@@ -233,7 +233,7 @@ const fillupOffline = () => {
 ;(async () => {
   checkOnline()
 
-  if (_isdemo) fillupOffline()
+  if (_isdemo.isdemo) fillupOffline()
   else {
     if (await getComplaintList()) nodata.value = false
     else nodata.value = true
