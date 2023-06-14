@@ -33,7 +33,7 @@ const sampleQR = ref(`**SCAN ME USING OCBO DOCTRACK** QrId::${encryptAES(randomD
 const qrSize = 200
 
 const createPDF = async () => {
-  const filePath = '../assets/wso.pdf'
+  const filePath = require('./wso.pdf')
   const existingPdfBytes = await fetch(filePath).then(res => res.arrayBuffer())
   const bytes = new Uint8Array(existingPdfBytes)
   const pdfDoc = await PDFDocument.load(bytes)

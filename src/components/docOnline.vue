@@ -13,7 +13,7 @@ div(v-if="mode===2")
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 
 export interface Props {
   state: string
@@ -27,8 +27,13 @@ const props = withDefaults(defineProps<Props>(), {
 
 let color = ref('')
 
-if (props.state === 'OFFLINE') color.value = '#E21D38'
-else color.value = '#279D21'
+watch(() => props.state, (newState) => {
+  if (newState === 'OFFLINE') {
+    color.value = '#E21D38'
+  } else {
+    color.value = '#279D21'
+  }
+})
 </script>
 
 <style lang="sass" scoped>
