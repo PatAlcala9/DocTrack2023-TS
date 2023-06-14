@@ -37,9 +37,7 @@ let onlineColor = ref('')
 
 const checkOnline = () => {
   if (_isdemo.isdemo) onlineColor.value = 'red'
-  else {
-    onlineColor.value = 'green'
-  }
+  else onlineColor.value = 'green'
 }
 
 const beforeEnterButton = (el: any) => {
