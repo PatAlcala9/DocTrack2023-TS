@@ -5,12 +5,13 @@ q-page(padding)
     section.title.full-width.row.justify-between
       div.column
         transition(appear @before-enter="beforeEnterLogo" @enter="enterLogo")
-          img(src="../assets/ocbologobw.avif" alt="OCBO Logo" ).logo
+          img(src="../assets/ocbologobw.avif" alt="OCBO Logo").logo
           //- @click="sampleMode = !sampleMode"
         transition(appear @before-enter="beforeEnterTitle" @enter="enterTitle")
           section.name.fit.column.wrap.justify-start.items-start.content-start
             span.ocbo-title OCBO
             span.ocbo-text Doctrack System 2023
+
 
     //- transition( appear @before-enter="beforeEnterForm" @enter="enterForm")
     div(v-if="inquiry === false").login#login
@@ -31,7 +32,6 @@ q-page(padding)
         section.register.column.wrap.justify-center.items-center.content-center
           span.register--text(@click="gotoRegister") Create New Account
 
-
     div(v-else).login#inquiry
       div
         section.username-area.column.wrap.justify-center.items-center.content-center
@@ -47,7 +47,8 @@ q-page(padding)
       div.inquiry
         span(v-if="inquiry" @click="showInquiry").inquiry-text Login
         span(v-else @click="showLogin").inquiry-text Inquire
-        component(v-if="sampleMode" :is="docPDF")
+        component(:is="docPDF" title="Sample Document PDF" text="aaaa")
+
 
 q-dialog(v-model="error" transition-show="flip-right" transition-hide="flip-left" @keypress.enter="error=false").dialog
   q-card.dialog-card.text-white.flex.flex-center
@@ -65,6 +66,9 @@ import { useRouter } from 'vue-router'
 import { comparePassword, encryptAES, decryptAES, encrypt } from 'src/js/OCBO'
 import { gsap } from 'gsap'
 import { SessionStorage, Platform } from 'quasar'
+import { checkConnection } from 'src/js/functions'
+import vueQr from 'vue-qr/src/packages/vue-qr.vue'
+import { PDFDocument, PDFImage, StandardFonts, PageSizes, PDFField, rgb } from 'pdf-lib'
 
 import { useEmployeeName } from 'stores/employeename'
 import { useUserID } from 'stores/userid'
@@ -231,40 +235,46 @@ const login = async () => {
     return
   }
 
-  await checkUsername()
-  if (usernameAccepted === false) {
+  if (await checkConnection()) {
+    await checkUsername()
+    if (usernameAccepted === false) {
+      error.value = true
+      errorMessage.value = 'Invalid Username'
+
+      if (usernameEntry.value.length > 0) errorInformation.value = `${usernameEntry.value.toUpperCase()} does not exist`
+      else errorInformation.value = 'Username is Empty'
+
+      return
+    }
+
+    await checkPassword()
+    if (passwordAccepted === false) {
+      error.value = true
+      errorMessage.value = 'Invalid Password'
+      errorInformation.value = `Password does not match with ${usernameEntry.value.toUpperCase()}`
+
+      if (passwordEntry.value.length > 0) errorInformation.value = `Password does not match with ${usernameEntry.value.toUpperCase()}`
+      else errorInformation.value = 'Password is Empty'
+      return
+    }
+
+    await getUserDetails()
+    if (detailsAllowed === false) {
+      error.value = true
+      errorMessage.value = 'No Details Found'
+      return
+    }
+    _isdemo.isdemo = false
+    _islogged.islogged = true
+    _pagewithtable.pagewithtable = false
+    SessionStorage.set('CurrentPage', 'dashboard')
+    _currentpage.currentpage = 'dashboard'
+    router.push('/dashboard')
+  } else {
     error.value = true
-    errorMessage.value = 'Invalid Username'
-
-    if (usernameEntry.value.length > 0) errorInformation.value = `${usernameEntry.value.toUpperCase()} does not exist`
-    else errorInformation.value = 'Username is Empty'
-
-    return
+    errorMessage.value = 'Cannot Login'
+    errorInformation.value = 'No Connection on Server'
   }
-
-  await checkPassword()
-  if (passwordAccepted === false) {
-    error.value = true
-    errorMessage.value = 'Invalid Password'
-    errorInformation.value = `Password does not match with ${usernameEntry.value.toUpperCase()}`
-
-    if (passwordEntry.value.length > 0) errorInformation.value = `Password does not match with ${usernameEntry.value.toUpperCase()}`
-    else errorInformation.value = 'Password is Empty'
-    return
-  }
-
-  await getUserDetails()
-  if (detailsAllowed === false) {
-    error.value = true
-    errorMessage.value = 'No Details Found'
-    return
-  }
-  _isdemo.isdemo = false
-  _islogged.islogged = true
-  _pagewithtable.pagewithtable = false
-  SessionStorage.set('CurrentPage', 'dashboard')
-  _currentpage.currentpage = 'dashboard'
-  router.push('/dashboard')
 }
 
 const exitLogin = async () => {
