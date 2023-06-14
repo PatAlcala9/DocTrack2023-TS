@@ -1,7 +1,7 @@
 <template lang="pug">
 
 div
-  component(:is="vueQr" :text="text" :size="size")
+  component(:is="vueQr" :text="props.text" :size="props.size" :id="props.id")
 
 </template>
 
@@ -11,6 +11,7 @@ import vueQr from 'vue-qr/src/packages/vue-qr.vue'
 export interface Props {
   text: string,
   size: number
+  id: string
 }
 
 const props = defineProps<Props>()
