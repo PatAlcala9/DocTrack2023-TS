@@ -327,6 +327,25 @@ func connect() {
         "result4": array4,
         "result5": array5,
 			})
+
+    } else if method == "GetAttachmentList" {
+      array := []string{}
+
+			results, err := db.Query("SELECT UPPER(description) AS result FROM ref_attachment ORDER BY description ASC")
+      if err != nil {
+        panic(err.Error())
+      }
+
+      for results.Next() {
+				err = results.Scan(&result)
+				if err != nil {
+					panic(err.Error())
+				}
+				array = append(array, result)
+			}
+			c.JSON(http.StatusOK, gin.H{
+				"result": array,
+			})
     }
   })
 
