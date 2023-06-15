@@ -47,7 +47,7 @@ q-page(padding)
       div.inquiry
         span(v-if="inquiry" @click="showInquiry").inquiry-text Login
         span(v-else @click="showLogin").inquiry-text Inquire
-        component(:is="docPDF" title="Sample Document PDF" text="aaaa")
+        component(:is="docPDF" title="Sample Document PDF" text="aaaa" date="yyyy-MM-dd")
 
 
 q-dialog(v-model="error" transition-show="flip-right" transition-hide="flip-left" @keypress.enter="error=false").dialog

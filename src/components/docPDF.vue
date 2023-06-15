@@ -8,7 +8,7 @@ div.flex.flex-center
 </template>
 
 <script setup lang="ts">
-import { PDFDocument, StandardFonts, PageSizes, PDFField } from 'pdf-lib'
+import { PDFDocument, StandardFonts, PageSizes, rgb } from 'pdf-lib'
 import { decryptAES, encryptAES } from 'src/js/OCBO'
 import docQR from 'components/docQR.vue'
 import docButton from 'components/docButton.vue'
@@ -18,6 +18,7 @@ import fs from 'fs'
 export interface Props {
   title: string
   text: string
+  date: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -35,6 +36,9 @@ const qrSize = 200
 
 const createPDF = async () => {
   const pdfDoc = await PDFDocument.create()
+  const page = pdfDoc.addPage(PageSizes.Legal)
+
+
 
   const qrItem = document.getElementById('qr')
   const qrSrc = qrItem?.getAttribute('src')
@@ -50,42 +54,52 @@ const createPDF = async () => {
 
   const response = await fetch(lungsodLink.href);
   const blob = await response.blob()
+  let img = ''
 
-  const reader = new FileReader();
-    reader.onloadend = async () => {
-      if (typeof reader.result === 'string') {
-        const lungsodImage = await pdfDoc.embedPng(reader.result)
-        const lungsodImageDims = lungsodImage.scale(1)
-        page.drawImage(lungsodImage, {
-          x: 250,
-          y: 600,
-          width: lungsodImageDims.width,
-          height: lungsodImageDims.height,
-        })
-        console.log(reader.result)
-      } else {
-        console.log(new Error('Failed to convert image to data URL'));
-      }
+  const reader = new FileReader()
+  reader.onload = async () => {
+    if (typeof reader.result === 'string') {
+      img = reader.result
+      const lungsodImage = await pdfDoc.embedPng(img)
+      const lungsodImageDims = lungsodImage.scale(0.5)
+      page.drawImage(lungsodImage, {
+        x: 250,
+        y: 600,
+        width: lungsodImageDims.width,
+        height: lungsodImageDims.height,
+      })
+    } else {
+      img = 'yeah'
+      console.log(new Error('Failed to convert image to data URL'));
     }
-    reader.readAsDataURL(blob);
+  }
+  reader.readAsDataURL(blob)
 
-  const page = pdfDoc.addPage(PageSizes.Legal)
 
-  const font = await pdfDoc.embedFont(StandardFonts.Helvetica)
+
+
+
+  const timesRoman = await pdfDoc.embedFont(StandardFonts.TimesRoman)
+  const timesRomanBold = await pdfDoc.embedFont(StandardFonts.TimesRomanBold)
+  const timesRomanItalic = await pdfDoc.embedFont(StandardFonts.TimesRomanItalic)
   const textSize = 14
-  page.drawText('Republic of the Philippines', { x: page.getWidth() / 2 - 80, y: page.getHeight() / 1 - 25, size: textSize, font })
-  page.drawText('OFFICE OF THE CITY BUILDING OFFICIAL', { x: page.getWidth() / 2 - 140, y: page.getHeight() / 1 - 42, size: textSize, font })
-  page.drawText('City of Davao', { x: page.getWidth() / 2 - 50, y: page.getHeight() / 1 - 59, size: textSize, font })
-  // page.drawText('Space Launch System', { x: 340, y: 500, size: textSize, font })
+
+  page.drawText('Republic of the Philippines', { x: page.getWidth() / 2 - 80, y: page.getHeight() / 1 - 25, size: textSize, font: timesRoman })
+  page.drawText('OFFICE OF THE CITY BUILDING OFFICIAL', { x: page.getWidth() / 2 - 140, y: page.getHeight() / 1 - 42, size: textSize, font: timesRomanBold })
+  page.drawText('City of Davao', { x: page.getWidth() / 2 - 50, y: page.getHeight() / 1 - 59, size: textSize, font: timesRoman })
+  page.drawText('Reference No. OCBO-2023-R', { x: 50, y: page.getHeight() / 1 - 93, size: 8, font: timesRomanItalic })
+  page.drawText(props.date, { x: page.getWidth() - 80, y: page.getHeight() / 1 - 93, size: 9, font: timesRoman })
+
+  page.drawText('WORK STOPPAGE ORDER', { x: page.getWidth() / 2 - 98, y: page.getHeight() / 1 - 127, size: textSize, font: timesRomanBold })
 
 
 
-  page.drawImage(qrImage, {
-    x: page.getWidth() / 20 - qrImageDims.width / 2 + 55,
-    y: page.getHeight() / 1 - qrImageDims.height,
-    width: qrImageDims.width,
-    height: qrImageDims.height,
-  })
+  // page.drawImage(qrImage, {
+  //   x: page.getWidth() / 20 - qrImageDims.width / 2 + 500,
+  //   y: page.getHeight() / 1 - qrImageDims.height,
+  //   width: qrImageDims.width,
+  //   height: qrImageDims.height,
+  // })
 
 
 
