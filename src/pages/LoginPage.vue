@@ -12,7 +12,6 @@ q-page(padding)
             span.ocbo-title OCBO
             span.ocbo-text Doctrack System 2023
 
-
     //- transition( appear @before-enter="beforeEnterForm" @enter="enterForm")
     div(v-if="inquiry === false").login#login
       div

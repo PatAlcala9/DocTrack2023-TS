@@ -57,6 +57,7 @@ const createPDF = async () => {
   let img = ''
 
   const reader = new FileReader()
+  reader.readAsDataURL(blob)
   reader.onload = async () => {
     if (typeof reader.result === 'string') {
       img = reader.result
@@ -73,7 +74,7 @@ const createPDF = async () => {
       console.log(new Error('Failed to convert image to data URL'));
     }
   }
-  reader.readAsDataURL(blob)
+
 
 
 
@@ -84,14 +85,17 @@ const createPDF = async () => {
   const timesRomanItalic = await pdfDoc.embedFont(StandardFonts.TimesRomanItalic)
   const textSize = 14
 
-  page.drawText('Republic of the Philippines', { x: page.getWidth() / 2 - 80, y: page.getHeight() / 1 - 25, size: textSize, font: timesRoman })
-  page.drawText('OFFICE OF THE CITY BUILDING OFFICIAL', { x: page.getWidth() / 2 - 140, y: page.getHeight() / 1 - 42, size: textSize, font: timesRomanBold })
-  page.drawText('City of Davao', { x: page.getWidth() / 2 - 50, y: page.getHeight() / 1 - 59, size: textSize, font: timesRoman })
+  const republicText = 'Republic of the Philippines'
+  const officeText = 'OFFICE OF THE CITY BUILDING OFFICIAL'
+  const cityText = 'City of Davao'
+  page.drawText(republicText, { x: page.getWidth() / 2 - (republicText.length * 3), y: page.getHeight() / 1 - 25, size: textSize, font: timesRoman });
+  page.drawText(officeText, { x: page.getWidth() / 2 - (officeText.length * 4), y: page.getHeight() / 1 - 42, size: textSize, font: timesRomanBold })
+  page.drawText(cityText, { x: page.getWidth() / 2 - (cityText.length * 3), y: page.getHeight() / 1 - 59, size: textSize, font: timesRoman })
+
   page.drawText('Reference No. OCBO-2023-R', { x: 50, y: page.getHeight() / 1 - 93, size: 8, font: timesRomanItalic })
   page.drawText(props.date, { x: page.getWidth() - 80, y: page.getHeight() / 1 - 93, size: 9, font: timesRoman })
 
   page.drawText('WORK STOPPAGE ORDER', { x: page.getWidth() / 2 - 98, y: page.getHeight() / 1 - 127, size: textSize, font: timesRomanBold })
-
 
 
   // page.drawImage(qrImage, {
@@ -100,6 +104,7 @@ const createPDF = async () => {
   //   width: qrImageDims.width,
   //   height: qrImageDims.height,
   // })
+
 
 
 
