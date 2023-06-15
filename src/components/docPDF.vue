@@ -43,8 +43,6 @@ const createPDF = async () => {
   const qrImage = await pdfDoc.embedPng(qrLink.href)
   const qrImageDims = qrImage.scale(0.5)
 
-  console.log(qrImage)
-
   const lungsodItem = document.getElementById('lungsod')
   const lungsodSrc = lungsodItem?.getAttribute('src')
   const lungsodLink = document.createElement('a')
@@ -64,7 +62,7 @@ const createPDF = async () => {
           width: lungsodImageDims.width,
           height: lungsodImageDims.height,
         })
-
+        console.log(reader.result)
       } else {
         console.log(new Error('Failed to convert image to data URL'));
       }
