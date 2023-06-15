@@ -14,6 +14,7 @@ div(v-if="mode===2")
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
+import { checkConnection } from 'src/js/functions'
 
 export interface Props {
   state: string
@@ -27,13 +28,21 @@ const props = withDefaults(defineProps<Props>(), {
 
 let color = ref('')
 
-watch(() => props.state, (newState) => {
-  if (newState === 'OFFLINE') {
-    color.value = '#E21D38'
-  } else {
-    color.value = '#279D21'
+;(async () => {
+  if (await checkConnection()) props.state = 'ONLINE'
+  else props.state = 'OFFLINE'
+})()
+
+watch(
+  () => props.state,
+  (newState) => {
+    if (newState === 'OFFLINE') {
+      color.value = '#E21D38'
+    } else {
+      color.value = '#279D21'
+    }
   }
-})
+)
 </script>
 
 <style lang="sass" scoped>
