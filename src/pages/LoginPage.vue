@@ -46,7 +46,7 @@ q-page(padding)
       div.inquiry
         span(v-if="inquiry" @click="showInquiry").inquiry-text Login
         span(v-else @click="showLogin").inquiry-text Inquire
-        component(:is="docPDF" title="Sample Document PDF" text="aaaa" date="yyyy-MM-dd")
+        //- component(:is="docPDF" title="Sample Document PDF" text="aaaa" date="yyyy-MM-dd")
 
 
 q-dialog(v-model="error" transition-show="flip-right" transition-hide="flip-left" @keypress.enter="error=false").dialog
@@ -416,7 +416,11 @@ const enterSwitch = (el: any) => {
   grid-area: inquiry
   justify-self: left
   align-self: end
-  padding-bottom: 2rem
+  padding: 1.1rem
+  border: 1px solid rgba(255, 255, 255, 0.125)
+  border-radius: 2rem
+  backdrop-filter: blur(9px) saturate(150%)
+  background-color: rgba(12, 21, 42, 0.45)
 
 .inquiry-text
   font-family: 'Inter'
