@@ -28,10 +28,10 @@ const props = withDefaults(defineProps<Props>(), {
 
 let color = ref('')
 
-;(async () => {
-  if (await checkConnection()) props.state = 'ONLINE'
-  else props.state = 'OFFLINE'
-})()
+// ;(async () => {
+//   if (await checkConnection()) props.state = 'ONLINE'
+//   else props.state = 'OFFLINE'
+// })()
 
 watch(
   () => props.state,

@@ -230,6 +230,13 @@ const getMaxComplaintCodeLOCAL = async (): Promise<string> => {
   else return ''
 }
 
+const getAttachmentList = async () => {
+  const response = await api.get('/api/GetAttachmentList')
+  const data = response.data.length !== 0 ? response.data : null
+  if (data !== null) return data.result
+  else return ''
+}
+
 const generateNewComplaintCode = async (code: string) => {
   const today = new Date()
   const currentYear = date.formatDate(today, 'YY')
@@ -322,8 +329,8 @@ const saveData = async () => {
         const latestRespondent = 0
         const maxComplaint = await getMaxComplaintCodeLOCAL()
         const newComplaint = await generateNewComplaintCode(maxComplaint)
-
-        if (await postComplaintLOCAL(newComplaint, sourceEntryID.value, complaintName.value, complaintDetail.value, receivedDate.value, complaintLocation.value, complaintDetail.value, latestRespondent)) showDialog('Success', 'Successfully Saved Complaint')
+        const newStatusID = await getLatestStatus(newComplaint)
+        if (await postComplaintLOCAL(newComplaint, sourceEntryID.value, complaintName.value, complaintDetail.value, receivedDate.value, complaintLocation.value, complaintDetail.value, latestRespondent, newStatusID)) showDialog('Success', 'Successfully Saved Complaint')
         else showDialog('Error', 'Failed to Save Complaint')
       } else {
         showDialog('Error', 'Failed to Save Respondent')
