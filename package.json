@@ -9,7 +9,7 @@
     "lint": "eslint --ext .js,.ts,.vue ./",
     "format": "prettier --write \"**/*.{js,ts,vue,,html,md,json}\" --ignore-path .gitignore",
     "dev": "quasar dev -m spa",
-    "build": "quasar build -m spa",
+    "build": "quasar build -m pwa",
     "debug": "quasar dev -m spa -d"
   },
   "dependencies": {
@@ -44,6 +44,7 @@
     "prettier": "^2.8.8",
     "pug": "^3.0.2",
     "pug-plain-loader": "^1.1.0",
+    "workbox-webpack-plugin": "^6.0.0",
     "zlib": "^1.0.5"
   },
   "browserslist": [

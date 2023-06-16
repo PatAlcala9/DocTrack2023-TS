@@ -127,10 +127,7 @@ module.exports = configure(function (ctx) {
       // directives: [],
 
       // Quasar plugins
-      plugins: [
-        'SessionStorage',
-        'LocalStorage'
-      ],
+      plugins: ['SessionStorage', 'LocalStorage'],
     },
 
     // animations: 'all', // --- includes all animations
@@ -161,20 +158,24 @@ module.exports = configure(function (ctx) {
     // https://v2.quasar.dev/quasar-cli-webpack/developing-pwa/configuring-pwa
     pwa: {
       workboxPluginMode: 'GenerateSW', // 'GenerateSW' or 'InjectManifest'
-      workboxOptions: {}, // only for GenerateSW
+      workboxOptions: {
+        skipWaiting: true,
+        clientsClaim: true
+      }, // only for GenerateSW
 
       // for the custom service worker ONLY (/src-pwa/custom-service-worker.[js|ts])
       // if using workbox in InjectManifest mode
       // chainWebpackCustomSW (/* chain */) {},
 
       manifest: {
-        name: 'Quasar App',
-        short_name: 'Quasar App',
+        name: 'OCBO DocTrack 2023',
+        short_name: 'DocTrack2023',
         description: '',
         display: 'standalone',
         orientation: 'portrait',
-        background_color: '#ffffff',
-        theme_color: '#027be3',
+        background_color: '#021926',
+        theme_color: '#000406',
+        start_url: '.',
         icons: [
           {
             src: 'icons/icon-128x128.png',
