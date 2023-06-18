@@ -31,7 +31,6 @@ const encText = encryptAES(props.text)
 
 const randomData1 = encryptAES(Math.random().toString()).substring(4, 10)
 const randomData2 = encryptAES('some random string').substring(25)
-const sampleQR = ref(`**SCAN ME USING OCBO DOCTRACK** QrId::${encryptAES(randomData1)}??${encryptAES(randomData2)}`)
 const qrSize = 200
 
 const createPDF = async () => {
@@ -52,7 +51,7 @@ const createPDF = async () => {
   const lungsodLink = document.createElement('a')
   lungsodLink.href = lungsodSrc ?? ''
 
-  const response = await fetch(lungsodLink.href);
+  const response = await fetch(lungsodLink.href)
   const blob = await response.blob()
   let img = ''
 
@@ -63,6 +62,8 @@ const createPDF = async () => {
       img = reader.result
       const lungsodImage = await pdfDoc.embedPng(img)
       const lungsodImageDims = lungsodImage.scale(0.5)
+      console.log(lungsodImageDims.width)
+      console.log(lungsodImageDims.height)
       page.drawImage(lungsodImage, {
         x: 250,
         y: 600,
@@ -74,9 +75,6 @@ const createPDF = async () => {
       console.log(new Error('Failed to convert image to data URL'));
     }
   }
-
-
-
 
 
 

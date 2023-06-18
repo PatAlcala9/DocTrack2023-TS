@@ -75,7 +75,10 @@ q-page(padding)
 
       section.form
         component(:is="docLabel" text="Respondent Location:").label--spaced
-        component(:is="docInputEntry" v-model:value="respondentLocation")
+        component(:is="docInputEntry" v-model:value="respondentLocation").label--spaced
+
+    div.attachment-group
+      component(:is="docList" text="Attachments" :options="attachmentList" v-model:modelValue="attachmentSelectedList").label--spaced
 
   div.flex.flex-center
     component(:is="docButton" text="Save" @click="saveData")
@@ -108,6 +111,7 @@ import docInput from 'components/docInput.vue'
 import docLabel from 'components/docLabel.vue'
 import docSelection from 'components/docSelection.vue'
 import docCalendar from 'components/docCalendar.vue'
+import docList from 'components/docList.vue'
 
 const sourceEntryList = ['DCR/888', 'EMAIL', 'MOTU PROPRIO', 'LETTER']
 let sourceEntry = ref('Select Source')
@@ -121,6 +125,8 @@ let complaintDetail = ref('')
 let respondentName = ref('')
 let respondentContact = ref('')
 let respondentLocation = ref('')
+let attachmentList = ref<{ label: string; value: string }[]>([])
+let attachmentSelectedList = ref<string[]>([])
 
 let dialog = ref(false)
 let dialogTitle = ref('')
@@ -230,11 +236,19 @@ const getMaxComplaintCodeLOCAL = async (): Promise<string> => {
   else return ''
 }
 
-const getAttachmentList = async () => {
-  const response = await api.get('/api/GetAttachmentList')
-  const data = response.data.length !== 0 ? response.data : null
-  if (data !== null) return data.result
-  else return ''
+const getAttachmentListFromDatabase = async () => {
+  try {
+    const response = await api.get('/api/GetAttachmentList')
+    const data = response.data.length !== 0 ? response.data : null
+    if (data !== null)
+      for (let i in data.result)
+        attachmentList.value.push({
+          label: data.result[i],
+          value: data.result2[i],
+        })
+  } catch {
+    attachmentList.value = []
+  }
 }
 
 const generateNewComplaintCode = async (code: string) => {
@@ -284,7 +298,7 @@ const postComplaintLOCAL = async (code: string, complaintid: number, complaintna
   return true
 }
 
-const postStatus = async (code: string, date: string, status: string, tagcode: string, tagword: string, receivedby: string, details: string) => {
+const postStatus = async (code: string, date: string, status: string, tagcode: string, tagword: string, receivedby: string, details: string): Promise<boolean> => {
   const response = await api.post('/api/PostStatus', {
     data: code,
     data2: date,
@@ -293,6 +307,17 @@ const postStatus = async (code: string, date: string, status: string, tagcode: s
     data5: tagword,
     data6: receivedby,
     data7: details,
+  })
+  const data = response.data.length !== 0 ? response.data : null
+
+  if (data !== null) return true
+  else return false
+}
+
+const postAttachment = async (code: string, ref: number): Promise<boolean> => {
+  const response = await api.post('/api/PostAttachment', {
+    data: code,
+    data2: ref,
   })
   const data = response.data.length !== 0 ? response.data : null
 
@@ -336,7 +361,9 @@ const saveData = async () => {
         showDialog('Error', 'Failed to Save Respondent')
       }
     } else {
-      console.log('hehe')
+      // for (let item of attachmentSelectedList.value) {
+      //   console.log(item)
+      // }
       if (await checkConnection()) {
         try {
           await getSourceIDFromDatabase()
@@ -346,15 +373,19 @@ const saveData = async () => {
             const maxComplaint = await getMaxComplaintCode()
             const newComplaint = await generateNewComplaintCode(maxComplaint)
 
-
             if (await postStatus(newComplaint, receivedDate.value, 'ENCODED TO SYSTEM', '15', 'ENCODED', complaintName.value, '')) {
               const newStatusID = await getLatestStatus(newComplaint)
-              if (await postComplaint(newComplaint, sourceEntryID.value, complaintName.value, complaintDetail.value, receivedDate.value, complaintLocation.value, complaintDetail.value, latestRespondent, newStatusID)) showDialog('Success', 'Successfully Saved Complaint')
+              if (await postComplaint(newComplaint, sourceEntryID.value, complaintName.value, complaintDetail.value, receivedDate.value, complaintLocation.value, complaintDetail.value, latestRespondent, newStatusID)) {
+                for (let item of attachmentSelectedList.value) {
+                  await postAttachment(newComplaint, parseInt(item))
+                }
+                showDialog('Success', 'Successfully Saved Complaint')
+              }
               else showDialog('Error', 'Failed to Save Complaint')
             } else showDialog('Error', 'Failed to Save Complaint')
           } else showDialog('Error', 'Failed to Save Respondent')
         } catch {
-          showDialog('Error', 'Failed to Save Respondent')
+          showDialog('Error', 'Failed to Save Complaint')
         }
       }
     }
@@ -454,6 +485,7 @@ const gotoComplaintDashboard = () => {
 
   checkOnline()
   createLOCALDATABASE()
+  getAttachmentListFromDatabase()
 })()
 </script>
 

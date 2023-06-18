@@ -28,6 +28,7 @@ export interface Props {
   transform: string
   mobileWidth: number
   type: string
+  alert: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -39,7 +40,8 @@ const props = withDefaults(defineProps<Props>(), {
   alignment: 'center',
   transform: 'uppercase',
   mobileWidth: 14,
-  type: 'input'
+  type: 'input',
+  alert: 'false',
 })
 
 const emit = defineEmits(['update:value'])
@@ -48,12 +50,20 @@ const updateValue = (value: string) => {
   emit('update:value', value)
 }
 
+let colorBackground = ''
+if (props.alert === 'false') {
+  colorBackground = 'rgba(12, 21, 42, 0.45)'
+} else {
+  colorBackground = 'rgba(128, 21, 21, 0.45)'
+}
+
 const styleComponent = computed(() => {
   return {
     '--width': props.width + 'rem',
     '--alignment': props.alignment,
     '--transform': props.transform,
     '--mobileWidth': props.mobileWidth,
+    '--colorBackground': colorBackground,
   }
 })
 </script>
@@ -82,12 +92,13 @@ const styleComponent = computed(() => {
   color: #ffffff
 
 .section
-  backdrop-filter: blur(9px) saturate(173%)
+  // backdrop-filter: blur(9px) saturate(173%)
   // background-color: rgba(10, 10, 35, 0.52)
   // background-color: rgba(17, 25, 40, 0.82)
-  background-color: rgba(17, 25, 40, 0.8)
+  // background-color: rgba(17, 25, 40, 0.8)
   backdrop-filter: blur(9px) saturate(150%)
-  background-color: rgba(12, 21, 42, 0.45)
+  // background-color: rgba(12, 21, 42, 0.45)
+  background-color: var(--colorBackground)
   border-radius: 0.6rem
   border: 1px solid rgba(255, 255, 255, 0.125)
   padding: 0.9rem 1.6rem 0.9rem 0.9rem

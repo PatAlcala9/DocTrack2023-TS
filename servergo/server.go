@@ -329,22 +329,26 @@ func connect() {
 			})
 
     } else if method == "GetAttachmentList" {
+      var result2 string
       array := []string{}
+      array2 := []string{}
 
-			results, err := db.Query("SELECT UPPER(description) AS result FROM ref_attachment ORDER BY description ASC")
+			results, err := db.Query("SELECT UPPER(description) AS result, ref_attachmentid AS result2 FROM ref_attachment ORDER BY description ASC")
       if err != nil {
         panic(err.Error())
       }
 
       for results.Next() {
-				err = results.Scan(&result)
+				err = results.Scan(&result, &result2)
 				if err != nil {
 					panic(err.Error())
 				}
 				array = append(array, result)
+        array2 = append(array2, result2)
 			}
 			c.JSON(http.StatusOK, gin.H{
 				"result": array,
+        "result2": array2,
 			})
     }
   })
@@ -1102,6 +1106,49 @@ func connect() {
       c.String(http.StatusOK, "Success on Saving Status")
     } else {
       c.String(http.StatusInternalServerError, "Failed on Saving Status")
+    }
+  })
+
+
+
+  router.POST("/api/PostAttachment", func(c *gin.Context) {
+    type AttachmentData struct {
+      Data  string `json:"data"`
+      Data2 int `json:"data2"`
+    }
+    var attachmentData AttachmentData
+    if err := c.ShouldBindJSON(&attachmentData); err != nil {
+      c.String(http.StatusBadRequest, "Invalid request body")
+      return
+    }
+
+    c.Writer.Header().Set("X-XSS-Protection", "1; mode=block")
+    c.Writer.Header().Set("X-Content-Type-Options", "nosniff")
+    c.Writer.Header().Set("X-DNS-Prefetch-Control", "off")
+    c.Writer.Header().Set("X-Frame-Options", "DENY")
+    c.Writer.Header().Set("X-Download-Options", "noopen")
+    c.Writer.Header().Set("Referrer-Policy", "no-referrer")
+
+    dbpost, err := db.Prepare("INSERT INTO complaint_attachment (complaint_attachmentid, complaint_code, ref_attachmentid) VALUES (NULL, ?, ?)")
+    if err != nil {
+      panic(err.Error())
+    }
+    defer dbpost.Close()
+
+    exec, err := dbpost.Exec(attachmentData.Data, attachmentData.Data2)
+    if err != nil {
+      panic(err.Error())
+    }
+
+    affect, err := exec.RowsAffected()
+    if err != nil {
+      panic(err.Error())
+    }
+
+    if affect > 0 {
+      c.String(http.StatusOK, "Success on Saving Attachments")
+    } else {
+      c.String(http.StatusInternalServerError, "Failed on Saving Attachments")
     }
   })
 
