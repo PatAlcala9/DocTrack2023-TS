@@ -10,7 +10,7 @@ q-page(padding)
   section.login.column.items-center
     transition(appear @before-enter="beforeEnterInputs" @enter="enterInputs")
       div.column.items-center
-        component(:is="docForm" text="Fullname" v-model:value="ifullname" :width=30 :mobileWidth=14 icon="badge").login__username--input
+        component(:is="docForm" text="Fullname" v-model:value="ifullname" :width=30 :mobileWidth=14 icon="badge" alert="true").login__username--input
         component(:is="docForm" text="Username" v-model:value="iusername" :width=30 :mobileWidth=14 icon="person").login__username--input
         component(:is="docForm" text="Password" v-model:value="ipassword" :width=30 :mobileWidth=14 icon="lock" type="password").login__username--input
         component(:is="docList" text="Access" v-model:modelValue="accessList" icon="format_list_bulleted" :options="accessOption").login__username--input
