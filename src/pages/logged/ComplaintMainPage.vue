@@ -49,17 +49,21 @@ q-page(padding)
               td
                 q-btn(color="button" icon="visibility" :ripple="false" @click="getComplaintSpecific(item)").button-view
 
-q-dialog(v-model="dialog" transition-show="flip-right" transition-hide="flip-left").dialog
-  q-card.dialog-card.text-white.flex.flex-center
-    q-card-section.dialog-card__section
-      div.dialog-title-area.column.justify-center.items-center
-        span.dialog-card__label Complaint Code:
-        span.dialog-card__data {{ dialogCode }}
-        span.dialog-card__label Complaint Type:
-        span.dialog-card__data {{ dialogType }}
-        span.dialog-card__label Received Date:
-        span.dialog-card__data {{ dialogReceivedDate }}
+q-dialog(full-width full-height v-model="dialog" transition-show="flip-right" transition-hide="flip-left").dialog
+  q-card.dialog-card.text-white
+    q-card-section
+      section.fit.row.wrap.justify-around.items-center.content-center.text-center
+        div.column
+          span.dialog-card__label Complaint Code:
+          span.dialog-card__data {{ dialogCode }}
+        div.column
+          span.dialog-card__label Complaint Type:
+          span.dialog-card__data {{ dialogType }}
+        div.column
+          span.dialog-card__label Received Date:
+          span.dialog-card__data {{ dialogReceivedDate }}
 
+      section.fit.row.wrap.justify-around.items-center.content-center
         span.dialog-card__label Complaintant:
         span.dialog-card__data {{ dialogName }}
         span.dialog-card__label Complaintant Contact:
@@ -276,8 +280,8 @@ const fillupOffline = () => {
   width: 100vw
 
 .dialog-card
-  width: 100vw
-  height: 100vh
+  // width: 100vw
+  // height: 100vh
 
 .dialog-card__label
   font-family: 'Inter'
@@ -287,7 +291,7 @@ const fillupOffline = () => {
 .dialog-card__data
   font-family: 'Inter'
   font-weight: 500
-  font-size: 1.1rem
+  font-size: 1.2rem
   padding-bottom: 2rem
 
 .nodata--text

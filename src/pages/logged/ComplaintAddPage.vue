@@ -69,13 +69,14 @@ q-page(padding)
           component(:is="docInputEntry" v-model:value="respondentName")
 
       section.form
-      section.section
-        component(:is="docLabel" text="Respondent Contact:").label--spaced
-        component(:is="docInputEntry" v-model:value="respondentContact")
+        section.section
+          component(:is="docLabel" text="Respondent Contact:").label--spaced
+          component(:is="docInputEntry" v-model:value="respondentContact")
 
       section.form
-        component(:is="docLabel" text="Respondent Location:").label--spaced
-        component(:is="docInputEntry" v-model:value="respondentLocation").label--spaced
+        section.section
+          component(:is="docLabel" text="Respondent Location:").label--spaced
+          component(:is="docInputEntry" v-model:value="respondentLocation").label--spaced
 
     div.attachment-group
       component(:is="docList" text="Attachments" :options="attachmentList" v-model:modelValue="attachmentSelectedList").label--spaced
