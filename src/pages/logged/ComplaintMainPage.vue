@@ -9,7 +9,7 @@ q-page(padding)
     q-btn(flat size="md" label="Back" @click="gotoComplaint" icon="arrow_back").close-button
 
   div.fit.row.wrap.justify-center.search-area
-    component(:is="docForm" text="Search" v-model:value="searchValue" :width=30 :mobileWidth=14 icon="search")
+    component(:is="docForm" text="Search" v-model:value="searchValue" :width=30 :mobileWidth=14 icon="search" @keypress.enter="filterTable")
 
   div(v-if="nodata").fit.row.wrap.justify-center
     span.flex.flex-center.nodata--text No Data Found
@@ -160,11 +160,34 @@ const getComplaintList = async () => {
         const remainingDays = (await calculateRemainingDays(item)).toString()
         arrayRemainingDays.push(data.result4.toString().includes('SERVED') ? remainingDays : '')
       }
-
-      console.log('arrayRemainingDays:', arrayRemainingDays)
       complaintList.value.result5 = arrayRemainingDays.toString()
-
       return true
+
+    } else return false
+  } else return false
+}
+
+const getComplaintListFiltered = async (code: string) => {
+  const response = await api.get('/api/GetComplaintListFiltered/' + code)
+  const data = response.data.length !== 0 ? response.data : null
+
+  if (data !== null) {
+    const result = data.result
+    if (result.length > 0) {
+      let arrayRemainingDays: string[] = []
+
+      complaintList.value.result = data.result
+      complaintList.value.result2 = data.result2
+      complaintList.value.result3 = data.result3
+      complaintList.value.result4 = data.result4
+
+      for (let item of data.result5) {
+        const remainingDays = (await calculateRemainingDays(item)).toString()
+        arrayRemainingDays.push(data.result4.toString().includes('SERVED') ? remainingDays : '')
+      }
+      complaintList.value.result5 = arrayRemainingDays.toString()
+      return true
+
     } else return false
   } else return false
 }
@@ -208,6 +231,17 @@ const getComplaintSpecific = async (code: string) => {
     dialogDateTransacted.value = data.result11
 
     dialog.value = true
+  }
+}
+
+const filterTable = async () => {
+  if (searchValue.value.length > 0) {
+    if (await getComplaintListFiltered(searchValue.value)) nodata.value = false
+    else nodata.value = true
+  } else {
+    console.log('here')
+    if (await getComplaintList()) nodata.value = false
+    else nodata.value = true
   }
 }
 
