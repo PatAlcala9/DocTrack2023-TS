@@ -63,7 +63,7 @@ const _pagewithtable = usePageWithTable()
 const _islogged = useIsLogged()
 const _isdemo = useIsDemo()
 
-let timer = ''
+let timer: NodeJS.Timeout
 
 let onlineColor = ref('')
 let online = ref('OFFLINE')
@@ -145,14 +145,14 @@ const checkOnline = async () => {
   await getDemo()
 
   if (_isdemo.isdemo) {
-    onlineColor.value = 'white'
+    // onlineColor.value = 'white'
     online.value = 'DEMO MODE'
   } else {
     if (await checkConnection()) {
-      onlineColor.value = 'green'
+      // onlineColor.value = 'green'
       online.value = 'ONLINE'
     } else {
-      onlineColor.value = 'red'
+      // onlineColor.value = 'red'
       online.value = 'OFFLINE'
     }
 
@@ -212,6 +212,7 @@ const rotateMessageBack = () => {
   if (_currentpage.currentpage !== undefined) router.push(_currentpage.currentpage)
   else router.push('/dashboard')
 
+  await checkOnline()
   timer = setInterval(checkOnline, 5000)
 })()
 </script>
