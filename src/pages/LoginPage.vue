@@ -213,6 +213,10 @@ const getUserDetails = async () => {
   }
 }
 
+const setDemo = async () => {
+  SessionStorage.set('Demo', _isdemo.isdemo)
+}
+
 const login = async () => {
   if (usernameEntry.value.toUpperCase() === 'DEMO' && passwordEntry.value.toUpperCase() === 'DEMO') {
     _access.access.push('incoming')
@@ -222,7 +226,9 @@ const login = async () => {
     _access.access.push('otherdocuments')
     _access.access.push('complaint')
     _isdemo.isdemo = true
+    await setDemo()
     _islogged.islogged = true
+
 
     _pagewithtable.pagewithtable = false
     _employeename.employeename = 'DEMO ACCOUNT'
@@ -263,6 +269,7 @@ const login = async () => {
       return
     }
     _isdemo.isdemo = false
+    await setDemo()
     _islogged.islogged = true
     _pagewithtable.pagewithtable = false
     SessionStorage.set('CurrentPage', 'dashboard')

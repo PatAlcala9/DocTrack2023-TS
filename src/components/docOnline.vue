@@ -36,11 +36,9 @@ let color = ref('')
 watch(
   () => props.state,
   (newState) => {
-    if (newState === 'OFFLINE') {
-      color.value = '#E21D38'
-    } else {
-      color.value = '#279D21'
-    }
+    if (newState === 'OFFLINE') color.value = '#E21D38'
+    else if (newState === 'DEMO') color.value = 'white'
+    else  color.value = '#279D21'
   }
 )
 </script>

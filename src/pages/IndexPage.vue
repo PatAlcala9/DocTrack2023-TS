@@ -42,6 +42,7 @@ import { ref } from 'vue'
 import { useQuasar, SessionStorage } from 'quasar'
 import { gsap } from 'gsap'
 import { useRouter } from 'vue-router'
+import { checkConnection } from 'src/js/functions'
 
 import docOnline from 'components/docOnline.vue'
 import docMenu from 'components/docMenu.vue'
@@ -61,6 +62,8 @@ const _currentpage = useCurrentPage()
 const _pagewithtable = usePageWithTable()
 const _islogged = useIsLogged()
 const _isdemo = useIsDemo()
+
+let timer = ''
 
 let onlineColor = ref('')
 let online = ref('OFFLINE')
@@ -128,6 +131,7 @@ const logout = async () => {
   _pagewithtable.pagewithtable = false
   quasar.sessionStorage.remove('EmployeeName')
   _access.access = []
+  clearInterval(timer)
   gotoPage('/')
 }
 
@@ -137,13 +141,21 @@ const gotoPage = (page: string, table = false) => {
   router.push(page)
 }
 
-const checkOnline = () => {
+const checkOnline = async () => {
+  await getDemo()
+
   if (_isdemo.isdemo) {
-    onlineColor.value = 'red'
-    online.value = 'OFFLINE'
+    onlineColor.value = 'white'
+    online.value = 'DEMO MODE'
   } else {
-    onlineColor.value = 'green'
-    online.value = 'ONLINE'
+    if (await checkConnection()) {
+      onlineColor.value = 'green'
+      online.value = 'ONLINE'
+    } else {
+      onlineColor.value = 'red'
+      online.value = 'OFFLINE'
+    }
+
   }
 }
 
@@ -194,13 +206,13 @@ const rotateMessageBack = () => {
   await setAccess()
   await getAccess()
 
-  await setDemo()
-  await getDemo()
+  // await setDemo()
+  // await getDemo()
 
   if (_currentpage.currentpage !== undefined) router.push(_currentpage.currentpage)
   else router.push('/dashboard')
 
-  checkOnline()
+  timer = setInterval(checkOnline, 5000)
 })()
 </script>
 
