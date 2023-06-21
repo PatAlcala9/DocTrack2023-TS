@@ -52,7 +52,7 @@ q-page(padding)
 q-dialog(full-width full-height v-model="dialog" transition-show="flip-right" transition-hide="flip-left").dialog
   q-card.dialog-card.text-white
     q-card-section
-      section.fit.row.wrap.justify-around.items-center.content-center.text-center
+      section.fit.row.wrap.justify-around.items-center.content-center.text-center.q-card--section
         div.column
           span.dialog-card__label Complaint Code:
           span.dialog-card__data {{ dialogCode }}
@@ -63,29 +63,37 @@ q-dialog(full-width full-height v-model="dialog" transition-show="flip-right" tr
           span.dialog-card__label Received Date:
           span.dialog-card__data {{ dialogReceivedDate }}
 
+      section.fit.row.wrap.justify-around.items-center.content-center.text-center
+        div.column
+          span.dialog-card__label Complaintant:
+          span.dialog-card__data {{ dialogName }}
+        div.column
+          span.dialog-card__label Complaintant Contact:
+          span.dialog-card__data {{ dialogContact }}
+        div.column
+          span.dialog-card__label Complaintant Location:
+          span.dialog-card__data {{ dialogLocation }}
+
+      section.fit.row.wrap.justify-around.items-center.content-center.text-center
+        div.column
+          span.dialog-card__label Details:
+          span.dialog-card__data {{ dialogDetails }}
+
+      section.fit.row.wrap.justify-around.items-center.content-center.text-center
+        div.column
+          span.dialog-card__label Transaction Date :
+          span.dialog-card__data {{ dialogDateTransacted }}
+        div.column
+          span.dialog-card__label Respodent:
+          span.dialog-card__data {{ dialogRespondentName }}
+        div.column
+          span.dialog-card__label Respodent Location:
+          span.dialog-card__data {{ dialogRespondentLocation }}
+        div.column
+          span.dialog-card__label Respodent Contact:
+          span.dialog-card__data {{ dialogRespondentContact }}
+
       section.fit.row.wrap.justify-around.items-center.content-center
-        span.dialog-card__label Complaintant:
-        span.dialog-card__data {{ dialogName }}
-        span.dialog-card__label Complaintant Contact:
-        span.dialog-card__data {{ dialogContact }}
-        span.dialog-card__label Complaintant Location:
-        span.dialog-card__data {{ dialogLocation }}
-        span.dialog-card__label Details:
-        span.dialog-card__data {{ dialogDetails }}
-
-        span.dialog-card__label Details:
-        span.dialog-card__data {{ dialogDetails }}
-
-        span.dialog-card__label Transaction Date :
-        span.dialog-card__data {{ dialogDateTransacted }}
-
-        span.dialog-card__label Respodent:
-        span.dialog-card__data {{ dialogRespondentName }}
-        span.dialog-card__label Respodent Location:
-        span.dialog-card__data {{ dialogRespondentLocation }}
-        span.dialog-card__label Respodent Contact:
-        span.dialog-card__data {{ dialogRespondentContact }}
-
         doc-button(text="OK" @click="dialog=false")
 </template>
 
@@ -337,6 +345,9 @@ const fillupOffline = () => {
   border-radius: 0.6rem
   border: 1px solid rgba(255, 255, 255, 0.125)
   padding: 1.2rem 9rem
+
+.q-card--section
+  padding: 2rem
 
 @media screen and (max-width: 500px)
   .section
