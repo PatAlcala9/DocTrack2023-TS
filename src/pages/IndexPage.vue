@@ -65,7 +65,6 @@ const _isdemo = useIsDemo()
 
 let timer: NodeJS.Timeout
 
-let onlineColor = ref('')
 let online = ref('OFFLINE')
 let menuMessage = ref('')
 const defaultMessage = 'Please make a selection from the menu'
@@ -144,18 +143,10 @@ const gotoPage = (page: string, table = false) => {
 const checkOnline = async () => {
   await getDemo()
 
-  if (_isdemo.isdemo) {
-    // onlineColor.value = 'white'
-    online.value = 'DEMO MODE'
-  } else {
-    if (await checkConnection()) {
-      // onlineColor.value = 'green'
-      online.value = 'ONLINE'
-    } else {
-      // onlineColor.value = 'red'
-      online.value = 'OFFLINE'
-    }
-
+  if (_isdemo.isdemo) online.value = 'DEMO MODE'
+  else {
+    if (await checkConnection()) online.value = 'ONLINE'
+    else online.value = 'OFFLINE'
   }
 }
 
