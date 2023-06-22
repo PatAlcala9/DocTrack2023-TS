@@ -22,11 +22,14 @@ q-page(padding)
             tr
               th Complain Code
               th Details
+              th Edit
           tbody
             tr(v-for="(item, index) in complaintList.result" :key="item").table-content-group
               td {{item}}
               td
-                q-btn(color="button" icon="visibility" :ripple="false" ).button-view
+                q-btn(color="button" size="lg" icon="visibility" :ripple="false" @click="getComplaintSpecific(item)").button-view
+              td
+                q-btn(color="button" size="lg" icon="settings" :ripple="false" @click="getComplaintSpecific(item)").button-view
 
     section(v-else).flex.flex-center
       section(v-if="complaintList.result !== ''").dialog-content-table
@@ -39,6 +42,7 @@ q-page(padding)
               th Status
               th Remaining Days
               th Details
+              th Update
           tbody
             tr(v-for="(item, index) in complaintList.result" :key="item").table-content-group
               td {{item}}
@@ -47,12 +51,21 @@ q-page(padding)
               td {{complaintList.result4[index]}}
               td {{complaintList.result5[index]}}
               td
-                q-btn(color="button" icon="visibility" :ripple="false" @click="getComplaintSpecific(item)").button-view
+                q-btn(rounded size="sm" color="button" label="show" :ripple="false" @click="getComplaintSpecific(item)").button-view
+              td
+                q-btn(rounded size="sm" color="button" label="edit" :ripple="false" ).button-view
 
 q-dialog(full-width full-height v-model="dialog" transition-show="flip-right" transition-hide="flip-left").dialog
   q-card.dialog-card.text-white
     q-card-section
-      section.fit.row.wrap.justify-around.items-center.content-center.text-center.q-card--section
+      section(v-if="quasar.screen.width > 500").fit.row.wrap.justify-between.items-center.content-center.text-center.q-card--section
+        div.column
+          component(:is="docInfoEdit" label="Complaint Code" :value="dialogCode" )
+        div.column
+          component(:is="docInfo" label="Complaint Type" :value="dialogType" )
+        div.column
+          component(:is="docInfo" label="Received Date" :value="dialogReceivedDate" )
+      section(v-else).fit.column.wrap.justify-center.items-center.content-center.text-center.q-card--section
         div.column
           component(:is="docInfo" label="Complaint Code" :value="dialogCode" )
         div.column
@@ -80,7 +93,50 @@ q-dialog(full-width full-height v-model="dialog" transition-show="flip-right" tr
           component(:is="docInfo" label="Respodent Contact" :value="dialogRespondentContact")
 
       section.fit.row.wrap.justify-around.items-center.content-center.button-area
-        doc-button(text="OK" @click="dialog=false")
+        //- doc-button(text="OK" @click="dialog=false")
+        component(:is="docButton" text="OK" @click="dialog=false")
+
+
+q-dialog(full-width full-height v-model="dialogEdit" transition-show="flip-right" transition-hide="flip-left" ).dialog
+  q-card.dialog-card.text-white
+    q-card-section
+      section(v-if="quasar.screen.width > 500").fit.row.wrap.justify-between.items-center.content-center.text-center.q-card--section
+        div.column
+          component(:is="docInfoEdit" label="Complaint Code" :value="dialogCode" )
+        div.column
+          component(:is="docInfo" label="Complaint Type" :value="dialogType" )
+        div.column
+          component(:is="docInfo" label="Received Date" :value="dialogReceivedDate" )
+      section(v-else).fit.column.wrap.justify-center.items-center.content-center.text-center.q-card--section
+        div.column
+          component(:is="docInfo" label="Complaint Code" :value="dialogCode" )
+        div.column
+          component(:is="docInfo" label="Complaint Type" :value="dialogType" )
+        div.column
+          component(:is="docInfo" label="Received Date" :value="dialogReceivedDate" )
+
+      section.full-width.wrap.column.wrap.justify-center.items-center.content-center.text-center
+        div.padded
+          component(:is="docInfo" label="Complaintant" :value="dialogName" )
+        div.padded
+          component(:is="docInfo" label="Complaintant Contact" :value="dialogContact" )
+        div.padded
+          component(:is="docInfo" label=" Complaintant Location" :value="dialogLocation" )
+        div.padded
+          component(:is="docInfo" label="Details" :value="dialogDetails" wide)
+
+        div.padded
+          component(:is="docInfo" label="Transaction Date" :value="dialogDateTransacted")
+        div.padded
+          component(:is="docInfo" label="Respodent" :value="dialogRespondentName")
+        div.padded
+          component(:is="docInfo" label="Respodent Location" :value="dialogRespondentLocation")
+        div.padded
+          component(:is="docInfo" label="Respodent Contact" :value="dialogRespondentContact")
+
+      section.fit.row.wrap.justify-around.items-center.content-center.button-area
+        //- doc-button(text="OK" @click="dialog=false")
+        component(:is="docButton" text="OK" @click="dialog=false")
 </template>
 
 <script setup lang="ts">
@@ -104,6 +160,7 @@ import docInput from 'components/docInput.vue'
 import docLabel from 'components/docLabel.vue'
 import docForm from 'components/docForm.vue'
 import docInfo from 'components/docInfo.vue'
+import docInfoEdit from 'components/docInfoEdit.vue'
 
 let searchValue = ref('')
 let searchByValue = ref('')
@@ -122,6 +179,8 @@ let dialogRespondentContact = ref('')
 let dialogRespondentLocation = ref('')
 let dialogStatus = ref('')
 let dialogDateTransacted = ref('')
+
+let dialogEdit = ref(false)
 
 type Complaint = {
   result: string
@@ -281,7 +340,6 @@ const fillupOffline = () => {
   margin-top: 3rem
 
 .button-view
-  width: 4rem
   background-color: $button
 
 .search-area
