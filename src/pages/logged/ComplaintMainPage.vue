@@ -54,46 +54,32 @@ q-dialog(full-width full-height v-model="dialog" transition-show="flip-right" tr
     q-card-section
       section.fit.row.wrap.justify-around.items-center.content-center.text-center.q-card--section
         div.column
-          span.dialog-card__label Complaint Code:
-          span.dialog-card__data {{ dialogCode }}
+          component(:is="docInfo" label="Complaint Code" :value="dialogCode" )
         div.column
-          span.dialog-card__label Complaint Type:
-          span.dialog-card__data {{ dialogType }}
+          component(:is="docInfo" label="Complaint Type" :value="dialogType" )
         div.column
-          span.dialog-card__label Received Date:
-          span.dialog-card__data {{ dialogReceivedDate }}
+          component(:is="docInfo" label="Received Date" :value="dialogReceivedDate" )
 
-      section.fit.row.wrap.justify-around.items-center.content-center.text-center
-        div.column
-          span.dialog-card__label Complaintant:
-          span.dialog-card__data {{ dialogName }}
-        div.column
-          span.dialog-card__label Complaintant Contact:
-          span.dialog-card__data {{ dialogContact }}
-        div.column
-          span.dialog-card__label Complaintant Location:
-          span.dialog-card__data {{ dialogLocation }}
+      section.full-width.wrap.column.wrap.justify-center.items-center.content-center.text-center
+        div.padded
+          component(:is="docInfo" label="Complaintant" :value="dialogName" )
+        div.padded
+          component(:is="docInfo" label="Complaintant Contact" :value="dialogContact" )
+        div.padded
+          component(:is="docInfo" label=" Complaintant Location" :value="dialogLocation" )
+        div.padded
+          component(:is="docInfo" label="Details" :value="dialogDetails" wide)
 
-      section.fit.row.wrap.justify-around.items-center.content-center.text-center
-        div.column
-          span.dialog-card__label Details:
-          span.dialog-card__data {{ dialogDetails }}
+        div.padded
+          component(:is="docInfo" label="Transaction Date" :value="dialogDateTransacted")
+        div.padded
+          component(:is="docInfo" label="Respodent" :value="dialogRespondentName")
+        div.padded
+          component(:is="docInfo" label="Respodent Location" :value="dialogRespondentLocation")
+        div.padded
+          component(:is="docInfo" label="Respodent Contact" :value="dialogRespondentContact")
 
-      section.fit.row.wrap.justify-around.items-center.content-center.text-center
-        div.column
-          span.dialog-card__label Transaction Date :
-          span.dialog-card__data {{ dialogDateTransacted }}
-        div.column
-          span.dialog-card__label Respodent:
-          span.dialog-card__data {{ dialogRespondentName }}
-        div.column
-          span.dialog-card__label Respodent Location:
-          span.dialog-card__data {{ dialogRespondentLocation }}
-        div.column
-          span.dialog-card__label Respodent Contact:
-          span.dialog-card__data {{ dialogRespondentContact }}
-
-      section.fit.row.wrap.justify-around.items-center.content-center
+      section.fit.row.wrap.justify-around.items-center.content-center.button-area
         doc-button(text="OK" @click="dialog=false")
 </template>
 
@@ -117,6 +103,7 @@ import docTextArea from 'components/docTextArea.vue'
 import docInput from 'components/docInput.vue'
 import docLabel from 'components/docLabel.vue'
 import docForm from 'components/docForm.vue'
+import docInfo from 'components/docInfo.vue'
 
 let searchValue = ref('')
 let searchByValue = ref('')
@@ -230,13 +217,13 @@ const getComplaintSpecific = async (code: string) => {
     dialogName.value = data.result2
     dialogContact.value = data.result3
     dialogLocation.value = data.result4
-    dialogReceivedDate.value = data.result5
+    dialogReceivedDate.value = date.formatDate(data.result5, 'MMMM D, YYYY')
     dialogDetails.value = data.result6
     dialogRespondentName.value = data.result7
     dialogRespondentContact.value = data.result8
     dialogRespondentLocation.value = data.result9
     dialogStatus.value = data.result10
-    dialogDateTransacted.value = data.result11
+    dialogDateTransacted.value = date.formatDate(data.result11, 'MMMM D, YYYY')
 
     dialog.value = true
   }
@@ -348,6 +335,12 @@ const fillupOffline = () => {
 
 .q-card--section
   padding: 2rem
+
+.padded
+  padding-bottom: 1rem
+
+.button-area
+  padding-top: 2rem
 
 @media screen and (max-width: 500px)
   .section
