@@ -229,7 +229,6 @@ const login = async () => {
     await setDemo()
     _islogged.islogged = true
 
-
     _pagewithtable.pagewithtable = false
     _employeename.employeename = 'DEMO ACCOUNT'
     SessionStorage.set('CurrentPage', 'dashboard')
