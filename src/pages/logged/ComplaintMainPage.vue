@@ -51,16 +51,16 @@ q-page(padding)
               td {{complaintList.result4[index]}}
               td {{complaintList.result5[index]}}
               td
-                q-btn(rounded size="sm" color="button" label="show" :ripple="false" @click="getComplaintSpecific(item)").button-view
+                q-btn(rounded size="sm" color="button" label="show" :ripple="false" @click="getComplaintSpecific(item, false)").button-view
               td
-                q-btn(rounded size="sm" color="button" label="edit" :ripple="false" ).button-view
+                q-btn(rounded size="sm" color="button" label="edit" :ripple="false" @click="getComplaintSpecific(item, true)").button-view
 
 q-dialog(full-width full-height v-model="dialog" transition-show="flip-right" transition-hide="flip-left").dialog
   q-card.dialog-card.text-white
     q-card-section
       section(v-if="quasar.screen.width > 500").fit.row.wrap.justify-between.items-center.content-center.text-center.q-card--section
         div.column
-          component(:is="docInfoEdit" label="Complaint Code" :value="dialogCode" )
+          component(:is="docInfo" label="Complaint Code" :value="dialogCode" )
         div.column
           component(:is="docInfo" label="Complaint Type" :value="dialogType" )
         div.column
@@ -104,39 +104,39 @@ q-dialog(full-width full-height v-model="dialogEdit" transition-show="flip-right
         div.column
           component(:is="docInfoEdit" label="Complaint Code" :value="dialogCode" )
         div.column
-          component(:is="docInfo" label="Complaint Type" :value="dialogType" )
+          component(:is="docInfoEdit" label="Complaint Type" :value="dialogType" )
         div.column
-          component(:is="docInfo" label="Received Date" :value="dialogReceivedDate" )
+          component(:is="docInfoEdit" label="Received Date" :value="dialogReceivedDate" )
       section(v-else).fit.column.wrap.justify-center.items-center.content-center.text-center.q-card--section
         div.column
-          component(:is="docInfo" label="Complaint Code" :value="dialogCode" )
+          component(:is="docInfoEdit" label="Complaint Code" :value="dialogCode" )
         div.column
-          component(:is="docInfo" label="Complaint Type" :value="dialogType" )
+          component(:is="docInfoEdit" label="Complaint Type" :value="dialogType" )
         div.column
-          component(:is="docInfo" label="Received Date" :value="dialogReceivedDate" )
+          component(:is="docInfoEdit" label="Received Date" :value="dialogReceivedDate" )
 
       section.full-width.wrap.column.wrap.justify-center.items-center.content-center.text-center
         div.padded
-          component(:is="docInfo" label="Complaintant" :value="dialogName" )
+          component(:is="docInfoEdit" label="Complaintant" :value="dialogName" )
         div.padded
-          component(:is="docInfo" label="Complaintant Contact" :value="dialogContact" )
+          component(:is="docInfoEdit" label="Complaintant Contact" :value="dialogContact" )
         div.padded
-          component(:is="docInfo" label=" Complaintant Location" :value="dialogLocation" )
+          component(:is="docInfoEdit" label=" Complaintant Location" :value="dialogLocation" )
         div.padded
-          component(:is="docInfo" label="Details" :value="dialogDetails" wide)
+          component(:is="docInfoEdit" label="Details" :value="dialogDetails" wide)
 
         div.padded
-          component(:is="docInfo" label="Transaction Date" :value="dialogDateTransacted")
+          component(:is="docInfoEdit" label="Transaction Date" :value="dialogDateTransacted")
         div.padded
-          component(:is="docInfo" label="Respodent" :value="dialogRespondentName")
+          component(:is="docInfoEdit" label="Respodent" :value="dialogRespondentName")
         div.padded
-          component(:is="docInfo" label="Respodent Location" :value="dialogRespondentLocation")
+          component(:is="docInfoEdit" label="Respodent Location" :value="dialogRespondentLocation")
         div.padded
-          component(:is="docInfo" label="Respodent Contact" :value="dialogRespondentContact")
+          component(:is="docInfoEdit" label="Respodent Contact" :value="dialogRespondentContact")
 
       section.fit.row.wrap.justify-around.items-center.content-center.button-area
         //- doc-button(text="OK" @click="dialog=false")
-        component(:is="docButton" text="OK" @click="dialog=false")
+        component(:is="docButton" text="OK" @click="dialogEdit=false")
 </template>
 
 <script setup lang="ts">
@@ -266,7 +266,7 @@ const calculateRemainingDays = async (expiry: string): Promise<number> => {
   } else return 0
 }
 
-const getComplaintSpecific = async (code: string) => {
+const getComplaintSpecific = async (code: string, edit: boolean) => {
   const response = await api.get('/api/GetComplaintSpecific/' + code)
   const data = response.data.length !== 0 ? response.data : null
 
@@ -284,7 +284,9 @@ const getComplaintSpecific = async (code: string) => {
     dialogStatus.value = data.result10
     dialogDateTransacted.value = date.formatDate(data.result11, 'MMMM D, YYYY')
 
-    dialog.value = true
+    if (edit) dialogEdit.value = true
+    else dialog.value = true
+
   }
 }
 
