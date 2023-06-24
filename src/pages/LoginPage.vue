@@ -5,7 +5,7 @@ q-page(padding)
     section.title.full-width.row.justify-between
       div.column
         transition(appear @before-enter="beforeEnterLogo" @enter="enterLogo")
-          img(src="../assets/ocbologobw.avif" alt="OCBO Logo").logo
+          img(src="../assets/logo2.avif" alt="OCBO Logo").logo
           //- @click="sampleMode = !sampleMode"
         transition(appear @before-enter="beforeEnterTitle" @enter="enterTitle")
           section.name.fit.column.wrap.justify-start.items-start.content-start
@@ -230,7 +230,7 @@ const login = async () => {
     _islogged.islogged = true
 
     _pagewithtable.pagewithtable = false
-    _employeename.employeename = 'DEMO ACCOUNT'
+    _employeename.employeename = 'DEMONSTRATION'
     SessionStorage.set('CurrentPage', 'dashboard')
     _currentpage.currentpage = 'dashboard'
     router.push('/dashboard')

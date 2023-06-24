@@ -4,10 +4,10 @@ q-page(padding)
   component(:is="docOnline" :state="online" )
 
   section(v-if="quasar.screen.width > 500").full-width.column.items-start.content-center
-    img(src="../assets/ocbologobw.avif" alt="OCBO Logo").logo
+    img(src="../assets/logo2.avif" alt="OCBO Logo").logo
 
   section(v-else).full-width.column.content-center.items-center
-    img(src="../assets/ocbologobw.avif" alt="OCBO Logo").logo
+    img(src="../assets/logo2.avif" alt="OCBO Logo").logo
 
   div.fit.column.text-center.main
     transition(appear @before-enter="beforeEnterTitle" @enter="enterTitle")
@@ -157,10 +157,10 @@ const setDefault = async () => {
 const setMessage = (link: string) => {
   switch (link) {
     case 'incoming':
-      menuMessage.value = "Government's internal document record"
+      menuMessage.value = "Tracking of Government's Internal Document record"
       break
     case 'outgoing':
-      menuMessage.value = 'I have no idea what this is'
+      menuMessage.value = 'Tracking of OCBO Issue Documents'
       break
     case 'releasing':
       menuMessage.value = 'Release the Kraken,'
@@ -169,7 +169,7 @@ const setMessage = (link: string) => {
       menuMessage.value = 'A list of Inventions, I guess'
       break
     case 'complaint':
-      menuMessage.value = 'Listahan sa mga reklamador'
+      menuMessage.value = 'Tracking of Complaints and Cases'
       break
     default:
       break
@@ -215,7 +215,7 @@ const rotateMessageBack = () => {
   width: 16rem
   height: auto
   position: fixed
-  opacity: 0.1
+  opacity: 0.5
   // filter: invert(100)
 
 .name
