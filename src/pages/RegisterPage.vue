@@ -13,6 +13,7 @@ q-page(padding)
         component(:is="docForm" text="Fullname" v-model:value="ifullname" :width=30 :mobileWidth=14 icon="badge" alert="true").login__username--input
         component(:is="docForm" text="Username" v-model:value="iusername" :width=30 :mobileWidth=14 icon="person").login__username--input
         component(:is="docForm" text="Password" v-model:value="ipassword" :width=30 :mobileWidth=14 icon="lock" type="password").login__username--input
+        component(:is="docForm" text="Confirm Password" v-model:value="icpassword" :width=30 :mobileWidth=14 icon="lock" type="password").login__username--input
         component(:is="docList" text="Access" v-model:modelValue="accessList" icon="format_list_bulleted" :options="accessOption").login__username--input
 
         //- span.login__username--label Access
@@ -86,6 +87,7 @@ const enterButton = (el: any) => {
 let ifullname = ref('')
 let iusername = ref('')
 let ipassword = ref('')
+let icpassword = ref('')
 let accessList = ref<string[]>([])
 let accessOption = ref([
   {
@@ -118,18 +120,24 @@ let dialogTitle = ref('')
 let dialogMessage = ref('')
 
 let missingDetails: string[] = []
-const checkComplete = () => {
+const checkComplete = async () => {
   missingDetails = []
 
   if (!ifullname.value) missingDetails.push('fullname')
   if (!iusername.value) missingDetails.push('username')
   if (!ipassword.value) missingDetails.push('password')
+  if (!icpassword.value) missingDetails.push('confirm password')
   if (accessList.value.length === 0) missingDetails.push('access')
 
   // console.log('accessList:', accessList.value)
   // console.log('missingDetails:', missingDetails)
   if (missingDetails.length > 0) return true
   else return false
+}
+
+const passwordConfirm = async () => {
+  if (ipassword.value === icpassword.value) return true
+  else false
 }
 
 // const checkConnection = async (): Promise<boolean> => {
@@ -145,33 +153,37 @@ const checkComplete = () => {
 
 const saveAccount = async () => {
   if (await checkConnection()) {
-    if (checkComplete() === false) {
-      let ipasswordEncrypted = encrypt(ipassword.value.toUpperCase(), 'doctrack2023', 3, 128)
-      let iincoming = accessList.value.includes('is_incoming') ? 1 : 0
-      let ioutgoing = accessList.value.includes('is_outgoing') ? 1 : 0
-      let ireleasing = accessList.value.includes('is_releasing') ? 1 : 0
-      let iinventory = accessList.value.includes('is_inventory') ? 1 : 0
-      let iothers = accessList.value.includes('is_otherdocuments') ? 1 : 0
-      let icomplaint = accessList.value.includes('is_complaint') ? 1 : 0
+    if (await checkComplete() === false) {
+      if (await passwordConfirm()) {
+        let ipasswordEncrypted = encrypt(ipassword.value.toUpperCase(), 'doctrack2023', 3, 128)
+        let iincoming = accessList.value.includes('is_incoming') ? 1 : 0
+        let ioutgoing = accessList.value.includes('is_outgoing') ? 1 : 0
+        let ireleasing = accessList.value.includes('is_releasing') ? 1 : 0
+        let iinventory = accessList.value.includes('is_inventory') ? 1 : 0
+        let iothers = accessList.value.includes('is_otherdocuments') ? 1 : 0
+        let icomplaint = accessList.value.includes('is_complaint') ? 1 : 0
 
-      const response = await api.post('/api/PostAccount', {
-        data: ifullname.value.toUpperCase(),
-        data2: iusername.value.toUpperCase(),
-        data3: ipasswordEncrypted,
-        data4: iincoming,
-        data5: ioutgoing,
-        data6: ireleasing,
-        data7: iinventory,
-        data8: iothers,
-        data9: icomplaint,
-      })
+        const response = await api.post('/api/PostAccount', {
+          data: ifullname.value.toUpperCase(),
+          data2: iusername.value.toUpperCase(),
+          data3: ipasswordEncrypted,
+          data4: iincoming,
+          data5: ioutgoing,
+          data6: ireleasing,
+          data7: iinventory,
+          data8: iothers,
+          data9: icomplaint,
+        })
 
-      const data = response.data
+        const data = response.data
 
-      if (data.includes('Success')) {
-        showDialog('Successfully Register', `You can now login as ${iusername.value.toUpperCase()}`)
+        if (data.includes('Success')) {
+          showDialog('Successfully Register', `You can now login as ${iusername.value.toUpperCase()}`)
+        } else {
+          showDialog('Failed to Register', 'Something went wrong. Please try again')
+        }
       } else {
-        showDialog('Failed to Register', 'Something went wrong. Please try again')
+        showDialog('Cannot Register', 'Password does not match')
       }
     } else {
       showDialog('Cannot Register', `Missing ${missingDetails.toString().toUpperCase()}`)
