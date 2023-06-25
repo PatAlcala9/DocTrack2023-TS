@@ -1,11 +1,11 @@
 <template lang="pug">
 
 div(v-if="$q.screen.width > 500")
-  label(:for="text").full-width.row.inline.wrap.justify-start.items-start.content-start.section
+  label(:for="text").full-width.row.inline.wrap.justify-start.items-start.content-start.section(:style="{ '--colorBackground': colorBackground }")
     q-icon(:name="icon" size="1.6rem").icon
     section.column
       span.label {{text}}:
-      input(:value="props.value" @input="updateValue(($event.target as HTMLInputElement)?.value)" :style="styleComponent" :id="text" :type="type").input
+      input(:value="props.value" @input="updateValue(($event.target as HTMLInputElement)?.value)" :style="styleComponent" :id="text" :type="type" ).input
 
 div(v-else)
   section.fit.column.wrap.justify-center.items-center.content-center.section
@@ -28,7 +28,7 @@ export interface Props {
   transform: string
   mobileWidth: number
   type: string
-  alert: string
+  alert: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -41,7 +41,7 @@ const props = withDefaults(defineProps<Props>(), {
   transform: 'uppercase',
   mobileWidth: 14,
   type: 'input',
-  alert: 'false',
+  alert: false,
 })
 
 const emit = defineEmits(['update:value'])
@@ -50,12 +50,9 @@ const updateValue = (value: string) => {
   emit('update:value', value)
 }
 
-let colorBackground = ''
-if (props.alert === 'false') {
-  colorBackground = 'rgba(12, 21, 42, 0.45)'
-} else {
-  colorBackground = 'rgba(128, 21, 21, 0.45)'
-}
+const colorBackground = computed(() => {
+  return props.alert ? 'rgba(128, 21, 21, 0.45)' : 'rgba(12, 21, 42, 0.45)'
+})
 
 const styleComponent = computed(() => {
   return {
@@ -63,7 +60,7 @@ const styleComponent = computed(() => {
     '--alignment': props.alignment,
     '--transform': props.transform,
     '--mobileWidth': props.mobileWidth,
-    '--colorBackground': colorBackground,
+    '--colorBackground': colorBackground.value,
   }
 })
 </script>
