@@ -128,14 +128,15 @@ let missingDetails: string[] = []
 const checkComplete = async () => {
   missingDetails = []
 
-  if (!ifullname.value) missingDetails.push('fullname')
+  if (!ifullname.value) {
+    missingDetails.push('fullname')
+    redFullname.value = true
+  }
   if (!iusername.value) missingDetails.push('username')
   if (!ipassword.value) missingDetails.push('password')
   if (!icpassword.value) missingDetails.push('confirm password')
   if (accessList.value.length === 0) missingDetails.push('access')
 
-  // console.log('accessList:', accessList.value)
-  // console.log('missingDetails:', missingDetails)
   if (missingDetails.length > 0) return true
   else return false
 }
