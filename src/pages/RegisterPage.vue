@@ -14,7 +14,7 @@ q-page(padding)
         component(:is="docForm" text="Username" v-model:value="iusername" :width=30 :mobileWidth=14 icon="person" :alert="redUsername").login__username--input
         component(:is="docForm" text="Password" v-model:value="ipassword" :width=30 :mobileWidth=14 icon="lock" type="password" :alert="redPassword").login__username--input
         component(:is="docForm" text="Confirm Password" v-model:value="icpassword" :width=30 :mobileWidth=14 icon="lock" type="password" :alert="redCPassword").login__username--input
-        component(:is="docList" text="Access" v-model:modelValue="accessList" icon="format_list_bulleted" :options="accessOption").login__username--input
+        component(:is="docList" text="Access" v-model:modelValue="accessList" icon="format_list_bulleted" :options="accessOption" :alert="redAccess").login__username--input
 
         //- span.login__username--label Access
         //- q-option-group(dark v-model="accessList" :options="accessOption" color="indigo-9" type="checkbox").login__username--option
@@ -88,6 +88,7 @@ let redFullname = ref(false)
 let redUsername = ref(false)
 let redPassword = ref(false)
 let redCPassword = ref(false)
+let redAccess = ref(false)
 
 let ifullname = ref('')
 let iusername = ref('')
@@ -131,11 +132,27 @@ const checkComplete = async () => {
   if (!ifullname.value) {
     missingDetails.push('fullname')
     redFullname.value = true
-  }
-  if (!iusername.value) missingDetails.push('username')
-  if (!ipassword.value) missingDetails.push('password')
-  if (!icpassword.value) missingDetails.push('confirm password')
-  if (accessList.value.length === 0) missingDetails.push('access')
+  } else redFullname.value = false
+
+  if (!iusername.value) {
+    missingDetails.push('username')
+    redUsername.value = true
+  } else redUsername.value = false
+
+  if (!ipassword.value) {
+    missingDetails.push('password')
+    redPassword.value = true
+  } else  redPassword.value = false
+
+  if (!icpassword.value) {
+    missingDetails.push('confirm password')
+    redCPassword.value = true
+  } else redCPassword.value = false
+
+  if (accessList.value.length === 0) {
+    missingDetails.push('access')
+    redAccess.value = true
+  } else redAccess.value = false
 
   if (missingDetails.length > 0) return true
   else return false

@@ -1,14 +1,14 @@
 <template lang="pug">
 
 div(v-if="$q.screen.width > 500")
-  section.full-width.row.inline.wrap.justify-start.items-start.content-start.section
+  section.full-width.row.inline.wrap.justify-start.items-start.content-start.section(:style="{ '--colorBackground': colorBackground }")
     q-icon(:name="icon" size="1.6rem").icon
     section.column
       span.label {{ text }}:
       q-option-group(dark :modelValue="props.modelValue" @update:modelValue="updateValue" :options="props.options" color="blue-10" type="checkbox").list
 
 div(v-else)
-  section.full-width.column.inline.wrap.justify-center.items-center.content-center.section
+  section.full-width.column.inline.wrap.justify-center.items-center.content-center.section(:style="{ '--colorBackground': colorBackground }")
     q-icon(:name="icon" size="1.8rem").icon
     section.column.wrap.justify-center.items-center.content-center.text-start
       span.label {{ text }}
@@ -23,23 +23,25 @@ export interface Props {
   icon: string
   modelValue: string[]
   options: Array<{ label: string; value: string }>
-  // width: number
-  // alignment: string
-  // mobileWidth: number
+  alert: boolean
 }
 
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  alert: false
+})
 const emit = defineEmits(['update:modelValue'])
 
 const updateValue = (value: string[]) => {
   emit('update:modelValue', value)
 }
 
+const colorBackground = computed(() => {
+  return props.alert ? 'rgba(128, 21, 21, 0.45)' : 'rgba(12, 21, 42, 0.45)'
+})
+
 // const styleComponent = computed(() => {
 //   return {
-//     '--width': props.width + 'rem',
-//     '--alignment': props.alignment,
-//     '--mobileWidth': props.mobileWidth,
+//     '--colorBackground': colorBackground.value,
 //   }
 // })
 </script>
@@ -52,7 +54,8 @@ const updateValue = (value: string[]) => {
   color: #ffffff
 
 .section
-  background-color: rgba(12, 21, 42, 0.45)
+  // background-color: rgba(12, 21, 42, 0.45)
+  background-color: var(--colorBackground)
   backdrop-filter: blur(9px) saturate(150%)
   border-radius: 0.6rem
   border: 1px solid rgba(255, 255, 255, 0.125)
