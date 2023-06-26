@@ -10,11 +10,11 @@ q-page(padding)
   section.login.column.items-center
     transition(appear @before-enter="beforeEnterInputs" @enter="enterInputs")
       div.column.items-center
-        component(:is="docForm" text="Fullname" v-model:value="ifullname" :width=30 :mobileWidth=14 icon="badge" :alert="redFullname").login__username--input
-        component(:is="docForm" text="Username" v-model:value="iusername" :width=30 :mobileWidth=14 icon="person" :alert="redUsername").login__username--input
-        component(:is="docForm" text="Password" v-model:value="ipassword" :width=30 :mobileWidth=14 icon="lock" type="password" :alert="redPassword").login__username--input
-        component(:is="docForm" text="Confirm Password" v-model:value="icpassword" :width=30 :mobileWidth=14 icon="lock" type="password" :alert="redCPassword").login__username--input
-        component(:is="docList" text="Access" v-model:modelValue="accessList" icon="format_list_bulleted" :options="accessOption" :alert="redAccess").login__username--input
+        component(:is="docForm" text="Fullname" v-model:value="ifullname" :width=30 :mobileWidth=14 icon="badge" :alert="redFullname" :keypressEvent="checkCompleteFullname").login__username--input
+        component(:is="docForm" text="Username" v-model:value="iusername" :width=30 :mobileWidth=14 icon="person" :alert="redUsername" :keypressEvent="checkCompleteUsername").login__username--input
+        component(:is="docForm" text="Password" v-model:value="ipassword" :width=30 :mobileWidth=14 icon="lock" type="password" :alert="redPassword" :keypressEvent="checkCompletePassword").login__username--input
+        component(:is="docForm" text="Confirm Password" v-model:value="icpassword" :width=30 :mobileWidth=14 icon="lock" type="password" :alert="redCPassword" :keypressEvent="checkCompleteCPassword").login__username--input
+        component(:is="docList" text="Access" v-model:modelValue="accessList" icon="format_list_bulleted" :options="accessOption" :alert="redAccess" :keypressEvent="checkCompleteAccess").login__username--input
 
         //- span.login__username--label Access
         //- q-option-group(dark v-model="accessList" :options="accessOption" color="indigo-9" type="checkbox").login__username--option
@@ -48,6 +48,9 @@ import docButton from 'components/docButton.vue'
 import docForm from 'components/docForm.vue'
 import docList from 'components/docList.vue'
 
+const sample = () => {
+  console.log('yeah')
+}
 const router = useRouter()
 const _pagewithtable = usePageWithTable()
 const _currentpage = useCurrentPage()
@@ -142,7 +145,7 @@ const checkComplete = async () => {
   if (!ipassword.value) {
     missingDetails.push('password')
     redPassword.value = true
-  } else  redPassword.value = false
+  } else redPassword.value = false
 
   if (!icpassword.value) {
     missingDetails.push('confirm password')
@@ -156,6 +159,27 @@ const checkComplete = async () => {
 
   if (missingDetails.length > 0) return true
   else return false
+}
+
+const checkCompleteFullname = () => {
+  if (!ifullname.value) redFullname.value = true
+  else redFullname.value = false
+}
+const checkCompleteUsername = () => {
+  if (!iusername.value) redUsername.value = true
+  else redUsername.value = false
+}
+const checkCompletePassword = () => {
+  if (!ipassword.value) redPassword.value = true
+  else redPassword.value = false
+}
+const checkCompleteCPassword = () => {
+  if (!icpassword.value) redCPassword.value = true
+  else redCPassword.value = false
+}
+const checkCompleteAccess = () => {
+  if  (accessList.value.length === 0) redAccess.value = true
+  else redAccess.value = false
 }
 
 const passwordConfirm = async () => {
@@ -176,7 +200,7 @@ const passwordConfirm = async () => {
 
 const saveAccount = async () => {
   if (await checkConnection()) {
-    if (await checkComplete() === false) {
+    if ((await checkComplete()) === false) {
       if (await passwordConfirm()) {
         let ipasswordEncrypted = encrypt(ipassword.value.toUpperCase(), 'doctrack2023', 3, 128)
         let iincoming = accessList.value.includes('is_incoming') ? 1 : 0

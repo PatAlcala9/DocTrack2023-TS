@@ -5,14 +5,14 @@ div(v-if="$q.screen.width > 500")
     q-icon(:name="icon" size="1.6rem").icon
     section.column
       span.label {{ text }}:
-      q-option-group(dark :modelValue="props.modelValue" @update:modelValue="updateValue" :options="props.options" color="blue-10" type="checkbox").list
+      q-option-group(dark :modelValue="props.modelValue" @update:modelValue="updateValue" :options="props.options" color="blue-10" type="checkbox" @keypress="keypressEvent").list
 
 div(v-else)
   section.full-width.column.inline.wrap.justify-center.items-center.content-center.section(:style="{ '--colorBackground': colorBackground }")
     q-icon(:name="icon" size="1.8rem").icon
     section.column.wrap.justify-center.items-center.content-center.text-start
       span.label {{ text }}
-      q-option-group(dark :modelValue="props.modelValue" @update:modelValue="updateValue" :options="props.options" color="blue-10" type="checkbox").list
+      q-option-group(dark :modelValue="props.modelValue" @update:modelValue="updateValue" :options="props.options" color="blue-10" type="checkbox" @keypress="keypressEvent").list
 </template>
 
 <script setup lang="ts">
@@ -24,6 +24,7 @@ export interface Props {
   modelValue: string[]
   options: Array<{ label: string; value: string }>
   alert: boolean
+  keypressEvent: () => void
 }
 
 const props = withDefaults(defineProps<Props>(), {

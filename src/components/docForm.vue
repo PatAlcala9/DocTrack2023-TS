@@ -5,14 +5,14 @@ div(v-if="$q.screen.width > 500")
     q-icon(:name="icon" size="1.6rem").icon
     section.column
       span.label {{text}}:
-      input(:value="props.value" @input="updateValue(($event.target as HTMLInputElement)?.value)" :style="styleComponent" :id="text" :type="type" ).input
+      input(:value="props.value" @input="updateValue(($event.target as HTMLInputElement)?.value)" :style="styleComponent" :id="text" :type="type" @keypress="keypressEvent").input
 
 div(v-else)
-  section.fit.column.wrap.justify-center.items-center.content-center.section
+  section.fit.column.wrap.justify-center.items-center.content-center.section(:style="{ '--colorBackground': colorBackground }")
     q-icon(:name="icon" size="1.8rem").icon
     section.column.wrap.justify-center.items-center.content-center
       span.label {{text}}
-      input(:value="props.value" @input="updateValue(($event.target as HTMLInputElement)?.value)" :style="styleComponent" :type="type").input
+      input(:value="props.value" @input="updateValue(($event.target as HTMLInputElement)?.value)" :style="styleComponent" :type="type" @keypress="keypressEvent").input
 
 </template>
 
@@ -29,6 +29,7 @@ export interface Props {
   mobileWidth: number
   type: string
   alert: boolean
+  keypressEvent: () => void
 }
 
 const props = withDefaults(defineProps<Props>(), {
