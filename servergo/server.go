@@ -1186,5 +1186,51 @@ func connect() {
   })
 
 
+
+  router.POST("/api/PostEditLog", func(c *gin.Context) {
+    type EditLogData struct {
+      Data  string `json:"data"`
+      Data2 string `json:"data2"`
+      Data3 string `json:"data3"`
+      Data4 string `json:"data4"`
+      Data5 string `json:"data5"`
+    }
+    var editLogData EditLogData
+    if err := c.ShouldBindJSON(&editLogData); err != nil {
+      c.String(http.StatusBadRequest, "Invalid request body")
+      return
+    }
+
+    c.Writer.Header().Set("X-XSS-Protection", "1; mode=block")
+    c.Writer.Header().Set("X-Content-Type-Options", "nosniff")
+    c.Writer.Header().Set("X-DNS-Prefetch-Control", "off")
+    c.Writer.Header().Set("X-Frame-Options", "DENY")
+    c.Writer.Header().Set("X-Download-Options", "noopen")
+    c.Writer.Header().Set("Referrer-Policy", "no-referrer")
+
+    dbpost, err := db.Prepare("INSERT INTO edit_logs (edit_logsid, table, column, old_data, new_data, date_edited) VALUES (NULL, ?, ?, ?, ?, ?)")
+    if err != nil {
+      panic(err.Error())
+    }
+    defer dbpost.Close()
+
+    exec, err := dbpost.Exec(editLogData.Data, editLogData.Data2, editLogData.Data3, editLogData.Data4, editLogData.Data5)
+    if err != nil {
+      panic(err.Error())
+    }
+
+    affect, err := exec.RowsAffected()
+    if err != nil {
+      panic(err.Error())
+    }
+
+    if affect > 0 {
+      c.String(http.StatusOK, "Success on Saving Edit Log")
+    } else {
+      c.String(http.StatusInternalServerError, "Failed on Saving Edit Log")
+    }
+  })
+
+
   router.Run(":8081")
 }
