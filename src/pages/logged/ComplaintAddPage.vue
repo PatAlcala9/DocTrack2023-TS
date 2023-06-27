@@ -356,7 +356,7 @@ const saveData = async () => {
         const maxComplaint = await getMaxComplaintCodeLOCAL()
         const newComplaint = await generateNewComplaintCode(maxComplaint)
         const newStatusID = await getLatestStatus(newComplaint)
-        if (await postComplaintLOCAL(newComplaint, sourceEntryID.value, complaintName.value, complaintDetail.value, receivedDate.value, complaintLocation.value, complaintDetail.value, latestRespondent, newStatusID)) showDialog('Success', 'Successfully Saved Complaint')
+        if (await postComplaintLOCAL(newComplaint, sourceEntryID.value, complaintName.value, complaintContact.value, receivedDate.value, complaintLocation.value, complaintDetail.value, latestRespondent, newStatusID)) showDialog('Success', 'Successfully Saved Complaint')
         else showDialog('Error', 'Failed to Save Complaint')
       } else {
         showDialog('Error', 'Failed to Save Respondent')
@@ -376,7 +376,7 @@ const saveData = async () => {
 
             if (await postStatus(newComplaint, receivedDate.value, 'ENCODED TO SYSTEM', '15', 'ENCODED', complaintName.value, '')) {
               const newStatusID = await getLatestStatus(newComplaint)
-              if (await postComplaint(newComplaint, sourceEntryID.value, complaintName.value, complaintDetail.value, receivedDate.value, complaintLocation.value, complaintDetail.value, latestRespondent, newStatusID)) {
+              if (await postComplaint(newComplaint, sourceEntryID.value, complaintName.value, complaintContact.value, receivedDate.value, complaintLocation.value, complaintDetail.value, latestRespondent, newStatusID)) {
                 for (let item of attachmentSelectedList.value) {
                   await postAttachment(newComplaint, parseInt(item))
                 }
