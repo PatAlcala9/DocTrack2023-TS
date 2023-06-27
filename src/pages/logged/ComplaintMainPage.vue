@@ -27,9 +27,9 @@ q-page(padding)
             tr(v-for="(item, index) in complaintList.result" :key="item").table-content-group
               td {{item}}
               td
-                q-btn(color="button" size="lg" icon="visibility" :ripple="false" @click="getComplaintSpecific(item)").button-view
+                q-btn(color="button" size="lg" icon="visibility" :ripple="false" @click="getComplaintSpecific(item,false)").button-view
               td
-                q-btn(color="button" size="lg" icon="settings" :ripple="false" @click="getComplaintSpecific(item)").button-view
+                q-btn(color="button" size="lg" icon="settings" :ripple="false" @click="getComplaintSpecific(item, true)").button-view
 
     section(v-else).flex.flex-center
       section(v-if="complaintList.result !== ''").dialog-content-table
@@ -286,7 +286,6 @@ const getComplaintSpecific = async (code: string, edit: boolean) => {
 
     if (edit) dialogEdit.value = true
     else dialog.value = true
-
   }
 }
 
