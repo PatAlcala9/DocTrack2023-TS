@@ -93,7 +93,6 @@ q-dialog(full-width full-height v-model="dialog" transition-show="flip-right" tr
           component(:is="docInfo" label="Respodent Contact" :value="dialogRespondentContact")
 
       section.fit.row.wrap.justify-around.items-center.content-center.button-area
-        //- doc-button(text="OK" @click="dialog=false")
         component(:is="docButton" text="OK" @click="dialog=false")
 
 
@@ -135,7 +134,6 @@ q-dialog(full-width full-height v-model="dialogEdit" transition-show="flip-right
           component(:is="docInfoEdit" label="Respodent Contact" v-model:value="dataRespondentContact" @blur="recordChange('respondent-contact')")
 
       section.fit.row.wrap.justify-around.items-center.content-center.button-area
-        //- doc-button(text="OK" @click="dialog=false")
         component(:is="docButton" text="OK" @click="dialogEdit=false")
 </template>
 
@@ -154,14 +152,7 @@ const _isdemo = useIsDemo()
 
 let onlineColor = ref('')
 
-const sample = () => {
-  console.log('yeah')
-}
-
 import docButton from 'components/docButton.vue'
-import docTextArea from 'components/docTextArea.vue'
-import docInput from 'components/docInput.vue'
-import docLabel from 'components/docLabel.vue'
 import docForm from 'components/docForm.vue'
 import docInfo from 'components/docInfo.vue'
 import docInfoEdit from 'components/docInfoEdit.vue'
@@ -421,6 +412,8 @@ const recordChange = (value: string) => {
         postUpdate(dataRespondentLocation.value, dialogCode.value, value)
         break
       }
+    default:
+      break
   }
 }
 

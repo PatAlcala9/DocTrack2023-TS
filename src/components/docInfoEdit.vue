@@ -3,7 +3,7 @@
 div.section.fit.column.wrap.justify-start.items-center.content-center
   component(:is="docLabel" :text="props.label")
   input(v-if="wide === false" dark :value="props.value" @input="updateValue(($event.target as HTMLInputElement)?.value)" dense  @blur="$emit('blur')").information
-  input(v-else dark v-html="displayMultiline(props.value)" dense type="multiline"  @blur="$emit('blur')").wide
+  input(v-else dark v-html="displayMultiline(props.value)" dense type="multiline" @blur="$emit('blur')").wide
 
 </template>
 

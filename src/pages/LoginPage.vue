@@ -518,7 +518,7 @@ const enterSwitch = (el: any) => {
 
 .version--text
   font-family: 'Inter'
-  font-size: 1rem
+  font-size: 0.9rem
   color: #ffffff
 
 @media screen and (max-width: 900px)
@@ -576,4 +576,7 @@ const enterSwitch = (el: any) => {
     cursor: pointer
     color: #ffffff
     font-size: 1.1rem
+
+  .version
+    padding-bottom: 2%
 </style>
