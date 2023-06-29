@@ -117,22 +117,22 @@ q-dialog(full-width full-height v-model="dialogEdit" transition-show="flip-right
 
       section.full-width.wrap.column.wrap.justify-center.items-center.content-center.text-center
         div.padded
-          component(:is="docInfoEdit" label="Complaintant" :value="dataName" @blur="recordChange('name')")
+          component(:is="docInfoEdit" label="Complaintant" v-model:value="dataName" @blur="recordChange('name')")
         div.padded
-          component(:is="docInfoEdit" label="Complaintant Contact" :value="dialogContact" )
+          component(:is="docInfoEdit" label="Complaintant Contact" v-model:value="dataContact" @blur="recordChange('contact')")
         div.padded
-          component(:is="docInfoEdit" label=" Complaintant Location" :value="dialogLocation" )
+          component(:is="docInfoEdit" label=" Complaintant Location" v-model:value="dataLocation" @blur="recordChange('location')")
         div.padded
-          component(:is="docInfoEdit" label="Details" :value="dialogDetails" wide)
+          component(:is="docInfoEdit" label="Details" v-model:value="dataDetails" wide @blur="recordChange('details')")
 
         div.padded
-          component(:is="docInfo" label="Transaction Date" :value="dialogDateTransacted")
+          component(:is="docInfo" label="Transaction Date" :value="dialogDateTransacted" )
         div.padded
-          component(:is="docInfoEdit" label="Respodent" :value="dialogRespondentName")
+          component(:is="docInfoEdit" label="Respodent" v-model:value="dataRespondentName" @blur="recordChange('respondent-name')")
         div.padded
-          component(:is="docInfoEdit" label="Respodent Location" :value="dialogRespondentLocation")
+          component(:is="docInfoEdit" label="Respodent Location" v-model:value="dataRespondentLocation" @blur="recordChange('respondent-location')")
         div.padded
-          component(:is="docInfoEdit" label="Respodent Contact" :value="dialogRespondentContact")
+          component(:is="docInfoEdit" label="Respodent Contact" v-model:value="dataRespondentContact" @blur="recordChange('respondent-contact')")
 
       section.fit.row.wrap.justify-around.items-center.content-center.button-area
         //- doc-button(text="OK" @click="dialog=false")
@@ -380,47 +380,45 @@ const recordChange = (value: string) => {
 
   switch (value) {
     case 'name':
-      console.log('dataName', dataName.value)
-      console.log('dialogName', dialogName.value)
       if (dataName.value !== dialogName.value) {
         postEditLog('complaint_info', 'complaintant_name', dataName.value, dialogName.value, formattedDate)
-        postUpdate(dataName.value, dialogName.value, value)
+        postUpdate(dataName.value, dialogCode.value, value)
         break
       }
     case 'contact':
       if (dataContact.value !== dialogContact.value) {
         postEditLog('complaint_info', 'complaintant_contact', dataContact.value, dialogContact.value, formattedDate)
-        postUpdate(dataContact.value, dialogContact.value, value)
+        postUpdate(dataContact.value, dialogCode.value, value)
         break
       }
     case 'location':
       if (dataLocation.value !== dialogLocation.value) {
         postEditLog('complaint_info', 'locationOfconstruction', dataLocation.value, dialogLocation.value, formattedDate)
-        postUpdate(dataLocation.value, dialogLocation.value, value)
+        postUpdate(dataLocation.value, dialogCode.value, value)
         break
       }
     case 'details':
       if (dataDetails.value !== dialogDetails.value) {
         postEditLog('complaint_info', 'details', dataDetails.value, dialogDetails.value, formattedDate)
-        postUpdate(dataDetails.value, dialogDetails.value, value)
+        postUpdate(dataDetails.value, dialogCode.value, value)
         break
       }
     case 'respondent-name':
       if (dataRespondentName.value !== dialogRespondentName.value) {
         postEditLog('respondent_info', 'respondent_name', dataRespondentName.value, dialogRespondentName.value, formattedDate)
-        postUpdate(dataRespondentName.value, dialogRespondentName.value, value)
+        postUpdate(dataRespondentName.value, dialogCode.value, value)
         break
       }
     case 'respondent-contact':
       if (dataRespondentContact.value !== dialogRespondentContact.value) {
         postEditLog('respondent_info', 'respondent_contact', dataRespondentContact.value, dialogRespondentContact.value, formattedDate)
-        postUpdate(dataRespondentContact.value, dialogRespondentContact.value, value)
+        postUpdate(dataRespondentContact.value, dialogCode.value, value)
         break
       }
     case 'respondent-location':
       if (dataRespondentLocation.value !== dialogRespondentLocation.value) {
         postEditLog('respondent_info', 'respondent_location', dataRespondentLocation.value, dialogRespondentLocation.value, formattedDate)
-        postUpdate(dataRespondentLocation.value, dialogRespondentLocation.value, value)
+        postUpdate(dataRespondentLocation.value, dialogCode.value, value)
         break
       }
   }
@@ -474,9 +472,9 @@ const recordChange = (value: string) => {
 .dialog-card
   // width: 100vw
   // height: 100vh
-  overflow: auto
-  scrollbar-width: thin
-  scrollbar-color: transparent transparent
+
+.dialog-card::-webkit-scrollbar
+    display: none
 
 .dialog-card__label
   font-family: 'Inter'
