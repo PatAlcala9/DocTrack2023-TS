@@ -102,7 +102,7 @@ q-dialog(full-width full-height v-model="dialogEdit" transition-show="flip-right
     q-card-section
       section(v-if="quasar.screen.width > 500").fit.row.wrap.justify-between.items-center.content-center.text-center.q-card--section
         div.column
-          component(:is="docInfoEdit" label="Complaint Code" :value="dialogCode" )
+          component(:is="docInfo" label="Complaint Code" :value="dialogCode" )
         div.column
           component(:is="docInfoEdit" label="Complaint Type" :value="dialogType" )
         div.column
