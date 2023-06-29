@@ -48,6 +48,8 @@ q-page(padding)
         span(v-else @click="showLogin").inquiry-text Inquire
         //- component(:is="docPDF" title="Sample Document PDF" text="aaaa" date="yyyy-MM-dd")
 
+    div.version
+      span.version--text {{version}}
 
 q-dialog(v-model="error" transition-show="flip-right" transition-hide="flip-left" @keypress.enter="error=false").dialog
   q-card.dialog-card.text-white.flex.flex-center
@@ -118,6 +120,8 @@ let passwordEntry = ref('')
 let userid = 0
 let employeeName = null
 let loginSuccess = false
+
+const version = ref('v 0.1')
 
 const showInquiry = async () => {
   await exitInquiry()
@@ -504,6 +508,19 @@ const enterSwitch = (el: any) => {
   font-family: 'Inter'
   font-family: 0.6rem
 
+.version
+  position: absolute
+  bottom: 0
+  left: 0
+  right: 0
+  text-align: center
+  padding-bottom: 2rem
+
+.version--text
+  font-family: 'Inter'
+  font-size: 1rem
+  color: #ffffff
+
 @media screen and (max-width: 900px)
   .grid
     grid-template-areas: "title title title" "login login login" "inquiry inquiry ."
@@ -521,6 +538,8 @@ const enterSwitch = (el: any) => {
     font-size: 1rem
   .inquiry-text
     font-size: 1.1rem
+
+
 
 @media screen and (max-width: 500px)
   .grid

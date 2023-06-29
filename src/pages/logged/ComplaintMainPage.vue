@@ -340,6 +340,11 @@ const postEditLog = async (table: string, column: string, old_value: string, new
     data4: new_value,
     data5: date
   })
+  const data = await response.data
+
+  if (data.includes('Success') === false) {
+    await postEditLog(table, column, old_value, new_value, date)
+  }
 }
 
 const postUpdate = async (value: string, code: string, column: string) => {
@@ -348,13 +353,11 @@ const postUpdate = async (value: string, code: string, column: string) => {
     data2: code,
     data3: column
   })
-  // const data = response.data
+  const data = await response.data
 
-  // if (data.includes('Success')) {
-  //   showDialog('Successfully Register')
-  // } else {
-  //   showDialog('Failed to Register', 'Something went wrong. Please try again')
-  // }
+  if (data.includes('Success') === false) {
+    await postUpdate(value, code, column)
+  }
 }
 
 const recordData = async () => {
