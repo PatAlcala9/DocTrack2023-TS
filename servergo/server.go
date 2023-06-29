@@ -1208,7 +1208,7 @@ func connect() {
     c.Writer.Header().Set("X-Download-Options", "noopen")
     c.Writer.Header().Set("Referrer-Policy", "no-referrer")
 
-    dbpost, err := db.Prepare("INSERT INTO edit_logs (edit_logsid, table, column, old_data, new_data, date_edited) VALUES (NULL, ?, ?, ?, ?, ?)")
+    dbpost, err := db.Prepare("INSERT INTO edit_logs (edit_logsid, edit_table, edit_column, old_data, new_data, date_edited) VALUES (NULL, ?, ?, ?, ?, ?)")
     if err != nil {
       panic(err.Error())
     }

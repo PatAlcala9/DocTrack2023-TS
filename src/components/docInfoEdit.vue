@@ -2,8 +2,8 @@
 
 div.section.fit.column.wrap.justify-start.items-center.content-center
   component(:is="docLabel" :text="props.label")
-  input(v-if="wide === false" dark v-model="props.value" dense).information
-  input(v-else dark v-html="displayMultiline(props.value)" dense type="multiline").wide
+  input(v-if="wide === false" dark v-model="props.value" dense  @blur="$emit('blur')").information
+  input(v-else dark v-html="displayMultiline(props.value)" dense type="multiline"  @blur="$emit('blur')").wide
 
 </template>
 
@@ -22,7 +22,7 @@ const props = withDefaults(defineProps<Props>(), {
   wide: false
 })
 
-const emit = defineEmits(['update:value'])
+const emit = defineEmits(['update:value', 'blur'])
 
 const displayMultiline = (value: string) => {
   return value.replace(/\r?\n/g, '<br>');

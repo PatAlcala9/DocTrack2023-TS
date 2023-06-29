@@ -109,15 +109,15 @@ q-dialog(full-width full-height v-model="dialogEdit" transition-show="flip-right
           component(:is="docInfo" label="Received Date" :value="dialogReceivedDate" )
       section(v-else).fit.column.wrap.justify-center.items-center.content-center.text-center.q-card--section
         div.column
-          component(:is="docInfoEdit" label="Complaint Code" :value="dialogCode" )
+          component(:is="docInfo" label="Complaint Code" :value="dialogCode")
         div.column
-          component(:is="docInfoEdit" label="Complaint Type" :value="dialogType" )
+          component(:is="docInfo" label="Complaint Type" :value="dialogType")
         div.column
-          component(:is="docInfoEdit" label="Received Date" :value="dialogReceivedDate" )
+          component(:is="docInfo" label="Received Date" :value="dialogReceivedDate")
 
       section.full-width.wrap.column.wrap.justify-center.items-center.content-center.text-center
         div.padded
-          component(:is="docInfoEdit" label="Complaintant" :value="dialogName" )
+          component(:is="docInfoEdit" label="Complaintant" :value="dialogName" @blur="recordChange('name')")
         div.padded
           component(:is="docInfoEdit" label="Complaintant Contact" :value="dialogContact" )
         div.padded
@@ -153,6 +153,10 @@ const _currentpage = useCurrentPage()
 const _isdemo = useIsDemo()
 
 let onlineColor = ref('')
+
+const sample = () => {
+  console.log('yeah')
+}
 
 import docButton from 'components/docButton.vue'
 import docTextArea from 'components/docTextArea.vue'
@@ -296,6 +300,7 @@ const getComplaintSpecific = async (code: string, edit: boolean) => {
     if (edit) dialogEdit.value = true
     else dialog.value = true
   }
+  await recordData()
 }
 
 const filterTable = async () => {
@@ -371,51 +376,51 @@ const recordData = async () => {
   dataStatus.value = dialogStatus.value
 }
 
-const recordChange = async (value: string) => {
+const recordChange = (value: string) => {
   const today = new Date()
-  const formattedDate = date.formatDate(today, 'YYYY-MM-DD')
+  const formattedDate = date.formatDate(today, 'YYYY-MM-DD HH:mm:ss')
 
   switch (value) {
     case 'name':
       if (dataName.value !== dialogName.value) {
         postEditLog('complaint_info', 'complaintant_name', dataName.value, dialogName.value, formattedDate)
-        postUpdate(dataName.value, dialogCode.value, 'complaintant_name')
+        postUpdate(dataName.value, dialogCode.value, value)
         break
       }
     case 'contact':
       if (dataContact.value !== dialogContact.value) {
         postEditLog('complaint_info', 'complaintant_contact', dataContact.value, dialogContact.value, formattedDate)
-        postUpdate(dataContact.value, dialogCode.value, 'complaintant_contact')
+        postUpdate(dataContact.value, dialogCode.value, value)
         break
       }
     case 'location':
       if (dataLocation.value !== dialogLocation.value) {
         postEditLog('complaint_info', 'locationOfconstruction', dataLocation.value, dialogLocation.value, formattedDate)
-        postUpdate(dataLocation.value, dialogCode.value, 'locationOfconstruction')
+        postUpdate(dataLocation.value, dialogCode.value, value)
         break
       }
     case 'details':
       if (dataDetails.value !== dialogDetails.value) {
         postEditLog('complaint_info', 'details', dataDetails.value, dialogDetails.value, formattedDate)
-        postUpdate(dataDetails.value, dialogDetails.value, 'details')
+        postUpdate(dataDetails.value, dialogDetails.value, value)
         break
       }
     case 'respondent-name':
       if (dataRespondentName.value !== dialogRespondentName.value) {
         postEditLog('respondent_info', 'respondent_name', dataRespondentName.value, dialogRespondentName.value, formattedDate)
-        postUpdate(dataRespondentName.value, dialogRespondentName.value, 'respondent_name')
+        postUpdate(dataRespondentName.value, dialogRespondentName.value, value)
         break
       }
     case 'respondent-contact':
       if (dataRespondentContact.value !== dialogRespondentContact.value) {
         postEditLog('respondent_info', 'respondent_contact', dataRespondentContact.value, dialogRespondentContact.value, formattedDate)
-        postUpdate(dataRespondentContact.value, dialogRespondentContact.value, 'respondent_contact')
+        postUpdate(dataRespondentContact.value, dialogRespondentContact.value, value)
         break
       }
     case 'respondent-location':
       if (dataRespondentLocation.value !== dialogRespondentLocation.value) {
         postEditLog('respondent_info', 'respondent_location', dataRespondentLocation.value, dialogRespondentLocation.value, formattedDate)
-        postUpdate(dataRespondentLocation.value, dialogRespondentLocation.value, 'respondent_location')
+        postUpdate(dataRespondentLocation.value, dialogRespondentLocation.value, value)
         break
       }
   }
@@ -423,7 +428,6 @@ const recordChange = async (value: string) => {
 
 ;(async () => {
   checkOnline()
-  await recordData()
 
   if (_isdemo.isdemo) fillupOffline()
   else {
