@@ -27,9 +27,9 @@ q-page(padding)
             tr(v-for="(item, index) in complaintList.result" :key="item").table-content-group
               td {{item}}
               td
-                q-btn(color="button" size="lg" icon="visibility" :ripple="false" @click="getComplaintSpecific(item,false)").button-view
+                q-btn(color="button" size="md" icon="visibility" :ripple="false" @click="getComplaintSpecific(item,false)").button-view
               td
-                q-btn(color="button" size="lg" icon="settings" :ripple="false" @click="getComplaintSpecific(item, true)").button-view
+                q-btn(color="button" size="md" icon="edit" :ripple="false" @click="getComplaintSpecific(item, true)").button-view
 
     section(v-else).flex.flex-center
       section(v-if="complaintList.result !== ''").dialog-content-table
@@ -102,11 +102,11 @@ q-dialog(full-width full-height v-model="dialogEdit" transition-show="flip-right
     q-card-section
       section(v-if="quasar.screen.width > 500").fit.row.wrap.justify-between.items-center.content-center.text-center.q-card--section
         div.column
-          component(:is="docInfo" label="Complaint Code" :value="dialogCode" )
+          component(:is="docInfo" label="Complaint Code" :value="dialogCode")
         div.column
-          component(:is="docInfo" label="Complaint Type" :value="dialogType" )
+          component(:is="docInfo" label="Complaint Type" :value="dialogType")
         div.column
-          component(:is="docInfo" label="Received Date" :value="dialogReceivedDate" )
+          component(:is="docInfo" label="Received Date" :value="dialogReceivedDate")
       section(v-else).fit.column.wrap.justify-center.items-center.content-center.text-center.q-card--section
         div.column
           component(:is="docInfo" label="Complaint Code" :value="dialogCode")
@@ -117,7 +117,7 @@ q-dialog(full-width full-height v-model="dialogEdit" transition-show="flip-right
 
       section.full-width.wrap.column.wrap.justify-center.items-center.content-center.text-center
         div.padded
-          component(:is="docInfoEdit" label="Complaintant" :value="dialogName" @blur="recordChange('name')")
+          component(:is="docInfoEdit" label="Complaintant" :value="dataName" @blur="recordChange('name')")
         div.padded
           component(:is="docInfoEdit" label="Complaintant Contact" :value="dialogContact" )
         div.padded
@@ -229,7 +229,6 @@ const getComplaintList = async () => {
       }
       complaintList.value.result5 = arrayRemainingDays.toString()
       return true
-
     } else return false
   } else return false
 }
@@ -254,7 +253,6 @@ const getComplaintListFiltered = async (code: string) => {
       }
       complaintList.value.result5 = arrayRemainingDays.toString()
       return true
-
     } else return false
   } else return false
 }
@@ -343,7 +341,7 @@ const postEditLog = async (table: string, column: string, old_value: string, new
     data2: column,
     data3: old_value,
     data4: new_value,
-    data5: date
+    data5: date,
   })
   const data = await response.data
 
@@ -356,7 +354,7 @@ const postUpdate = async (value: string, code: string, column: string) => {
   const response = await api.post('/api/PostUpdate', {
     data: value,
     data2: code,
-    data3: column
+    data3: column,
   })
   const data = await response.data
 
@@ -382,21 +380,23 @@ const recordChange = (value: string) => {
 
   switch (value) {
     case 'name':
+      console.log('dataName', dataName.value)
+      console.log('dialogName', dialogName.value)
       if (dataName.value !== dialogName.value) {
         postEditLog('complaint_info', 'complaintant_name', dataName.value, dialogName.value, formattedDate)
-        postUpdate(dataName.value, dialogCode.value, value)
+        postUpdate(dataName.value, dialogName.value, value)
         break
       }
     case 'contact':
       if (dataContact.value !== dialogContact.value) {
         postEditLog('complaint_info', 'complaintant_contact', dataContact.value, dialogContact.value, formattedDate)
-        postUpdate(dataContact.value, dialogCode.value, value)
+        postUpdate(dataContact.value, dialogContact.value, value)
         break
       }
     case 'location':
       if (dataLocation.value !== dialogLocation.value) {
         postEditLog('complaint_info', 'locationOfconstruction', dataLocation.value, dialogLocation.value, formattedDate)
-        postUpdate(dataLocation.value, dialogCode.value, value)
+        postUpdate(dataLocation.value, dialogLocation.value, value)
         break
       }
     case 'details':
@@ -470,9 +470,13 @@ const recordChange = (value: string) => {
 .dialog
   width: 100vw
 
+
 .dialog-card
   // width: 100vw
   // height: 100vh
+  overflow: auto
+  scrollbar-width: thin
+  scrollbar-color: transparent transparent
 
 .dialog-card__label
   font-family: 'Inter'
