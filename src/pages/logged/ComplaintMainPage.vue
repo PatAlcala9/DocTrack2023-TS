@@ -332,8 +332,8 @@ const fillupOffline = () => {
   const complaint = LocalStorage.getItem('complaint')
 }
 
-const postEditLogData = async (table: string, column: string, old_value: string, new_value: string, date: string) => {
-  const response = await api.post('/api/PostEditLogData', {
+const postEditLog = async (table: string, column: string, old_value: string, new_value: string, date: string) => {
+  const response = await api.post('/api/PostEditLog', {
     data: table,
     data2: column,
     data3: old_value,
@@ -342,7 +342,20 @@ const postEditLogData = async (table: string, column: string, old_value: string,
   })
 }
 
+const postUpdate = async (value: string, code: string, column: string) => {
+  const response = await api.post('/api/PostUpdate', {
+    data: value,
+    data2: code,
+    data3: column
+  })
+  // const data = response.data
 
+  // if (data.includes('Success')) {
+  //   showDialog('Successfully Register')
+  // } else {
+  //   showDialog('Failed to Register', 'Something went wrong. Please try again')
+  // }
+}
 
 const recordData = async () => {
   dataName.value = dialogName.value
@@ -356,10 +369,50 @@ const recordData = async () => {
 }
 
 const recordChange = async (value: string) => {
+  const today = new Date()
+  const formattedDate = date.formatDate(today, 'YYYY-MM-DD')
+
   switch (value) {
     case 'name':
       if (dataName.value !== dialogName.value) {
-        //record change
+        postEditLog('complaint_info', 'complaintant_name', dataName.value, dialogName.value, formattedDate)
+        postUpdate(dataName.value, dialogCode.value, 'complaintant_name')
+        break
+      }
+    case 'contact':
+      if (dataContact.value !== dialogContact.value) {
+        postEditLog('complaint_info', 'complaintant_contact', dataContact.value, dialogContact.value, formattedDate)
+        postUpdate(dataContact.value, dialogCode.value, 'complaintant_contact')
+        break
+      }
+    case 'location':
+      if (dataLocation.value !== dialogLocation.value) {
+        postEditLog('complaint_info', 'locationOfconstruction', dataLocation.value, dialogLocation.value, formattedDate)
+        postUpdate(dataLocation.value, dialogCode.value, 'locationOfconstruction')
+        break
+      }
+    case 'details':
+      if (dataDetails.value !== dialogDetails.value) {
+        postEditLog('complaint_info', 'details', dataDetails.value, dialogDetails.value, formattedDate)
+        postUpdate(dataDetails.value, dialogDetails.value, 'details')
+        break
+      }
+    case 'respondent-name':
+      if (dataRespondentName.value !== dialogRespondentName.value) {
+        postEditLog('respondent_info', 'respondent_name', dataRespondentName.value, dialogRespondentName.value, formattedDate)
+        postUpdate(dataRespondentName.value, dialogRespondentName.value, 'respondent_name')
+        break
+      }
+    case 'respondent-contact':
+      if (dataRespondentContact.value !== dialogRespondentContact.value) {
+        postEditLog('respondent_info', 'respondent_contact', dataRespondentContact.value, dialogRespondentContact.value, formattedDate)
+        postUpdate(dataRespondentContact.value, dialogRespondentContact.value, 'respondent_contact')
+        break
+      }
+    case 'respondent-location':
+      if (dataRespondentLocation.value !== dialogRespondentLocation.value) {
+        postEditLog('respondent_info', 'respondent_location', dataRespondentLocation.value, dialogRespondentLocation.value, formattedDate)
+        postUpdate(dataRespondentLocation.value, dialogRespondentLocation.value, 'respondent_location')
         break
       }
   }

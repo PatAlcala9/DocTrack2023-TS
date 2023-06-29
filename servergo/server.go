@@ -1255,7 +1255,6 @@ func connect() {
     var dbpost *sql.Stmt
     var successMessage, failureMessage string
 
-    // stmt, err := db.Prepare("UPDATE complaint_info SET complaintant_name = ? WHERE complaint_code = ?")
     switch editData.Data3 {
       case "name":
           dbpost, err = db.Prepare("UPDATE complaint_info SET complaintant_name = ? WHERE complaint_code = ?")
