@@ -342,6 +342,8 @@ const postEditLogData = async (table: string, column: string, old_value: string,
   })
 }
 
+
+
 const recordData = async () => {
   dataName.value = dialogName.value
   dataContact.value = dialogContact.value
@@ -351,6 +353,16 @@ const recordData = async () => {
   dataRespondentContact.value = dialogRespondentContact.value
   dataRespondentLocation.value = dialogRespondentLocation.value
   dataStatus.value = dialogStatus.value
+}
+
+const recordChange = async (value: string) => {
+  switch (value) {
+    case 'name':
+      if (dataName.value !== dialogName.value) {
+        //record change
+        break
+      }
+  }
 }
 
 ;(async () => {

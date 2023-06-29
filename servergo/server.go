@@ -1232,5 +1232,129 @@ func connect() {
   })
 
 
+
+  router.POST("/api/PostUpdate", func(c *gin.Context) {
+    type EditData struct {
+      Data  string `json:"data"`
+      Data2 string `json:"data2"`
+      Data3 string `json:"data3"`
+    }
+    var editData EditData
+    if err := c.ShouldBindJSON(&editData); err != nil {
+      c.String(http.StatusBadRequest, "Invalid request body")
+      return
+    }
+
+    c.Writer.Header().Set("X-XSS-Protection", "1; mode=block")
+    c.Writer.Header().Set("X-Content-Type-Options", "nosniff")
+    c.Writer.Header().Set("X-DNS-Prefetch-Control", "off")
+    c.Writer.Header().Set("X-Frame-Options", "DENY")
+    c.Writer.Header().Set("X-Download-Options", "noopen")
+    c.Writer.Header().Set("Referrer-Policy", "no-referrer")
+
+    var dbpost *sql.Stmt
+    var successMessage, failureMessage string
+
+    // stmt, err := db.Prepare("UPDATE complaint_info SET complaintant_name = ? WHERE complaint_code = ?")
+    switch editData.Data3 {
+      case "name":
+          dbpost, err = db.Prepare("UPDATE complaint_info SET complaintant_name = ? WHERE complaint_code = ?")
+          successMessage = "Success on Updating Complaintant Name"
+          failureMessage = "Failed on Updating Complaintant Name"
+      case "contact":
+          dbpost, err = db.Prepare("UPDATE complaint_info SET complaintant_contact = ? WHERE complaint_code = ?")
+          successMessage = "Success on Updating Complaintant Contact"
+          failureMessage = "Failed on Updating Complaintant Contact"
+      case "location":
+        dbpost, err = db.Prepare("UPDATE complaint_info SET locationOfconstruction = ? WHERE complaint_code = ?")
+        successMessage = "Success on Updating Complaintant Location"
+        failureMessage = "Failed on Updating Complaintant Location"
+      case "details":
+        dbpost, err = db.Prepare("UPDATE complaint_info SET details = ? WHERE complaint_code = ?")
+        successMessage = "Success on Updating Details"
+        failureMessage = "Failed on Updating Details"
+      case "respondent-name":
+        dbpost, err = db.Prepare("UPDATE respondent_info SET respondent_name = ? WHERE respondent_infoid = (SELECT respondent_infoid FROM complaint_info WHERE complaint_code = ? LIMIT 1)")
+        successMessage = "Success on Updating Respondent Name"
+        failureMessage = "Failed on Updating Respondent Name"
+      case "respondent-contact":
+        dbpost, err = db.Prepare("UPDATE respondent_info SET respondent_contact = ? WHERE respondent_infoid = (SELECT respondent_infoid FROM complaint_info WHERE complaint_code = ? LIMIT 1)")
+        successMessage = "Success on Updating Respondent Contact"
+        failureMessage = "Failed on Updating Respondent Contact"
+      case "respondent-location":
+        dbpost, err = db.Prepare("UPDATE respondent_info SET respondent_location = ? WHERE respondent_infoid = (SELECT respondent_infoid FROM complaint_info WHERE complaint_code = ? LIMIT 1)")
+        successMessage = "Success on Updating Respondent Location"
+        failureMessage = "Failed on Updating Respondent Location"
+      default:
+          c.String(http.StatusBadRequest, "Invalid update type")
+          return
+    }
+
+    if err != nil {
+      panic(err.Error())
+    }
+    defer dbpost.Close()
+
+    exec, err := dbpost.Exec(editData.Data, editData.Data2)
+    if err != nil {
+      panic(err.Error())
+    }
+
+    affect, err := exec.RowsAffected()
+    if err != nil {
+      panic(err.Error())
+    }
+
+    if affect > 0 {
+      c.String(http.StatusOK, successMessage)
+    } else {
+      c.String(http.StatusInternalServerError, failureMessage)
+    }
+  })
+
+
+
+  // router.POST("/api/PostUpdateContact", func(c *gin.Context) {
+  //   type EditData struct {
+  //     Data  string `json:"data"`
+  //     Data2 string `json:"data2"`
+  //   }
+  //   var editData EditData
+  //   if err := c.ShouldBindJSON(&editData); err != nil {
+  //     c.String(http.StatusBadRequest, "Invalid request body")
+  //     return
+  //   }
+
+  //   c.Writer.Header().Set("X-XSS-Protection", "1; mode=block")
+  //   c.Writer.Header().Set("X-Content-Type-Options", "nosniff")
+  //   c.Writer.Header().Set("X-DNS-Prefetch-Control", "off")
+  //   c.Writer.Header().Set("X-Frame-Options", "DENY")
+  //   c.Writer.Header().Set("X-Download-Options", "noopen")
+  //   c.Writer.Header().Set("Referrer-Policy", "no-referrer")
+
+  //   dbpost, err := db.Prepare("UPDATE complaint_info SET complaintant_contact = ? WHERE complaint_code = ?")
+  //   if err != nil {
+  //     panic(err.Error())
+  //   }
+  //   defer dbpost.Close()
+
+  //   exec, err := dbpost.Exec(editData.Data, editData.Data2)
+  //   if err != nil {
+  //     panic(err.Error())
+  //   }
+
+  //   affect, err := exec.RowsAffected()
+  //   if err != nil {
+  //     panic(err.Error())
+  //   }
+
+  //   if affect > 0 {
+  //     c.String(http.StatusOK, "Success on Updating Complaintant Contact")
+  //   } else {
+  //     c.String(http.StatusInternalServerError, "Failed on Updating Complaintant Contact")
+  //   }
+  // })
+
+
   router.Run(":8081")
 }
