@@ -40,7 +40,7 @@ const displayMultiline = (value: string) => {
 
 .wide
   @extend .information
-  font-weight: 400
+  font-weight: 450
   font-size: 1.1rem
   width: auto
   text-align: justify

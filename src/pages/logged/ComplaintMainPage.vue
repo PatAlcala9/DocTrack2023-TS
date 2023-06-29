@@ -104,9 +104,9 @@ q-dialog(full-width full-height v-model="dialogEdit" transition-show="flip-right
         div.column
           component(:is="docInfo" label="Complaint Code" :value="dialogCode" )
         div.column
-          component(:is="docInfoEdit" label="Complaint Type" :value="dialogType" )
+          component(:is="docInfo" label="Complaint Type" :value="dialogType" )
         div.column
-          component(:is="docInfoEdit" label="Received Date" :value="dialogReceivedDate" )
+          component(:is="docInfo" label="Received Date" :value="dialogReceivedDate" )
       section(v-else).fit.column.wrap.justify-center.items-center.content-center.text-center.q-card--section
         div.column
           component(:is="docInfoEdit" label="Complaint Code" :value="dialogCode" )
@@ -126,7 +126,7 @@ q-dialog(full-width full-height v-model="dialogEdit" transition-show="flip-right
           component(:is="docInfoEdit" label="Details" :value="dialogDetails" wide)
 
         div.padded
-          component(:is="docInfoEdit" label="Transaction Date" :value="dialogDateTransacted")
+          component(:is="docInfo" label="Transaction Date" :value="dialogDateTransacted")
         div.padded
           component(:is="docInfoEdit" label="Respodent" :value="dialogRespondentName")
         div.padded
@@ -179,6 +179,15 @@ let dialogRespondentContact = ref('')
 let dialogRespondentLocation = ref('')
 let dialogStatus = ref('')
 let dialogDateTransacted = ref('')
+
+let dataName = ref('')
+let dataContact = ref('')
+let dataLocation = ref('')
+let dataDetails = ref('')
+let dataRespondentName = ref('')
+let dataRespondentContact = ref('')
+let dataRespondentLocation = ref('')
+let dataStatus = ref('')
 
 let dialogEdit = ref(false)
 
@@ -323,8 +332,30 @@ const fillupOffline = () => {
   const complaint = LocalStorage.getItem('complaint')
 }
 
+const postEditLogData = async (table: string, column: string, old_value: string, new_value: string, date: string) => {
+  const response = await api.post('/api/PostEditLogData', {
+    data: table,
+    data2: column,
+    data3: old_value,
+    data4: new_value,
+    data5: date
+  })
+}
+
+const recordData = async () => {
+  dataName.value = dialogName.value
+  dataContact.value = dialogContact.value
+  dataLocation.value = dialogLocation.value
+  dataDetails.value = dialogDetails.value
+  dataRespondentName.value = dialogRespondentName.value
+  dataRespondentContact.value = dialogRespondentContact.value
+  dataRespondentLocation.value = dialogRespondentLocation.value
+  dataStatus.value = dialogStatus.value
+}
+
 ;(async () => {
   checkOnline()
+  await recordData()
 
   if (_isdemo.isdemo) fillupOffline()
   else {

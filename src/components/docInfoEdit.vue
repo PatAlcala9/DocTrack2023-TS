@@ -3,7 +3,7 @@
 div.section.fit.column.wrap.justify-start.items-center.content-center
   component(:is="docLabel" :text="props.label")
   input(v-if="wide === false" dark v-model="props.value" dense).information
-  input(v-else dark v-model="props.value" dense).wide
+  input(v-else dark v-html="displayMultiline(props.value)" dense type="multiline").wide
 
 </template>
 
@@ -21,8 +21,12 @@ const props = withDefaults(defineProps<Props>(), {
   value: 'Value',
   wide: false
 })
+
 const emit = defineEmits(['update:value'])
 
+const displayMultiline = (value: string) => {
+  return value.replace(/\r?\n/g, '<br>');
+}
 </script>
 
 <style lang="sass" scoped>
@@ -32,14 +36,15 @@ const emit = defineEmits(['update:value'])
   font-size: 1.4rem
   border: 1px solid #ffffff
   border-radius: 3rem
-  padding: 0.4rem 1.5rem
+  padding: 0.4rem 0rem
   background-color: white
   text-align: center
 
 .wide
   @extend .information
-  font-weight: 400
-  font-size: 1.1rem
+  font-weight: 450
+  font-size: 1.2rem
   width: auto
   text-align: justify
+  padding: 0.4rem 1.5rem
 </style>
