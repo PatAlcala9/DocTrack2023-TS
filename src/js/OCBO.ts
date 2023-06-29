@@ -3,7 +3,7 @@ const CryptoJS = require('crypto-js')
 
 // declare module 'crypto-js'
 
-export function encrypt(Password: string, salt: string, iteration = 1, bits: 128 | 256 | 512 | 1024 | 2048) {
+export function hash(Password: string, salt: string, iteration = 1, bits: 128 | 256 | 512 | 1024 | 2048) {
   let expandedSalt = ''
   for (let i = 0; i < iteration; i++) {
     expandedSalt += salt
@@ -133,7 +133,7 @@ export function encrypt(Password: string, salt: string, iteration = 1, bits: 128
 
 export function comparePassword(dbPassword: string, strPassword: string, salt: string, iteration = 1, bits: 128 | 256 | 512 | 1024 | 2048) {
   let result
-  const estrPassword = encrypt(strPassword, salt, iteration, bits)
+  const estrPassword = hash(strPassword, salt, iteration, bits)
 
   if (dbPassword === estrPassword) {
     result = true
@@ -143,9 +143,9 @@ export function comparePassword(dbPassword: string, strPassword: string, salt: s
   return result
 }
 
-export function encryptAES(text: string) {
-  const key = CryptoJS.enc.Utf8.parse(encrypt('OCBODocTrack2023', 'AESKey', 4, 128))
-  const iv = CryptoJS.enc.Utf8.parse(encrypt('OCBODocTrack2023', 'AESIV', 6, 128))
+export function encrypt(text: string) {
+  const key = CryptoJS.enc.Utf8.parse(hash('OCBODocTrack2023', 'AESKey', 4, 128))
+  const iv = CryptoJS.enc.Utf8.parse(hash('OCBODocTrack2023', 'AESIV', 6, 128))
   const encrypted = CryptoJS.AES.encrypt(text, key, {
     mode: CryptoJS.mode.CTR,
     padding: CryptoJS.pad.Iso10126,
@@ -159,9 +159,9 @@ export function encryptAES(text: string) {
   return newEncrypted
 }
 
-export function decryptAES(ciphertext: string) {
-  const key = CryptoJS.enc.Utf8.parse(encrypt('OCBODocTrack2023', 'AESKey', 4, 128))
-  const iv = CryptoJS.enc.Utf8.parse(encrypt('OCBODocTrack2023', 'AESIV', 6, 128))
+export function decrypt(ciphertext: string) {
+  const key = CryptoJS.enc.Utf8.parse(hash('OCBODocTrack2023', 'AESKey', 4, 128))
+  const iv = CryptoJS.enc.Utf8.parse(hash('OCBODocTrack2023', 'AESIV', 6, 128))
 
   const lastDigit = ciphertext.slice(-1)
   const removeLastDigit = ciphertext.slice(0, - 1)

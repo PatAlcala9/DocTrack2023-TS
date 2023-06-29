@@ -34,7 +34,7 @@ q-dialog(v-model="dialog" transition-show="flip-right" transition-hide="flip-lef
 <script setup lang="ts">
 import { api } from 'boot/axios'
 import { ref } from 'vue'
-import { encrypt } from 'src/js/OCBO'
+import { hash } from 'src/js/OCBO'
 import { useRouter } from 'vue-router'
 import { gsap } from 'gsap'
 import { checkConnection } from 'src/js/functions'
@@ -202,7 +202,7 @@ const saveAccount = async () => {
   if (await checkConnection()) {
     if ((await checkComplete()) === false) {
       if (await passwordConfirm()) {
-        let ipasswordEncrypted = encrypt(ipassword.value.toUpperCase(), 'doctrack2023', 3, 128)
+        let ipasswordEncrypted = hash(ipassword.value.toUpperCase(), 'doctrack2023', 3, 128)
         let iincoming = accessList.value.includes('is_incoming') ? 1 : 0
         let ioutgoing = accessList.value.includes('is_outgoing') ? 1 : 0
         let ireleasing = accessList.value.includes('is_releasing') ? 1 : 0

@@ -8,6 +8,15 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
+
+  "crypto/aes"
+	"crypto/cipher"
+	"crypto/rand"
+	// "encoding/base64"
+	"fmt"
+	"io"
+  "crypto/md5"
+	"encoding/hex"
 )
 
 // DEV
@@ -17,7 +26,76 @@ var connection string = "root:superuser@tcp(localhost:3306)/ocbodoctracksys"
 // var connection string = "iips:iipsuser@tcp(192.168.7.100:3306)/ocbodoctracksys"
 
 func main() {
-	connect()
+	// connect()
+
+  md5Hash := hash("inputString")
+	fmt.Println("MD5 Hash:", md5Hash)
+}
+
+func getSubstring(str string, start, end int) string {
+	if start < 0 {
+		start = 0
+	}
+	if end > len(str) {
+		end = len(str)
+	}
+	return str[start:end]
+}
+
+func hash(password string, salt string, iteration int, bits int) string {
+  expandedSalt := ""
+	for i := 0; i < iteration; i++ {
+		expandedSalt += salt
+	}
+
+
+
+	hasher := md5.New()
+	hasher.Write([]byte(password))
+	hash := hasher.Sum(nil)
+	md51 := hex.EncodeToString( expandedSalt + hash + expandedSalt)
+
+  vowelCount := 0
+	consCount := 0
+  p1 := getSubstring(md51, 0, 8)
+	p2 := getSubstring(md51, 8, 8)
+	p3 := getSubstring(md51, 16, 8)
+	p4 := getSubstring(md51, 24, 8)
+
+  for x := 0; x < iteration; x++ {
+		for i := 0; i < len(Password); i++ {
+			char := Password[i]
+			switch char {
+			case 'a', 'A', 'e', 'E', 'i', 'I', 'o', 'O', 'u', 'U':
+				vowelCount++
+			default:
+				consCount++
+			}
+		}
+	}
+
+	return hashString
+}
+
+func encryptAES(plaintext string, key []byte) (string, error) {
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		return "", err
+	}
+
+	iv := make([]byte, aes.BlockSize)
+	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
+		return "", err
+	}
+
+	encrypter := cipher.NewCTR(block, iv)
+	ciphertext := make([]byte, len(plaintext))
+	encrypter.XORKeyStream(ciphertext, []byte(plaintext))
+
+	// Append the IV to the ciphertext (for completeness)
+	ciphertext = append(iv, ciphertext...)
+
+	return string(ciphertext), nil
 }
 
 func connect() {

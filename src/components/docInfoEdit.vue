@@ -3,7 +3,7 @@
 div.section.fit.column.wrap.justify-start.items-center.content-center
   component(:is="docLabel" :text="props.label")
   input(v-if="wide === false" dark :value="props.value" @input="updateValue(($event.target as HTMLInputElement)?.value)" dense  @blur="$emit('blur')").information
-  input(v-else dark v-html="displayMultiline(props.value)" dense type="multiline" @blur="$emit('blur')").wide
+  input(v-else dark :value="props.value" @input="updateValue(($event.target as HTMLInputElement)?.value)"  dense type="multiline" @blur="$emit('blur')").wide(v-html="displayMultiline(props.value)")
 
 </template>
 
@@ -19,7 +19,7 @@ export interface Props {
 const props = withDefaults(defineProps<Props>(), {
   label: 'Label',
   value: 'Value',
-  wide: false
+  wide: false,
 })
 
 const emit = defineEmits(['update:value', 'blur'])
@@ -29,7 +29,7 @@ const updateValue = (value: string) => {
 }
 
 const displayMultiline = (value: string) => {
-  return value.replace(/\r?\n/g, '<br>');
+  return value.replace(/\r?\n/g, '<br>')
 }
 </script>
 

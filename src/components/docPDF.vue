@@ -1,4 +1,4 @@
-<template lang="pug">
+<template lang="pug">encrypt
 
 div.flex.flex-center
   component(:is="docButton" @click="createPDF" text="Create Sample PDF")
@@ -9,7 +9,7 @@ div.flex.flex-center
 
 <script setup lang="ts">
 import { PDFDocument, StandardFonts, PageSizes, rgb } from 'pdf-lib'
-import { decryptAES, encryptAES } from 'src/js/OCBO'
+import { decrypt, encrypt } from 'src/js/OCBO'
 import docQR from 'components/docQR.vue'
 import docButton from 'components/docButton.vue'
 import { ref } from 'vue'
@@ -29,10 +29,10 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const preText = '**SCAN ME USING OCBO DOCTRACK** QrId::'
-const encText = encryptAES(props.text)
+const encText = encrypt(props.text)
 
-const randomData1 = encryptAES(Math.random().toString()).substring(4, 10)
-const randomData2 = encryptAES('some random string').substring(25)
+const randomData1 = encrypt(Math.random().toString()).substring(4, 10)
+const randomData2 = encrypt('some random string').substring(25)
 const qrSize = 200
 
 const createPDF = async () => {
