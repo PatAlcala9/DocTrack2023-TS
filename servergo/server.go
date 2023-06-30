@@ -27,12 +27,12 @@ var connection string = "root:superuser@tcp(localhost:3306)/ocbodoctracksys"
 // var connection string = "iips:iipsuser@tcp(192.168.7.100:3306)/ocbodoctracksys"
 
 func main() {
-	// connect()
+	connect()
 
   // md5Hash := hash("1", "sample", 1, 256)
 	// fmt.Println("MD5 Hash:", md5Hash)
 
-  fmt.Println(encryptAES("a", []))
+  // fmt.Println(encryptAES("a", []))
 }
 
 // func getSubstring(str string, start, end int) string {
@@ -227,26 +227,26 @@ func main() {
 // 	return result
 // }
 
-func encryptAES(plaintext string, key []byte) (string, error) {
-	block, err := aes.NewCipher(key)
-	if err != nil {
-		return "", err
-	}
+// func encryptAES(plaintext string, key []byte) (string, error) {
+// 	block, err := aes.NewCipher(key)
+// 	if err != nil {
+// 		return "", err
+// 	}
 
-	iv := make([]byte, aes.BlockSize)
-	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
-		return "", err
-	}
+// 	iv := make([]byte, aes.BlockSize)
+// 	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
+// 		return "", err
+// 	}
 
-	encrypter := cipher.NewCTR(block, iv)
-	ciphertext := make([]byte, len(plaintext))
-	encrypter.XORKeyStream(ciphertext, []byte(plaintext))
+// 	encrypter := cipher.NewCTR(block, iv)
+// 	ciphertext := make([]byte, len(plaintext))
+// 	encrypter.XORKeyStream(ciphertext, []byte(plaintext))
 
-	// Append the IV to the ciphertext (for completeness)
-	ciphertext = append(iv, ciphertext...)
+// 	// Append the IV to the ciphertext (for completeness)
+// 	ciphertext = append(iv, ciphertext...)
 
-	return string(ciphertext), nil
-}
+// 	return string(ciphertext), nil
+// }
 
 func connect() {
 	db, err := sql.Open("mysql", connection)
