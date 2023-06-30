@@ -9,12 +9,12 @@ import (
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 
-  "crypto/aes"
-	"crypto/cipher"
-	"crypto/rand"
-	// "encoding/base64"
-	"fmt"
-	"io"
+  // "crypto/aes"
+	// "crypto/cipher"
+	// "crypto/rand"
+	// // "encoding/base64"
+	// "fmt"
+	// "io"
   // "crypto/md5"
 	// "encoding/hex"
   // "strconv"
@@ -260,11 +260,6 @@ func connect() {
   // gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
   router.Use(cors.Default())
-  // router.LoadHTMLGlob("templates/**")
-
-  // router.GET("/", func(c *gin.Context) {
-  //   c.HTML(http.StatusOK, "index.html", gin.H{})
-  // })
 
   router.GET("/api/:method", func(c *gin.Context) {
     var result string
