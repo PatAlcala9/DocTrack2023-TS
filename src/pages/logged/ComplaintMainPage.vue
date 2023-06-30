@@ -48,7 +48,7 @@ q-page(padding)
               td {{item}}
               td {{complaintList.result2[index]}}
               td {{complaintList.result3[index]}}
-              td {{complaintList.result4[index]}}
+              td(@click="getComplaintSpecific(item, false)" style="cursor: pointer") {{complaintList.result4[index]}}
               td {{complaintList.result5[index]}}
               td
                 q-btn(rounded size="sm" color="button" label="show" :ripple="false" @click="getComplaintSpecific(item, false)").button-view
@@ -65,6 +65,8 @@ q-dialog(full-width full-height v-model="dialog" transition-show="flip-right" tr
           component(:is="docInfo" label="Complaint Type" :value="dialogType" )
         div.column
           component(:is="docInfo" label="Received Date" :value="dialogReceivedDate" )
+        div.column
+          component(:is="docInfo" label="Status" :value="dialogStatus" )
       section(v-else).fit.column.wrap.justify-center.items-center.content-center.text-center.q-card--section
         div.column
           component(:is="docInfo" label="Complaint Code" :value="dialogCode" )
@@ -106,6 +108,8 @@ q-dialog(full-width full-height v-model="dialogEdit" transition-show="flip-right
           component(:is="docInfo" label="Complaint Type" :value="dialogType")
         div.column
           component(:is="docInfo" label="Received Date" :value="dialogReceivedDate")
+        div.column
+          component(:is="docInfo" label="Status" :value="dialogStatus")
       section(v-else).fit.column.wrap.justify-center.items-center.content-center.text-center.q-card--section
         div.column
           component(:is="docInfo" label="Complaint Code" :value="dialogCode")
@@ -135,6 +139,7 @@ q-dialog(full-width full-height v-model="dialogEdit" transition-show="flip-right
 
       section.fit.row.wrap.justify-around.items-center.content-center.button-area
         component(:is="docButton" text="OK" @click="dialogEdit=false")
+
 </template>
 
 <script setup lang="ts">
@@ -185,6 +190,7 @@ let dataRespondentLocation = ref('')
 let dataStatus = ref('')
 
 let dialogEdit = ref(false)
+let dialogStatusEdit = ref(false)
 
 type Complaint = {
   result: string

@@ -1060,9 +1060,9 @@ func connect() {
 			})
 
     } else if method == "GetComplaintSpecific" {
-      var result2, result3, result4, result5, result6, result7, result8, result9, result10, result11 string
+      var result2, result3, result4, result5, result6, result7, result8, result9, result10, result11, result12 string
 
-      err = db.QueryRow("SELECT s.source_desc AS result, c.complaintant_name AS result2, c.complaintant_contact AS result3, c.locationOfconstruction AS result4, c.date_received AS result5, c.details AS result6, r.respondent_name AS result7, r.respondent_contact AS result8, r.respondent_location AS result9, st.status AS result10, st.date_transacted AS result11 FROM complaint_info c, source_complaint s, respondent_info r, complaint_status st WHERE c.source_complaintid = s.source_complaintid AND c.respondent_infoid = r.respondent_infoid AND c.complaint_code = st.complaint_code AND c.complaint_code = ?", data).Scan(&result, &result2, &result3, &result4, &result5, &result6, &result7, &result8, &result9, &result10, &result11)
+      err = db.QueryRow("SELECT s.source_desc AS result, c.complaintant_name AS result2, c.complaintant_contact AS result3, c.locationOfconstruction AS result4, c.date_received AS result5, c.details AS result6, r.respondent_name AS result7, r.respondent_contact AS result8, r.respondent_location AS result9, st.status AS result10, st.date_transacted AS result11, st.status AS result12 FROM complaint_info c, source_complaint s, respondent_info r, complaint_status st WHERE c.source_complaintid = s.source_complaintid AND c.respondent_infoid = r.respondent_infoid AND c.complaint_code = st.complaint_code AND c.complaint_code = ?", data).Scan(&result, &result2, &result3, &result4, &result5, &result6, &result7, &result8, &result9, &result10, &result11, &result12)
       if err != nil {
         panic(err.Error())
       }
@@ -1079,6 +1079,7 @@ func connect() {
         "result9": result9,
         "result10": result10,
         "result11": result11,
+        "result12": result12,
 			})
 
     } else if method == "GetLatestStatus" {
