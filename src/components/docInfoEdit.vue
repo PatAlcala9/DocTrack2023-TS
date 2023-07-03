@@ -3,7 +3,7 @@
 div.section.fit.column.wrap.justify-start.items-center.content-center
   component(:is="docLabel" :text="props.label")
   input(v-if="wide === false" dark :value="props.value" @input="updateValue(($event.target as HTMLInputElement)?.value)" dense  @blur="$emit('blur')").information
-  input(v-else dark :value="props.value" @input="updateValue(($event.target as HTMLInputElement)?.value)"  dense type="multiline" @blur="$emit('blur')").wide(v-html="displayMultiline(props.value)")
+  textarea(v-else dark :value="props.value" @input="updateValue(($event.target as HTMLInputElement)?.value)"  dense type="multiline" @blur="$emit('blur')").wide(v-html="displayMultiline(props.value)")
 
 </template>
 
@@ -48,7 +48,9 @@ const displayMultiline = (value: string) => {
   @extend .information
   font-weight: 450
   font-size: 1.2rem
-  width: auto
+  width: 50vw
+  padding: 1rem 2rem
+  height: 30vh
   text-align: justify
   padding: 0.4rem 1.5rem
 </style>
