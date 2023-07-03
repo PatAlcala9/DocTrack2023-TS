@@ -1,6 +1,9 @@
 <template lang="pug">
 
 q-page(padding)
+  //- section.online
+  //-   q-icon(name="circle" size="1rem" :color="onlineColor")
+
   div.full-width.row.justify-between
     span.title Incomings - New Entry
     q-btn(flat size="md" label="Back" @click="gotoIncomingDashboard" icon="arrow_back").close-button
