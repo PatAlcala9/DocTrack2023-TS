@@ -48,7 +48,7 @@ q-page(padding)
               td {{item}}
               td {{complaintList.result2[index]}}
               td {{complaintList.result3[index]}}
-              td(@click="getComplaintSpecific(item, false)" style="cursor: pointer") {{complaintList.result4[index]}}
+              td(@click="changeStatus(item)" style="cursor: pointer") {{complaintList.result4[index]}}
               td {{complaintList.result5[index]}}
               td
                 q-btn(rounded size="sm" color="button" label="show" :ripple="false" @click="getComplaintSpecific(item, false)").button-view
@@ -140,6 +140,19 @@ q-dialog(full-width full-height v-model="dialogEdit" transition-show="flip-right
       section.fit.row.wrap.justify-around.items-center.content-center.button-area
         component(:is="docButton" text="OK" @click="dialogEdit=false")
 
+
+q-dialog(v-model="dialogStatusEdit" transition-show="flip-right" transition-hide="flip-left" ).dialog
+  q-card.dialog-card.text-white
+    q-card-section
+      section.full-height.column.wrap.justify-center.items-center.content-center.q-card--section
+        div.padded
+          component(:is="docInfo" label="Current Status" :value="dialogStatus")
+        div.padded
+          q-select(dark rounded outlined v-model="dialogNewStatus" :options="statusList" label="Select Status")
+
+      section.fit.row.wrap.justify-around.items-center.content-center.button-area
+        component(:is="docButton" text="OK" @click="dialogStatusEdit=false")
+
 </template>
 
 <script setup lang="ts">
@@ -179,6 +192,7 @@ let dialogRespondentContact = ref('')
 let dialogRespondentLocation = ref('')
 let dialogStatus = ref('')
 let dialogDateTransacted = ref('')
+let dialogNewStatus = ref('')
 
 let dataName = ref('')
 let dataContact = ref('')
@@ -191,6 +205,8 @@ let dataStatus = ref('')
 
 let dialogEdit = ref(false)
 let dialogStatusEdit = ref(false)
+
+let statusList = ['a', 'b', 'c']
 
 type Complaint = {
   result: string
@@ -294,6 +310,29 @@ const getComplaintSpecific = async (code: string, edit: boolean) => {
 
     if (edit) dialogEdit.value = true
     else dialog.value = true
+  }
+  await recordData()
+}
+
+const changeStatus = async (code: string) => {
+  const response = await api.get('/api/GetComplaintSpecific/' + code)
+  const data = response.data.length !== 0 ? response.data : null
+
+  if (data !== null) {
+    dialogCode.value = code
+    dialogType.value = data.result
+    dialogName.value = data.result2
+    dialogContact.value = data.result3
+    dialogLocation.value = data.result4
+    dialogReceivedDate.value = date.formatDate(data.result5, 'MMMM D, YYYY')
+    dialogDetails.value = data.result6
+    dialogRespondentName.value = data.result7
+    dialogRespondentContact.value = data.result8
+    dialogRespondentLocation.value = data.result9
+    dialogStatus.value = data.result10
+    dialogDateTransacted.value = date.formatDate(data.result11, 'MMMM D, YYYY')
+
+    dialogStatusEdit.value = true
   }
   await recordData()
 }
