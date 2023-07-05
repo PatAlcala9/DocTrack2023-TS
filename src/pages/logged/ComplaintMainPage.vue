@@ -355,6 +355,12 @@ const getStatusList = async (exception: string) => {
   }
 }
 
+const postStatus = async () => {
+  const response = await api.post('/api/PostStatus', {
+    data: 
+  })
+}
+
 const checkOnline = () => {
   if (_isdemo.isdemo) onlineColor.value = 'red'
   else {
