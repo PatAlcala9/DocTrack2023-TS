@@ -1124,7 +1124,26 @@ func connect() {
         "result5": array5,
 			})
 
-    }
+      } else if method == "GetStatusList" {
+        array := []string{}
+
+        results, err := db.Query("SELECT whereabouts AS result FROM complaint_whereabouts WHERE whereabouts <> ? ORDER BY complaint_whereaboutsid ASC", data)
+        if err != nil {
+          panic(err.Error())
+        }
+
+        for results.Next() {
+          err = results.Scan(&result)
+          if err != nil {
+            panic(err.Error())
+          }
+          array = append(array, result)
+        }
+        c.JSON(http.StatusOK, gin.H{
+          "result": array,
+        })
+
+      }
   })
 
 
