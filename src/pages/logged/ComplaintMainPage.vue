@@ -147,8 +147,10 @@ q-dialog(v-model="dialogStatusEdit" transition-show="flip-right" transition-hide
       section.full-height.column.wrap.justify-center.items-center.content-center.q-card--section
         div.padded
           component(:is="docInfo" label="Current Status" :value="dialogStatus")
-        div.padded
-          q-select(dark rounded outlined v-model="dialogNewStatus" :options="statusList" :label="statusLabel").select
+        div.padded.text-center
+          component(:is="docLabel" text="New Status")
+          q-select(v-if="$q.screen.width > 500" dark rounded outlined v-model="dialogNewStatus" :options="statusList" input-class="select" behavior="menu").select
+          q-select(v-else dark rounded outlined v-model="dialogNewStatus" :options="statusList" input-class="select" behavior="dialog").select
 
       section.fit.row.wrap.justify-around.items-center.content-center.button-area
         component(:is="docButton" text="OK" @click="dialogStatusEdit=false")
@@ -174,6 +176,7 @@ import docButton from 'components/docButton.vue'
 import docForm from 'components/docForm.vue'
 import docInfo from 'components/docInfo.vue'
 import docInfoEdit from 'components/docInfoEdit.vue'
+import docLabel from 'components/docLabel.vue'
 
 let searchValue = ref('')
 let searchByValue = ref('')
@@ -207,6 +210,8 @@ let dialogEdit = ref(false)
 let dialogStatusEdit = ref(false)
 
 let statusList: Ref<string[]> = ref([])
+let statusListTagword: Ref<string[]> = ref([])
+let statusListTagcode: Ref<string[]> = ref([])
 let statusLabel = ref('')
 
 type Complaint = {
@@ -340,8 +345,10 @@ const getStatusList = async (exception: string) => {
   const data = response.data.length !== 0 ? response.data : null
 
   if (data !== null) {
-    for (let item of data.result) {
-      statusList.value.push(item)
+    for (let i in data.result) {
+      statusList.value.push(data.result[i])
+      statusListTagword.value.push(data.result2[i])
+      statusListTagcode.value.push(data.result3[i])
     }
   }
 }
@@ -544,9 +551,15 @@ const recordChange = (value: string) => {
 
 .select
   width: auto
+  max-width: 200rem
   font-family: 'Inter'
-  font-weight: 400
+  font-weight: 500
   font-size: 1.2rem
+  text-align: center
+  white-space: nowrap
+  overflow: hidden
+  text-overflow: ellipsis
+
 
 @media screen and (max-width: 500px)
   .section
