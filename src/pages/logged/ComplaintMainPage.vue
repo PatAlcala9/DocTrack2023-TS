@@ -141,8 +141,8 @@ q-dialog(full-width full-height v-model="dialogEdit" transition-show="flip-right
         component(:is="docButton" text="OK" @click="dialogEdit=false")
 
 
-q-dialog(v-model="dialogStatusEdit" transition-show="flip-right" transition-hide="flip-left" ).dialog
-  q-card.dialog-card.text-white
+q-dialog(full-width v-model="dialogStatusEdit" transition-show="flip-right" transition-hide="flip-left").dialog
+  q-card.dialog-card.text-white(style="height: auto")
     q-card-section
       section.full-height.column.wrap.justify-center.items-center.content-center.q-card--section
         div.padded
@@ -151,6 +151,8 @@ q-dialog(v-model="dialogStatusEdit" transition-show="flip-right" transition-hide
           component(:is="docLabel" text="New Status")
           q-select(v-if="$q.screen.width > 500" dark rounded outlined v-model="dialogNewStatus" :options="statusList" input-class="select" behavior="menu").select
           q-select(v-else dark rounded outlined v-model="dialogNewStatus" :options="statusList" input-class="select" behavior="dialog").select
+        div.padded
+          component(:is="docInfoEdit" label="Remarks" v-model:value="dataRespondentContact" )
 
       section.fit.row.wrap.justify-around.items-center.content-center.button-area
         component(:is="docButton" text="OK" @click="dialogStatusEdit=false")
