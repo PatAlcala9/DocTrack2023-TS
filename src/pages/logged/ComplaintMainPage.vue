@@ -48,7 +48,7 @@ q-page(padding)
               td {{item}}
               td {{complaintList.result2[index]}}
               td {{complaintList.result3[index]}}
-              td(@click="changeStatus(item)" style="cursor: pointer") {{complaintList.result4[index]}}
+              td(@click="changeStatus(complaintList.result4[index])" style="cursor: pointer") {{complaintList.result4[index]}}
               td {{complaintList.result5[index]}}
               td
                 q-btn(rounded size="sm" color="button" label="show" :ripple="false" @click="getComplaintSpecific(item, false)").button-view
@@ -148,7 +148,7 @@ q-dialog(v-model="dialogStatusEdit" transition-show="flip-right" transition-hide
         div.padded
           component(:is="docInfo" label="Current Status" :value="dialogStatus")
         div.padded
-          q-select(dark rounded outlined v-model="dialogNewStatus" :options="statusList" label="Select Status")
+          q-select(dark rounded outlined v-model="dialogNewStatus" :options="statusList" :label="statusLabel").select
 
       section.fit.row.wrap.justify-around.items-center.content-center.button-area
         component(:is="docButton" text="OK" @click="dialogStatusEdit=false")
@@ -156,7 +156,7 @@ q-dialog(v-model="dialogStatusEdit" transition-show="flip-right" transition-hide
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, Ref } from 'vue'
 import { date, useQuasar, LocalStorage } from 'quasar'
 import { useRouter } from 'vue-router'
 import { api } from 'boot/axios'
@@ -206,7 +206,8 @@ let dataStatus = ref('')
 let dialogEdit = ref(false)
 let dialogStatusEdit = ref(false)
 
-let statusList = ['a', 'b', 'c']
+let statusList: Ref<string[]> = ref([])
+let statusLabel = ref('')
 
 type Complaint = {
   result: string
@@ -314,27 +315,14 @@ const getComplaintSpecific = async (code: string, edit: boolean) => {
   await recordData()
 }
 
-const changeStatus = async (code: string) => {
-  const response = await api.get('/api/GetComplaintSpecific/' + code)
-  const data = response.data.length !== 0 ? response.data : null
+const changeStatus = async (status: string) => {
+  await getStatusList(status)
 
-  if (data !== null) {
-    dialogCode.value = code
-    dialogType.value = data.result
-    dialogName.value = data.result2
-    dialogContact.value = data.result3
-    dialogLocation.value = data.result4
-    dialogReceivedDate.value = date.formatDate(data.result5, 'MMMM D, YYYY')
-    dialogDetails.value = data.result6
-    dialogRespondentName.value = data.result7
-    dialogRespondentContact.value = data.result8
-    dialogRespondentLocation.value = data.result9
-    dialogStatus.value = data.result10
-    dialogDateTransacted.value = date.formatDate(data.result11, 'MMMM D, YYYY')
+  if (dialogNewStatus.value === '') statusLabel.value = 'SELECT STATUS'
+  else statusLabel.value = ''
 
-    dialogStatusEdit.value = true
-  }
-  await recordData()
+  dialogStatus.value = status
+  dialogStatusEdit.value = true
 }
 
 const filterTable = async () => {
@@ -342,9 +330,19 @@ const filterTable = async () => {
     if (await getComplaintListFiltered(searchValue.value)) nodata.value = false
     else nodata.value = true
   } else {
-    console.log('here')
     if (await getComplaintList()) nodata.value = false
     else nodata.value = true
+  }
+}
+
+const getStatusList = async (exception: string) => {
+  const response = await api.get('/api/GetStatusList/' + exception)
+  const data = response.data.length !== 0 ? response.data : null
+
+  if (data !== null) {
+    for (let item of data.result) {
+      statusList.value.push(item)
+    }
   }
 }
 
@@ -543,6 +541,12 @@ const recordChange = (value: string) => {
 
 .button-area
   padding-top: 2rem
+
+.select
+  width: auto
+  font-family: 'Inter'
+  font-weight: 400
+  font-size: 1.2rem
 
 @media screen and (max-width: 500px)
   .section
