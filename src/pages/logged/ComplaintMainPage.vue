@@ -412,7 +412,7 @@ const postChangeStatus = async (code: string, status: string, tagcode: string, t
   const today = new Date()
   const formattedDate = date.formatDate(today, 'YYYY-MM-dd')
   if (await postStatus(code, formattedDate, status,tagcode, tagword, 'JUAN', details)) {
-    
+
   }
 }
 

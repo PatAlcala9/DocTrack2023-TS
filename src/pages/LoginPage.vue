@@ -46,7 +46,7 @@ q-page(padding)
       div.inquiry
         span(v-if="inquiry" @click="showInquiry").inquiry-text Login
         span(v-else @click="showLogin").inquiry-text Inquire
-        //- component(:is="docPDF" title="Sample Document PDF" text="aaaa" date="yyyy-MM-dd")
+        //- component(:is="docPDF2" title="Sample Document PDF" text="aaaa" date="yyyy-MM-dd")
 
     div.version
       span.version--text {{version}}
@@ -83,7 +83,7 @@ import docButton from 'components/docButton.vue'
 import docInput from 'components/docInput.vue'
 import docInputPassword from 'components/docInputPassword.vue'
 import docLabel from 'components/docLabel.vue'
-import docPDF from 'components/docPDF.vue'
+import docPDF2 from 'components/docPDF2.vue'
 
 let _employeename = useEmployeeName()
 let _userid = useUserID()
