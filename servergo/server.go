@@ -1150,6 +1150,16 @@ func connect() {
           "result3": array3,
         })
 
+      } else if method == "GetMaxStatusID" {
+        err = db.QueryRow("SELECT MAX(complaint_statusid) AS result FROM complaint_status WHERE complaint_code = ?", data).Scan(&result)
+        if err != nil {
+          panic(err.Error())
+        }
+
+        c.JSON(http.StatusOK, gin.H{
+          "result": result,
+        })
+
       }
   })
 
