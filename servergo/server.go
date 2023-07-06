@@ -1573,6 +1573,49 @@ func connect() {
 
 
 
+  router.POST("/api/PostUpdateStatusID", func(c *gin.Context) {
+    type EditData struct {
+      Data  string `json:"data"`
+      Data2 string `json:"data2"`
+    }
+    var editData EditData
+    if err := c.ShouldBindJSON(&editData); err != nil {
+      c.String(http.StatusBadRequest, "Invalid request body")
+      return
+    }
+
+    c.Writer.Header().Set("X-XSS-Protection", "1; mode=block")
+    c.Writer.Header().Set("X-Content-Type-Options", "nosniff")
+    c.Writer.Header().Set("X-DNS-Prefetch-Control", "off")
+    c.Writer.Header().Set("X-Frame-Options", "DENY")
+    c.Writer.Header().Set("X-Download-Options", "noopen")
+    c.Writer.Header().Set("Referrer-Policy", "no-referrer")
+
+    dbpost, err := db.Prepare("UPDATE complaint_info SET complaint_statusid = ? WHERE complaint_code = ?")
+    if err != nil {
+      panic(err.Error())
+    }
+    defer dbpost.Close()
+
+    exec, err := dbpost.Exec(editData.Data, editData.Data2)
+    if err != nil {
+      panic(err.Error())
+    }
+
+    affect, err := exec.RowsAffected()
+    if err != nil {
+      panic(err.Error())
+    }
+
+    if affect > 0 {
+      c.String(http.StatusOK, "Success on Update Status ID")
+    } else {
+      c.String(http.StatusInternalServerError, "Failed on Update Status ID")
+    }
+  })
+
+
+
   // router.POST("/api/PostUpdateContact", func(c *gin.Context) {
   //   type EditData struct {
   //     Data  string `json:"data"`
