@@ -1,4 +1,4 @@
-<template lang="pug">encrypt
+<template lang="pug">
 
 div.flex.flex-center
   component(:is="docButton" @click="createPDF" text="Create Sample PDF")
