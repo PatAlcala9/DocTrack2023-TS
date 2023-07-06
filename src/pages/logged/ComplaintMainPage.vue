@@ -155,7 +155,8 @@ q-dialog(full-width v-model="dialogStatusEdit" transition-show="flip-right" tran
           component(:is="docInfoEdit" label="Remarks" v-model:value="statusRemarks" )
 
       section.fit.row.wrap.justify-around.items-center.content-center.button-area
-        component(:is="docButton" text="OK" @click="dialogStatusEdit=false")
+        component(:is="docButton" text="OK" @click="sample")
+        //- @click="dialogStatusEdit=false"
 
 </template>
 
@@ -225,10 +226,6 @@ type Complaint = {
   result5: string
 }
 let complaintList = ref({} as Complaint)
-
-const sample = () => {
-  console.log('yeah')
-}
 
 const gotoComplaint = () => {
   _currentpage.currentpage = 'complaint'
@@ -350,6 +347,28 @@ const getMaxStatusID = async (code: string): Promise<number> => {
   } else return 0
 }
 
+const postUpdateStatusID = async (id: number, code: string): Promise<boolean> => {
+  const response = await api.post('/api/PostUpdateStatusID',{
+    data: id.toString(),
+    data2: code
+  })
+  const data = response.data.length !== 0 ? response.data : null
+
+  // if (data !== null) {
+  //   return data.result
+  // } else return 0
+
+  console.log('data', data)
+
+  return true
+}
+
+const sample = async () => {
+  await postUpdateStatusID(6, '23-2-0007')
+}
+
+
+
 const filterTable = async () => {
   if (searchValue.value.length > 0) {
     if (await getComplaintListFiltered(searchValue.value)) nodata.value = false
@@ -389,10 +408,12 @@ const postStatus = async (code: string, date: string, status: string, tagcode: s
   else return false
 }
 
-const saveStatusChange = async (code: string, status: string, tagcode) => {
+const postChangeStatus = async (code: string, status: string, tagcode: string, tagword: string, details: string) => {
   const today = new Date()
   const formattedDate = date.formatDate(today, 'YYYY-MM-dd')
-  await postStatus(code, formattedDate, status, )
+  if (await postStatus(code, formattedDate, status,tagcode, tagword, 'JUAN', details)) {
+    
+  }
 }
 
 const checkOnline = () => {
