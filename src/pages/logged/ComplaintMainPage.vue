@@ -149,10 +149,10 @@ q-dialog(full-width v-model="dialogStatusEdit" transition-show="flip-right" tran
           component(:is="docInfo" label="Current Status" :value="dialogStatus")
         div.padded.text-center
           component(:is="docLabel" text="New Status")
-          q-select(v-if="$q.screen.width > 500" dark rounded outlined v-model="dialogNewStatus" :options="statusList" input-class="select" behavior="menu").select
-          q-select(v-else dark rounded outlined v-model="dialogNewStatus" :options="statusList" input-class="select" behavior="dialog").select
+          q-select(v-if="$q.screen.width > 500" dark rounded outlined v-model="dialogNewStatus" :options="statusList" input-class="select" behavior="menu" @blur="sample").select
+          q-select(v-else dark rounded outlined v-model="dialogNewStatus" :options="statusList" input-class="select" behavior="dialog"  @blur="sample").select
         div.padded
-          component(:is="docInfoEdit" label="Remarks" v-model:value="dataRespondentContact" )
+          component(:is="docInfoEdit" label="Remarks" v-model:value="statusRemarks" )
 
       section.fit.row.wrap.justify-around.items-center.content-center.button-area
         component(:is="docButton" text="OK" @click="dialogStatusEdit=false")
@@ -215,6 +215,7 @@ let statusList: Ref<string[]> = ref([])
 let statusListTagword: Ref<string[]> = ref([])
 let statusListTagcode: Ref<string[]> = ref([])
 let statusLabel = ref('')
+let statusRemarks = ref('')
 
 type Complaint = {
   result: string
@@ -224,6 +225,10 @@ type Complaint = {
   result5: string
 }
 let complaintList = ref({} as Complaint)
+
+const sample = () => {
+  console.log('yeah')
+}
 
 const gotoComplaint = () => {
   _currentpage.currentpage = 'complaint'
@@ -322,6 +327,10 @@ const getComplaintSpecific = async (code: string, edit: boolean) => {
   await recordData()
 }
 
+// const openDialog = async () => {
+
+// }
+
 const changeStatus = async (status: string) => {
   await getStatusList(status)
 
@@ -330,6 +339,15 @@ const changeStatus = async (status: string) => {
 
   dialogStatus.value = status
   dialogStatusEdit.value = true
+}
+
+const getMaxStatusID = async (code: string): Promise<number> => {
+  const response = await api.get('/api/GetMaxStatusID/' + code)
+  const data = response.data.length !== 0 ? response.data : null
+
+  if (data !== null) {
+    return data.result
+  } else return 0
 }
 
 const filterTable = async () => {
@@ -355,10 +373,26 @@ const getStatusList = async (exception: string) => {
   }
 }
 
-const postStatus = async () => {
+const postStatus = async (code: string, date: string, status: string, tagcode: string, tagword: string, receivedby: string, details: string): Promise<boolean> => {
   const response = await api.post('/api/PostStatus', {
-    data: 
+    data: code,
+    data2: date,
+    data3: status,
+    data4: tagcode,
+    data5: tagword,
+    data6: receivedby,
+    data7: details,
   })
+  const data = response.data.length !== 0 ? response.data : null
+
+  if (data !== null) return true
+  else return false
+}
+
+const saveStatusChange = async (code: string, status: string, tagcode) => {
+  const today = new Date()
+  const formattedDate = date.formatDate(today, 'YYYY-MM-dd')
+  await postStatus(code, formattedDate, status, )
 }
 
 const checkOnline = () => {
