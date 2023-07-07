@@ -4,6 +4,7 @@ div.flex.flex-center
   component(:is="docButton" @click="createPDF" text="Create Sample PDF")
   component(:is="docQR" :text="preText + encText" :size=qrSize style="display: none;" id="qr")
   img(src="../assets/lungsod.png", alt="PNG Image" style="display: none" id="lungsod")
+  img(src="../assets/ocbologobw.png", alt="PNG Image" style="display: none" id="ocbo")
 
 </template>
 
@@ -14,7 +15,6 @@ import docQR from 'components/docQR.vue'
 import docButton from 'components/docButton.vue'
 import { ref } from 'vue'
 // const image = ref('../assets/lungsod.png')
-// import imgUrl from '../assets/lungsod.png'
 
 export interface Props {
   title: string
@@ -44,18 +44,51 @@ const createPDF = async () => {
   const lungsodLink = document.createElement('a')
   lungsodLink.href = lungsodSrc ?? ''
 
+  const ocboItem = document.getElementById('ocbo')
+  const ocboSrc = ocboItem?.getAttribute('src')
+  const ocboLink = document.createElement('a')
+  ocboLink.href = ocboSrc ?? ''
+
+  function getTextWidth(text: string, fontSize: number) {
+    doc.setFontSize(fontSize)
+    const textWidth = doc.getStringUnitWidth(text) * fontSize * 0.35 // Adjust the multiplier if needed
+    return textWidth
+  }
+
+  const pageWidth = doc.internal.pageSize.getWidth()
+
   const republicText = 'Republic of the Philippines'
+  const republicTextWidth = getTextWidth(republicText, 12)
   const officeText = 'OFFICE OF THE CITY BUILDING OFFICIAL'
+  const officeTextWidth = getTextWidth(officeText, 12)
   const cityText = 'City of Davao'
+  const cityTextWidth = getTextWidth(cityText, 12)
 
-  doc.text(republicText, 20, 10)
+  const republicTextX = (pageWidth - republicTextWidth) / 2
+  const officeTextX = (pageWidth - officeTextWidth) / 2
+  const cityTextX = (pageWidth - cityTextWidth) / 2
 
-  doc.addImage(qrLink.href, 'PNG', 10, 10, 20, 20, 'qr', 'NONE', 0)
-  doc.addImage(lungsodLink.href, 'PNG', 20, 20, 50, 50, 'lungsod', 'NONE', 0)
+  doc.addFont('../assets/fonts/lora.ttf', 'Lora', 'normal')
+  doc.setFont('Lora')
+
+  doc.text(republicText, republicTextX, 10)
+  doc.text(officeText, officeTextX, 16)
+  doc.text(cityText, cityTextX, 22)
+
+  // doc.addImage(qrLink.href, 'PNG', 1, 10, 20, 20, 'qr', 'NONE', 0)
+  doc.addImage(lungsodLink.href, 'PNG', 5, 2, 30, 30, 'lungsod', 'NONE', 0)
+  doc.addImage(ocboLink.href, 'PNG', pageWidth - 35, 2, 30, 30, 'ocbo', 'NONE', 0)
+
+  doc.line(10, 200, 1, 200, 'F')
 
   // const pdfData = doc.output('datauristring')
   // const fileName = 'sample.pdf'
 
   doc.save('sample.pdf')
+
+  // const pdfData = doc.output()
+  // const blob = new Blob([pdfData], { type: 'application/pdf' })
+  // const url = URL.createObjectURL(blob)
+  // window.open(url)
 }
 </script>
