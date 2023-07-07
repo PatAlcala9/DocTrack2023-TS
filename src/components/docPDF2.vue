@@ -68,18 +68,26 @@ const createPDF = async () => {
   const officeTextX = (pageWidth - officeTextWidth) / 2
   const cityTextX = (pageWidth - cityTextWidth) / 2
 
-  doc.addFont('../assets/fonts/lora.ttf', 'Lora', 'normal')
-  doc.setFont('Lora')
+  // doc.addFont('../assets/fonts/lora.ttf', 'lora', 'normal')
+  // doc.setFont('lora')
 
+  doc.setFont('times', 'normal')
   doc.text(republicText, republicTextX, 10)
+  doc.setFont('times', 'bold')
   doc.text(officeText, officeTextX, 16)
+  doc.setFont('times', 'normal')
   doc.text(cityText, cityTextX, 22)
 
   // doc.addImage(qrLink.href, 'PNG', 1, 10, 20, 20, 'qr', 'NONE', 0)
   doc.addImage(lungsodLink.href, 'PNG', 5, 2, 30, 30, 'lungsod', 'NONE', 0)
   doc.addImage(ocboLink.href, 'PNG', pageWidth - 35, 2, 30, 30, 'ocbo', 'NONE', 0)
 
-  doc.line(10, 200, 1, 200, 'F')
+  doc.setLineWidth(0.9)
+  doc.line(10, 34, 200, 34)
+
+  doc.setFont('times', 'italic')
+  doc.setFontSize(9)
+  doc.text('Reference No. OCBO-2023-R', 10, 38)
 
   // const pdfData = doc.output('datauristring')
   // const fileName = 'sample.pdf'
