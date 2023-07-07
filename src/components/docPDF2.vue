@@ -44,17 +44,18 @@ const createPDF = async () => {
   const lungsodLink = document.createElement('a')
   lungsodLink.href = lungsodSrc ?? ''
 
-  doc.text('Hello world!', 10, 10)
+  const republicText = 'Republic of the Philippines'
+  const officeText = 'OFFICE OF THE CITY BUILDING OFFICIAL'
+  const cityText = 'City of Davao'
+
+  doc.text(republicText, 20, 10)
+
   doc.addImage(qrLink.href, 'PNG', 10, 10, 20, 20, 'qr', 'NONE', 0)
-  doc.addImage(lungsodLink.href, 'PNG', 10, 10, 10, 10, 'lungsod', 'NONE', 0)
+  doc.addImage(lungsodLink.href, 'PNG', 20, 20, 50, 50, 'lungsod', 'NONE', 0)
 
   // const pdfData = doc.output('datauristring')
   // const fileName = 'sample.pdf'
 
-  const pdfBytes = await doc.save('sample.pdf')
-  const pdfBlob = new Blob([pdfBytes], { type: 'application/pdf' })
-  const link2 = document.createElement('a')
-  link2.href = URL.createObjectURL(pdfBlob)
-  window.open(link2.href)
+  doc.save('sample.pdf')
 }
 </script>
