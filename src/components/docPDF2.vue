@@ -72,12 +72,14 @@ const createPDF = async () => {
 
   const workTextWidth = getTextWidth('WORK STOPPAGE ORDER', 14)
   const propsTypeWidth = getTextWidth(props.type, 14)
+  const pdWidth = getTextWidth('National Building Code of the Philippines (PD 1096)', 12)
 
   const republicTextX = (pageWidth - republicTextWidth) / 2
   const officeTextX = (pageWidth - officeTextWidth) / 2
   const cityTextX = (pageWidth - cityTextWidth) / 2
   const workTextX = (pageWidth - workTextWidth) / 2
   const propsTypeX = (pageWidth - propsTypeWidth) / 2
+  const pdX = (pageWidth - pdWidth) / 2
 
   // doc.addFont('../assets/fonts/lora.ttf', 'lora', 'normal')
   // doc.setFont('lora')
@@ -151,6 +153,9 @@ const createPDF = async () => {
   doc.text('Number of Storey:', 10, 114)
   doc.setFont('times', 'bold')
   doc.text(props.address, getTextWidth('Number of Storey:', 12) + 10, 114)
+
+  doc.setFont('times', 'bold')
+  doc.text('National Building Code of the Philippines (PD 1096)', pdX, 124)
 
   // const pdfData = doc.output('datauristring')
   // const fileName = 'sample.pdf'
