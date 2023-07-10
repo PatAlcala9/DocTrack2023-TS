@@ -138,9 +138,19 @@ const createPDF = async () => {
   doc.text(props.address, getTextWidth('Telephone No./ Mobile Phone No.:', 12) + 10, 96)
 
   doc.setFont('times', 'normal')
-  doc.text('Location of Construction or Installation:', 10, 96)
+  doc.text('Location of Construction or Installation:', 10, 102)
   doc.setFont('times', 'bold')
-  doc.text(props.address, getTextWidth('Location of Construction or Installation:', 12) + 10, 96)
+  doc.text(props.address, getTextWidth('Location of Construction or Installation:', 12) + 10, 102)
+
+  doc.setFont('times', 'normal')
+  doc.text('Use or Character of Occupancy:', 10, 108)
+  doc.setFont('times', 'bold')
+  doc.text(props.address, getTextWidth('Use or Character of Occupancy:', 12) + 10, 108)
+
+  doc.setFont('times', 'normal')
+  doc.text('Number of Storey:', 10, 114)
+  doc.setFont('times', 'bold')
+  doc.text(props.address, getTextWidth('Number of Storey:', 12) + 10, 114)
 
   // const pdfData = doc.output('datauristring')
   // const fileName = 'sample.pdf'
