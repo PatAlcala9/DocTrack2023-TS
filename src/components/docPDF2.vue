@@ -20,11 +20,17 @@ export interface Props {
   title: string
   text: string
   date: string
+  type: string
+  name: string
+  address: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
   title: 'Generated Document',
   text: 'Sample Text',
+  type: 'First Notice of Violation',
+  name: 'Juan Dela Cruz',
+  address: 'Davao City'
 })
 
 const preText = '**SCAN ME USING OCBO DOCTRACK** QrId::'
@@ -60,13 +66,18 @@ const createPDF = async () => {
   const republicText = 'Republic of the Philippines'
   const republicTextWidth = getTextWidth(republicText, 12)
   const officeText = 'OFFICE OF THE CITY BUILDING OFFICIAL'
-  const officeTextWidth = getTextWidth(officeText, 12)
+  const officeTextWidth = getTextWidth(officeText, 14)
   const cityText = 'City of Davao'
   const cityTextWidth = getTextWidth(cityText, 12)
+
+  const workTextWidth = getTextWidth('WORK STOPPAGE ORDER', 14)
+  const propsTypeWidth = getTextWidth(props.type, 14)
 
   const republicTextX = (pageWidth - republicTextWidth) / 2
   const officeTextX = (pageWidth - officeTextWidth) / 2
   const cityTextX = (pageWidth - cityTextWidth) / 2
+  const workTextX = (pageWidth - workTextWidth) / 2
+  const propsTypeX = (pageWidth - propsTypeWidth) / 2
 
   // doc.addFont('../assets/fonts/lora.ttf', 'lora', 'normal')
   // doc.setFont('lora')
@@ -88,6 +99,28 @@ const createPDF = async () => {
   doc.setFont('times', 'italic')
   doc.setFontSize(9)
   doc.text('Reference No. OCBO-2023-R', 10, 38)
+
+  doc.setFont('times', 'bold')
+  doc.setFontSize(14)
+  doc.text('WORK STOPPAGE ORDER', workTextX, 46)
+
+  doc.setFont('times', 'bold')
+  doc.setFontSize(14)
+  doc.text(props.type, propsTypeX, 56)
+
+  doc.setFontSize(12)
+  doc.setFont('times', 'normal')
+  doc.text(props.date, 156, 38)
+
+  doc.setFont('times', 'normal')
+  doc.text('Name of Structure Owner:', 10, 72)
+  doc.setFont('times', 'bold')
+  doc.text(props.name, 58, 72)
+
+  doc.setFont('times', 'normal')
+  doc.text('Mailing Address of Structure Owner:', 10, 78)
+  doc.setFont('times', 'bold')
+  doc.text(props.address, 75, 78)
 
   // const pdfData = doc.output('datauristring')
   // const fileName = 'sample.pdf'
