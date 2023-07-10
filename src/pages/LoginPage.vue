@@ -44,8 +44,8 @@ q-page(padding)
 
     transition(appear @before-enter="beforeEnterSwitch" @enter="enterSwitch")
       div.inquiry
-        span(v-if="inquiry" @click="showInquiry").inquiry-text Login
-        span(v-else @click="showLogin").inquiry-text Inquire
+        //- span(v-if="inquiry" @click="showInquiry").inquiry-text Login
+        //- span(v-else @click="showLogin").inquiry-text Inquire
         component(:is="docPDF2" title="Sample Document PDF" text="aaaa" date="yyyy-MM-dd")
 
     div.version
@@ -121,7 +121,7 @@ let userid = 0
 let employeeName = null
 let loginSuccess = false
 
-const version = ref('v 0.1')
+const version = ref('v 0.2')
 
 const showInquiry = async () => {
   await exitInquiry()
