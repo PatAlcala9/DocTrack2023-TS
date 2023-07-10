@@ -115,12 +115,32 @@ const createPDF = async () => {
   doc.setFont('times', 'normal')
   doc.text('Name of Structure Owner:', 10, 72)
   doc.setFont('times', 'bold')
-  doc.text(props.name, 58, 72)
+  doc.text(props.name, 57, 72)
 
   doc.setFont('times', 'normal')
   doc.text('Mailing Address of Structure Owner:', 10, 78)
   doc.setFont('times', 'bold')
   doc.text(props.address, 75, 78)
+
+  doc.setFont('times', 'normal')
+  doc.text('Name of Lot Owner:', 10, 84)
+  doc.setFont('times', 'bold')
+  doc.text(props.address, 47, 84)
+
+  doc.setFont('times', 'normal')
+  doc.text('Postal/Mailing Address of Lot Owner:', 10, 90)
+  doc.setFont('times', 'bold')
+  doc.text(props.address, getTextWidth('Postal/Mailing Address of Lot Owner:', 12) + 8, 90)
+
+  doc.setFont('times', 'normal')
+  doc.text('Telephone No./ Mobile Phone No.:', 10, 96)
+  doc.setFont('times', 'bold')
+  doc.text(props.address, getTextWidth('Telephone No./ Mobile Phone No.:', 12) + 10, 96)
+
+  doc.setFont('times', 'normal')
+  doc.text('Location of Construction or Installation:', 10, 96)
+  doc.setFont('times', 'bold')
+  doc.text(props.address, getTextWidth('Location of Construction or Installation:', 12) + 10, 96)
 
   // const pdfData = doc.output('datauristring')
   // const fileName = 'sample.pdf'
