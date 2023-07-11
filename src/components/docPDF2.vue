@@ -118,7 +118,7 @@ const createPDF = async () => {
 
   doc.setFontSize(12)
   doc.setFont('times', 'normal')
-  doc.text(props.date, 156, 38)
+  doc.text(props.date, pageWidth - (props.date.length * 3), 38)
 
   doc.setFont('times', 'normal')
   doc.text('Name of Structure Owner:', 10, 72)
