@@ -85,7 +85,7 @@ const createPDF = async () => {
 
   const sentence =
     '     In view hereof, you are hereby directed to stop immediately the illegal construction activities of your structure and secure Necessary Permits for your construction within a period of fifteen (15) calendar days from receipt of this notice. Failure to comply with this Work Stoppage Order will prompt the Building Official to request the DCWD for disconnection of the water supply, request the DLPC for disconnection of the electricity supply, and/or order the closure of the structure. This letter shall serve as your formal notice, and it is incumbent on your part to show why no actions should be taken against you and your property.'
-  const sentence2 = 'Your immediate attention and cooperation on this regard is earnestly sought.'
+  const sentence2 = '     Your immediate attention and cooperation on this regard is earnestly sought.'
 
   // doc.addFont('../assets/fonts/lora.ttf', 'lora', 'normal')
   // doc.setFont('lora')
@@ -177,35 +177,20 @@ const createPDF = async () => {
   doc.text('REMARKS:', 10, 176)
   doc.text(props.remarks, 10, 182, { maxWidth: 188, align: 'justify' })
 
-  doc.text(sentence, 10, 198, { maxWidth: 188, align: 'justify' })
+  const remarksY = 182
+  const sentenceY = remarksY + (props.remarks.length / 188 * 10) + 6
+  const sentence2Y = sentenceY + (sentence.length / 188 * 10)
 
-  // let y = 194
-  // const words = sentence.split(' ')
-  // const maxLength = 110
-  // let lines = []
-  // let currentLine = ''
-  // words.forEach(function (word) {
-  //       if (currentLine.length + word.length + 1 <= maxLength) {
-  //     currentLine += word + ' '
-  //   } else {
-  //     doc.text(currentLine, 10, y)
-  //     y += 6
-  //     currentLine = word + ' '
-  //   }
-  // })
+  doc.text(sentence, 10, sentenceY, { maxWidth: 188, align: 'justify' })
+  doc.text(sentence2, 10, sentence2Y, { maxWidth: 188, align: 'justify' })
 
-  // if (currentLine.length > 0) {
-  //   doc.text(currentLine, 10, y, {align: 'justify'})
-  // }
+  doc.text('Very truly yours,', 140, sentence2Y + 18)
+  doc.setFont('times', 'bold')
+  doc.text('AR. KHASAHAYAR L. TOGHYANI', 120, sentence2Y + 30)
 
   // const pdfData = doc.output('datauristring')
   // const fileName = 'sample.pdf'
 
   doc.save('sample.pdf')
-
-  // const pdfData = doc.output()
-  // const blob = new Blob([pdfData], { type: 'application/pdf' })
-  // const url = URL.createObjectURL(blob)
-  // window.open(url)
 }
 </script>
