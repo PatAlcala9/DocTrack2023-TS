@@ -46,7 +46,7 @@ q-page(padding)
       div.inquiry
         //- span(v-if="inquiry" @click="showInquiry").inquiry-text Login
         //- span(v-else @click="showLogin").inquiry-text Inquire
-        component(:is="docPDF2" title="Sample Document PDF" text="aaaa" date="yyyy-MM-dd")
+        component(:is="docPDF2" title="Sample Document PDF" text="aaaa" date="July 12, 2023")
 
     div.version
       span.version--text {{version}}
