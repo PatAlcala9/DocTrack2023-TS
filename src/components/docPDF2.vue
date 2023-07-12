@@ -24,6 +24,7 @@ export interface Props {
   name: string
   address: string
   remarks: string
+  employee: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -33,6 +34,7 @@ const props = withDefaults(defineProps<Props>(), {
   name: 'Juan Dela Cruz',
   address: 'Davao City',
   remarks: 'The quick brown fox jumps over the lazy dog.',
+  employee: 'Juan Dela Xruz',
 })
 
 const preText = '**SCAN ME USING OCBO DOCTRACK** QrId::'
@@ -40,7 +42,11 @@ const encText = encrypt(props.text)
 const qrSize = 200
 
 const createPDF = async () => {
-  const doc = new jsPDF()
+  const doc = new jsPDF({
+    orientation: 'p',
+    unit: 'mm',
+    format: 'legal',
+  })
 
   const qrItem = document.getElementById('qr')
   const qrSrc = qrItem?.getAttribute('src')
@@ -97,7 +103,7 @@ const createPDF = async () => {
   doc.setFont('times', 'normal')
   doc.text(cityText, cityTextX, 22)
 
-  // doc.addImage(qrLink.href, 'PNG', 1, 10, 20, 20, 'qr', 'NONE', 0)
+
   doc.addImage(lungsodLink.href, 'PNG', 5, 2, 30, 30, 'lungsod', 'NONE', 0)
   doc.addImage(ocboLink.href, 'PNG', pageWidth - 35, 2, 30, 30, 'ocbo', 'NONE', 0)
 
@@ -118,7 +124,7 @@ const createPDF = async () => {
 
   doc.setFontSize(12)
   doc.setFont('times', 'normal')
-  doc.text(props.date, pageWidth - (props.date.length * 3), 38)
+  doc.text(props.date, pageWidth - props.date.length * 3, 38)
 
   doc.setFont('times', 'normal')
   doc.text('Name of Structure Owner:', 10, 72)
@@ -178,8 +184,8 @@ const createPDF = async () => {
   doc.text(props.remarks, 10, 182, { maxWidth: 188, align: 'justify' })
 
   const remarksY = 182
-  const sentenceY = remarksY + (props.remarks.length / 188 * 10) + 6
-  const sentence2Y = sentenceY + (sentence.length / 188 * 10)
+  const sentenceY = remarksY + (props.remarks.length / 188) * 10 + 6
+  const sentence2Y = sentenceY + (sentence.length / 188) * 10
 
   doc.text(sentence, 10, sentenceY, { maxWidth: 188, align: 'justify' })
   doc.text(sentence2, 10, sentence2Y, { maxWidth: 188, align: 'justify' })
@@ -187,9 +193,34 @@ const createPDF = async () => {
   doc.text('Very truly yours,', 140, sentence2Y + 18)
   doc.setFont('times', 'bold')
   doc.text('AR. KHASAHAYAR L. TOGHYANI', 120, sentence2Y + 30)
+  doc.setFont('times', 'normal')
+  doc.text('Officer-In-Charge', 140, sentence2Y + 36)
 
-  // const pdfData = doc.output('datauristring')
-  // const fileName = 'sample.pdf'
+  doc.text('Received By    :', 10, sentence2Y + 54)
+  doc.text('Date and Time :', 10, sentence2Y + 60)
+
+  doc.setLineWidth(0.2)
+  doc.line(40, sentence2Y + 54, 100, sentence2Y + 54)
+  doc.line(40, sentence2Y + 60, 100, sentence2Y + 60)
+
+  doc.text('Served By        :', 10, sentence2Y + 66)
+  doc.setFont('times', 'bold')
+  doc.text(props.employee, 39, sentence2Y + 66)
+
+  const footerWidth = getTextWidth('Office of the City Building Official - Pichon Street (former Magallanes Street)', 9)
+  const footerWidthX = (pageWidth - footerWidth) / 2
+  const footer2Width = getTextWidth('fronting A. Bonifacio Monument Rotunda, Davao City', 9)
+  const footer2WidthX = (pageWidth - footer2Width) / 2
+  const footer3Width = getTextWidth('Tel. No. 291-6695 / email address: ocbo.davao@gmail.com', 9)
+  const footer3WidthX = (pageWidth - footer3Width) / 2
+
+  doc.setFont('times', 'italic')
+  doc.setFontSize(9)
+  doc.text('Office of the City Building Official - Pichon Street (former Magallanes Street)', footerWidthX, sentence2Y + 84)
+  doc.text('fronting A. Bonifacio Monument Rotunda, Davao City', footer2WidthX, sentence2Y + 89)
+  doc.text('Tel. No. 291-6695 / email address: ocbo.davao@gmail.com', footer3WidthX, sentence2Y + 94)
+
+  doc.addImage(qrLink.href, 'PNG', 180, sentence2Y + 48, 25, 25, 'qr', 'NONE', 0)
 
   doc.save('sample.pdf')
 }
