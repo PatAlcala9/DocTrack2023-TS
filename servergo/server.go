@@ -1150,6 +1150,20 @@ func connect() {
           "result3": array3,
         })
 
+      } else if method == "GetStatusSpecific" {
+        var result2, result3 string
+
+        err = db.QueryRow("SELECT complaint_whereaboutsid AS result, tagword AS result2, tagcode AS result3 FROM complaint_whereabouts WHERE whereabouts = ?", data).Scan(&result, &result2, &result3)
+        if err != nil {
+          panic(err.Error())
+        }
+
+        c.JSON(http.StatusOK, gin.H{
+          "result": result,
+          "result2": result2,
+          "result3": result3,
+        })
+
       } else if method == "GetMaxStatusID" {
         err = db.QueryRow("SELECT MAX(complaint_statusid) AS result FROM complaint_status WHERE complaint_code = ?", data).Scan(&result)
         if err != nil {
@@ -1590,6 +1604,8 @@ func connect() {
     c.Writer.Header().Set("X-Frame-Options", "DENY")
     c.Writer.Header().Set("X-Download-Options", "noopen")
     c.Writer.Header().Set("Referrer-Policy", "no-referrer")
+
+    var dbpost *sql.Stmt
 
     dbpost, err := db.Prepare("UPDATE complaint_info SET complaint_statusid = ? WHERE complaint_code = ?")
     if err != nil {
