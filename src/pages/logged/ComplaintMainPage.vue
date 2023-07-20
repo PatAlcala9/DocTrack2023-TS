@@ -25,7 +25,7 @@ q-page(padding)
               th Edit
           tbody
             tr(v-for="(item, index) in complaintList.result" :key="item").table-content-group
-              td {{item}}
+              td(@click="changeStatus(complaintList.result4[index])" style="cursor: pointer") {{item}}
               td
                 q-btn(color="button" size="md" icon="visibility" :ripple="false" @click="getComplaintSpecific(item,false)").button-view
               td
@@ -149,13 +149,13 @@ q-dialog(full-width v-model="dialogStatusEdit" transition-show="flip-right" tran
           component(:is="docInfo" label="Current Status" :value="dialogStatus")
         div.padded.text-center
           component(:is="docLabel" text="New Status")
-          q-select(v-if="$q.screen.width > 500" dark rounded outlined v-model="dialogNewStatus" :options="statusList" input-class="select" behavior="menu" @blur="sample").select
-          q-select(v-else dark rounded outlined v-model="dialogNewStatus" :options="statusList" input-class="select" behavior="dialog"  @blur="sample").select
+          q-select(v-if="$q.screen.width > 500" dark rounded outlined v-model="dialogNewStatus" :options="statusList" input-class="select" behavior="menu" @blur="postChangeStatus(dialogNewStatus)").select
+          q-select(v-else dark rounded outlined v-model="dialogNewStatus" :options="statusList" input-class="select" behavior="dialog"  @blur="postChangeStatus(dialogNewStatus)").select
         div.padded
           component(:is="docInfoEdit" label="Remarks" v-model:value="statusRemarks" )
 
       section.fit.row.wrap.justify-around.items-center.content-center.button-area
-        component(:is="docButton" text="OK" @click="sample")
+        component(:is="docButton" text="OK" @click="postChangeStatus(dialogNewStatus)")
         //- @click="dialogStatusEdit=false"
 
 </template>
@@ -167,11 +167,13 @@ import { useRouter } from 'vue-router'
 import { api } from 'boot/axios'
 import { useCurrentPage } from 'stores/currentpage'
 import { useIsDemo } from 'stores/isdemo'
+import { useEmployeeName } from 'stores/employeename'
 
 const router = useRouter()
 const quasar = useQuasar()
 const _currentpage = useCurrentPage()
 const _isdemo = useIsDemo()
+const _employeename = useEmployeeName()
 
 let onlineColor = ref('')
 
@@ -324,10 +326,6 @@ const getComplaintSpecific = async (code: string, edit: boolean) => {
   await recordData()
 }
 
-// const openDialog = async () => {
-
-// }
-
 const changeStatus = async (status: string) => {
   await getStatusList(status)
 
@@ -348,26 +346,20 @@ const getMaxStatusID = async (code: string): Promise<number> => {
 }
 
 const postUpdateStatusID = async (id: number, code: string): Promise<boolean> => {
-  const response = await api.post('/api/PostUpdateStatusID',{
-    data: id.toString(),
-    data2: code
-  })
-  const data = response.data.length !== 0 ? response.data : null
+  try {
+    const response = await api.post('/api/PostUpdateStatusID', {
+      data: id.toString(),
+      data2: code,
+    })
+    const data = response.data
 
-  // if (data !== null) {
-  //   return data.result
-  // } else return 0
-
-  console.log('data', data)
-
-  return true
+    if (data.includes('Success')) {
+      return true
+    } else return false
+  } catch {
+    return false
+  }
 }
-
-const sample = async () => {
-  await postUpdateStatusID(6, '23-2-0007')
-}
-
-
 
 const filterTable = async () => {
   if (searchValue.value.length > 0) {
@@ -392,11 +384,31 @@ const getStatusList = async (exception: string) => {
   }
 }
 
-const postStatus = async (code: string, date: string, status: string, tagcode: string, tagword: string, receivedby: string, details: string): Promise<boolean> => {
+let newStatusId = 0
+let newStatusTagword = ''
+let newStatusTagcode = ''
+const getStatusSpecific = async (whereabout: string): Promise<boolean> => {
+  try {
+    const response = await api.get('/api/GetStatusSpecific/' + whereabout)
+    const data = response.data.length !== 0 ? response.data : null
+
+    if (data !== null) {
+      newStatusId = data.result
+      newStatusTagword = data.result2
+      newStatusTagcode = data.result3
+
+      return true
+    } else return false
+  } catch {
+    return false
+  }
+}
+
+const postStatus = async (code: string, date: string, newstatus: string, tagcode: string, tagword: string, receivedby: string, details: string): Promise<boolean> => {
   const response = await api.post('/api/PostStatus', {
     data: code,
     data2: date,
-    data3: status,
+    data3: newstatus,
     data4: tagcode,
     data5: tagword,
     data6: receivedby,
@@ -408,11 +420,13 @@ const postStatus = async (code: string, date: string, status: string, tagcode: s
   else return false
 }
 
-const postChangeStatus = async (code: string, status: string, tagcode: string, tagword: string, details: string) => {
+const postChangeStatus = async (newstatus: string) => {
   const today = new Date()
-  const formattedDate = date.formatDate(today, 'YYYY-MM-dd')
-  if (await postStatus(code, formattedDate, status,tagcode, tagword, 'JUAN', details)) {
+  const formattedDate = date.formatDate(today, 'YYYY-MM-DD')
+  const postStatusBool = await postStatus(dialogCode.value, formattedDate, newstatus, newStatusTagcode, newStatusTagword, _employeename.employeename, statusRemarks.value)
 
+  if (postStatusBool) {
+    const postUpdateStatusIDBool = await postUpdateStatusID(newStatusId, dialogCode.value)
   }
 }
 
