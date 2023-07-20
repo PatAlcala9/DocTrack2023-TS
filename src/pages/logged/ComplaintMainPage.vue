@@ -25,11 +25,11 @@ q-page(padding)
               th Edit
           tbody
             tr(v-for="(item, index) in complaintList.result" :key="item").table-content-group
-              td(@click="changeStatus(complaintList.result4[index])" style="cursor: pointer") {{item}}
+              td(@click="changeStatus(item, complaintList.result4[index])" style="cursor: pointer") {{item}}
               td
-                q-btn(color="button" size="md" icon="visibility" :ripple="false" @click="getComplaintSpecific(item,false)").button-view
+                q-btn(color="button" size="md" icon="visibility" :ripple="false" @click="getComplaintSpecific(item,false, true)").button-view
               td
-                q-btn(color="button" size="md" icon="edit" :ripple="false" @click="getComplaintSpecific(item, true)").button-view
+                q-btn(color="button" size="md" icon="edit" :ripple="false" @click="getComplaintSpecific(item, true, true)").button-view
 
     section(v-else).flex.flex-center
       section(v-if="complaintList.result !== ''").dialog-content-table
@@ -48,12 +48,12 @@ q-page(padding)
               td {{item}}
               td {{complaintList.result2[index]}}
               td {{complaintList.result3[index]}}
-              td(@click="changeStatus(complaintList.result4[index])" style="cursor: pointer") {{complaintList.result4[index]}}
+              td(@click="changeStatus(item, complaintList.result4[index])" style="cursor: pointer") {{complaintList.result4[index]}}
               td {{complaintList.result5[index]}}
               td
-                q-btn(rounded size="sm" color="button" label="show" :ripple="false" @click="getComplaintSpecific(item, false)").button-view
+                q-btn(rounded size="sm" color="button" label="show" :ripple="false" @click="getComplaintSpecific(item, false, true)").button-view
               td
-                q-btn(rounded size="sm" color="button" label="edit" :ripple="false" @click="getComplaintSpecific(item, true)").button-view
+                q-btn(rounded size="sm" color="button" label="edit" :ripple="false" @click="getComplaintSpecific(item, true, true)").button-view
 
 q-dialog(full-width full-height v-model="dialog" transition-show="flip-right" transition-hide="flip-left").dialog
   q-card.dialog-card.text-white
@@ -142,15 +142,15 @@ q-dialog(full-width full-height v-model="dialogEdit" transition-show="flip-right
 
 
 q-dialog(full-width v-model="dialogStatusEdit" transition-show="flip-right" transition-hide="flip-left").dialog
-  q-card.dialog-card.text-white(style="height: auto")
+  q-card.dialog-card.text-white(style="height: auto" )
     q-card-section
       section.full-height.column.wrap.justify-center.items-center.content-center.q-card--section
         div.padded
           component(:is="docInfo" label="Current Status" :value="dialogStatus")
         div.padded.text-center
           component(:is="docLabel" text="New Status")
-          q-select(v-if="$q.screen.width > 500" dark rounded outlined v-model="dialogNewStatus" :options="statusList" input-class="select" behavior="menu" @blur="postChangeStatus(dialogNewStatus)").select
-          q-select(v-else dark rounded outlined v-model="dialogNewStatus" :options="statusList" input-class="select" behavior="dialog"  @blur="postChangeStatus(dialogNewStatus)").select
+          q-select(v-if="$q.screen.width > 500" dark rounded outlined v-model="dialogNewStatus" :options="statusList" input-class="select" behavior="menu" ).select
+          q-select(v-else dark rounded outlined v-model="dialogNewStatus" :options="statusList" input-class="select" behavior="dialog" ).select
         div.padded
           component(:is="docInfoEdit" label="Remarks" v-model:value="statusRemarks" )
 
@@ -302,7 +302,7 @@ const calculateRemainingDays = async (expiry: string): Promise<number> => {
   } else return 0
 }
 
-const getComplaintSpecific = async (code: string, edit: boolean) => {
+const getComplaintSpecific = async (code: string, edit: boolean, show: boolean) => {
   const response = await api.get('/api/GetComplaintSpecific/' + code)
   const data = response.data.length !== 0 ? response.data : null
 
@@ -320,13 +320,17 @@ const getComplaintSpecific = async (code: string, edit: boolean) => {
     dialogStatus.value = data.result10
     dialogDateTransacted.value = date.formatDate(data.result11, 'MMMM D, YYYY')
 
-    if (edit) dialogEdit.value = true
-    else dialog.value = true
+    if (show) {
+      if (edit) dialogEdit.value = true
+      else dialog.value = true
+    }
+
   }
   await recordData()
 }
 
-const changeStatus = async (status: string) => {
+const changeStatus = async (code: string, status: string) => {
+  await getComplaintSpecific(code, false, false)
   await getStatusList(status)
 
   if (dialogNewStatus.value === '') statusLabel.value = 'SELECT STATUS'
@@ -423,11 +427,16 @@ const postStatus = async (code: string, date: string, newstatus: string, tagcode
 const postChangeStatus = async (newstatus: string) => {
   const today = new Date()
   const formattedDate = date.formatDate(today, 'YYYY-MM-DD')
-  const postStatusBool = await postStatus(dialogCode.value, formattedDate, newstatus, newStatusTagcode, newStatusTagword, _employeename.employeename, statusRemarks.value)
+  const getStatusSpecificBool = await getStatusSpecific(dialogNewStatus.value)
 
-  if (postStatusBool) {
-    const postUpdateStatusIDBool = await postUpdateStatusID(newStatusId, dialogCode.value)
+  if (getStatusSpecificBool) {
+    const postStatusBool = await postStatus(dialogCode.value, formattedDate, newstatus, newStatusTagcode, newStatusTagword, _employeename.employeename, statusRemarks.value)
+    if (postStatusBool) {
+      await postUpdateStatusID(newStatusId, dialogCode.value)
+    }
   }
+
+  dialogStatusEdit.value = false
 }
 
 const checkOnline = () => {
