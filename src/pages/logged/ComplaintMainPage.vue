@@ -433,6 +433,7 @@ const postChangeStatus = async (newstatus: string) => {
     const postStatusBool = await postStatus(dialogCode.value, formattedDate, newstatus, newStatusTagcode, newStatusTagword, _employeename.employeename, statusRemarks.value)
     if (postStatusBool) {
       await postUpdateStatusID(newStatusId, dialogCode.value)
+      await refreshData()
     }
   }
 
@@ -553,14 +554,17 @@ const recordChange = (value: string) => {
   }
 }
 
-;(async () => {
-  checkOnline()
-
+const refreshData = async () => {
   if (_isdemo.isdemo) fillupOffline()
   else {
     if (await getComplaintList()) nodata.value = false
     else nodata.value = true
   }
+}
+
+;(async () => {
+  checkOnline()
+  await refreshData()
 })()
 </script>
 
