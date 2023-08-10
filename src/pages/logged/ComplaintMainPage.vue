@@ -432,7 +432,7 @@ const postChangeStatus = async (newstatus: string) => {
 
   if (getStatusSpecificBool) {
     const encodedStatus = newstatus.replace('/', '~')
-    console.log('encodedStatus', encodedStatus)
+
     const postStatusBool = await postStatus(dialogCode.value, formattedDate, encodedStatus, newStatusTagcode, newStatusTagword, _employeename.employeename, statusRemarks.value)
     if (postStatusBool) {
       await postUpdateStatusID(newStatusId, formattedDate,dialogCode.value)

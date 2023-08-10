@@ -345,7 +345,6 @@ const showDialog = (title: string, message: string) => {
 }
 
 const saveData = async () => {
-  console.log('_isdemo.isdemo:', _isdemo.isdemo)
   if (checkComplete() === false) {
     if (_isdemo.isdemo) {
       await getSourceIDFromLOCAL()
