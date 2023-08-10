@@ -121,7 +121,7 @@ let userid = 0
 let employeeName = null
 let loginSuccess = false
 
-const version = ref('v 0.3')
+const version = ref('v 0.4')
 
 const showInquiry = async () => {
   await exitInquiry()
