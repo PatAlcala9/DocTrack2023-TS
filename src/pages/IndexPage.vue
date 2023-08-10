@@ -4,10 +4,10 @@ q-page(padding)
   component(:is="docOnline" :state="online" )
 
   section(v-if="quasar.screen.width > 500").full-width.column.items-start.content-center
-    img(src="../assets/logo2.avif" alt="OCBO Logo").logo
+    img(src="../assets/logo3.avif" alt="OCBO Logo").logo
 
   section(v-else).full-width.column.content-center.items-center
-    img(src="../assets/logo2.avif" alt="OCBO Logo").logo
+    img(src="../assets/logo3.avif" alt="OCBO Logo").logo
 
   div.fit.column.text-center.main
     transition(appear @before-enter="beforeEnterTitle" @enter="enterTitle")
@@ -35,7 +35,7 @@ q-page(padding)
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
       component(:is="docMenu" text="Complaint" icon="gavel" v-if="_access.access.includes('complaint')" @click="gotoPage('complaint', false)" @mouseover="setMessage('complaint')" @mouseout="returnDefault")
 
-  </template>
+</template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
