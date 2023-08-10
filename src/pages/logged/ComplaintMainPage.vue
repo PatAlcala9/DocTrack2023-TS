@@ -347,11 +347,12 @@ const getMaxStatusID = async (code: string): Promise<number> => {
   } else return 0
 }
 
-const postUpdateStatusID = async (id: number, code: string): Promise<boolean> => {
+const postUpdateStatusID = async (id: number, date: string, code: string): Promise<boolean> => {
   try {
     const response = await api.post('/api/PostUpdateStatusID', {
       data: id.toString(),
-      data2: code,
+      data2: date,
+      data3: code
     })
     const data = response.data
 
@@ -426,12 +427,15 @@ const postStatus = async (code: string, date: string, newstatus: string, tagcode
 const postChangeStatus = async (newstatus: string) => {
   const today = new Date()
   const formattedDate = date.formatDate(today, 'YYYY-MM-DD')
-  const getStatusSpecificBool = await getStatusSpecific(dialogNewStatus.value)
+  const dialogEncodedStatus = dialogNewStatus.value.replace('/', '~')
+  const getStatusSpecificBool = await getStatusSpecific(dialogEncodedStatus)
 
   if (getStatusSpecificBool) {
-    const postStatusBool = await postStatus(dialogCode.value, formattedDate, newstatus, newStatusTagcode, newStatusTagword, _employeename.employeename, statusRemarks.value)
+    const encodedStatus = newstatus.replace('/', '~')
+    console.log('encodedStatus', encodedStatus)
+    const postStatusBool = await postStatus(dialogCode.value, formattedDate, encodedStatus, newStatusTagcode, newStatusTagword, _employeename.employeename, statusRemarks.value)
     if (postStatusBool) {
-      await postUpdateStatusID(newStatusId, dialogCode.value)
+      await postUpdateStatusID(newStatusId, formattedDate,dialogCode.value)
       await refreshData()
     }
   }

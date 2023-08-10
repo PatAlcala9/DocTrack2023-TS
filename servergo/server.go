@@ -1147,8 +1147,9 @@ func connect() {
 
 		} else if method == "GetStatusSpecific" {
 			var result2, result3 string
+      decodedStatus := strings.Replace(data, "~", "/", -1)
 
-			err = db.QueryRow("SELECT complaint_whereaboutsid AS result, tagword AS result2, tagcode AS result3 FROM complaint_whereabouts WHERE whereabouts = ?", data).Scan(&result, &result2, &result3)
+			err = db.QueryRow("SELECT complaint_whereaboutsid AS result, tagword AS result2, tagcode AS result3 FROM complaint_whereabouts WHERE whereabouts = ?", decodedStatus).Scan(&result, &result2, &result3)
 			if err != nil {
 				panic(err.Error())
 			}
@@ -1570,6 +1571,7 @@ func connect() {
 		type EditData struct {
 			Data  string `json:"data"`
 			Data2 string `json:"data2"`
+      Data3 string `json:"data3"`
 		}
 		var editData EditData
 		if err := c.ShouldBindJSON(&editData); err != nil {
@@ -1586,13 +1588,13 @@ func connect() {
 
 		var dbpost *sql.Stmt
 
-		dbpost, err := db.Prepare("UPDATE complaint_info SET complaint_statusid = ? WHERE complaint_code = ?")
+		dbpost, err := db.Prepare("UPDATE complaint_info SET complaint_whereaboutsid = ?, date_transacted = ? WHERE complaint_code = ?")
 		if err != nil {
 			panic(err.Error())
 		}
 		defer dbpost.Close()
 
-		exec, err := dbpost.Exec(editData.Data, editData.Data2)
+		exec, err := dbpost.Exec(editData.Data, editData.Data2, editData.Data3)
 		if err != nil {
 			panic(err.Error())
 		}
