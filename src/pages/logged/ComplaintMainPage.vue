@@ -184,7 +184,6 @@ import docInfoEdit from 'components/docInfoEdit.vue'
 import docLabel from 'components/docLabel.vue'
 
 let searchValue = ref('')
-let searchByValue = ref('')
 let nodata = ref(true)
 
 let dialog = ref(false)
