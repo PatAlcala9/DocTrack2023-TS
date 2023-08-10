@@ -324,7 +324,6 @@ const getComplaintSpecific = async (code: string, edit: boolean, show: boolean) 
       if (edit) dialogEdit.value = true
       else dialog.value = true
     }
-
   }
   await recordData()
 }
@@ -409,10 +408,11 @@ const getStatusSpecific = async (whereabout: string): Promise<boolean> => {
 }
 
 const postStatus = async (code: string, date: string, newstatus: string, tagcode: string, tagword: string, receivedby: string, details: string): Promise<boolean> => {
+  const encodedStatus = newstatus.replace('/', '~')
   const response = await api.post('/api/PostStatus', {
     data: code,
     data2: date,
-    data3: newstatus,
+    data3: encodedStatus,
     data4: tagcode,
     data5: tagword,
     data6: receivedby,
