@@ -53,6 +53,11 @@ const checkQR = () => {
   else validQR.value = 1
 }
 
+const loadSampleData = () => {
+  _qrvalue.qrvalue = '**SCAN ME USING OCBO DOCTRACK** QrId::2dfg21fd23g23df12g31fd2g12fd12g3'
+  validQR.value = 2
+}
+
 const extractData = () => {
   const codeLoc = _qrvalue.qrvalue.indexOf('::')
   const codeData = _qrvalue.qrvalue.slice(codeLoc + 5)
@@ -71,7 +76,8 @@ const gotoHome = () => {
 }
 
 ;(async () => {
-  checkQR()
+  // checkQR()
+  loadSampleData()
 })()
 </script>
 
@@ -92,9 +98,11 @@ const gotoHome = () => {
 .information
   font-family: 'Inter'
   font-weight: 560
-  font-size: 2rem
-  border: 1px solid #ffffff
+  font-size: 1.4rem
+  border: 2px solid rgba(255, 255, 255, 0.5)
+  background-color: rgba(12, 21, 42, 0.45)
+  backdrop-filter: blur(9px) saturate(150%)
   border-radius: 3rem
   padding: 0.5rem 1.5rem
-  background-color: $background
+  //background-color: $background
 </style>
