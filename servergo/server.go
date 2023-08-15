@@ -27,224 +27,7 @@ var connection string = "root:superuser@tcp(localhost:3306)/ocbodoctracksys"
 
 func main() {
 	connect()
-
-	// md5Hash := hash("1", "sample", 1, 256)
-	// fmt.Println("MD5 Hash:", md5Hash)
-
-	// fmt.Println(encryptAES("a", []))
 }
-
-// func getSubstring(str string, start, end int) string {
-// 	if start < 0 {
-// 		start = 0
-// 	}
-// 	if end > len(str) {
-// 		end = len(str)
-// 	}
-// 	return str[start:end]
-// }
-
-// func hash(password string, salt string, iteration int, bits int) string {
-//   expandedSalt := ""
-// 	for i := 0; i < iteration; i++ {
-// 		expandedSalt += salt
-// 	}
-
-// 	hasher := md5.New()
-// 	hasher.Write([]byte(password))
-// 	hash := hasher.Sum(nil)
-// 	md51 := hex.EncodeToString([]byte(expandedSalt + hex.EncodeToString(hash) + expandedSalt))
-
-//   vowelCount := 0
-// 	consCount := 0
-//   p1 := getSubstring(md51, 0, 8)
-// 	p2 := getSubstring(md51, 8, 8)
-// 	p3 := getSubstring(md51, 16, 8)
-// 	p4 := getSubstring(md51, 24, 8)
-
-//   for x := 0; x < iteration; x++ {
-// 		for i := 0; i < len(password); i++ {
-// 			char := password[i]
-// 			switch char {
-// 			case 'a', 'A', 'e', 'E', 'i', 'I', 'o', 'O', 'u', 'U':
-// 				vowelCount++
-// 			default:
-// 				consCount++
-// 			}
-// 		}
-// 	}
-
-//   outputLength := bits / 128
-//   result := ""
-//   xtra := fmt.Sprintf("%d%d", consCount, vowelCount)
-//   intXtra, err := strconv.Atoi(xtra)
-//   if err != nil {
-// 		panic(err)
-// 	}
-
-// 	newConsCount := consCount * intXtra
-// 	newVowelCount := vowelCount * intXtra
-// 	newValue := md51 + strconv.Itoa(newConsCount) + strconv.Itoa(newVowelCount)
-
-//   hasher2 := md5.New()
-// 	hasher2.Write([]byte(newValue))
-// 	hash2 := hasher2.Sum(nil)
-// 	md52 := hex.EncodeToString(hash2)
-
-//   p21 := getSubstring(md52, 0, 8)
-// 	p22 := getSubstring(md52, 8, 8)
-// 	p23 := getSubstring(md52, 16, 8)
-// 	p24 := getSubstring(md52, 24, 8)
-
-//   result = p2 + p22 + p1 + p21 + p4 + p24 + p3 + p23
-
-//   if outputLength > 1 {
-//     xtra := strconv.Itoa(consCount * outputLength) + strconv.Itoa(vowelCount * outputLength)
-//     newConsCount, _ := strconv.Atoi(xtra)
-//     newConsCount *= consCount * outputLength
-//     newVowelCount, _ := strconv.Atoi(xtra)
-//     newVowelCount *= vowelCount * outputLength
-//     newValue := result + strconv.Itoa(newConsCount) + strconv.Itoa(newVowelCount)
-
-//     hasher3 := md5.New()
-//     hasher3.Write([]byte(newValue))
-//     hash3 := hasher3.Sum(nil)
-//     md53 := hex.EncodeToString(hash3)
-
-//     hasher4 := md5.New()
-//     hasher4.Write([]byte(strconv.Itoa(newConsCount) + strconv.Itoa(newVowelCount)))
-//     hash4 := hasher4.Sum(nil)
-//     md54 := hex.EncodeToString(hash4)
-
-//     p31 := getSubstring(md53, 0, 8)
-//     p32 := getSubstring(md53, 8, 8)
-//     p33 := getSubstring(md53, 16, 8)
-//     p34 := getSubstring(md53, 24, 8)
-
-//     p31x := getSubstring(md54, 0, 8)
-//     p32x := getSubstring(md54, 8, 8)
-//     p33x := getSubstring(md54, 16, 8)
-//     p34x := getSubstring(md54, 24, 8)
-
-//     result = result + p32x + p32 + p31x + p31 + p34x + p34 + p33x + p33
-//   }
-
-//   if outputLength > 2 {
-//     xtra := strconv.Itoa(consCount * outputLength) + strconv.Itoa(vowelCount * outputLength)
-//     newConsCount, _ := strconv.Atoi(xtra)
-//     newConsCount *= consCount * outputLength
-//     newVowelCount, _ := strconv.Atoi(xtra)
-//     newVowelCount *= vowelCount * outputLength
-//     newValue := result + strconv.Itoa(newConsCount) + strconv.Itoa(newVowelCount)
-
-//     hasher5 := md5.New()
-//     hasher5.Write([]byte(newValue))
-//     hash5 := hasher5.Sum(nil)
-//     md55 := hex.EncodeToString(hash5)
-
-//     hasher6 := md5.New()
-//     hasher6.Write([]byte(strconv.Itoa(newConsCount) + strconv.Itoa(newVowelCount)))
-//     hash6 := hasher6.Sum(nil)
-//     md56 := hex.EncodeToString(hash6)
-
-//     p41 := getSubstring(md55, 0, 8)
-//     p42 := getSubstring(md55, 8, 8)
-//     p43 := getSubstring(md55, 16, 8)
-//     p44 := getSubstring(md55, 24, 8)
-
-//     p41x := getSubstring(md56, 0, 8)
-//     p42x := getSubstring(md56, 8, 8)
-//     p43x := getSubstring(md56, 16, 8)
-//     p44x := getSubstring(md56, 24, 8)
-
-//     result = result + p42x + p42 + p41x + p41 + p44x + p44 + p43x + p43
-//   }
-
-//   if outputLength > 3 {
-//     xtra := strconv.Itoa(consCount * outputLength) + strconv.Itoa(vowelCount * outputLength)
-//     newConsCount, _ := strconv.Atoi(xtra)
-//     newConsCount *= consCount * outputLength
-//     newVowelCount, _ := strconv.Atoi(xtra)
-//     newVowelCount *= vowelCount * outputLength
-//     newValue := result + strconv.Itoa(newConsCount) + strconv.Itoa(newVowelCount)
-
-//     hasher7 := md5.New()
-//     hasher7.Write([]byte(newValue))
-//     hash7 := hasher7.Sum(nil)
-//     md57 := hex.EncodeToString(hash7)
-
-//     hasher8 := md5.New()
-//     hasher8.Write([]byte(strconv.Itoa(newConsCount) + strconv.Itoa(newVowelCount)))
-//     hash8 := hasher8.Sum(nil)
-//     md58 := hex.EncodeToString(hash8)
-
-//     p51 := getSubstring(md57, 0, 8)
-//     p52 := getSubstring(md57, 8, 8)
-//     p53 := getSubstring(md57, 16, 8)
-//     p54 := getSubstring(md57, 24, 8)
-
-//     p51x := getSubstring(md58, 0, 8)
-//     p52x := getSubstring(md58, 8, 8)
-//     p53x := getSubstring(md58, 16, 8)
-//     p54x := getSubstring(md58, 24, 8)
-
-//     result = result + p52x + p52 + p51x + p51 + p54x + p54 + p53x + p53
-//   }
-
-//   if outputLength > 4 {
-//     xtra := strconv.Itoa(consCount * outputLength) + strconv.Itoa(vowelCount * outputLength)
-//     newConsCount, _ := strconv.Atoi(xtra)
-//     newConsCount *= consCount * outputLength
-//     newVowelCount, _ := strconv.Atoi(xtra)
-//     newVowelCount *= vowelCount * outputLength
-//     newValue := result + strconv.Itoa(newConsCount) + strconv.Itoa(newVowelCount)
-
-//     hasher9 := md5.New()
-//     hasher9.Write([]byte(newValue))
-//     hash9 := hasher9.Sum(nil)
-//     md59 := hex.EncodeToString(hash9)
-
-//     hasher10 := md5.New()
-//     hasher10.Write([]byte(strconv.Itoa(newConsCount) + strconv.Itoa(newVowelCount)))
-//     hash10 := hasher10.Sum(nil)
-//     md510 := hex.EncodeToString(hash10)
-
-//     p61 := getSubstring(md59, 0, 8)
-//     p62 := getSubstring(md59, 8, 8)
-//     p63 := getSubstring(md59, 16, 8)
-//     p64 := getSubstring(md59, 24, 8)
-
-//     p61x := getSubstring(md510, 0, 8)
-//     p62x := getSubstring(md510, 8, 8)
-//     p63x := getSubstring(md510, 16, 8)
-//     p64x := getSubstring(md510, 24, 8)
-
-//     result = result + p62x + p62 + p61x + p61 + p64x + p64 + p63x + p63
-//   }
-
-// 	return result
-// }
-
-// func encryptAES(plaintext string, key []byte) (string, error) {
-// 	block, err := aes.NewCipher(key)
-// 	if err != nil {
-// 		return "", err
-// 	}
-
-// 	iv := make([]byte, aes.BlockSize)
-// 	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
-// 		return "", err
-// 	}
-
-// 	encrypter := cipher.NewCTR(block, iv)
-// 	ciphertext := make([]byte, len(plaintext))
-// 	encrypter.XORKeyStream(ciphertext, []byte(plaintext))
-
-// 	// Append the IV to the ciphertext (for completeness)
-// 	ciphertext = append(iv, ciphertext...)
-
-// 	return string(ciphertext), nil
-// }
 
 func connect() {
 	db, err := sql.Open("mysql", connection)
@@ -258,6 +41,12 @@ func connect() {
 	// gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
 	router.Use(cors.Default())
+
+	router.GET("/", func(c *gin.Context) {
+    router.LoadHTMLFiles("index.html")
+		c.Header("Content-Type", "text/html")
+    c.HTML(http.StatusOK, "index.html", nil)
+	})
 
 	router.GET("/api/:method", func(c *gin.Context) {
 		var result string
@@ -1147,7 +936,7 @@ func connect() {
 
 		} else if method == "GetStatusSpecific" {
 			var result2, result3 string
-      decodedStatus := strings.Replace(data, "~", "/", -1)
+			decodedStatus := strings.Replace(data, "~", "/", -1)
 
 			err = db.QueryRow("SELECT complaint_whereaboutsid AS result, tagword AS result2, tagcode AS result3 FROM complaint_whereabouts WHERE whereabouts = ?", decodedStatus).Scan(&result, &result2, &result3)
 			if err != nil {
@@ -1381,7 +1170,7 @@ func connect() {
 
 		decodedStatus := strings.Replace(statusData.Data3, "~", "/", -1)
 
-    dbpost, err := db.Prepare("INSERT INTO complaint_status (complaint_statusid, complaint_code, date_transacted, status, tagcode, tagword, received_by, remarks) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?)")
+		dbpost, err := db.Prepare("INSERT INTO complaint_status (complaint_statusid, complaint_code, date_transacted, status, tagcode, tagword, received_by, remarks) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?)")
 		if err != nil {
 			panic(err.Error())
 		}
@@ -1571,7 +1360,7 @@ func connect() {
 		type EditData struct {
 			Data  string `json:"data"`
 			Data2 string `json:"data2"`
-      Data3 string `json:"data3"`
+			Data3 string `json:"data3"`
 		}
 		var editData EditData
 		if err := c.ShouldBindJSON(&editData); err != nil {
