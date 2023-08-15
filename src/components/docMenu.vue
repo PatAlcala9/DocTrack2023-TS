@@ -27,9 +27,13 @@ const props = withDefaults(defineProps<Props>(), {
   background-color: rgba(12, 21, 42, 0.45)
   backdrop-filter: blur(9px) saturate(150%)
   border-radius: 2rem
-  border: 1px solid rgba(255, 255, 255, 0.125)
+  border: 3px solid rgba(255, 255, 255, 0.125)
   padding: 1.4rem
   cursor: pointer
+
+.section:hover
+  border: 3px solid rgba(255, 255, 255, 1)
+  margin-top: -1rem
 
 .icon
   padding: 0 0 0.8rem 0
