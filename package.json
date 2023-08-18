@@ -16,6 +16,8 @@
     "@quasar/extras": "^1.16.5",
     "@types/jspdf": "^2.0.0",
     "axios": "^1.4.0",
+    "axios-retry": "^3.6.0",
+    "consola": "^3.2.3",
     "core-js": "^3.31.1",
     "crypto-js": "^4.1.1",
     "dexie": "^3.2.4",
