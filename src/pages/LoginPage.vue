@@ -84,6 +84,7 @@ import docInput from 'components/docInput.vue'
 import docInputPassword from 'components/docInputPassword.vue'
 import docLabel from 'components/docLabel.vue'
 import docPDF2 from 'components/docPDF2.vue'
+import { consola, createConsola } from 'consola/basic'
 
 let _employeename = useEmployeeName()
 let _userid = useUserID()
@@ -101,6 +102,7 @@ const mobileWidth = ref(10)
 const sampleMode = ref(false)
 
 const router = useRouter()
+
 
 let inquiry = ref(false)
 let inquireReceived = ref(false)
@@ -177,6 +179,7 @@ const checkUsername = async () => {
     const data = response.data
     const dataNum = parseInt(data.result)
     if (data !== undefined) usernameAccepted = dataNum > 0 ? true : false
+
   } catch {
     usernameAccepted = false
   }
@@ -187,8 +190,8 @@ const checkPassword = async () => {
   try {
     const response = await api.get('/api/CheckPassword/' + usernameEntry.value.toUpperCase())
     const data = response.data
-
     if (data !== undefined && comparePassword(data.result, passwordEntry.value.toUpperCase(), 'doctrack2023', 3, 128)) passwordAccepted = true
+
   } catch {
     passwordAccepted = false
   }
@@ -200,8 +203,9 @@ const getUserDetails = async () => {
     const response = await api.get('/api/GetUserDetails/' + usernameEntry.value.toUpperCase())
     const data = response.data
 
+
     if (data !== undefined) {
-      _userid.userid = data.result
+      _userid.userid = data
       _employeename.employeename = data.result2
 
       if (data.result3 === '1') _access.access.push('incoming')
@@ -243,6 +247,7 @@ const login = async () => {
   }
 
   if (await checkConnection()) {
+
     await checkUsername()
     if (usernameAccepted === false) {
       error.value = true
@@ -259,6 +264,8 @@ const login = async () => {
       error.value = true
       errorMessage.value = 'Invalid Password'
       errorInformation.value = `Password does not match with ${usernameEntry.value.toUpperCase()}`
+
+
 
       if (passwordEntry.value.length > 0) errorInformation.value = `Password does not match with ${usernameEntry.value.toUpperCase()}`
       else errorInformation.value = 'Password is Empty'
