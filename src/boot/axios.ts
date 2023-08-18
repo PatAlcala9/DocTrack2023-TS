@@ -1,5 +1,6 @@
 import { boot } from 'quasar/wrappers'
 import axios, { AxiosInstance } from 'axios'
+import axiosRetry from 'axios-retry'
 
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
@@ -21,6 +22,8 @@ const api = axios.create({
     'X-OCBO-SecureConnection': 'ocbo',
   },
 })
+
+axiosRetry(api, { retries: 3 })
 
 // const api = axios.create({
 //   baseURL: 'http://192.168.7.160:8080/doctrackserver',
