@@ -140,15 +140,15 @@ export function todayDate(): string {
 export function checkConnection(): Promise<boolean> {
   return new Promise<boolean>(async (resolve, reject) => {
     try {
-      const response = await api.get('/api/CheckConnection');
+      const response = await api.get('/api/CheckConnection')
       const data = response.data;
       if (data !== undefined && data.result === '1') {
-        resolve(true);
+        resolve(true)
       } else {
-        resolve(false);
+        resolve(false)
       }
-    } catch (error) {
-      resolve(false);
+    } catch {
+      reject()
     }
   });
 }
