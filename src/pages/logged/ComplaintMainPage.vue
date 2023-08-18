@@ -352,7 +352,7 @@ const postUpdateStatusID = async (id: number, date: string, code: string): Promi
     const response = await api.post('/api/PostUpdateStatusID', {
       data: id.toString(),
       data2: date,
-      data3: code
+      data3: code,
     })
     const data = response.data
 
@@ -435,7 +435,7 @@ const postChangeStatus = async (newstatus: string) => {
 
     const postStatusBool = await postStatus(dialogCode.value, formattedDate, encodedStatus, newStatusTagcode, newStatusTagword, _employeename.employeename, statusRemarks.value)
     if (postStatusBool) {
-      await postUpdateStatusID(newStatusId, formattedDate,dialogCode.value)
+      await postUpdateStatusID(newStatusId, formattedDate, dialogCode.value)
       await refreshData()
     }
   }
