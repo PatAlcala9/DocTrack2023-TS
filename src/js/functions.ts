@@ -1,4 +1,8 @@
 import { api } from 'boot/axios'
+import { useAuthentication } from 'stores/authentication'
+import { SessionStorage} from "quasar";
+
+const _authentication = useAuthentication()
 
 // export function isNumberKey(evt: any) {
 //   const charCode = evt.which ? evt.which : event.keyCode
@@ -141,7 +145,7 @@ export function checkConnection(): Promise<boolean> {
   return new Promise<boolean>(async (resolve, reject) => {
     try {
       const response = await api.get('/api/CheckConnection')
-      const data = response.data;
+      const data = response.data
       if (data !== undefined && data.result === '1') {
         resolve(true)
       } else {
@@ -150,5 +154,10 @@ export function checkConnection(): Promise<boolean> {
     } catch {
       reject()
     }
-  });
+  })
+}
+
+export async function checkAuthentication(): Promise<boolean> {
+  const auth = _authentication.authentication
+  return auth !== ''
 }
