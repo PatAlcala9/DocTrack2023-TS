@@ -43,9 +43,9 @@ func connect() {
 	router.Use(cors.Default())
 
 	router.GET("/", func(c *gin.Context) {
-    router.LoadHTMLFiles("index.html")
+		router.LoadHTMLFiles("index.html")
 		c.Header("Content-Type", "text/html")
-    c.HTML(http.StatusOK, "index.html", nil)
+		c.HTML(http.StatusOK, "index.html", nil)
 	})
 
 	router.GET("/api/:method", func(c *gin.Context) {
