@@ -64,7 +64,7 @@ q-dialog(v-model="error" transition-show="flip-right" transition-hide="flip-left
 import { ref } from 'vue'
 import { api } from 'boot/axios'
 import { useRouter } from 'vue-router'
-import { comparePassword } from 'src/js/OCBO'
+import { comparePassword, createAuth } from 'src/js/OCBO'
 import { gsap } from 'gsap'
 import { SessionStorage, Platform } from 'quasar'
 import { checkConnection } from 'src/js/functions'
@@ -78,6 +78,7 @@ import { useAccess } from 'stores/access'
 import { useCurrentPage } from 'stores/currentpage'
 import { useIsDemo } from 'stores/isdemo'
 import { useIsLogged } from 'stores/islogged'
+import { useAuthentication } from 'stores/authentication'
 
 import docButton from 'components/docButton.vue'
 import docInput from 'components/docInput.vue'
@@ -86,13 +87,14 @@ import docLabel from 'components/docLabel.vue'
 import docPDF2 from 'components/docPDF2.vue'
 import { consola, createConsola } from 'consola/basic'
 
-let _employeename = useEmployeeName()
-let _userid = useUserID()
-let _pagewithtable = usePageWithTable()
-let _access = useAccess()
-let _currentpage = useCurrentPage()
-let _isdemo = useIsDemo()
-let _islogged = useIsLogged()
+const _employeename = useEmployeeName()
+const _userid = useUserID()
+const _pagewithtable = usePageWithTable()
+const _access = useAccess()
+const _currentpage = useCurrentPage()
+const _isdemo = useIsDemo()
+const _islogged = useIsLogged()
+const _authentication = useAuthentication()
 
 let error = ref(false)
 let errorMessage = ref('')
@@ -102,7 +104,6 @@ const mobileWidth = ref(10)
 const sampleMode = ref(false)
 
 const router = useRouter()
-
 
 let inquiry = ref(false)
 let inquireReceived = ref(false)
@@ -123,7 +124,7 @@ let userid = 0
 let employeeName = null
 let loginSuccess = false
 
-const version = ref('v 0.4')
+const version = ref('v 0.5')
 
 const showInquiry = async () => {
   await exitInquiry()
@@ -179,7 +180,6 @@ const checkUsername = async () => {
     const data = response.data
     const dataNum = parseInt(data.result)
     if (data !== undefined) usernameAccepted = dataNum > 0 ? true : false
-
   } catch {
     usernameAccepted = false
   }
@@ -191,7 +191,6 @@ const checkPassword = async () => {
     const response = await api.get('/api/CheckPassword/' + usernameEntry.value.toUpperCase())
     const data = response.data
     if (data !== undefined && comparePassword(data.result, passwordEntry.value.toUpperCase(), 'doctrack2023', 3, 128)) passwordAccepted = true
-
   } catch {
     passwordAccepted = false
   }
@@ -202,7 +201,6 @@ const getUserDetails = async () => {
   try {
     const response = await api.get('/api/GetUserDetails/' + usernameEntry.value.toUpperCase())
     const data = response.data
-
 
     if (data !== undefined) {
       _userid.userid = data
@@ -247,7 +245,6 @@ const login = async () => {
   }
 
   if (await checkConnection()) {
-
     await checkUsername()
     if (usernameAccepted === false) {
       error.value = true
@@ -265,8 +262,6 @@ const login = async () => {
       errorMessage.value = 'Invalid Password'
       errorInformation.value = `Password does not match with ${usernameEntry.value.toUpperCase()}`
 
-
-
       if (passwordEntry.value.length > 0) errorInformation.value = `Password does not match with ${usernameEntry.value.toUpperCase()}`
       else errorInformation.value = 'Password is Empty'
       return
@@ -278,12 +273,14 @@ const login = async () => {
       errorMessage.value = 'No Details Found'
       return
     }
+    _authentication.authentication = createAuth(usernameEntry.value, passwordEntry.value)
     _isdemo.isdemo = false
     await setDemo()
     _islogged.islogged = true
     _pagewithtable.pagewithtable = false
     SessionStorage.set('CurrentPage', 'dashboard')
     _currentpage.currentpage = 'dashboard'
+
     router.push('/dashboard')
   } else {
     error.value = true
