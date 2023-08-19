@@ -19,7 +19,6 @@ const api = axios.create({
   baseURL: '',
   headers: {
     'X-Requested-With': 'XMLHttpRequest',
-    'X-OCBO-SecureConnection': 'ocbo',
   },
 })
 
