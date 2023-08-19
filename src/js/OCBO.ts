@@ -149,11 +149,11 @@ export function encrypt(text: string) {
   const encrypted = CryptoJS.AES.encrypt(text, key, {
     mode: CryptoJS.mode.CTR,
     padding: CryptoJS.pad.Iso10126,
-    iv: iv
+    iv: iv,
   }).toString()
 
-  const countEqual = encrypted.match(/=/g).length;
-  const removeEqual = encrypted.slice(0, - countEqual)
+  const countEqual = encrypted.match(/=/g).length
+  const removeEqual = encrypted.slice(0, -countEqual)
   const newEncrypted = removeEqual + countEqual
 
   return newEncrypted
@@ -164,15 +164,21 @@ export function decrypt(ciphertext: string) {
   const iv = CryptoJS.enc.Utf8.parse(hash('OCBODocTrack2023', 'AESIV', 6, 128))
 
   const lastDigit = ciphertext.slice(-1)
-  const removeLastDigit = ciphertext.slice(0, - 1)
+  const removeLastDigit = ciphertext.slice(0, -1)
   const equalString = lastDigit === '2' ? '==' : '='
   const newCiphertext = removeLastDigit + equalString
 
   const decrypted = CryptoJS.AES.decrypt(newCiphertext, key, {
     mode: CryptoJS.mode.CTR,
     padding: CryptoJS.pad.Iso10126,
-    iv: iv
+    iv: iv,
   }).toString(CryptoJS.enc.Utf8)
 
   return decrypted
+}
+
+export function createAuth(username: string, password: string) {
+  const today = new Date()
+  const text = (username + password.substring(0, 5)).toUpperCase() + today.getHours() + today.getMinutes() + today.getSeconds()
+  return hash(text, 'auth', 5, 512)
 }
