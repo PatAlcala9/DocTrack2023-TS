@@ -8,77 +8,106 @@ q-page(padding)
     span.title Complaint - Add New
     q-btn(flat size="md" label="Back" @click="gotoComplaintDashboard" icon="arrow_back").close-button
 
-  div.entry-group
-    div.complaint-group
-      section.form
-        section
-          //- component(:is="docLabel" text="Source Type:").form--label
+  div(v-if="$q.screen.width < 500")
+    div.entry-group
+      div.complaint-group
+        section.form
           component(:is="docSelection" text="Source Type" label="Select Type" :options="sourceEntryList" v-model:modelValue="sourceEntry")
-        //- q-btn-dropdown(unelevated color="grey-10" :label="sourceEntry" size="1rem" :content-style="{ fontSize: '1.2rem', fontFamily: 'Inter' }")
-        //-   q-list
-        //-     q-item(clickable v-close-popup @click="sourceEntry = 'DCR/888'")
-        //-       q-item-section
-        //-         q-item-label DCR/888
 
-        //-     q-item(clickable v-close-popup @click="sourceEntry = 'EMAIL'")
-        //-       q-item-section
-        //-         q-item-label EMAIL
+        section.form
+          section.section
+            span.form--label Date Received
+            q-date(flat v-model="receivedDate" minimal color="$button" @click="formatDate").calendar
+            component(v-if="formattedReceivedDate.length > 0" :is="docLabel" :text="formattedReceivedDate").form--label
+            component(v-else :is="docLabel" text="No Date Selected").inputs__label--date.text-center
+            //- component(:is="docCalendar" text="Date Received" v-model:modelValue="formattedReceivedDate" @click="formatDate")
 
-        //-     q-item(clickable v-close-popup @click="sourceEntry = 'MOTU PROPRIO'")
-        //-       q-item-section
-        //-         q-item-label MOTU PROPRIO
+        section.form
+          section.section
+            component(:is="docLabel" text="Complaint Name:").label--spaced
+            component(:is="docInputEntry" v-model:value="complaintName" )
 
-        //-     q-item(clickable v-close-popup @click="sourceEntry = 'WALK-IN'")
-        //-       q-item-section
-        //-         q-item-label WALK-IN
-        //-         div.full-width.row.justify-between
+        section.form
+          section.section
+            component(:is="docLabel" text="Complaint Contact:").label--spaced
+            component(:is="docInputEntry" v-model:value="complaintContact" )
 
-      section.form
-        section.section
-          span.form--label Date Received
-          q-date(flat v-model="receivedDate" minimal color="$button" @click="formatDate").calendar
-          component(v-if="formattedReceivedDate.length > 0" :is="docLabel" :text="formattedReceivedDate").form--label
-          component(v-else :is="docLabel" text="No Date Selected").inputs__label--date.text-center
-          //- component(:is="docCalendar" text="Date Received" v-model:modelValue="formattedReceivedDate" @click="formatDate")
+        section.form
+          section.section
+            component(:is="docLabel" text="Complaint Location:").label--spaced
+            component(:is="docInputEntry" v-model:value="complaintLocation" )
 
-      section.form
+        section.form
+          section.section
+            component(:is="docLabel" text="Detail of Complaint:").label--spaced
+            component(:is="docTextArea" v-model:value="complaintDetail" )
+
+      div.respondent-group
+        section.form
+          section.section
+            component(:is="docLabel" text="Respondent Name:").label--spaced
+            component(:is="docInputEntry" v-model:value="respondentName")
+
+        section.form
+          section.section
+            component(:is="docLabel" text="Respondent Contact:").label--spaced
+            component(:is="docInputEntry" v-model:value="respondentContact")
+
+        section.form
+          section.section
+            component(:is="docLabel" text="Respondent Location:").label--spaced
+            component(:is="docInputEntry" v-model:value="respondentLocation").label--spaced
+
+      div.attachment-group
+
+          component(:is="docList" text="Attachments" :options="attachmentList" v-model:modelValue="attachmentSelectedList").label--spaced
+
+  div(v-else)
+    div.container
+      div.left
+        div.source
+          component(:is="docSelection" text="Source Type" label="Select Type" :options="sourceEntryList" v-model:modelValue="sourceEntry")
+          br
+          section.section
+            span.form--label Date Received
+            q-date(flat v-model="receivedDate" minimal color="$button" @click="formatDate").calendar
+            component(v-if="formattedReceivedDate.length > 0" :is="docLabel" :text="formattedReceivedDate").form--label
+            component(v-else :is="docLabel" text="No Date Selected").form--label
+
+      div.right
         section.section
           component(:is="docLabel" text="Complaint Name:").label--spaced
           component(:is="docInputEntry" v-model:value="complaintName" )
 
-      section.form
         section.section
           component(:is="docLabel" text="Complaint Contact:").label--spaced
           component(:is="docInputEntry" v-model:value="complaintContact" )
 
-      section.form
         section.section
           component(:is="docLabel" text="Complaint Location:").label--spaced
           component(:is="docInputEntry" v-model:value="complaintLocation" )
 
-      section.form
         section.section
           component(:is="docLabel" text="Detail of Complaint:").label--spaced
           component(:is="docTextArea" v-model:value="complaintDetail" )
 
-    div.respondent-group
-      section.form
-        section.section
-          component(:is="docLabel" text="Respondent Name:").label--spaced
-          component(:is="docInputEntry" v-model:value="respondentName")
+        div.respondent-group
+          section.section
+            component(:is="docLabel" text="Respondent Name:").label--spaced
+            component(:is="docInputEntry" v-model:value="respondentName")
 
-      section.form
-        section.section
-          component(:is="docLabel" text="Respondent Contact:").label--spaced
-          component(:is="docInputEntry" v-model:value="respondentContact")
+          section.section
+            component(:is="docLabel" text="Respondent Contact:").label--spaced
+            component(:is="docInputEntry" v-model:value="respondentContact")
 
-      section.form
-        section.section
-          component(:is="docLabel" text="Respondent Location:").label--spaced
-          component(:is="docInputEntry" v-model:value="respondentLocation").label--spaced
+          section.section
+            component(:is="docLabel" text="Respondent Location:").label--spaced
+            component(:is="docInputEntry" v-model:value="respondentLocation").label--spaced
 
-    div.attachment-group
-      component(:is="docList" text="Attachments" :options="attachmentList" v-model:modelValue="attachmentSelectedList").label--spaced
+        div.attachment-group
+          section.section
+
+          component(:is="docList" text="Attachments" :options="attachmentList" v-model:modelValue="attachmentSelectedList").label--spaced
 
   div.flex.flex-center
     component(:is="docButton" text="Save" @click="saveData")
@@ -379,8 +408,7 @@ const saveData = async () => {
                   await postAttachment(newComplaint, parseInt(item))
                 }
                 showDialog('Success', 'Successfully Saved Complaint')
-              }
-              else showDialog('Error', 'Failed to Save Complaint')
+              } else showDialog('Error', 'Failed to Save Complaint')
             } else showDialog('Error', 'Failed to Save Complaint')
           } else showDialog('Error', 'Failed to Save Respondent')
         } catch {
@@ -547,7 +575,46 @@ const gotoComplaintDashboard = () => {
   border-radius: 0.6rem
   border: 1px solid rgba(255, 255, 255, 0.125)
   padding: 1.2rem 2rem 1.2rem 1.2rem
+  margin-bottom: 1rem
 
+.container
+  display: grid
+  grid-template-columns: 1fr 6fr
+  grid-template-rows: 1fr
+  gap: 0px 10px
+  grid-auto-flow: row
+  grid-template-areas: "left right"
+
+.left
+  display: grid
+  grid-template-columns: 1fr
+  grid-template-rows: 1fr
+  grid-template-areas: "source"
+  grid-area: left
+
+.source
+  grid-area: source
+
+.right
+  display: grid
+  grid-template-columns: 1fr
+  grid-template-rows: 1fr 1fr 1fr
+  gap: 0px 0px
+  grid-auto-flow: row
+  grid-template-areas: "name" "contact" "location" "details"
+  grid-area: right
+
+.name
+  grid-area: name
+
+.contact
+  grid-area: contact
+
+.location
+  grid-area: location
+
+.details
+  grid-area: details
 
 @media screen and (max-width: 500px)
   .entry-group
