@@ -42,7 +42,7 @@ import { ref } from 'vue'
 import { useQuasar, SessionStorage } from 'quasar'
 import { gsap } from 'gsap'
 import { useRouter } from 'vue-router'
-import { checkConnection } from 'src/js/functions'
+import { checkConnection, checkAuthentication } from 'src/js/functions'
 
 import docOnline from 'components/docOnline.vue'
 import docMenu from 'components/docMenu.vue'
@@ -53,6 +53,7 @@ import { useCurrentPage } from 'stores/currentpage'
 import { usePageWithTable } from 'stores/pagewithtable'
 import { useIsLogged } from 'stores/islogged'
 import { useIsDemo } from 'stores/isdemo'
+import { useAuthentication } from 'stores/authentication'
 
 const router = useRouter()
 const quasar = useQuasar()
@@ -62,6 +63,8 @@ const _currentpage = useCurrentPage()
 const _pagewithtable = usePageWithTable()
 const _islogged = useIsLogged()
 const _isdemo = useIsDemo()
+const _authentication = useAuthentication()
+let expectedAuthResponse = ''
 
 let timer: NodeJS.Timeout
 
@@ -189,6 +192,11 @@ const rotateMessageBack = () => {
 }
 
 ;(async () => {
+  if (!(await checkAuthentication())) {
+    await logout()
+    return
+  }
+
   await setDefault()
 
   await setName()
