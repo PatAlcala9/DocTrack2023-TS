@@ -1,6 +1,6 @@
 import { api } from 'boot/axios'
 import { useAuthentication } from 'stores/authentication'
-import { SessionStorage} from "quasar";
+import { SessionStorage } from 'quasar'
 
 const _authentication = useAuthentication()
 
@@ -141,23 +141,27 @@ export function todayDate(): string {
   return year + '/' + fixMonth + '/' + fixDay + ' ' + hour + ':' + minutes
 }
 
-export function checkConnection(): Promise<boolean> {
-  return new Promise<boolean>(async (resolve, reject) => {
-    try {
-      const response = await api.get('/api/CheckConnection')
-      const data = response.data
-      if (data !== undefined && data.result === '1') {
-        resolve(true)
-      } else {
-        resolve(false)
-      }
-    } catch {
-      reject()
-    }
-  })
+export async function checkConnection(): Promise<boolean> {
+  try {
+    const response = await api.get('/api/CheckConnection')
+    const data = response.data
+    return data !== undefined && data.result === '1'
+  } catch {
+    return false
+  }
 }
 
 export async function checkAuthentication(): Promise<boolean> {
   const auth = _authentication.authentication
   return auth !== ''
+}
+
+export async function saveAuth() {
+  const auth = _authentication.authentication
+  SessionStorage.set('Authentication', auth)
+}
+
+export async function removeAuth() {
+  const auth = _authentication.authentication
+  SessionStorage.remove('Authentication')
 }
