@@ -114,8 +114,6 @@ module.exports = configure(function (ctx) {
 
     // https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js#Property%3A-framework
     framework: {
-      config: {},
-
       // iconSet: 'material-icons', // Quasar icon set
       lang: 'en-US',
 
@@ -127,7 +125,14 @@ module.exports = configure(function (ctx) {
       // directives: [],
 
       // Quasar plugins
-      plugins: ['SessionStorage', 'LocalStorage'],
+      plugins: ['SessionStorage', 'LocalStorage', 'Loading'],
+      config: {
+        loading: {
+          spinner: 'QSpinnerBars',
+          spinnerSize: '180px',
+          spinnerColor: 'grey-1',
+        },
+      },
     },
 
     // animations: 'all', // --- includes all animations
@@ -160,7 +165,7 @@ module.exports = configure(function (ctx) {
       workboxPluginMode: 'GenerateSW', // 'GenerateSW' or 'InjectManifest'
       workboxOptions: {
         skipWaiting: true,
-        clientsClaim: true
+        clientsClaim: true,
       }, // only for GenerateSW
 
       // for the custom service worker ONLY (/src-pwa/custom-service-worker.[js|ts])
