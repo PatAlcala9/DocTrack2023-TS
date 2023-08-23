@@ -66,7 +66,7 @@ import { api } from 'boot/axios'
 import { useRouter } from 'vue-router'
 import { comparePassword, createAuth } from 'src/js/OCBO'
 import { gsap } from 'gsap'
-import { SessionStorage, Platform } from 'quasar'
+import { SessionStorage, Platform, useQuasar } from 'quasar'
 import { checkConnection } from 'src/js/functions'
 //- import vueQr from 'vue-qr/src/packages/vue-qr.vue'
 //- import { PDFDocument, PDFImage, StandardFonts, PageSizes, PDFField, rgb } from 'pdf-lib'
@@ -104,6 +104,7 @@ const mobileWidth = ref(10)
 const sampleMode = ref(false)
 
 const router = useRouter()
+const quasar = useQuasar()
 
 let inquiry = ref(false)
 let inquireReceived = ref(false)
@@ -244,6 +245,7 @@ const login = async () => {
     return
   }
 
+  quasar.loading.show()
   if (await checkConnection()) {
     await checkUsername()
     if (usernameAccepted === false) {
@@ -253,6 +255,7 @@ const login = async () => {
       if (usernameEntry.value.length > 0) errorInformation.value = `${usernameEntry.value.toUpperCase()} does not exist`
       else errorInformation.value = 'Username is Empty'
 
+      quasar.loading.hide()
       return
     }
 
@@ -264,6 +267,8 @@ const login = async () => {
 
       if (passwordEntry.value.length > 0) errorInformation.value = `Password does not match with ${usernameEntry.value.toUpperCase()}`
       else errorInformation.value = 'Password is Empty'
+
+      quasar.loading.hide()
       return
     }
 
@@ -271,8 +276,10 @@ const login = async () => {
     if (detailsAllowed === false) {
       error.value = true
       errorMessage.value = 'No Details Found'
+      quasar.loading.hide()
       return
     }
+    quasar.loading.hide()
     _authentication.authentication = createAuth(usernameEntry.value, passwordEntry.value)
     _isdemo.isdemo = false
     await setDemo()
@@ -283,6 +290,7 @@ const login = async () => {
 
     router.push('/dashboard')
   } else {
+    quasar.loading.hide()
     error.value = true
     errorMessage.value = 'Cannot Login'
     errorInformation.value = 'No Connection on Server'
