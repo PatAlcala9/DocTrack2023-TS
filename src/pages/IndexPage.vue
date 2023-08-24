@@ -192,10 +192,10 @@ const rotateMessageBack = () => {
 }
 
 ;(async () => {
-  if (!(await checkAuthentication())) {
-    await logout()
-    return
-  }
+  // if (!(await checkAuthentication())) {
+  //   await logout()
+  //   return
+  // }
 
   await setDefault()
 
@@ -212,6 +212,10 @@ const rotateMessageBack = () => {
   else router.push('/dashboard')
 
   await checkOnline()
+  if (!(await checkAuthentication()) && !_isdemo.isdemo) {
+    await logout()
+    return
+  }
   timer = setInterval(checkOnline, 5000)
 })()
 </script>
