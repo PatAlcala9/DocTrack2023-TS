@@ -21,7 +21,7 @@ const props = withDefaults(defineProps<Props>(), {
   width: 16,
   alignment: 'center',
   transform: 'uppercase',
-  mobileWidth: 16
+  mobileWidth: 16,
 })
 const emit = defineEmits(['update:value'])
 
@@ -31,7 +31,7 @@ const updateValue = (value: string) => {
 
 const styleComponent = computed(() => {
   return {
-    '--width': props.width + 'rem',
+    '--width': props.width + '%',
     '--alignment': props.alignment,
     '--transform': props.transform,
     '--mobileWidth': props.mobileWidth,
@@ -53,12 +53,12 @@ const styleComponent = computed(() => {
 .input:focus
   outline: none
   border: 1px solid #ffffff
-  background-color: #274c62
+  //background-color: #274c62
+  background-color: transparent
   color: #ffffff
 
 @media screen and (max-width: 500px)
   .input
     font-size: 1.2rem
     width: var(--mobileWidth)
-
 </style>

@@ -11,6 +11,7 @@ import { computed } from 'vue'
 export interface Props {
   value: string
   width: number
+  height: number
 }
 
 const props = defineProps<Props>()
@@ -22,7 +23,8 @@ const updateValue = (value: string) => {
 
 const widthComponent = computed(() => {
   return {
-    '--width': props.width + 'rem'
+    '--width': props.width + '%',
+    '--height': props.height + 'rem',
   }
 })
 </script>
@@ -37,10 +39,12 @@ const widthComponent = computed(() => {
   border: 1px solid $button
   color: #000000
   width: var(--width)
+  height: var(--height)
 
 .textarea:focus
   outline: none
   border: 1px solid #ffffff
-  background-color: #274c62
+  //background-color: #274c62
+  background-color: transparent
   color: #ffffff
 </style>
