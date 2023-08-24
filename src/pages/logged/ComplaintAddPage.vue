@@ -77,39 +77,38 @@ q-page(padding)
       div.right
         section.section
           component(:is="docLabel" text="Complaint Name:").label--spaced
-          component(:is="docInputEntry" v-model:value="complaintName" )
+          component(:is="docInputEntry" v-model:value="complaintName" alignment="left" width="100")
 
         section.section
           component(:is="docLabel" text="Complaint Contact:").label--spaced
-          component(:is="docInputEntry" v-model:value="complaintContact" )
+          component(:is="docInputEntry" v-model:value="complaintContact" alignment="left" width="100")
 
         section.section
           component(:is="docLabel" text="Complaint Location:").label--spaced
-          component(:is="docInputEntry" v-model:value="complaintLocation" )
+          component(:is="docInputEntry" v-model:value="complaintLocation" alignment="left" width="100")
 
         section.section
           component(:is="docLabel" text="Detail of Complaint:").label--spaced
-          component(:is="docTextArea" v-model:value="complaintDetail" )
+          component(:is="docTextArea" v-model:value="complaintDetail" width="100" height="20")
 
         div.respondent-group
           section.section
             component(:is="docLabel" text="Respondent Name:").label--spaced
-            component(:is="docInputEntry" v-model:value="respondentName")
+            component(:is="docInputEntry" v-model:value="respondentName" alignment="left" width="100")
 
           section.section
             component(:is="docLabel" text="Respondent Contact:").label--spaced
-            component(:is="docInputEntry" v-model:value="respondentContact")
+            component(:is="docInputEntry" v-model:value="respondentContact" alignment="left" width="100")
 
           section.section
             component(:is="docLabel" text="Respondent Location:").label--spaced
-            component(:is="docInputEntry" v-model:value="respondentLocation").label--spaced
+            component(:is="docInputEntry" v-model:value="respondentLocation" alignment="left" width="100")
 
         div.attachment-group
           section.section
-
           component(:is="docList" text="Attachments" :options="attachmentList" v-model:modelValue="attachmentSelectedList").label--spaced
 
-  div.flex.flex-center
+  div.flex.flex-center.button-area
     component(:is="docButton" text="Save" @click="saveData")
 
 q-dialog(v-model="dialog" transition-show="flip-right" transition-hide="flip-left").dialog
@@ -568,10 +567,12 @@ const gotoComplaintDashboard = () => {
 .section
   display: flex
   flex-direction: column
-  backdrop-filter: blur(1.6px) saturate(173%)
   // background-color: rgba(10, 10, 35, 0.52)
   // background-color: rgba(17, 25, 40, 0.82)
-  background-color: rgba(17, 25, 40, 0.8)
+  //backdrop-filter: blur(1.6px) saturate(173%)
+  //background-color: rgba(17, 25, 40, 0.8)
+  background-color: rgba(12, 21, 42, 0.45)
+  backdrop-filter: blur(9px) saturate(150%)
   border-radius: 0.6rem
   border: 1px solid rgba(255, 255, 255, 0.125)
   padding: 1.2rem 2rem 1.2rem 1.2rem
@@ -615,6 +616,9 @@ const gotoComplaintDashboard = () => {
 
 .details
   grid-area: details
+
+.button-area
+  margin-top: 2rem
 
 @media screen and (max-width: 500px)
   .entry-group
