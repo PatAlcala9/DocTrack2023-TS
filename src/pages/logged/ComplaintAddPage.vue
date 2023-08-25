@@ -122,7 +122,7 @@ q-dialog(v-model="dialog" transition-show="flip-right" transition-hide="flip-lef
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { date, LocalStorage } from 'quasar'
+import { date, useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
 import { api } from 'boot/axios'
 import { checkConnection } from 'src/js/functions'
@@ -161,6 +161,7 @@ let dialogTitle = ref('')
 let dialogMessage = ref('')
 
 const router = useRouter()
+const quasar = useQuasar()
 let _currentpage = useCurrentPage()
 let _pagewithtable = usePageWithTable()
 const _isdemo = useIsDemo()
@@ -233,7 +234,7 @@ const postRespodentLOCAL = async (name: string, contact: string, location: strin
     respondentcontact: contact,
     respondentlocation: location,
   }
-  LocalStorage.set('respondent', respodentData)
+  quasar.localStorage.set('respondent', respodentData)
 
   return true
 }
@@ -257,7 +258,7 @@ const getMaxComplaintCode = async (): Promise<string> => {
 }
 
 const getMaxComplaintCodeLOCAL = async (): Promise<string> => {
-  const response = LocalStorage.getItem('complaintcode')
+  const response = quasar.localStorage.getItem('complaintcode')
   const data = response?.toString() ?? ''
 
   if (data !== null) return data
@@ -321,7 +322,7 @@ const postComplaintLOCAL = async (code: string, complaintid: number, complaintna
     infoid: infoid,
     statusid: statusid,
   }
-  LocalStorage.set('complaint', response)
+  quasar.localStorage.set('complaint', response)
 
   return true
 }
@@ -367,6 +368,7 @@ const getLatestStatus = async (code: string): Promise<number> => {
 }
 
 const showDialog = (title: string, message: string) => {
+  quasar.loading.hide()
   dialog.value = true
   dialogTitle.value = title
   dialogMessage.value = message
@@ -391,6 +393,7 @@ const saveData = async () => {
       // for (let item of attachmentSelectedList.value) {
       //   console.log(item)
       // }
+      quasar.loading.show()
       if (await checkConnection()) {
         try {
           await getSourceIDFromDatabase()
