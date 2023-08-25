@@ -192,6 +192,11 @@ const rotateMessageBack = () => {
 }
 
 ;(async () => {
+  // if (!(await checkAuthentication())) {
+  //   await logout()
+  //   return
+  // }
+
   await setDefault()
 
   await setName()
