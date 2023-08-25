@@ -49,7 +49,7 @@ q-page(padding)
         //- component(:is="docPDF2" title="Sample Document PDF" text="aaaa" date="July 12, 2023")
 
     div.version
-      span.version--text {{version}}
+      span(@click="versionDialog=true").version--text {{version}}
 
 q-dialog(v-model="error" transition-show="flip-right" transition-hide="flip-left" @keypress.enter="error=false").dialog
   q-card.dialog-card.text-white.flex.flex-center
@@ -58,6 +58,13 @@ q-dialog(v-model="error" transition-show="flip-right" transition-hide="flip-left
         span.dialog-card__title {{errorMessage}}
         span.dialog-card__info {{errorInformation}}
         doc-button(text="OK" @click="error=false")
+
+q-dialog(v-model="versionDialog" transition-show="flip-right" transition-hide="flip-left" @keypress.enter="versionDialog=false").dialog
+  q-card.dialog-card.text-white
+    q-card-section.dialog-card__section
+      div.dialog-title-area.column.justify-center.items-center
+        component(:is="docVersions")
+        doc-button(text="OK" @click="versionDialog=false")
 </template>
 
 <script setup lang="ts">
@@ -84,6 +91,7 @@ import docButton from 'components/docButton.vue'
 import docInput from 'components/docInput.vue'
 import docInputPassword from 'components/docInputPassword.vue'
 import docLabel from 'components/docLabel.vue'
+import docVersions from 'components/docVersions.vue'
 import docPDF2 from 'components/docPDF2.vue'
 import { consola, createConsola } from 'consola/basic'
 
@@ -99,6 +107,8 @@ const _authentication = useAuthentication()
 let error = ref(false)
 let errorMessage = ref('')
 let errorInformation = ref('')
+
+let versionDialog = ref(false)
 
 const mobileWidth = ref(10)
 const sampleMode = ref(false)
