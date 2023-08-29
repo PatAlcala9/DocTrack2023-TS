@@ -59,7 +59,7 @@ q-dialog(v-model="error" transition-show="flip-right" transition-hide="flip-left
         span.dialog-card__info {{errorInformation}}
         doc-button(text="OK" @click="error=false")
 
-q-dialog(v-model="versionDialog" transition-show="flip-right" transition-hide="flip-left" @keypress.enter="versionDialog=false").dialog
+q-dialog(v-model="versionDialog" full-width full-height transition-show="flip-right" transition-hide="flip-left" @keypress.enter="versionDialog=false").dialog
   q-card.dialog-card.text-white
     q-card-section.dialog-card__section
       div.dialog-title-area.column.justify-center.items-center
