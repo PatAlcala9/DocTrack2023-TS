@@ -292,22 +292,22 @@ const generateNewComplaintCode = async (code: string) => {
   } else return `${currentYear}-${sourceEntryID.value}-0001`
 }
 
-const postComplaint = async (code: string, complaintid: number, complaintname: string, complaintcontact: string, datereceived: string, location: string, details: string, infoid: number, statusid: number): Promise<boolean> => {
+const postComplaint = async (code: string, complaintid: number, complaintname: string, complaintcontact: string, datereceived: string, location: string, details: string, infoid: number, statusid: number, datetransacted: string): Promise<boolean> => {
   const response = await api.post('/api/PostComplaint', {
     data: code,
     data2: complaintid.toString(),
     data3: complaintname,
     data4: complaintcontact,
-    data5: datereceived,
+    data5: datereceived.replace(/\//g, '-'),
     data6: location,
     data7: details,
     data8: infoid.toString(),
     data9: statusid.toString(),
+    data10: datetransacted.replace(/\//g, '-'),
   })
   const data = response.data.length !== 0 ? response.data : null
 
-  if (data !== null) return true
-  else return false
+  return data !== null
 }
 
 const postComplaintLOCAL = async (code: string, complaintid: number, complaintname: string, complaintcontact: string, datereceived: string, location: string, details: string, infoid: number, statusid: number): Promise<boolean> => {
@@ -405,7 +405,7 @@ const saveData = async () => {
 
             if (await postStatus(newComplaint, receivedDate.value, 'ENCODED TO SYSTEM', '15', 'ENCODED', complaintName.value, '')) {
               const newStatusID = await getLatestStatus(newComplaint)
-              if (await postComplaint(newComplaint, sourceEntryID.value, complaintName.value, complaintContact.value, receivedDate.value, complaintLocation.value, complaintDetail.value, latestRespondent, newStatusID)) {
+              if (await postComplaint(newComplaint, sourceEntryID.value, complaintName.value, complaintContact.value, receivedDate.value, complaintLocation.value, complaintDetail.value, latestRespondent, newStatusID, receivedDate.value)) {
                 for (let item of attachmentSelectedList.value) {
                   await postAttachment(newComplaint, parseInt(item))
                 }
