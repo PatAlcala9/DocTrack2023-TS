@@ -21,16 +21,16 @@ q-page(padding)
 
   div.button-area.flex.flex-center
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
-      component(:is="docMenu" text="Incoming" icon="description" v-if="_access.access.includes('incoming')" @click="gotoPage('incoming', false)" @mouseover="setMessage('incoming')" @mouseout="returnDefault")
+      component(:is="docMenu" text="Incoming" icon="description" v-if="_access.access.includes('incoming')" @click="gotoPage('notready', false)" @mouseover="setMessage('incoming')" @mouseout="returnDefault")
 
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
-      component(:is="docMenu" text="Outgoing" icon="upload_file" v-if="_access.access.includes('outgoing')" @click="gotoPage('outgoing', false)" @mouseover="setMessage('outgoing')" @mouseout="returnDefault")
+      component(:is="docMenu" text="Outgoing" icon="upload_file" v-if="_access.access.includes('outgoing')" @click="gotoPage('notready', false)" @mouseover="setMessage('outgoing')" @mouseout="returnDefault")
 
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
-      component(:is="docMenu" text="Releasing" icon="start" v-if="_access.access.includes('releasing')" @click="gotoPage('releasing', false)" @mouseover="setMessage('releasing')" @mouseout="returnDefault")
+      component(:is="docMenu" text="Releasing" icon="start" v-if="_access.access.includes('releasing')" @click="gotoPage('notready', false)" @mouseover="setMessage('releasing')" @mouseout="returnDefault")
 
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
-      component(:is="docMenu" text="Inventory" icon="summarize" v-if="_access.access.includes('inventory')" @click="gotoPage('inventory', false)" @mouseover="setMessage('inventory')" @mouseout="returnDefault")
+      component(:is="docMenu" text="Inventory" icon="summarize" v-if="_access.access.includes('inventory')" @click="gotoPage('notready', false)" @mouseover="setMessage('inventory')" @mouseout="returnDefault")
 
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
       component(:is="docMenu" text="Complaint" icon="gavel" v-if="_access.access.includes('complaint')" @click="gotoPage('complaint', false)" @mouseover="setMessage('complaint')" @mouseout="returnDefault")
