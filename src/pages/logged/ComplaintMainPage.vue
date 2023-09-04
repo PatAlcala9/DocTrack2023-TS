@@ -366,11 +366,9 @@ const postUpdateStatusID = async (id: number, date: string, code: string): Promi
 
 const filterTable = async () => {
   if (searchValue.value.length > 0) {
-    if (await getComplaintListFiltered(searchValue.value)) nodata.value = false
-    else nodata.value = true
+    nodata.value = !(await getComplaintListFiltered(searchValue.value))
   } else {
-    if (await getComplaintList()) nodata.value = false
-    else nodata.value = true
+    nodata.value = !(await getComplaintList())
   }
 }
 
@@ -420,8 +418,7 @@ const postStatus = async (code: string, date: string, newstatus: string, tagcode
   })
   const data = response.data.length !== 0 ? response.data : null
 
-  if (data !== null) return true
-  else return false
+  return data !== null
 }
 
 const postChangeStatus = async (newstatus: string) => {
