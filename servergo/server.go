@@ -314,7 +314,7 @@ func connect() {
 			array4 := []string{}
 			array5 := []string{}
 
-			results, err := db.Query("SELECT DISTINCT c.complaint_code AS result, s.source_desc AS result2, c.complaintant_name AS result3, sw.whereabouts AS result4, c.date_transacted as result5 FROM complaint_info c, source_complaint s, complaint_status st, complaint_whereabouts sw WHERE c.source_complaintid = s.source_complaintid AND c.complaint_code = st.complaint_code AND c.complaint_whereaboutsid = sw.complaint_whereaboutsid")
+			results, err := db.Query("SELECT DISTINCT c.complaint_code AS result, s.source_desc AS result2, c.complaintant_name AS result3, sw.whereabouts AS result4, c.date_transacted as result5 FROM complaint_info c, source_complaint s, complaint_status st, complaint_whereabouts sw WHERE c.source_complaintid = s.source_complaintid AND c.complaint_code = st.complaint_code AND c.complaint_statusid = sw.complaint_whereaboutsid")
 			if err != nil {
 				panic(err.Error())
 			}
@@ -1108,6 +1108,7 @@ func connect() {
 			Data7 string `json:"data7"`
 			Data8 string `json:"data8"`
 			Data9 string `json:"data9"`
+            Data10 string `json:"data10"`
 		}
 		var complaintData ComplaintData
 		if err := c.ShouldBindJSON(&complaintData); err != nil {
@@ -1122,13 +1123,16 @@ func connect() {
 		c.Writer.Header().Set("X-Download-Options", "noopen")
 		c.Writer.Header().Set("Referrer-Policy", "no-referrer")
 
-		dbpost, err := db.Prepare("INSERT INTO complaint_info (complaint_infoid, complaint_code, source_complaintid, complaintant_name, complaintant_contact, date_received, locationOfconstruction, details, respondent_infoid, complaint_statusid) VALUES(NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+        // decodedDate := strings.Replace(complaintData.Data5, "~", "/", -1)
+        // fmt.Println(decodedDate)
+
+		dbpost, err := db.Prepare("INSERT INTO complaint_info (complaint_infoid, complaint_code, source_complaintid, complaintant_name, complaintant_contact, date_received, locationOfconstruction, details, respondent_infoid, complaint_statusid, date_transacted) VALUES(NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
 		if err != nil {
 			panic(err.Error())
 		}
 		defer dbpost.Close()
 
-		exec, err := dbpost.Exec(complaintData.Data, complaintData.Data2, complaintData.Data3, complaintData.Data4, complaintData.Data5, complaintData.Data6, complaintData.Data7, complaintData.Data8, complaintData.Data9)
+		exec, err := dbpost.Exec(complaintData.Data, complaintData.Data2, complaintData.Data3, complaintData.Data4, complaintData.Data5, complaintData.Data6, complaintData.Data7, complaintData.Data8, complaintData.Data9, complaintData.Data10)
 		if err != nil {
 			panic(err.Error())
 		}
