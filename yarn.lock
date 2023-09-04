@@ -1230,10 +1230,10 @@
   resolved "https://registry.yarnpkg.com/@polka/url/-/url-1.0.0-next.21.tgz#5de5a2385a35309427f6011992b544514d559aa1"
   integrity sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==
 
-"@quasar/app-webpack@^3.9.5":
-  version "3.9.5"
-  resolved "https://registry.yarnpkg.com/@quasar/app-webpack/-/app-webpack-3.9.5.tgz#3df7717c7cc9e14066c5bddee7171c1782e33a78"
-  integrity sha512-K9b/Wq2XDwLx4LaABlsHPKKAqzFXeVKLcqNWDgo1V6aSm6I68/L06ru/WHMVLGQG35ZA3d/uOYN5KrgYTCbD0w==
+"@quasar/app-webpack@^3.10.0":
+  version "3.10.0"
+  resolved "https://registry.yarnpkg.com/@quasar/app-webpack/-/app-webpack-3.10.0.tgz#527e73dfc23a9998f9c3bebb6857fdbc7cc4bfc5"
+  integrity sha512-wRbApdSDA2DIgRVIHz20x6lg6v80O8XG7YusrbHbmLNlmrDHjcYY/DM9Y/og3QMS+i08za1yZevminy1h49CSA==
   dependencies:
     "@quasar/babel-preset-app" "2.0.2"
     "@quasar/render-ssr-error" "^1.0.1"
@@ -1282,13 +1282,13 @@
     register-service-worker "1.7.2"
     sass "1.32.12"
     sass-loader "13.2.0"
-    semver "7.3.8"
+    semver "^7.3.8"
     table "6.8.1"
     terser-webpack-plugin "5.3.6"
     ts-loader "9.4.2"
     typescript "4.9.4"
     url-loader "4.1.1"
-    vue-loader "17.0.1"
+    vue-loader "^17.1.1"
     vue-style-loader "4.1.3"
     webpack "^5.58.1"
     webpack-bundle-analyzer "4.7.0"
@@ -1323,10 +1323,10 @@
     core-js "^3.6.5"
     core-js-compat "^3.6.5"
 
-"@quasar/extras@^1.16.5":
-  version "1.16.5"
-  resolved "https://registry.yarnpkg.com/@quasar/extras/-/extras-1.16.5.tgz#77fd7b8e77e45a2798067a1e4aeafb39a95daf51"
-  integrity sha512-3VAJS9NECr1OSHX674+3YvEMIlHclr81aZrEkoBtVqr+sX4In22Up44toua+qNFsxnoATPqzpwKOJxA3iAF71Q==
+"@quasar/extras@^1.16.6":
+  version "1.16.6"
+  resolved "https://registry.yarnpkg.com/@quasar/extras/-/extras-1.16.6.tgz#6b79d3c01785793c10543c93f21653e26539a740"
+  integrity sha512-yHvp2Z73LuS29fhjE+dSzUvEKGCuTTy+WGIsAYxbnhBVW2rTYlYmFQfGdOPdzNreHZh+G/1D56n0Q6ClZxJHKg==
 
 "@quasar/render-ssr-error@^1.0.1":
   version "1.0.2"
@@ -6013,10 +6013,10 @@ qs@6.11.0:
   dependencies:
     side-channel "^1.0.4"
 
-quasar@^2.12.5:
-  version "2.12.5"
-  resolved "https://registry.yarnpkg.com/quasar/-/quasar-2.12.5.tgz#f5e907500dad613cc5787d89ba2c57f4f4efe80a"
-  integrity sha512-YPG9O+bRq3imN53EGKPyM6rUdx+IGxrs4Q1AljeA4JQh0FibWyPzM44hxFpO8JQiuWAJ5e5wZXhsyeyFyb4a2w==
+quasar@^2.12.6:
+  version "2.12.6"
+  resolved "https://registry.yarnpkg.com/quasar/-/quasar-2.12.6.tgz#5fcd92c1e0c33427b626c425d0dd0aaa706e48c1"
+  integrity sha512-C4rDMzRu+onIP+4f8WrXUJYqMZ7KsZZewU5zjxCPHQqDVKAWNbfqePN/4ME42PZ3u5C26J9eLLW32rc/vEXXfg==
 
 queue-microtask@^1.2.2:
   version "1.2.3"
@@ -6354,13 +6354,6 @@ selfsigned@^2.1.1:
   integrity sha512-GSL3aowiF7wa/WtSFwnUrludWFoNhftq8bUkH9pkzjpN2XSPOAYEgg6e0sS9s0rZwgJzJiQRPU18A6clnoW5wQ==
   dependencies:
     node-forge "^1"
-
-semver@7.3.8:
-  version "7.3.8"
-  resolved "https://registry.yarnpkg.com/semver/-/semver-7.3.8.tgz#07a78feafb3f7b32347d725e33de7e2a2df67798"
-  integrity sha512-NB1ctGL5rlHrPJtFDVIVzTyQylMLu9N9VICA6HSFJo8MCGVTMW6gfpicwKmmK/dAjTOrqu5l63JJOpDSrAis3A==
-  dependencies:
-    lru-cache "^6.0.0"
 
 semver@^6.0.0:
   version "6.3.0"
@@ -7206,14 +7199,14 @@ vue-eslint-parser@^9.3.0:
     lodash "^4.17.21"
     semver "^7.3.6"
 
-vue-loader@17.0.1:
-  version "17.0.1"
-  resolved "https://registry.yarnpkg.com/vue-loader/-/vue-loader-17.0.1.tgz#c0ee8875e0610a0c2d13ba9b4d50a9c8442e7a3a"
-  integrity sha512-/OOyugJnImKCkAKrAvdsWMuwoCqGxWT5USLsjohzWbMgOwpA5wQmzQiLMzZd7DjhIfunzAGIApTOgIylz/kwcg==
+vue-loader@^17.1.1:
+  version "17.2.2"
+  resolved "https://registry.yarnpkg.com/vue-loader/-/vue-loader-17.2.2.tgz#96148eb70c1365cc8c5bab4274923596811c79df"
+  integrity sha512-aqNvKJvnz2A/6VWeJZodAo8XLoAlVwBv+2Z6dama+LHsAF+P/xijQ+OfWrxIs0wcGSJduvdzvTuATzXbNKkpiw==
   dependencies:
     chalk "^4.1.0"
     hash-sum "^2.0.0"
-    loader-utils "^2.0.0"
+    watchpack "^2.4.0"
 
 vue-qr@^4.0.9:
   version "4.0.9"
