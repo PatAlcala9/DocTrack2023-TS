@@ -338,6 +338,35 @@ func connect() {
 				"result5": array5,
 			})
 
+		} else if method == "GetComplaintList2" {
+			var result2, result3, result4 string
+			array := []string{}
+			array2 := []string{}
+			array3 := []string{}
+			array4 := []string{}
+
+			results, err := db.Query("SELECT DISTINCT IFNULL(c.complaint_code, '') AS result, IFNULL(s.source_desc, '') AS result2, IFNULL(c.complaintant_name, '') AS result3, c.date_transacted as result4 FROM complaint_info c, source_complaint s WHERE c.source_complaintid = s.source_complaintid AND c.date_transacted IS NOT NULL")
+			if err != nil {
+				panic(err.Error())
+			}
+
+			for results.Next() {
+				err = results.Scan(&result, &result2, &result3, &result4)
+				if err != nil {
+					panic(err.Error())
+				}
+				array = append(array, result)
+				array2 = append(array2, result2)
+				array3 = append(array3, result3)
+				array4 = append(array4, result4)
+			}
+			c.JSON(http.StatusOK, gin.H{
+				"result":  array,
+				"result2": array2,
+				"result3": array3,
+				"result4": array4,
+			})
+
 		} else if method == "GetAttachmentList" {
 			var result2 string
 			array := []string{}
