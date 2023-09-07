@@ -249,8 +249,10 @@ const getLatestRespondent = async (): Promise<number> => {
   } else return 0
 }
 
-const getMaxComplaintCode = async (): Promise<string> => {
-  const response = await api.get('/api/GetMaxComplaintCode')
+const getMaxComplaintCode = async (type: number): Promise<string> => {
+  const currentYear = new Date().getFullYear();
+  const yearDigit = currentYear.toString().slice(-2);
+  const response = await api.get('/api/GetMaxComplaintCode/' + yearDigit + '/' +  type.toString())
   const data = response.data.length !== 0 ? response.data : null
 
   if (data !== null) return data.result
@@ -400,7 +402,7 @@ const saveData = async () => {
 
           if ((await postRespondent(respondentName.value, respondentContact.value, respondentLocation.value)) === true) {
             const latestRespondent = await getLatestRespondent()
-            const maxComplaint = await getMaxComplaintCode()
+            const maxComplaint = await getMaxComplaintCode(sourceEntryID.value)
             const newComplaint = await generateNewComplaintCode(maxComplaint)
 
             if (await postStatus(newComplaint, receivedDate.value, 'ENCODED TO SYSTEM', '15', 'ENCODED', complaintName.value, '')) {
