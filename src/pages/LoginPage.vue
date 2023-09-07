@@ -68,7 +68,7 @@ q-dialog(v-model="versionDialog" full-width full-height transition-show="flip-ri
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 import { api } from 'boot/axios'
 import { useRouter } from 'vue-router'
 import { comparePassword, createAuth } from 'src/js/OCBO'
@@ -93,7 +93,7 @@ import docInputPassword from 'components/docInputPassword.vue'
 import docLabel from 'components/docLabel.vue'
 import docVersions from 'components/docVersions.vue'
 import docPDF2 from 'components/docPDF2.vue'
-import { consola, createConsola } from 'consola/basic'
+import { consola, createConsola } from 'consola'
 
 const _employeename = useEmployeeName()
 const _userid = useUserID()
@@ -355,12 +355,95 @@ const enterSwitch = (el: any) => {
   gsap.to(el, { duration: 0.8, x: 1, opacity: 1 })
 }
 
-//- let browserName = ''
-//- let browserVersion
-//- const detectBrowser = () => {
-//-   browserName = Platform.is.name
-//-   browserVersion = Platform.is.version ?? 0
-//- }
+interface State {
+  browserName: string
+  browserVersion: number
+  devicePlatform: string
+}
+
+const state = reactive<State>({
+  browserName: '',
+  browserVersion: 0,
+  devicePlatform: '',
+})
+
+const supportedBrowsers = [
+  {
+    name: 'firefox',
+    minVersion: 193,
+  },
+  {
+    name: 'chrome',
+    minVersion: 85,
+  },
+  {
+    name: 'safari',
+    minVersion: 16.4,
+  },
+  {
+    name: 'opera',
+    minVersion: 71,
+  },
+]
+
+const supportedMobile = [
+  {
+    name: 'firefox',
+    minVersion: 116,
+  },
+  {
+    name: 'chrome',
+    minVersion: 116,
+  },
+  {
+    name: 'safari',
+    minVersion: 16,
+  },
+  {
+    name: 'samsung',
+    minVersion: 14,
+  },
+  {
+    name: 'opera',
+    minVersion: 73,
+  },
+  {
+    name: 'operamini',
+    minVersion: 0,
+  },
+]
+
+const isBrowserSupported = () => {
+  return supportedBrowsers.some((browser) => {
+    return state.browserName === browser.name && state.browserVersion >= browser.minVersion
+  })
+}
+
+const isMobileSupported = () => {
+  return supportedMobile.some((browser) => {
+    return state.browserName === browser.name && state.browserVersion >= browser.minVersion
+  })
+}
+
+const detectBrowser = () => {
+  state.browserName = Platform.is.name
+  state.browserVersion = Number(Platform.is.version ?? 0)
+  state.devicePlatform = Platform.is.platform
+
+  const isMobile = Platform.is.mobile ? true : false
+
+  if(!isBrowserSupported()) {
+    _currentpage.currentpage = 'unsupported'
+    router.push('/unsupported')
+  }
+
+  if(isMobile && !isMobileSupported()) {
+    _currentpage.currentpage = 'unsupported'
+    router.push('/unsupported')
+  }
+}
+
+
 
 //- import { useQrValue } from 'stores/qrvalue'
 //- import { useQrError } from 'stores/qrerror'
@@ -375,6 +458,8 @@ const enterSwitch = (el: any) => {
 //- }
 
 ;(async () => {
+  detectBrowser()
+
   if (_currentpage.currentpage !== undefined) router.push(_currentpage.currentpage)
   else router.push('/')
 })()
@@ -542,6 +627,7 @@ const enterSwitch = (el: any) => {
   font-family: 'Inter'
   font-size: 0.9rem
   color: #ffffff
+  cursor: pointer
 
 .no-scrolling
   overflow: hidden
