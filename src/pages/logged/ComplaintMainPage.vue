@@ -257,6 +257,62 @@ const getComplaintList = async () => {
   } else return false
 }
 
+const getComplaintList2 = async () => {
+  try {
+    const response = await api.get('/api/GetComplaintList2')
+    const data = response.data.length !== 0 ? response.data : null
+
+    if (data !== null) {
+      const result = data.result
+      if (result.length > 0) {
+        let arrayRemainingDays: string[] = []
+        let arrayStatus: string[] = []
+
+        complaintList.value.result = data.result
+        complaintList.value.result2 = data.result2
+        complaintList.value.result3 = data.result3
+
+        // for (let item of data.result4) {
+        //   const remainingDays = (await calculateRemainingDays(item)).toString()
+        //   arrayRemainingDays.push(data.result3.toString().includes('SERVED') ? remainingDays : '')
+
+        // }
+
+        for (let i in data.result) {
+          const remainingDays = (await calculateRemainingDays(data.result4[i])).toString()
+          arrayRemainingDays.push(data.result3.toString().includes('SERVED') ? remainingDays : '0')
+
+          arrayStatus.push((await getLatestStatusNameIndividual(data.result[i])))
+        }
+
+        complaintList.value.result4 = arrayStatus
+        complaintList.value.result5 = arrayRemainingDays
+
+        return true
+      } else return false
+    } else return false
+  } catch {
+    return false
+  }
+}
+
+const getLatestStatusNameIndividual = async (code: string): Promise<string> => {
+  try {
+    const response = await api.get('/api/GetLatestStatusNameIndividual/' + code)
+    const data = response.data.length !== 0 ? response.data : null
+
+    // if (data !== null) {
+    //   return data.result.toString()
+    // } else {
+    //   return ''
+    // }
+
+    return data?.result.toString() || ''
+  } catch {
+    return ''
+  }
+}
+
 const getComplaintListFiltered = async (code: string) => {
   const response = await api.get('/api/GetComplaintListFiltered/' + code)
   const data = response.data.length !== 0 ? response.data : null
@@ -368,7 +424,7 @@ const filterTable = async () => {
   if (searchValue.value.length > 0) {
     nodata.value = !(await getComplaintListFiltered(searchValue.value))
   } else {
-    nodata.value = !(await getComplaintList())
+    nodata.value = !(await getComplaintList2())
   }
 }
 
@@ -557,7 +613,7 @@ const recordChange = (value: string) => {
 const refreshData = async () => {
   if (_isdemo.isdemo) fillupOffline()
   else {
-    if (await getComplaintList()) nodata.value = false
+    if (await getComplaintList2()) nodata.value = false
     else nodata.value = true
   }
 }
