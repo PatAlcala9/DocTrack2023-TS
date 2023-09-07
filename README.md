@@ -1,27 +1,45 @@
+![DocTrack Logo](src/assets/logo.avif)
+
 # OCBO Document Tracking 2023
 
-An Application for Office of the City Building Official to track and monitor Documents and Cases
+A web-based application to efficiently track and monitor documents and case files.
 
-## Install the dependencies
+## Key Modules
 
-```bash
-yarn
-# or
-yarn install
-```
+Document Management
 
-### Start the app in development mode (hot-code reloading, error reporting, etc.)
+- Incoming Documents
 
-```bash
-yarn dev
-```
+- Outgoing Documents
 
-### Build the app for production
+- Inventory Management
 
-```bash
-yarn build
-```
+Case Management
 
-### Temporary Release Site
+- Active Cases
 
-https://doctrack.pages.dev/
+- Resolved Cases
+
+- Complaint Tracking
+
+## Core Features
+
+Digital Document
+
+- Generate signature-ready PDFs with embedded QR codes
+
+- Built-in QR scanner
+
+Version Control
+
+- Monitor and log changes to document records
+
+- Real-time Tracking using QR
+
+- Track document status, locations, and assigned users
+
+#
+
+### Temporary Site
+
+https://doctrack2023.vercel.app/
