@@ -389,7 +389,7 @@ const supportedBrowsers = [
 const supportedMobile = [
   {
     name: 'firefox',
-    minVersion: 116,
+    minVersion: 93,
   },
   {
     name: 'chrome',
@@ -441,6 +441,7 @@ const detectBrowser = () => {
     _currentpage.currentpage = 'unsupported'
     router.push('/unsupported')
   }
+
 }
 
 
