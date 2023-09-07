@@ -296,16 +296,6 @@ func connect() {
 				"result": result,
 			})
 
-		} else if method == "GetMaxComplaintCode" {
-			err = db.QueryRow("SELECT COALESCE(MAX(complaint_code), '') AS result FROM complaint_info").Scan(&result)
-			if err != nil {
-				panic(err.Error())
-			}
-
-			c.JSON(http.StatusOK, gin.H{
-				"result": result,
-			})
-
 		} else if method == "GetComplaintList" {
 			var result2, result3, result4, result5 string
 			array := []string{}
@@ -987,6 +977,41 @@ func connect() {
 			c.JSON(http.StatusOK, gin.H{
 				"result": result,
 			})
+
+		} else if method == "GetLatestStatusNameIndividual" {
+			err = db.QueryRow("SELECT status AS result FROM complaint_status WHERE complaint_code = ? AND complaint_statusid = (SELECT MAX(complaint_statusid) FROM complaint_status WHERE complaint_code = ?)", data, data).Scan(&result)
+			if err != nil {
+				panic(err.Error())
+			}
+
+			c.JSON(http.StatusOK, gin.H{
+				"result": result,
+			})
+		}
+	})
+
+    router.GET("/api/:method/:data/:data2", func(c *gin.Context) {
+		var result string
+		method := c.Param("method")
+		data := c.Param("data")
+        data2 := c.Param("data2")
+
+		c.Writer.Header().Set("X-XSS-Protection", "1; mode=block")
+		c.Writer.Header().Set("X-Content-Type-Options", "nosniff")
+		c.Writer.Header().Set("X-DNS-Prefetch-Control", "off")
+		c.Writer.Header().Set("X-Frame-Options", "DENY")
+		c.Writer.Header().Set("X-Download-Options", "noopen")
+		c.Writer.Header().Set("Referrer-Policy", "no-referrer")
+
+		if method == "GetMaxComplaintCode" {
+            err = db.QueryRow("SELECT COALESCE(MAX(complaint_code), '') AS result FROM complaint_info where substring(complaint_code, 1, 2) = ? and substring(complaint_code, 4, 1) = ?", data, data2).Scan(&result)
+            if err != nil {
+                panic(err.Error())
+            }
+
+            c.JSON(http.StatusOK, gin.H{
+                "result": result,
+            })
 
 		}
 	})
