@@ -60,7 +60,7 @@ q-dialog(v-model="error" transition-show="flip-right" transition-hide="flip-left
         doc-button(text="OK" @click="error=false")
 
 q-dialog(v-model="versionDialog" full-width full-height transition-show="flip-right" transition-hide="flip-left" @keypress.enter="versionDialog=false").dialog
-  q-card.dialog-card.text-white.no-scrolling
+  q-card.dialog-card.text-white
     q-card-section.dialog-card__section
       div.dialog-title-area.column.justify-center.items-center
         component(:is="docVersions")
