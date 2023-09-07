@@ -10,7 +10,8 @@
     "format": "prettier --write \"**/*.{js,ts,vue,,html,md,json}\" --ignore-path .gitignore",
     "dev": "quasar dev -m spa",
     "build": "quasar build -m pwa",
-    "debug": "quasar dev -m spa -d"
+    "debug": "quasar dev -m spa -d",
+    "server": "cd servergo && go run ."
   },
   "dependencies": {
     "@quasar/extras": "^1.16.6",
