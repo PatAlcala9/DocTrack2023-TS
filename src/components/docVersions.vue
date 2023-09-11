@@ -10,7 +10,7 @@ div.full-width.column.wrap.justify-start.items-start.content-start
 <script setup lang="ts">
 const versions = ['0.9','0.8', '0.7', '0.6', '0.5', '0.4', '0.3', '0.2', '0.1', 'Undocumented']
 const infos = {
-  '0.9': ['09/11/2023 - Patched Security', '09/11/2023 - Removed Mobile Bug', '09/11/2023 - Changed mode to SPA', '09/11/2023 - Updated NPM', '09/11/2023 - Used new logo on README', '09/11/2023 - Fixed Browser detection and add loading when switching pages'],
+  '0.9': ['09/11/2023 - New Background','09/11/2023 - Patched Security', '09/11/2023 - Removed Mobile Bug', '09/11/2023 - Changed mode to SPA', '09/11/2023 - Updated NPM', '09/11/2023 - Used new logo on README', '09/11/2023 - Fixed Browser detection and add loading when switching pages'],
   '0.8': ['09/07/2023 - Added individual fetching of complaint latest status for accuracy', '09/07/2023 - Fixed incorrect generation of complaint code', '09/07/2023 - Updated Backend Dependencies', '09/05/2023 - Improved way of getting complaint list'],
   '0.7': ['09/04/2023 - Fixed saving of complaint', '09/04/2023 - Redirected unready pages to temp file', "09/04/2023 - Fixed error when Complaint Type has '/'", '09/04/2023 - Simplified function to enhance performance'],
   '0.6': ['08/25/2023 - Fixed storage usage', '08/25/2023 - Updated Backend Dependencies', '08/25/2023 - Added a dialog to show version changes', '08/25/2023 - Added new Versioning component', '08/24/2023 - Fixed Demo mode authentication checking', '08/24/2023 - Changed text alignment', '08/24/2023 - Changed width measurement to percentage'],
