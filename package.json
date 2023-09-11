@@ -11,7 +11,9 @@
     "dev": "quasar dev -m spa",
     "build": "quasar build -m pwa",
     "debug": "quasar dev -m spa -d",
-    "server": "cd servergo && go run ."
+    "server": "cd servergo && go get -u && go run .",
+    "serverbuild": "cd servergo && go mod tidy && GOOS=windows GOARCH=amd64 go build -ldflags=\"-s -w\" -o bin/server.exe server.go",
+    "localbuild": "cd servergo && go mod tidy && GOOS=windows GOARCH=amd64 go build -ldflags=\"-s -w\" -o bin/localhost.exe server.go"
   },
   "dependencies": {
     "@quasar/extras": "^1.16.6",
@@ -22,7 +24,6 @@
     "core-js": "^3.32.1",
     "crypto-js": "^4.1.1",
     "dexie": "^3.2.4",
-    "fs": "^0.0.1-security",
     "gsap": "^3.12.2",
     "html-to-image": "^1.11.11",
     "jspdf": "^2.5.1",
@@ -36,7 +37,7 @@
     "vue3-qr-reader": "^1.0.0"
   },
   "devDependencies": {
-    "@quasar/app-webpack": "^3.10.0",
+    "@quasar/app-webpack": "^3.10.1",
     "@types/node": "^18.16.19",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.60.1",
