@@ -620,8 +620,8 @@ const detectBrowser = () => {
 .version
   position: absolute
   bottom: 0
-  left: 0
-  right: 0
+  left: 50%
+  transform: translateX(-50%)
   text-align: center
   padding-bottom: 2rem
 
