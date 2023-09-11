@@ -8,7 +8,7 @@ q-page(padding).column.fit.justify-center.content-center.items-center.text-cente
   span.info Browser Info: {{ state.browserName }} version {{ state.browserVersion }}
 
   section.button
-    component(:is="DocButton" text="Go Back" @click="gotoPage('dashboard')")
+    component(:is="DocButton" text="Go Back" @click="gotoPage('/')")
 
 </template>
 
