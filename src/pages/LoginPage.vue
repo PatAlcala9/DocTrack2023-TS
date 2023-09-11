@@ -5,7 +5,7 @@ q-page(padding)
     section.title.full-width.row.justify-between
       div.column
         transition(appear @before-enter="beforeEnterLogo" @enter="enterLogo")
-          img(src="../assets/logo3.avif" alt="OCBO Logo").logo
+          img(src="../assets/logo3.webp" alt="OCBO Logo").logo
           //- @click="sampleMode = !sampleMode"
         transition(appear @before-enter="beforeEnterTitle" @enter="enterTitle")
           section.name.fit.column.wrap.justify-start.items-start.content-start

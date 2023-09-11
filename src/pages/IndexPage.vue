@@ -4,10 +4,10 @@ q-page(padding)
   component(:is="docOnline" :state="online" )
 
   section(v-if="quasar.screen.width > 500").full-width.column.items-start.content-center
-    img(src="../assets/logo3.avif" alt="OCBO Logo").logo
+    img(src="../assets/logo3.webp" alt="OCBO Logo").logo
 
   section(v-else).full-width.column.content-center.items-center
-    img(src="../assets/logo3.avif" alt="OCBO Logo").logo
+    img(src="../assets/logo3.webp" alt="OCBO Logo").logo
 
   div.fit.column.text-center.main
     transition(appear @before-enter="beforeEnterTitle" @enter="enterTitle")
@@ -26,8 +26,8 @@ q-page(padding)
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
       component(:is="docMenu" text="Outgoing" icon="upload_file" v-if="_access.access.includes('outgoing')" @click="gotoPage('notready', false)" @mouseover="setMessage('outgoing')" @mouseout="returnDefault")
 
-    transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
-      component(:is="docMenu" text="Releasing" icon="start" v-if="_access.access.includes('releasing')" @click="gotoPage('notready', false)" @mouseover="setMessage('releasing')" @mouseout="returnDefault")
+    //- transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
+    //-   component(:is="docMenu" text="Releasing" icon="start" v-if="_access.access.includes('releasing')" @click="gotoPage('notready', false)" @mouseover="setMessage('releasing')" @mouseout="returnDefault")
 
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
       component(:is="docMenu" text="Inventory" icon="summarize" v-if="_access.access.includes('inventory')" @click="gotoPage('notready', false)" @mouseover="setMessage('inventory')" @mouseout="returnDefault")
