@@ -370,7 +370,7 @@ const state = reactive<State>({
 const supportedBrowsers = [
   {
     name: 'firefox',
-    minVersion: 193,
+    minVersion: 93,
   },
   {
     name: 'chrome',
@@ -437,10 +437,10 @@ const detectBrowser = () => {
     router.push('/unsupported')
   }
 
-  if(isMobile && !isMobileSupported()) {
-    _currentpage.currentpage = 'unsupported'
-    router.push('/unsupported')
-  }
+  //- if(isMobile && !isMobileSupported()) {
+  //-   _currentpage.currentpage = 'unsupported'
+  //-   router.push('/unsupported')
+  //- }
 
 }
 
