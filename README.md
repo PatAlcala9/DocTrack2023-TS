@@ -1,4 +1,4 @@
-![DocTrack Logo](src/assets/logo3.svg)
+![DocTrack Logo](src/assets/logo_new.webp)
 
 # OCBO Document Tracking 2023
 
