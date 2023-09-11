@@ -178,6 +178,7 @@ const getIncoming = async () => {
 }
 
 const gotoRegister = async () => {
+  quasar.loading.show()
   _pagewithtable.pagewithtable = false
   SessionStorage.set('CurrentPage', 'register')
   _currentpage.currentpage = 'register'
@@ -437,10 +438,10 @@ const detectBrowser = () => {
     router.push('/unsupported')
   }
 
-  //- if(isMobile && !isMobileSupported()) {
-  //-   _currentpage.currentpage = 'unsupported'
-  //-   router.push('/unsupported')
-  //- }
+  if(isMobile && !isMobileSupported()) {
+    _currentpage.currentpage = 'unsupported'
+    router.push('/unsupported')
+  }
 
 }
 
@@ -459,7 +460,7 @@ const detectBrowser = () => {
 //- }
 
 ;(async () => {
-  detectBrowser()
+  //- detectBrowser()
 
   if (_currentpage.currentpage !== undefined) router.push(_currentpage.currentpage)
   else router.push('/')
