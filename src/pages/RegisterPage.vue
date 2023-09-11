@@ -38,6 +38,7 @@ import { hash } from 'src/js/OCBO'
 import { useRouter } from 'vue-router'
 import { gsap } from 'gsap'
 import { checkConnection } from 'src/js/functions'
+import { useQuasar } from 'quasar'
 
 import { usePageWithTable } from 'stores/pagewithtable'
 import { useCurrentPage } from 'stores/currentpage'
@@ -52,6 +53,7 @@ const sample = () => {
   console.log('yeah')
 }
 const router = useRouter()
+const quasar = useQuasar()
 const _pagewithtable = usePageWithTable()
 const _currentpage = useCurrentPage()
 
@@ -253,6 +255,7 @@ const gotoHome = () => {
 }
 
 ;(async () => {
+  quasar.Loading.hide()
   if (_currentpage.currentpage !== undefined) router.push(_currentpage.currentpage)
   else router.push('/register')
 })()
