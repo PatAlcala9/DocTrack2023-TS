@@ -17,7 +17,7 @@ const _pagewithtable = usePageWithTable()
 .page
   // background: #000c13
   // background: linear-gradient(83deg,#000c13 0%, #305b74 80%)
-  background-image: url('../assets/background2.avif')
+  background-image: url('../assets/background4.webp')
   background-size: cover
   font-family: 'Inter'
   color: #ffffff
