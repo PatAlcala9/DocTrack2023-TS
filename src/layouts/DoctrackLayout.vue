@@ -2,7 +2,7 @@
 
 q-layout(view="hHh lpR lFr")
   q-page-container.page
-    img(v-show="_pagewithtable.pagewithtable === false" src="../assets/davao2.avif" alt="Davao Logo").davaologo
+    img(v-show="_pagewithtable.pagewithtable === false" src="../assets/davao2.webp" alt="Davao Logo").davaologo
     router-view
 
 </template>

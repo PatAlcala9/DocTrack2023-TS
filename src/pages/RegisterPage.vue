@@ -255,7 +255,7 @@ const gotoHome = () => {
 }
 
 ;(async () => {
-  quasar.Loading.hide()
+  quasar.loading.hide()
   if (_currentpage.currentpage !== undefined) router.push(_currentpage.currentpage)
   else router.push('/register')
 })()
