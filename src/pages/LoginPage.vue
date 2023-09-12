@@ -433,19 +433,16 @@ const detectBrowser = () => {
 
   const isMobile = Platform.is.mobile ? true : false
 
-  if(!isBrowserSupported()) {
+  if (!isBrowserSupported()) {
     _currentpage.currentpage = 'unsupported'
     router.push('/unsupported')
   }
 
-  if(isMobile && !isMobileSupported()) {
+  if (isMobile && !isMobileSupported()) {
     _currentpage.currentpage = 'unsupported'
     router.push('/unsupported')
   }
-
 }
-
-
 
 //- import { useQrValue } from 'stores/qrvalue'
 //- import { useQrError } from 'stores/qrerror'
