@@ -1,7 +1,12 @@
 <template lang="pug">
 
-div.section.fit.column.wrap.justify-start.items-center.content-center
+div(v-if="left === false").section.fit.column.wrap.justify-start.items-center.content-center
   component(:is="docLabel" :text="props.label")
+  span(v-if="wide === false").information {{ props.value }}
+  span(v-else v-html="displayMultiline(props.value)").wide
+
+div(v-else).section.fit.column.wrap.justify-start.items-start.content-center
+  component(:is="docLabel" :text="props.label + ':'")
   span(v-if="wide === false").information {{ props.value }}
   span(v-else v-html="displayMultiline(props.value)").wide
 
@@ -14,12 +19,14 @@ export interface Props {
   label: string
   value: string
   wide: boolean
+  left: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   label: 'Label',
   value: 'Value',
-  wide: false
+  wide: false,
+  left: false
 })
 const emit = defineEmits(['update:value'])
 
