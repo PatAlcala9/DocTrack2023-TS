@@ -55,44 +55,78 @@ q-page(padding)
               td
                 q-btn(rounded size="sm" color="button" label="edit" :ripple="false" @click="getComplaintSpecific(item, true, true)").button-view
 
+//- q-dialog(full-width full-height v-model="dialog" transition-show="flip-right" transition-hide="flip-left").dialog
+//-   q-card.dialog-card.text-white
+//-     q-card-section
+//-       section(v-if="quasar.screen.width > 500").fit.row.wrap.justify-between.items-center.content-center.text-center.q-card--section
+//-         div.column
+//-           component(:is="docInfo" label="Complaint Code" :value="dialogCode" )
+//-         div.column
+//-           component(:is="docInfo" label="Complaint Type" :value="dialogType" )
+//-         div.column
+//-           component(:is="docInfo" label="Received Date" :value="dialogReceivedDate" )
+//-         div.column
+//-           component(:is="docInfo" label="Status" :value="dialogStatus" )
+//-       section(v-else).fit.column.wrap.justify-center.items-center.content-center.text-center.q-card--section
+//-         div.column
+//-           component(:is="docInfo" label="Complaint Code" :value="dialogCode" )
+//-         div.column
+//-           component(:is="docInfo" label="Complaint Type" :value="dialogType" )
+//-         div.column
+//-           component(:is="docInfo" label="Received Date" :value="dialogReceivedDate" )
+
+//-       section.full-width.wrap.column.wrap.justify-center.items-center.content-center.text-center
+//-         div.padded
+//-           component(:is="docInfo" label="Complaintant" :value="dialogName" )
+//-         div.padded
+//-           component(:is="docInfo" label="Complaintant Contact" :value="dialogContact" )
+//-         div.padded
+//-           component(:is="docInfo" label=" Complaintant Location" :value="dialogLocation" )
+//-         div.padded
+//-           component(:is="docInfo" label="Details" :value="dialogDetails" wide)
+
+//-         div.padded
+//-           component(:is="docInfo" label="Transaction Date" :value="dialogDateTransacted")
+//-         div.padded
+//-           component(:is="docInfo" label="Respodent" :value="dialogRespondentName")
+//-         div.padded
+//-           component(:is="docInfo" label="Respodent Location" :value="dialogRespondentLocation")
+//-         div.padded
+//-           component(:is="docInfo" label="Respodent Contact" :value="dialogRespondentContact")
+
+//-       section.fit.row.wrap.justify-around.items-center.content-center.button-area
+//-         component(:is="docButton" text="OK" @click="dialog=false")
+
 q-dialog(full-width full-height v-model="dialog" transition-show="flip-right" transition-hide="flip-left").dialog
   q-card.dialog-card.text-white
-    q-card-section
-      section(v-if="quasar.screen.width > 500").fit.row.wrap.justify-between.items-center.content-center.text-center.q-card--section
-        div.column
-          component(:is="docInfo" label="Complaint Code" :value="dialogCode" )
-        div.column
-          component(:is="docInfo" label="Complaint Type" :value="dialogType" )
-        div.column
-          component(:is="docInfo" label="Received Date" :value="dialogReceivedDate" )
-        div.column
-          component(:is="docInfo" label="Status" :value="dialogStatus" )
-      section(v-else).fit.column.wrap.justify-center.items-center.content-center.text-center.q-card--section
-        div.column
-          component(:is="docInfo" label="Complaint Code" :value="dialogCode" )
-        div.column
-          component(:is="docInfo" label="Complaint Type" :value="dialogType" )
-        div.column
-          component(:is="docInfo" label="Received Date" :value="dialogReceivedDate" )
+    q-card-section.grid
+      div.code
+        component(:is="docInfo" label="Complaint Code" :value="dialogCode" )
+      div.type
+        component(:is="docInfo" label="Complaint Type" :value="dialogType" )
+      div.received
+        component(:is="docInfo" label="Received Date" :value="dialogReceivedDate" )
+      div.status
+        component(:is="docInfo" label="Status" :value="dialogStatus" )
 
-      section.full-width.wrap.column.wrap.justify-center.items-center.content-center.text-center
-        div.padded
-          component(:is="docInfo" label="Complaintant" :value="dialogName" )
-        div.padded
-          component(:is="docInfo" label="Complaintant Contact" :value="dialogContact" )
-        div.padded
-          component(:is="docInfo" label=" Complaintant Location" :value="dialogLocation" )
-        div.padded
-          component(:is="docInfo" label="Details" :value="dialogDetails" wide)
 
-        div.padded
-          component(:is="docInfo" label="Transaction Date" :value="dialogDateTransacted")
-        div.padded
-          component(:is="docInfo" label="Respodent" :value="dialogRespondentName")
-        div.padded
-          component(:is="docInfo" label="Respodent Location" :value="dialogRespondentLocation")
-        div.padded
-          component(:is="docInfo" label="Respodent Contact" :value="dialogRespondentContact")
+      div.complaintant
+        component(:is="docInfo" label="Complaintant" :value="dialogName" )
+      div.contact
+        component(:is="docInfo" label="Complaintant Contact" :value="dialogContact" )
+      div.location
+        component(:is="docInfo" label=" Complaintant Location" :value="dialogLocation" )
+      div.details
+        component(:is="docInfo" label="Details" :value="dialogDetails" wide)
+
+      div.respondent
+        component(:is="docInfo" label="Transaction Date" :value="dialogDateTransacted")
+      div.transaction
+        component(:is="docInfo" label="Respodent" :value="dialogRespondentName")
+      div.respondent-contact
+        component(:is="docInfo" label="Respodent Contact" :value="dialogRespondentContact")
+      div.respondent-location
+        component(:is="docInfo" label="Respodent Location" :value="dialogRespondentLocation")
 
       section.fit.row.wrap.justify-around.items-center.content-center.button-area
         component(:is="docButton" text="OK" @click="dialog=false")
@@ -282,7 +316,7 @@ const getComplaintList2 = async () => {
           const remainingDays = (await calculateRemainingDays(data.result4[i])).toString()
           arrayRemainingDays.push(data.result3.toString().includes('SERVED') ? remainingDays : '0')
 
-          arrayStatus.push((await getLatestStatusNameIndividual(data.result[i])))
+          arrayStatus.push(await getLatestStatusNameIndividual(data.result[i]))
         }
 
         complaintList.value.result4 = arrayStatus
@@ -705,6 +739,57 @@ const refreshData = async () => {
   white-space: nowrap
   overflow: hidden
   text-overflow: ellipsis
+
+.grid
+  display: grid
+  grid-template-columns: 1fr 1fr 1fr
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr
+  gap: 0px 0px
+  grid-template-areas: "code type received" "status status status" "complaintant complaintant complaintant" "contact contact contact" "location location location" "details details details" "respondent respondent transaction" "respondent-contact respondent-contact respondent-contact" "respondent-location respondent-location respondent-location" "button button button"
+  padding: 2rem
+
+.code
+  grid-area: code
+.type
+  grid-area: type
+.received
+  grid-area: received
+.status
+  grid-area: status
+  justify-self: start
+  align-self: center
+.complaintant
+  grid-area: complaintant
+  justify-self: start
+  align-self: center
+.contact
+  grid-area: contact
+  justify-self: start
+  align-self: center
+.location
+  grid-area: location
+  justify-self: start
+  align-self: center
+.details
+  grid-area: details
+  justify-self: start
+  align-self: center
+.respondent
+  grid-area: respondent
+.transaction
+  grid-area: transaction
+  justify-self: start
+  align-self: center
+.respondent-contact
+  grid-area: respondent-contact
+  justify-self: start
+  align-self: center
+.respondent-location
+  grid-area: respondent-location
+  justify-self: start
+  align-self: center
+.button
+  grid-area: button
 
 
 @media screen and (max-width: 500px)
