@@ -1,7 +1,7 @@
 <template lang="pug">
 
 div.flex.flex-center
-  component(:is="docButton" @click="createPDF" text="Create Sample PDF")
+  component(:is="docButton" @click="createPDF" :text="props.text" :title="props.title" :type="props.type" :name="props.name" :address="props.address" :remarks="props.remarks" :employee="props.employee")
   component(:is="docQR" :text="preText + encText" :size=qrSize style="display: none;" id="qr")
   img(src="../assets/lungsod.png", alt="PNG Image" style="display: none" id="lungsod")
   img(src="../assets/ocbologobw.png", alt="PNG Image" style="display: none" id="ocbo")
@@ -19,6 +19,7 @@ import { ref } from 'vue'
 export interface Props {
   title: string
   text: string
+  content: string
   date: string
   type: string
   name: string
@@ -30,6 +31,7 @@ export interface Props {
 const props = withDefaults(defineProps<Props>(), {
   title: 'Generated Document',
   text: 'Sample Text',
+  content: 'Sample Content',
   type: 'First Notice of Violation',
   name: 'Juan Dela Cruz',
   address: 'Davao City',
@@ -38,7 +40,7 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const preText = '**SCAN ME USING OCBO DOCTRACK** QrId::'
-const encText = encrypt(props.text)
+const encText = encrypt(props.content)
 const qrSize = 200
 
 const createPDF = async () => {
