@@ -108,7 +108,8 @@ q-dialog(full-width full-height v-model="dialog" transition-show="flip-right" tr
         component(:is="docInfo" label="Received Date" :value="dialogReceivedDate" )
       div.status
         component(:is="docInfo" label="Status" :value="dialogStatus" left)
-
+      div.generate
+        component(:is="docPDF2" title="Sample Document PDF" text="Generate PDF" date="July 12, 2023")
 
       div.complaintant
         component(:is="docInfo" label="Complaintant" :value="dialogName" left)
@@ -217,6 +218,7 @@ import docForm from 'components/docForm.vue'
 import docInfo from 'components/docInfo.vue'
 import docInfoEdit from 'components/docInfoEdit.vue'
 import docLabel from 'components/docLabel.vue'
+import docPDF2 from 'components/docPDF2.vue'
 
 let searchValue = ref('')
 let nodata = ref(true)
@@ -744,7 +746,7 @@ const refreshData = async () => {
   grid-template-columns: 1fr 1fr 1fr
   grid-template-rows: 0fr
   gap: 2rem 0px
-  grid-template-areas: "code type received" "status status status" "complaintant complaintant complaintant" "contact contact contact" "location location location" "details details details" "respondent respondent transaction" "respondent-contact respondent-contact respondent-contact" "respondent-location respondent-location respondent-location" "button button button"
+  grid-template-areas: "code type received" "status status generate" "complaintant complaintant complaintant" "contact contact contact" "location location location" "details details details" "respondent respondent transaction" "respondent-contact respondent-contact respondent-contact" "respondent-location respondent-location respondent-location" "button button button"
   padding: 2rem
 
 .code
@@ -757,6 +759,11 @@ const refreshData = async () => {
   grid-area: received
   justify-self: end
   align-self: center
+.generate
+  grid-area: generate
+  justify-self: end
+  align-self: center
+  margin-right: 1rem
 .status
   grid-area: status
   justify-self: start
