@@ -107,26 +107,27 @@ q-dialog(full-width full-height v-model="dialog" transition-show="flip-right" tr
       div.received
         component(:is="docInfo" label="Received Date" :value="dialogReceivedDate" )
       div.status
-        component(:is="docInfo" label="Status" :value="dialogStatus" )
+        component(:is="docInfo" label="Status" :value="dialogStatus" left)
 
 
       div.complaintant
-        component(:is="docInfo" label="Complaintant" :value="dialogName" )
+        component(:is="docInfo" label="Complaintant" :value="dialogName" left)
       div.contact
-        component(:is="docInfo" label="Complaintant Contact" :value="dialogContact" )
+        component(:is="docInfo" label="Complaintant Contact" :value="dialogContact" left)
       div.location
-        component(:is="docInfo" label=" Complaintant Location" :value="dialogLocation" )
+        component(:is="docInfo" label=" Complaintant Location" :value="dialogLocation" left)
       div.details
-        component(:is="docInfo" label="Details" :value="dialogDetails" wide)
+        component(:is="docInfo" label="Details" :value="dialogDetails" wide left)
 
       div.respondent
-        component(:is="docInfo" label="Transaction Date" :value="dialogDateTransacted")
+        component(:is="docInfo" label="Respodent" :value="dialogRespondentName" left)
       div.transaction
-        component(:is="docInfo" label="Respodent" :value="dialogRespondentName")
+        component(:is="docInfo" label="Transaction Date" :value="dialogDateTransacted")
+
       div.respondent-contact
-        component(:is="docInfo" label="Respodent Contact" :value="dialogRespondentContact")
+        component(:is="docInfo" label="Respodent Contact" :value="dialogRespondentContact" left)
       div.respondent-location
-        component(:is="docInfo" label="Respodent Location" :value="dialogRespondentLocation")
+        component(:is="docInfo" label="Respodent Location" :value="dialogRespondentLocation" left)
 
       section.fit.row.wrap.justify-around.items-center.content-center.button-area
         component(:is="docButton" text="OK" @click="dialog=false")
@@ -726,8 +727,6 @@ const refreshData = async () => {
 .padded
   padding-bottom: 1rem
 
-.button-area
-  padding-top: 2rem
 
 .select
   width: auto
@@ -743,17 +742,21 @@ const refreshData = async () => {
 .grid
   display: grid
   grid-template-columns: 1fr 1fr 1fr
-  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr
-  gap: 0px 0px
+  grid-template-rows: 0fr
+  gap: 2rem 0px
   grid-template-areas: "code type received" "status status status" "complaintant complaintant complaintant" "contact contact contact" "location location location" "details details details" "respondent respondent transaction" "respondent-contact respondent-contact respondent-contact" "respondent-location respondent-location respondent-location" "button button button"
   padding: 2rem
 
 .code
   grid-area: code
+  justify-self: start
+  align-self: center
 .type
   grid-area: type
 .received
   grid-area: received
+  justify-self: end
+  align-self: center
 .status
   grid-area: status
   justify-self: start
@@ -776,9 +779,11 @@ const refreshData = async () => {
   align-self: center
 .respondent
   grid-area: respondent
+  justify-self: start
+  align-self: center
 .transaction
   grid-area: transaction
-  justify-self: start
+  justify-self: end
   align-self: center
 .respondent-contact
   grid-area: respondent-contact
@@ -788,7 +793,8 @@ const refreshData = async () => {
   grid-area: respondent-location
   justify-self: start
   align-self: center
-.button
+.button-area
+  padding-top: 2rem
   grid-area: button
 
 
