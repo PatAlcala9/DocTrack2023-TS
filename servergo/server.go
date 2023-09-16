@@ -986,6 +986,21 @@ func connect() {
 			c.JSON(http.StatusOK, gin.H{
 				"result": result,
 			})
+
+		} else if method == "GetWorkStoppageDetails" {
+            var result2, result3, result4, result5 string
+			err = db.QueryRow("SELECT IFNULL(c.complaintant_name, '') AS result, IFNULL(c.locationofconstruction, '') AS result2, IFNULL(r.respondent_name, '') AS result3, IFNULL(r.respondent_location, '') AS result4, IFNULL(c.details, '') AS result5 FROM complaint_info c, respondent_info r WHERE c.respondent_infoid = r.respondent_infoid and c.complaint_code = ?", data).Scan(&result, &result2, &result3, &result4, &result5)
+			if err != nil {
+				panic(err.Error())
+			}
+
+			c.JSON(http.StatusOK, gin.H{
+				"result": result,
+                "result2": result2,
+                "result3": result3,
+                "result4": result4,
+                "result5": result5,
+			})
 		}
 	})
 
