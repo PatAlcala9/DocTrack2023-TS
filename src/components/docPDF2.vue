@@ -4,7 +4,7 @@ div.flex.flex-center
   component(:is="docButton" @click="createPDF" :text="props.text" :title="props.title" :type="props.type" :name="props.name" :address="props.address" :remarks="props.remarks" :employee="props.employee")
   component(:is="docQR" :text="preText + encText" :size=qrSize style="display: none;" id="qr")
   img(src="../assets/lungsod.png", alt="PNG Image" style="display: none" id="lungsod")
-  img(src="../assets/ocbologobw.png", alt="PNG Image" style="display: none" id="ocbo")
+  img(src="../assets/ocbologo2.png", alt="PNG Image" style="display: none" id="ocbo")
 
 </template>
 
