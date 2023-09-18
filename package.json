@@ -30,14 +30,14 @@
     "md5": "^2.3.0",
     "pdf-lib": "^1.17.1",
     "pinia": "^2.1.6",
-    "quasar": "^2.12.6",
+    "quasar": "^2.12.7",
     "vue": "^3.3.4",
     "vue-qr": "^4.0.9",
     "vue-router": "^4.2.4",
     "vue3-qr-reader": "^1.0.0"
   },
   "devDependencies": {
-    "@quasar/app-webpack": "^3.10.1",
+    "@quasar/app-webpack": "^3.11.2",
     "@types/node": "^18.16.19",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.60.1",
