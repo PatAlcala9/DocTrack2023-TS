@@ -2,15 +2,22 @@
 
 q-page(padding)
   div.grid
-    section.title.full-width.row.justify-between
+    section(v-if="$q.screen.width <=500").title.full-width.row.justify-between
       div.column
         transition(appear @before-enter="beforeEnterLogo" @enter="enterLogo")
           img(src="../assets/logo3.webp" alt="OCBO Logo").logo
-          //- @click="sampleMode = !sampleMode"
         transition(appear @before-enter="beforeEnterTitle" @enter="enterTitle")
           section.name.fit.column.wrap.justify-start.items-start.content-start
-            span.ocbo-title OCBO
-            span.ocbo-text Doctrack System 2023
+            span.ocbo-title-mobile DDMS
+
+    section(v-else).title.full-width.row.justify-between
+      div.column
+        transition(appear @before-enter="beforeEnterLogo" @enter="enterLogo")
+          img(src="../assets/logo3.webp" alt="OCBO Logo").logo
+        transition(appear @before-enter="beforeEnterTitle" @enter="enterTitle")
+          section.name.fit.column.wrap.justify-start.items-start.content-start
+            span.ocbo-title Digital Document
+            span.ocbo-text Management System
 
     //- transition( appear @before-enter="beforeEnterForm" @enter="enterForm")
     div(v-if="inquiry === false").login#login
@@ -470,6 +477,11 @@ const detectBrowser = () => {
   font-family: 'RalewayBold'
   color: #ffffff
 
+.ocbo-title-mobile
+  font-size: 3rem
+  font-family: 'RalewayBold'
+  color: #ffffff
+
 .ocbo-text
   font-size: 3.3rem
   font-family: 'Montserrat'
@@ -634,6 +646,12 @@ const detectBrowser = () => {
 @media screen and (max-width: 900px)
   .grid
     grid-template-areas: "title title title" "login login login" "inquiry inquiry ."
+
+  //.title
+    //grid-area: title
+    //justify-self: center
+    // margin-top: 2rem
+
   .logo
     width: 9rem
 
