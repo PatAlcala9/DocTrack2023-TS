@@ -647,11 +647,6 @@ const detectBrowser = () => {
   .grid
     grid-template-areas: "title title title" "login login login" "inquiry inquiry ."
 
-  //.title
-    //grid-area: title
-    //justify-self: center
-    // margin-top: 2rem
-
   .logo
     width: 9rem
 
