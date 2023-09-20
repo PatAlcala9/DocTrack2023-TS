@@ -1,6 +1,6 @@
 ![DocTrack Logo](src/assets/logo_new.webp)
 
-# OCBO Document Tracking 2023
+# Digital Document Management System
 
 A web-based application to efficiently track and monitor documents and case files.
 
