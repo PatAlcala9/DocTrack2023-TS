@@ -400,7 +400,7 @@ const saveData = async () => {
         try {
           await getSourceIDFromDatabase()
 
-          if ((await postRespondent(respondentName.value, respondentContact.value, respondentLocation.value)) === true) {
+          if ((await postRespondent(respondentName.value.toUpperCase(), respondentContact.value.toUpperCase(), respondentLocation.value.toUpperCase())) === true) {
             const latestRespondent = await getLatestRespondent()
             const maxComplaint = await getMaxComplaintCode(sourceEntryID.value)
             const newComplaint = await generateNewComplaintCode(maxComplaint)
