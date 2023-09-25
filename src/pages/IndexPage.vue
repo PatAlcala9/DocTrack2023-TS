@@ -216,7 +216,7 @@ const rotateMessageBack = () => {
     await logout()
     return
   }
-  timer = setInterval(checkOnline, 5000)
+  timer = setInterval(checkOnline, 60000)
 })()
 </script>
 
