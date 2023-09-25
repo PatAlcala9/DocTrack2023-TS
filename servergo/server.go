@@ -1001,7 +1001,17 @@ func connect() {
                 "result4": result4,
                 "result5": result5,
 			})
-		}
+
+        } else if method == "GetUserID" {
+                err = db.QueryRow("SELECT userid AS result FROM user WHERE username = ?", data).Scan(&result)
+                if err != nil {
+                    panic(err.Error())
+                }
+
+                c.JSON(http.StatusOK, gin.H{
+                    "result": result,
+                })
+            }
 	})
 
     router.GET("/api/:method/:data/:data2", func(c *gin.Context) {
@@ -1469,6 +1479,54 @@ func connect() {
 			c.String(http.StatusOK, "Success on Update Status ID")
 		} else {
 			c.String(http.StatusInternalServerError, "Failed on Update Status ID")
+		}
+	})
+
+
+    router.POST("/api/PostUserLog", func(c *gin.Context) {
+		type UserLogData struct {
+			Data  string `json:"data"`
+			Data2 string `json:"data2"`
+			Data3 string `json:"data3"`
+            Data4 string `json:"data4"`
+            Data5 string `json:"data5"`
+            Data6 string `json:"data6"`
+		}
+		var userLogData UserLogData
+		if err := c.ShouldBindJSON(&userLogData); err != nil {
+			c.String(http.StatusBadRequest, "Invalid request body")
+			return
+		}
+
+		c.Writer.Header().Set("X-XSS-Protection", "1; mode=block")
+		c.Writer.Header().Set("X-Content-Type-Options", "nosniff")
+		c.Writer.Header().Set("X-DNS-Prefetch-Control", "off")
+		c.Writer.Header().Set("X-Frame-Options", "DENY")
+		c.Writer.Header().Set("X-Download-Options", "noopen")
+		c.Writer.Header().Set("Referrer-Policy", "no-referrer")
+
+		var dbpost *sql.Stmt
+
+		dbpost, err := db.Prepare("INSERT INTO user_logs (user_logid, userid, tableName, columnName, old_value, new_value, dateOfEdit) VALUES (NULL, ?, ?, ?, ?, ?, ?)")
+		if err != nil {
+			panic(err.Error())
+		}
+		defer dbpost.Close()
+
+		exec, err := dbpost.Exec(userLogData.Data, userLogData.Data2, userLogData.Data3, userLogData.Data4, userLogData.Data5, userLogData.Data6)
+		if err != nil {
+			panic(err.Error())
+		}
+
+		affect, err := exec.RowsAffected()
+		if err != nil {
+			panic(err.Error())
+		}
+
+		if affect > 0 {
+			c.String(http.StatusOK, "Success on Posting User Log")
+		} else {
+			c.String(http.StatusInternalServerError, "Failed on Posting User Log")
 		}
 	})
 
