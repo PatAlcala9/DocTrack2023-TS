@@ -93,6 +93,7 @@ import { useCurrentPage } from 'stores/currentpage'
 import { useIsDemo } from 'stores/isdemo'
 import { useIsLogged } from 'stores/islogged'
 import { useAuthentication } from 'stores/authentication'
+import { useEmployeeID } from 'stores/employeeid'
 
 import docButton from 'components/docButton.vue'
 import docInput from 'components/docInput.vue'
@@ -110,6 +111,7 @@ const _currentpage = useCurrentPage()
 const _isdemo = useIsDemo()
 const _islogged = useIsLogged()
 const _authentication = useAuthentication()
+const _employeeid = useEmployeeID()
 
 let error = ref(false)
 let errorMessage = ref('')
@@ -238,6 +240,16 @@ const getUserDetails = async () => {
   }
 }
 
+const getUserID = async () => {
+  try {
+    const response = await api.get('/api/GetUserID/' + usernameEntry.value.toUpperCase())
+    const data = response.data
+    _employeeid.employeeid = (data !== undefined) ? data.result : 0
+  } catch {
+    _employeeid.employeeid = 0
+  }
+}
+
 const setDemo = async () => {
   SessionStorage.set('Demo', _isdemo.isdemo)
 }
@@ -291,6 +303,7 @@ const login = async () => {
     }
 
     await getUserDetails()
+    await getUserID()
     if (detailsAllowed === false) {
       error.value = true
       errorMessage.value = 'No Details Found'
