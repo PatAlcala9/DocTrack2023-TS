@@ -405,9 +405,9 @@ const saveData = async () => {
             const maxComplaint = await getMaxComplaintCode(sourceEntryID.value)
             const newComplaint = await generateNewComplaintCode(maxComplaint)
 
-            if (await postStatus(newComplaint, receivedDate.value, 'ENCODED TO SYSTEM', '15', 'ENCODED', complaintName.value, '')) {
+            if (await postStatus(newComplaint, receivedDate.value, 'ENCODED TO SYSTEM', '15', 'ENCODED', complaintName.value.toUpperCase(), '')) {
               const newStatusID = await getLatestStatus(newComplaint)
-              if (await postComplaint(newComplaint, sourceEntryID.value, complaintName.value, complaintContact.value, receivedDate.value, complaintLocation.value, complaintDetail.value, latestRespondent, newStatusID, receivedDate.value)) {
+              if (await postComplaint(newComplaint, sourceEntryID.value, complaintName.value.toUpperCase(), complaintContact.value.toUpperCase(), receivedDate.value, complaintLocation.value.toUpperCase(), complaintDetail.value, latestRespondent, newStatusID, receivedDate.value)) {
                 for (let item of attachmentSelectedList.value) {
                   await postAttachment(newComplaint, parseInt(item))
                 }
