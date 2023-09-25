@@ -204,12 +204,14 @@ import { api } from 'boot/axios'
 import { useCurrentPage } from 'stores/currentpage'
 import { useIsDemo } from 'stores/isdemo'
 import { useEmployeeName } from 'stores/employeename'
+import { useEmployeeID } from 'stores/employeeid'
 
 const router = useRouter()
 const quasar = useQuasar()
 const _currentpage = useCurrentPage()
 const _isdemo = useIsDemo()
 const _employeename = useEmployeeName()
+const _employeeid = useEmployeeID()
 
 let onlineColor = ref('')
 
@@ -533,6 +535,20 @@ const postChangeStatus = async (newstatus: string) => {
   dialogStatusEdit.value = false
 }
 
+const postUserLog = async (userid: number, table: string, column: string, old_value: string, new_value: string, dateOfEdit: string) => {
+  const response = await api.post('/api/PostUserLog', {
+    data: userid,
+    data2: table,
+    data3: column,
+    data4: old_value,
+    data5: new_value,
+    data6: dateOfEdit,
+  })
+  const data = response.data.length !== 0 ? response.data : null
+
+  return data !== null
+}
+
 const checkOnline = () => {
   if (_isdemo.isdemo) onlineColor.value = 'red'
   else {
@@ -595,51 +611,58 @@ const recordData = async () => {
   dataStatus.value = dialogStatus.value
 }
 
-const recordChange = (value: string) => {
+const recordChange = async (value: string) => {
   const today = new Date()
   const formattedDate = date.formatDate(today, 'YYYY-MM-DD HH:mm:ss')
 
   switch (value) {
     case 'name':
       if (dataName.value !== dialogName.value) {
-        postEditLog('complaint_info', 'complaintant_name', dataName.value, dialogName.value, formattedDate)
-        postUpdate(dataName.value, dialogCode.value, value)
+        await postUserLog(_employeeid.employeeid, 'complaint_info', 'complaintant_name', dataName.value, dialogName.value, formattedDate)
+        // postEditLog('complaint_info', 'complaintant_name', dataName.value, dialogName.value, formattedDate)
+        await postUpdate(dataName.value, dialogCode.value, value)
         break
       }
     case 'contact':
       if (dataContact.value !== dialogContact.value) {
-        postEditLog('complaint_info', 'complaintant_contact', dataContact.value, dialogContact.value, formattedDate)
-        postUpdate(dataContact.value, dialogCode.value, value)
+        await postUserLog(_employeeid.employeeid, 'complaint_info', 'complaintant_contact', dataContact.value, dialogContact.value, formattedDate)
+        // postEditLog('complaint_info', 'complaintant_contact', dataContact.value, dialogContact.value, formattedDate)
+        await postUpdate(dataContact.value, dialogCode.value, value)
         break
       }
     case 'location':
       if (dataLocation.value !== dialogLocation.value) {
-        postEditLog('complaint_info', 'locationOfconstruction', dataLocation.value, dialogLocation.value, formattedDate)
-        postUpdate(dataLocation.value, dialogCode.value, value)
+        await postUserLog(_employeeid.employeeid, 'complaint_info', 'locationOfconstruction', dataContact.value, dialogContact.value, formattedDate)
+        // postEditLog('complaint_info', 'locationOfconstruction', dataLocation.value, dialogLocation.value, formattedDate)
+        await postUpdate(dataLocation.value, dialogCode.value, value)
         break
       }
     case 'details':
       if (dataDetails.value !== dialogDetails.value) {
-        postEditLog('complaint_info', 'details', dataDetails.value, dialogDetails.value, formattedDate)
-        postUpdate(dataDetails.value, dialogCode.value, value)
+        await postUserLog(_employeeid.employeeid, 'complaint_info', 'details', dataContact.value, dialogContact.value, formattedDate)
+        // postEditLog('complaint_info', 'details', dataDetails.value, dialogDetails.value, formattedDate)
+        await postUpdate(dataDetails.value, dialogCode.value, value)
         break
       }
     case 'respondent-name':
       if (dataRespondentName.value !== dialogRespondentName.value) {
-        postEditLog('respondent_info', 'respondent_name', dataRespondentName.value, dialogRespondentName.value, formattedDate)
-        postUpdate(dataRespondentName.value, dialogCode.value, value)
+        await postUserLog(_employeeid.employeeid, 'respondent_info', 'respondent_name', dataContact.value, dialogContact.value, formattedDate)
+        // postEditLog('respondent_info', 'respondent_name', dataRespondentName.value, dialogRespondentName.value, formattedDate)
+        await postUpdate(dataRespondentName.value, dialogCode.value, value)
         break
       }
     case 'respondent-contact':
       if (dataRespondentContact.value !== dialogRespondentContact.value) {
-        postEditLog('respondent_info', 'respondent_contact', dataRespondentContact.value, dialogRespondentContact.value, formattedDate)
-        postUpdate(dataRespondentContact.value, dialogCode.value, value)
+        await postUserLog(_employeeid.employeeid, 'respondent_info', 'respondent_contact', dataContact.value, dialogContact.value, formattedDate)
+        // postEditLog('respondent_info', 'respondent_contact', dataRespondentContact.value, dialogRespondentContact.value, formattedDate)
+        await postUpdate(dataRespondentContact.value, dialogCode.value, value)
         break
       }
     case 'respondent-location':
       if (dataRespondentLocation.value !== dialogRespondentLocation.value) {
-        postEditLog('respondent_info', 'respondent_location', dataRespondentLocation.value, dialogRespondentLocation.value, formattedDate)
-        postUpdate(dataRespondentLocation.value, dialogCode.value, value)
+        await postUserLog(_employeeid.employeeid, 'respondent_info', 'respondent_location', dataContact.value, dialogContact.value, formattedDate)
+        // postEditLog('respondent_info', 'respondent_location', dataRespondentLocation.value, dialogRespondentLocation.value, formattedDate)
+        await postUpdate(dataRespondentLocation.value, dialogCode.value, value)
         break
       }
     default:
