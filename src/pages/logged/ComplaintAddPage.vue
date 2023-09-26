@@ -77,15 +77,15 @@ q-page(padding)
       div.right
         section.section
           component(:is="docLabel" text="Complaint Name:").label--spaced
-          component(:is="docInputEntry" v-model:value="complaintName" alignment="left" width="100")
+          component(:is="docInputEntry" v-model:value="complaintName" alignment="left" width=100)
 
         section.section
           component(:is="docLabel" text="Complaint Contact:").label--spaced
-          component(:is="docInputEntry" v-model:value="complaintContact" alignment="left" width="100")
+          component(:is="docInputEntry" v-model:value="complaintContact" alignment="left" width=100)
 
         section.section
           component(:is="docLabel" text="Complaint Location:").label--spaced
-          component(:is="docInputEntry" v-model:value="complaintLocation" alignment="left" width="100")
+          component(:is="docInputEntry" v-model:value="complaintLocation" alignment="left" width=100)
 
         section.section
           component(:is="docLabel" text="Detail of Complaint:").label--spaced
@@ -118,6 +118,15 @@ q-dialog(v-model="dialog" transition-show="flip-right" transition-hide="flip-lef
         span.dialog-card__title {{ dialogTitle }}
         span.dialog-card__info {{ dialogMessage }}
         doc-button(text="OK" @click="dialog=false")
+
+q-dialog(v-model="dialogMissing" transition-show="flip-right" transition-hide="flip-left").dialog
+  q-card.dialog-card-missing.text-white.flex.flex-center
+    q-card-section.dialog-card__section
+      div.dialog-title-area.column.justify-center.items-center
+        span.dialog-card__title {{ dialogMissingTitle }}
+        span.dialog-card__title {{ dialogMissingSubTitle }}
+        span.dialog-card__info {{ dialogMissingMessage }}
+        doc-button(text="OK" @click="dialogMissing=false")
 </template>
 
 <script setup lang="ts">
@@ -159,6 +168,11 @@ let attachmentSelectedList = ref<string[]>([])
 let dialog = ref(false)
 let dialogTitle = ref('')
 let dialogMessage = ref('')
+
+let dialogMissing = ref(false)
+let dialogMissingTitle = ref('')
+let dialogMissingSubTitle = ref('')
+let dialogMissingMessage = ref('')
 
 const router = useRouter()
 const quasar = useQuasar()
@@ -250,9 +264,9 @@ const getLatestRespondent = async (): Promise<number> => {
 }
 
 const getMaxComplaintCode = async (type: number): Promise<string> => {
-  const currentYear = new Date().getFullYear();
-  const yearDigit = currentYear.toString().slice(-2);
-  const response = await api.get('/api/GetMaxComplaintCode/' + yearDigit + '/' +  type.toString())
+  const currentYear = new Date().getFullYear()
+  const yearDigit = currentYear.toString().slice(-2)
+  const response = await api.get('/api/GetMaxComplaintCode/' + yearDigit + '/' + type.toString())
   const data = response.data.length !== 0 ? response.data : null
 
   if (data !== null) return data.result
@@ -376,6 +390,14 @@ const showDialog = (title: string, message: string) => {
   dialogMessage.value = message
 }
 
+const showDialogMissing = (title: string, subtitle: string, message: string) => {
+  quasar.loading.hide()
+  dialogMissing.value = true
+  dialogMissingTitle.value = title
+  dialogMissingSubTitle.value = subtitle
+  dialogMissingMessage.value = message
+}
+
 const saveData = async () => {
   if (checkComplete() === false) {
     if (_isdemo.isdemo) {
@@ -392,9 +414,6 @@ const saveData = async () => {
         showDialog('Error', 'Failed to Save Respondent')
       }
     } else {
-      // for (let item of attachmentSelectedList.value) {
-      //   console.log(item)
-      // }
       quasar.loading.show()
       if (await checkConnection()) {
         try {
@@ -420,6 +439,8 @@ const saveData = async () => {
         }
       }
     }
+  } else {
+    showDialogMissing('Error on Saving', 'Missing Data',`${missingDetails.toString().toUpperCase()}`)
   }
 }
 
@@ -624,6 +645,15 @@ const gotoComplaintDashboard = () => {
 
 .button-area
   margin-top: 2rem
+
+.dialog-card-missing
+  font-family: "Inter"
+  background-color: transparent
+  backdrop-filter: blur(16px)
+  border: 4px solid rgba(255, 255, 255, 0.125)
+  border-radius: 12px
+  width: 60%
+  height: 80%
 
 @media screen and (max-width: 500px)
   .entry-group
