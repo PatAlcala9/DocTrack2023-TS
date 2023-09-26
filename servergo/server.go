@@ -1003,15 +1003,25 @@ func connect() {
 			})
 
         } else if method == "GetUserID" {
-                err = db.QueryRow("SELECT userid AS result FROM user WHERE username = ?", data).Scan(&result)
-                if err != nil {
-                    panic(err.Error())
-                }
-
-                c.JSON(http.StatusOK, gin.H{
-                    "result": result,
-                })
+            err = db.QueryRow("SELECT userid AS result FROM user WHERE username = ?", data).Scan(&result)
+            if err != nil {
+                panic(err.Error())
             }
+
+            c.JSON(http.StatusOK, gin.H{
+                "result": result,
+            })
+
+        }  else if method == "GetMaxComplaintCode2" {
+            err = db.QueryRow("SELECT COALESCE(MAX(complaint_code), '') AS result FROM complaint_info WHERE SUBSTRING(complaint_code, 1, 2) = ?", data).Scan(&result)
+            if err != nil {
+                panic(err.Error())
+            }
+
+            c.JSON(http.StatusOK, gin.H{
+                "result": result,
+            })
+        }
 	})
 
     router.GET("/api/:method/:data/:data2", func(c *gin.Context) {
@@ -1571,5 +1581,5 @@ func connect() {
 	//   }
 	// })
 
-	router.Run(":8081")
+	router.Run(":8082")
 }
