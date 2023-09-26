@@ -311,17 +311,11 @@ const getComplaintList2 = async () => {
         complaintList.value.result2 = data.result2
         complaintList.value.result3 = data.result3
 
-        // for (let item of data.result4) {
-        //   const remainingDays = (await calculateRemainingDays(item)).toString()
-        //   arrayRemainingDays.push(data.result3.toString().includes('SERVED') ? remainingDays : '')
-
-        // }
-
-        for (let i in data.result) {
-          const remainingDays = (await calculateRemainingDays(data.result4[i])).toString()
-          arrayRemainingDays.push(data.result3.toString().includes('SERVED') ? remainingDays : '0')
-
+        for (let i in data.result4) {
           arrayStatus.push(await getLatestStatusNameIndividual(data.result[i]))
+
+          const remainingDays = (await calculateRemainingDays(data.result4[i])).toString()
+          arrayRemainingDays.push(arrayStatus[i].toString().includes('SERVED') ? remainingDays : '0')
         }
 
         complaintList.value.result4 = arrayStatus
@@ -367,7 +361,9 @@ const getComplaintListFiltered = async (code: string) => {
       complaintList.value.result4 = data.result4
 
       for (let item of data.result5) {
+        console.log('item', item)
         const remainingDays = (await calculateRemainingDays(item)).toString()
+
         arrayRemainingDays.push(data.result4.toString().includes('SERVED') ? remainingDays : '')
       }
       complaintList.value.result5 = arrayRemainingDays.toString()
@@ -380,9 +376,8 @@ const calculateRemainingDays = async (expiry: string): Promise<number> => {
   const expiryDate = date.formatDate(expiry, 'DDD')
   const today = date.formatDate(new Date(), 'DDD')
 
-  if (expiryDate > today) {
+  if (expiryDate >= today) {
     const remainingDays = parseInt(expiryDate) - parseInt(today)
-
     const currentDayOfWeek = new Date().getDay()
     const remainingWeekdays = Math.max(remainingDays - Math.floor(remainingDays / 7) * 2, 0)
 
@@ -393,7 +388,7 @@ const calculateRemainingDays = async (expiry: string): Promise<number> => {
       adjustedRemainingDays = Math.max(remainingWeekdays - 2, 0)
     }
     return adjustedRemainingDays
-  } else return 0
+  } else return parseInt(expiryDate) - parseInt(today)
 }
 
 const getComplaintSpecific = async (code: string, edit: boolean, show: boolean) => {
