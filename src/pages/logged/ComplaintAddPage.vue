@@ -266,7 +266,7 @@ const getLatestRespondent = async (): Promise<number> => {
 const getMaxComplaintCode = async (type: number): Promise<string> => {
   const currentYear = new Date().getFullYear()
   const yearDigit = currentYear.toString().slice(-2)
-  const response = await api.get('/api/GetMaxComplaintCode/' + yearDigit + '/' + type.toString())
+  const response = await api.get('/api/GetMaxComplaintCode2/' + yearDigit)
   const data = response.data.length !== 0 ? response.data : null
 
   if (data !== null) return data.result
