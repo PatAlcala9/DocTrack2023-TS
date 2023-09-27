@@ -11,8 +11,8 @@
     "dev": "quasar dev -m spa",
     "build": "quasar build -m spa",
     "debug": "quasar dev -m spa -d",
-    "server": "cd servergo && go get -u && go run .",
-    "serverbuild": "cd servergo && go mod tidy && GOOS=windows GOARCH=amd64 go build -ldflags=\"-s -w\" -o bin/server.exe server.go",
+    "server": "cd servergo && go run .",
+    "serverbuild": "cd servergo && go mod tidy && go build -ldflags=\"-s -w\" -o bin/server.exe server.go",
     "localbuild": "cd servergo && go mod tidy && GOOS=windows GOARCH=amd64 go build -ldflags=\"-s -w\" -o bin/localhost.exe server.go"
   },
   "dependencies": {
