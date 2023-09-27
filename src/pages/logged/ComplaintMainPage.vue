@@ -45,14 +45,29 @@ q-page(padding)
               th Update
           tbody
             tr(v-for="(item, index) in complaintList.result" :key="item").table-content-group
-              td {{item}}
-              td {{complaintList.result2[index]}}
-              td {{complaintList.result3[index]}}
-              td(@click="changeStatus(item, complaintList.result4[index])" style="cursor: pointer") {{complaintList.result4[index]}}
-              td {{complaintList.result5[index]}}
-              td
+              td(v-if="complaintList.result5[index].includes('-')" style="background-color: rgba(128, 21, 21, 0.45)") {{item}}
+              td(v-else) {{ item }}
+
+              td(v-if="complaintList.result5[index].includes('-')" style="background-color: rgba(128, 21, 21, 0.45)") {{complaintList.result2[index]}}
+              td(v-else) {{ complaintList.result2[index] }}
+
+              td(v-if="complaintList.result5[index].includes('-')" style="background-color: rgba(128, 21, 21, 0.45)") {{complaintList.result3[index]}}
+              td(v-else) {{ complaintList.result3[index] }}
+
+              td(v-if="complaintList.result5[index].includes('-')" style="background-color: rgba(128, 21, 21, 0.45); cursor: pointer" @click="changeStatus(item, complaintList.result4[index])") {{complaintList.result4[index]}}
+              td(v-else @click="changeStatus(item, complaintList.result4[index])" style="cursor: pointer") {{complaintList.result4[index]}}
+
+              td(v-if="complaintList.result5[index].includes('-')" style="background-color: rgba(128, 21, 21, 0.45)") {{complaintList.result5[index]}}
+              td(v-else) {{complaintList.result5[index]}}
+
+              td(v-if="complaintList.result5[index].includes('-')" style="background-color: rgba(128, 21, 21, 0.45)")
                 q-btn(rounded size="sm" color="button" label="show" :ripple="false" @click="getComplaintSpecific(item, false, true)").button-view
-              td
+              td(v-else)
+                q-btn(rounded size="sm" color="button" label="show" :ripple="false" @click="getComplaintSpecific(item, false, true)").button-view
+
+              td(v-if="complaintList.result5[index].includes('-')" style="background-color: rgba(128, 21, 21, 0.45)")
+                q-btn(rounded size="sm" color="button" label="edit" :ripple="false" @click="getComplaintSpecific(item, true, true)").button-view
+              td(v-else)
                 q-btn(rounded size="sm" color="button" label="edit" :ripple="false" @click="getComplaintSpecific(item, true, true)").button-view
 
 //- q-dialog(full-width full-height v-model="dialog" transition-show="flip-right" transition-hide="flip-left").dialog
@@ -315,7 +330,7 @@ const getComplaintList2 = async () => {
           arrayStatus.push(await getLatestStatusNameIndividual(data.result[i]))
 
           const remainingDays = (await calculateRemainingDays(data.result4[i])).toString()
-          arrayRemainingDays.push(arrayStatus[i].toString().includes('SERVED') ? remainingDays : '0')
+          arrayRemainingDays.push(arrayStatus[i].toString().includes('SERVED') ? remainingDays : '')
         }
 
         complaintList.value.result4 = arrayStatus
@@ -347,26 +362,27 @@ const getLatestStatusNameIndividual = async (code: string): Promise<string> => {
 }
 
 const getComplaintListFiltered = async (code: string) => {
-  const response = await api.get('/api/GetComplaintListFiltered/' + code)
+  const response = await api.get('/api/GetComplaintListFiltered2/' + code)
   const data = response.data.length !== 0 ? response.data : null
 
   if (data !== null) {
     const result = data.result
     if (result.length > 0) {
       let arrayRemainingDays: string[] = []
+      let arrayStatus: string[] = []
 
       complaintList.value.result = data.result
       complaintList.value.result2 = data.result2
       complaintList.value.result3 = data.result3
-      complaintList.value.result4 = data.result4
 
-      for (let item of data.result5) {
-        console.log('item', item)
-        const remainingDays = (await calculateRemainingDays(item)).toString()
-
-        arrayRemainingDays.push(data.result4.toString().includes('SERVED') ? remainingDays : '')
+      for (let i in data.result4) {
+        arrayStatus.push(await getLatestStatusNameIndividual(data.result[i]))
+        const remainingDays = (await calculateRemainingDays(data.result4[i])).toString()
+        arrayRemainingDays.push(arrayStatus[i].toString().includes('SERVED') ? remainingDays : '0')
       }
-      complaintList.value.result5 = arrayRemainingDays.toString()
+      complaintList.value.result4 = arrayStatus
+      complaintList.value.result5 = arrayRemainingDays
+
       return true
     } else return false
   } else return false
