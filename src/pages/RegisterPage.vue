@@ -33,7 +33,7 @@ q-dialog(v-model="dialog" transition-show="flip-right" transition-hide="flip-lef
 
 <script setup lang="ts">
 import { api } from 'boot/axios'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { hash } from 'src/js/OCBO'
 import { useRouter } from 'vue-router'
 import { gsap } from 'gsap'
@@ -49,13 +49,12 @@ import docButton from 'components/docButton.vue'
 import docForm from 'components/docForm.vue'
 import docList from 'components/docList.vue'
 
-const sample = () => {
-  console.log('yeah')
-}
 const router = useRouter()
 const quasar = useQuasar()
 const _pagewithtable = usePageWithTable()
 const _currentpage = useCurrentPage()
+
+
 
 const beforeEnterTitle = (el: any) => {
   el.style.transform = 'translateX(-100px)'
@@ -126,6 +125,12 @@ let accessOption = ref([
     value: 'is_complaint',
   },
 ])
+
+watch(accessList, (item) => {
+  if (item.length === 0) redAccess.value = true
+  else redAccess.value = false
+})
+
 let dialog = ref(false)
 let dialogTitle = ref('')
 let dialogMessage = ref('')
@@ -180,25 +185,15 @@ const checkCompleteCPassword = () => {
   else redCPassword.value = false
 }
 const checkCompleteAccess = () => {
-  if  (accessList.value.length === 0) redAccess.value = true
-  else redAccess.value = false
+  // if  (accessList.value.length === 0) redAccess.value = true
+  // else redAccess.value = false
+  redAccess.value = true
 }
 
 const passwordConfirm = async () => {
   if (ipassword.value === icpassword.value) return true
   else false
 }
-
-// const checkConnection = async (): Promise<boolean> => {
-//   try {
-//     const response = await api.get('/api/CheckConnection')
-//     const data = response.data
-//     if (data !== undefined && data.result === '1') return true
-//   } catch {
-//     return false
-//   }
-//   return false
-// }
 
 const saveAccount = async () => {
   if (await checkConnection()) {
@@ -258,6 +253,12 @@ const gotoHome = () => {
   quasar.loading.hide()
   if (_currentpage.currentpage !== undefined) router.push(_currentpage.currentpage)
   else router.push('/register')
+
+  checkCompleteFullname()
+  checkCompleteUsername()
+  checkCompletePassword()
+  checkCompleteCPassword()
+  checkCompleteAccess()
 })()
 </script>
 
