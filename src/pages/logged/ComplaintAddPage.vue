@@ -12,10 +12,10 @@ q-page(padding)
     div.entry-group
       div.complaint-group
         section.form
-          component(:is="docSelection" text="Source Type" label="Select Type" :options="sourceEntryList" v-model:modelValue="sourceEntry")
+          component(:is="docSelection" text="Source Type" label="Select Type" :options="sourceEntryList" v-model:modelValue="sourceEntry" :alert="redSourceEntry")
 
         section.form
-          section.section
+          section.section--calendar
             span.form--label Date Received
             q-date(flat v-model="receivedDate" minimal color="$button" @click="formatDate").calendar
             component(v-if="formattedReceivedDate.length > 0" :is="docLabel" :text="formattedReceivedDate").form--label
@@ -66,12 +66,12 @@ q-page(padding)
     div.container
       div.left
         div.source
-          component(:is="docSelection" text="Source Type" label="Select Type" :options="sourceEntryList" v-model:modelValue="sourceEntry")
+          component(:is="docSelection" text="Source Type" label="Select Type" :options="sourceEntryList" v-model:modelValue="sourceEntry" :alert="redSourceEntry")
           br
-          section.section
+          section.section--calendar
             span.form--label Date Received
             q-date(flat v-model="receivedDate" minimal color="$button" @click="formatDate").calendar
-            component(v-if="formattedReceivedDate.length > 0" :is="docLabel" :text="formattedReceivedDate").form--label
+            component(v-if="formattedReceivedDate.length > 0" :is="docLabel" :text="formattedReceivedDate" ).form--label
             component(v-else :is="docLabel" text="No Date Selected").form--label
 
       div.right
@@ -130,7 +130,7 @@ q-dialog(v-model="dialogMissing" transition-show="flip-right" transition-hide="f
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { date, useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
 import { api } from 'boot/axios'
@@ -181,6 +181,17 @@ let _pagewithtable = usePageWithTable()
 const _isdemo = useIsDemo()
 
 let onlineColor = ref('')
+
+let redSourceEntry = ref(true)
+let redCalendar = ref(true)
+
+watch(sourceEntry, (item) => {
+  redSourceEntry.value = (item === 'Select Source' || item === '')
+})
+watch(formattedReceivedDate, (item) => {
+  const cal: HTMLElement | null = document.querySelector('.section--calendar')
+  cal.style.backgroundColor = (item.length > 0) ? 'rgba(12, 21, 42, 0.45)' : 'rgba(128, 21, 21, 0.45)'
+})
 
 const formatDate = () => {
   formattedReceivedDate.value = date.formatDate(Date.parse(receivedDate.value), 'MMMM D, YYYY')
@@ -603,6 +614,10 @@ const gotoComplaintDashboard = () => {
   border: 1px solid rgba(255, 255, 255, 0.125)
   padding: 1.2rem 2rem 1.2rem 1.2rem
   margin-bottom: 1rem
+
+.section--calendar
+  @extend .section
+  background-color: rgba(128, 21, 21, 0.45)
 
 .container
   display: grid
