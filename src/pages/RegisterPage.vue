@@ -10,11 +10,11 @@ q-page(padding)
   section.login.column.items-center
     transition(appear @before-enter="beforeEnterInputs" @enter="enterInputs")
       div.column.items-center
-        component(:is="docForm" text="Fullname" v-model:value="ifullname" :width=30 :mobileWidth=14 icon="badge" :alert="redFullname" :keypressEvent="checkCompleteFullname").login__username--input
-        component(:is="docForm" text="Username" v-model:value="iusername" :width=30 :mobileWidth=14 icon="person" :alert="redUsername" :keypressEvent="checkCompleteUsername").login__username--input
-        component(:is="docForm" text="Password" v-model:value="ipassword" :width=30 :mobileWidth=14 icon="lock" type="password" :alert="redPassword" :keypressEvent="checkCompletePassword").login__username--input
-        component(:is="docForm" text="Confirm Password" v-model:value="icpassword" :width=30 :mobileWidth=14 icon="lock" type="password" :alert="redCPassword" :keypressEvent="checkCompleteCPassword").login__username--input
-        component(:is="docList" text="Access" v-model:modelValue="accessList" icon="format_list_bulleted" :options="accessOption" :alert="redAccess" :keypressEvent="checkCompleteAccess").login__username--input
+        component(:is="docForm" text="Fullname" v-model:value="ifullname" :width=30 :mobileWidth=14 icon="badge" :alert="redFullname" ).login__username--input
+        component(:is="docForm" text="Username" v-model:value="iusername" :width=30 :mobileWidth=14 icon="person" :alert="redUsername" ).login__username--input
+        component(:is="docForm" text="Password" v-model:value="ipassword" :width=30 :mobileWidth=14 icon="lock" type="password" :alert="redPassword" ).login__username--input
+        component(:is="docForm" text="Confirm Password" v-model:value="icpassword" :width=30 :mobileWidth=14 icon="lock" type="password" :alert="redCPassword" ).login__username--input
+        component(:is="docList" text="Access" v-model:modelValue="accessList" icon="format_list_bulleted" :options="accessOption" :alert="redAccess" ).login__username--input
 
         //- span.login__username--label Access
         //- q-option-group(dark v-model="accessList" :options="accessOption" color="indigo-9" type="checkbox").login__username--option
@@ -129,6 +129,26 @@ let accessOption = ref([
 watch(accessList, (item) => {
   if (item.length === 0) redAccess.value = true
   else redAccess.value = false
+})
+
+watch(ifullname, (item) => {
+  if (!item) redFullname.value = true
+  else redFullname.value = false
+})
+
+watch(iusername, (item) => {
+  if (!item) redUsername.value = true
+  else redUsername.value = false
+})
+
+watch(ipassword, (item) => {
+  if (!item) redPassword.value = true
+  else redPassword.value = false
+})
+
+watch(icpassword, (item) => {
+  if (!item) redCPassword.value = true
+  else redCPassword.value = false
 })
 
 let dialog = ref(false)
