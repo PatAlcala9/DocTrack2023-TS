@@ -1,13 +1,13 @@
 <template lang="pug">
 
 div(v-if="$q.screen.width > 500")
-  section.full-width.row.inline.wrap.justify-start.items-start.content-start.section
+  section.full-width.row.inline.wrap.justify-start.items-start.content-start.section(:style="{ '--colorBackground': colorBackground }")
     section.column
       span.label {{text}}:
       q-select(filled dark :modelValue="props.modelValue" @update:modelValue="updateValue" :options="options" style="width: 250px" color="blue-10" behavior="menu" label-color="blue-1" item-aligned)
 
 div(v-else)
-  section.fit.column.wrap.justify-center.items-center.content-center.section
+  section.fit.column.wrap.justify-center.items-center.content-center.section(:style="{ '--colorBackground': colorBackground }")
     section.column.wrap.justify-center.items-center.content-center
       span.label {{text}}
       q-select(filled dark :modelValue="props.modelValue" @update:modelValue="updateValue" :options="options" style="width: 250px" color="blue-10" behavior="dialog" label-color="blue-1" item-aligned)
@@ -21,11 +21,13 @@ export interface Props {
   text: string
   modelValue: string
   options: string[]
+  alert: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   text: 'Label',
-  modelValue: ''
+  modelValue: '',
+  alert: false
 })
 
 const emit = defineEmits(['update:value'])
@@ -33,6 +35,10 @@ const emit = defineEmits(['update:value'])
 const updateValue = (modelValue: string) => {
   emit('update:modelValue', modelValue)
 }
+
+const colorBackground = computed(() => {
+  return props.alert ? 'rgba(128, 21, 21, 0.45)' : 'rgba(12, 21, 42, 0.45)'
+})
 
 const styleComponent = computed(() => {
   return {
@@ -69,7 +75,8 @@ const styleComponent = computed(() => {
 
 .section
   backdrop-filter: blur(9px) saturate(150%)
-  background-color: rgba(12, 21, 42, 0.45)
+  // background-color: rgba(12, 21, 42, 0.45)
+  background-color: var(--colorBackground)
   border-radius: 0.6rem
   border: 1px solid rgba(255, 255, 255, 0.125)
   padding: 1.2rem 2rem
