@@ -144,7 +144,7 @@ let userid = 0
 let employeeName = null
 let loginSuccess = false
 
-const version = ref('v 0.11')
+const version = ref('v 0.12')
 
 const showInquiry = async () => {
   await exitInquiry()
@@ -244,7 +244,7 @@ const getUserID = async () => {
   try {
     const response = await api.get('/api/GetUserID/' + usernameEntry.value.toUpperCase())
     const data = response.data
-    _employeeid.employeeid = (data !== undefined) ? data.result : 0
+    _employeeid.employeeid = data !== undefined ? data.result : 0
   } catch {
     _employeeid.employeeid = 0
   }
