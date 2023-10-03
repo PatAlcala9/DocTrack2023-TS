@@ -23,7 +23,7 @@ q-page(padding)
             //- component(:is="docCalendar" text="Date Received" v-model:modelValue="formattedReceivedDate" @click="formatDate")
 
         section.form
-          section.section
+          section.section--red
             component(:is="docLabel" text="Complaint Name:").label--spaced
             component(:is="docInputEntry" v-model:value="complaintName" )
 
@@ -75,38 +75,38 @@ q-page(padding)
             component(v-else :is="docLabel" text="No Date Selected").form--label
 
       div.right
-        section.section
+        section.section--cname
           component(:is="docLabel" text="Complaint Name:").label--spaced
           component(:is="docInputEntry" v-model:value="complaintName" alignment="left" width=100)
 
-        section.section
+        section.section--ccontact
           component(:is="docLabel" text="Complaint Contact:").label--spaced
           component(:is="docInputEntry" v-model:value="complaintContact" alignment="left" width=100)
 
-        section.section
+        section.section--clocation
           component(:is="docLabel" text="Complaint Location:").label--spaced
           component(:is="docInputEntry" v-model:value="complaintLocation" alignment="left" width=100)
 
-        section.section
+        section.section--cdetails
           component(:is="docLabel" text="Detail of Complaint:").label--spaced
           component(:is="docTextArea" v-model:value="complaintDetail" width="100" height="20")
 
         div.respondent-group
-          section.section
+          section.section--rname
             component(:is="docLabel" text="Respondent Name:").label--spaced
             component(:is="docInputEntry" v-model:value="respondentName" alignment="left" width="100")
 
-          section.section
+          section.section--rcontact
             component(:is="docLabel" text="Respondent Contact:").label--spaced
             component(:is="docInputEntry" v-model:value="respondentContact" alignment="left" width="100")
 
-          section.section
+          section.section--rlocation
             component(:is="docLabel" text="Respondent Location:").label--spaced
             component(:is="docInputEntry" v-model:value="respondentLocation" alignment="left" width="100")
 
         div.attachment-group
-          section.section
-          component(:is="docList" text="Attachments" :options="attachmentList" v-model:modelValue="attachmentSelectedList").label--spaced
+          section
+          component.section--list(:is="docList" text="Attachments" :options="attachmentList" v-model:modelValue="attachmentSelectedList").label--spaced
 
   div.flex.flex-center.button-area
     component(:is="docButton" text="Save" @click="saveData")
@@ -190,6 +190,38 @@ watch(sourceEntry, (item) => {
 })
 watch(formattedReceivedDate, (item) => {
   const cal: HTMLElement | null = document.querySelector('.section--calendar')
+  cal.style.backgroundColor = (item.length > 0) ? 'rgba(12, 21, 42, 0.45)' : 'rgba(128, 21, 21, 0.45)'
+})
+watch(complaintName, (item) => {
+  const cal: HTMLElement | null = document.querySelector('.section--cname')
+  cal.style.backgroundColor = (item.length > 0) ? 'rgba(12, 21, 42, 0.45)' : 'rgba(128, 21, 21, 0.45)'
+})
+watch(complaintContact, (item) => {
+  const cal: HTMLElement | null = document.querySelector('.section--ccontact')
+  cal.style.backgroundColor = (item.length > 0) ? 'rgba(12, 21, 42, 0.45)' : 'rgba(128, 21, 21, 0.45)'
+})
+watch(complaintLocation, (item) => {
+  const cal: HTMLElement | null = document.querySelector('.section--clocation')
+  cal.style.backgroundColor = (item.length > 0) ? 'rgba(12, 21, 42, 0.45)' : 'rgba(128, 21, 21, 0.45)'
+})
+watch(complaintDetail, (item) => {
+  const cal: HTMLElement | null = document.querySelector('.section--cdetails')
+  cal.style.backgroundColor = (item.length > 0) ? 'rgba(12, 21, 42, 0.45)' : 'rgba(128, 21, 21, 0.45)'
+})
+watch(respondentName, (item) => {
+  const cal: HTMLElement | null = document.querySelector('.section--rname')
+  cal.style.backgroundColor = (item.length > 0) ? 'rgba(12, 21, 42, 0.45)' : 'rgba(128, 21, 21, 0.45)'
+})
+watch(respondentContact, (item) => {
+  const cal: HTMLElement | null = document.querySelector('.section--rcontact')
+  cal.style.backgroundColor = (item.length > 0) ? 'rgba(12, 21, 42, 0.45)' : 'rgba(128, 21, 21, 0.45)'
+})
+watch(respondentLocation, (item) => {
+  const cal: HTMLElement | null = document.querySelector('.section--rlocation')
+  cal.style.backgroundColor = (item.length > 0) ? 'rgba(12, 21, 42, 0.45)' : 'rgba(128, 21, 21, 0.45)'
+})
+watch(attachmentSelectedList, (item) => {
+  const cal: HTMLElement | null = document.querySelector('.section--list')
   cal.style.backgroundColor = (item.length > 0) ? 'rgba(12, 21, 42, 0.45)' : 'rgba(128, 21, 21, 0.45)'
 })
 
@@ -615,8 +647,13 @@ const gotoComplaintDashboard = () => {
   padding: 1.2rem 2rem 1.2rem 1.2rem
   margin-bottom: 1rem
 
-.section--calendar
+
+.section--calendar, .section--cname, .section--ccontact, .section--clocation, .section--cdetails, .section--rname, .section--rcontact, .section--rlocation
   @extend .section
+  background-color: rgba(128, 21, 21, 0.45)
+
+.section--list
+  border-radius: 0.6rem
   background-color: rgba(128, 21, 21, 0.45)
 
 .container
