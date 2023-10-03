@@ -329,10 +329,16 @@ const getComplaintList2 = async () => {
         for (let i in data.result4) {
           const [result, result2] = await getLatestStatusNameIndividual2(data.result[i])
           arrayStatus.push(result)
-          // arrayStatus.push(await getLatestStatusNameIndividual2(data.result[i]))
 
           const remainingDays = (await calculateRemainingDays(result2)).toString()
-          arrayRemainingDays.push(arrayStatus[i].toString().includes('SERVED') ? remainingDays : '')
+          // arrayRemainingDays.push(arrayStatus[i].toString().includes('SERVED') ? remainingDays : '')
+          if (arrayStatus[i].toString() === 'FIRST NOTICE OF VIOLATION SERVED') {
+            arrayRemainingDays.push(remainingDays)
+          } else if (arrayStatus[i].toString().includes('WORK STOPPAGE ORDER SERVED')) {
+            arrayRemainingDays.push('')
+          } else {
+            arrayRemainingDays.push('')
+          }
         }
 
         complaintList.value.result4 = arrayStatus
