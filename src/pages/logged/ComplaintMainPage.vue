@@ -45,27 +45,27 @@ q-page(padding)
               th Update
           tbody
             tr(v-for="(item, index) in complaintList.result" :key="item").table-content-group
-              td(v-if="complaintList.result5[index].includes('-')" style="background-color: rgba(128, 21, 21, 0.45)") {{item}}
+              td(v-if="complaintList.result5[index].includes('-') || complaintList.result5[index] === '0'" style="background-color: rgba(128, 21, 21, 0.45)") {{item}}
               td(v-else) {{ item }}
 
-              td(v-if="complaintList.result5[index].includes('-')" style="background-color: rgba(128, 21, 21, 0.45)") {{complaintList.result2[index]}}
+              td(v-if="complaintList.result5[index].includes('-') || complaintList.result5[index] === '0'" style="background-color: rgba(128, 21, 21, 0.45)") {{complaintList.result2[index]}}
               td(v-else) {{ complaintList.result2[index] }}
 
-              td(v-if="complaintList.result5[index].includes('-')" style="background-color: rgba(128, 21, 21, 0.45)") {{complaintList.result3[index]}}
+              td(v-if="complaintList.result5[index].includes('-') || complaintList.result5[index] === '0'" style="background-color: rgba(128, 21, 21, 0.45)") {{complaintList.result3[index]}}
               td(v-else) {{ complaintList.result3[index] }}
 
-              td(v-if="complaintList.result5[index].includes('-')" style="background-color: rgba(128, 21, 21, 0.45); cursor: pointer" @click="changeStatus(item, complaintList.result4[index])") {{complaintList.result4[index]}}
+              td(v-if="complaintList.result5[index].includes('-') || complaintList.result5[index] === '0'" style="background-color: rgba(128, 21, 21, 0.45); cursor: pointer" @click="changeStatus(item, complaintList.result4[index])") {{complaintList.result4[index]}}
               td(v-else @click="changeStatus(item, complaintList.result4[index])" style="cursor: pointer") {{complaintList.result4[index]}}
 
-              td(v-if="complaintList.result5[index].includes('-')" style="background-color: rgba(128, 21, 21, 0.45)") {{complaintList.result5[index]}}
+              td(v-if="complaintList.result5[index].includes('-') || complaintList.result5[index] === '0'" style="background-color: rgba(128, 21, 21, 0.45)") {{complaintList.result5[index]}}
               td(v-else) {{complaintList.result5[index]}}
 
-              td(v-if="complaintList.result5[index].includes('-')" style="background-color: rgba(128, 21, 21, 0.45)")
+              td(v-if="complaintList.result5[index].includes('-') || complaintList.result5[index] === '0'" style="background-color: rgba(128, 21, 21, 0.45)")
                 q-btn(rounded size="sm" color="button" label="show" :ripple="false" @click="getComplaintSpecific(item, false, true)").button-view
               td(v-else)
                 q-btn(rounded size="sm" color="button" label="show" :ripple="false" @click="getComplaintSpecific(item, false, true)").button-view
 
-              td(v-if="complaintList.result5[index].includes('-')" style="background-color: rgba(128, 21, 21, 0.45)")
+              td(v-if="complaintList.result5[index].includes('-') || complaintList.result5[index] === '0'" style="background-color: rgba(128, 21, 21, 0.45)")
                 q-btn(rounded size="sm" color="button" label="edit" :ripple="false" @click="getComplaintSpecific(item, true, true)").button-view
               td(v-else)
                 q-btn(rounded size="sm" color="button" label="edit" :ripple="false" @click="getComplaintSpecific(item, true, true)").button-view
@@ -236,6 +236,7 @@ import docInfo from 'components/docInfo.vue'
 import docInfoEdit from 'components/docInfoEdit.vue'
 import docLabel from 'components/docLabel.vue'
 import docPDF2 from 'components/docPDF2.vue'
+import { parseDate } from 'pdf-lib'
 
 let searchValue = ref('')
 let nodata = ref(true)
@@ -329,13 +330,19 @@ const getComplaintList2 = async () => {
         for (let i in data.result4) {
           const [result, result2] = await getLatestStatusNameIndividual2(data.result[i])
           arrayStatus.push(result)
-
+          // const expirationDate =
+          console.log('result2', result2)
+          // const expirationDate = parseDate(result2) + 15
+          const expirationDate = new Date(result2)
+          expirationDate.setDate(expirationDate.getDate() + 15)
+          console.log('expirationDate', expirationDate)
           const remainingDays = (await calculateRemainingDays(result2)).toString()
           // arrayRemainingDays.push(arrayStatus[i].toString().includes('SERVED') ? remainingDays : '')
+
           if (arrayStatus[i].toString() === 'FIRST NOTICE OF VIOLATION SERVED') {
             arrayRemainingDays.push(remainingDays)
           } else if (arrayStatus[i].toString().includes('WORK STOPPAGE ORDER SERVED')) {
-            arrayRemainingDays.push('')
+            arrayRemainingDays.push(remainingDays)
           } else {
             arrayRemainingDays.push('')
           }
@@ -415,13 +422,37 @@ const calculateRemainingDays = async (expiry: string): Promise<number> => {
     const remainingDays = parseInt(expiryDate) - parseInt(today)
     const currentDayOfWeek = new Date().getDay()
     const remainingWeekdays = Math.max(remainingDays - Math.floor(remainingDays / 7) * 2, 0)
-
+    console.log('remainingDays', remainingDays)
     let adjustedRemainingDays = remainingWeekdays
     if (currentDayOfWeek === 6) {
       adjustedRemainingDays = Math.max(remainingWeekdays - 1, 0)
     } else if (currentDayOfWeek === 0) {
       adjustedRemainingDays = Math.max(remainingWeekdays - 2, 0)
     }
+    console.log('adjustedRemainingDays', adjustedRemainingDays)
+    return adjustedRemainingDays
+  } else return parseInt(expiryDate) - parseInt(today)
+}
+
+const calculateRemainingDays2 = async (status: string): Promise<number> => {
+  const today = date.formatDate(new Date(), 'DDD')
+  let expiryDate
+
+  if (status === 'FIRST NOTICE OF VIOLATION SERVED') {
+    expiryDate = 15
+    console.log('parseInt(today)', parseInt(today))
+
+    const remainingDays = parseInt(expiryDate) - parseInt(today)
+    const currentDayOfWeek = new Date().getDay()
+    const remainingWeekdays = Math.max(remainingDays - Math.floor(remainingDays / 7) * 2, 0)
+    console.log('remainingDays', remainingDays)
+    let adjustedRemainingDays = remainingWeekdays
+    if (currentDayOfWeek === 6) {
+      adjustedRemainingDays = Math.max(remainingWeekdays - 1, 0)
+    } else if (currentDayOfWeek === 0) {
+      adjustedRemainingDays = Math.max(remainingWeekdays - 2, 0)
+    }
+    console.log('adjustedRemainingDays', adjustedRemainingDays)
     return adjustedRemainingDays
   } else return parseInt(expiryDate) - parseInt(today)
 }
