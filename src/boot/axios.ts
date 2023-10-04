@@ -29,6 +29,15 @@ const api = axios.create({
 //   },
 // })
 
+// const api = axios.create({
+//   baseURL: 'https://ncyhljvhdyblusgeqzre.supabase.co/rest/v1',
+//   headers: {
+//     'X-Requested-With': 'XMLHttpRequest',
+//     Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5jeWhsanZoZHlibHVzZ2VxenJlIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTYzNDAyNDgsImV4cCI6MjAxMTkxNjI0OH0.1ENfnJGp10NYpkxpy15PXD--cyvNJUQJbk6hwzvvum0',
+//     apikey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5jeWhsanZoZHlibHVzZ2VxenJlIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTYzNDAyNDgsImV4cCI6MjAxMTkxNjI0OH0.1ENfnJGp10NYpkxpy15PXD--cyvNJUQJbk6hwzvvum0',
+//   },
+// })
+
 axiosRetry(api, { retries: 3 })
 
 export default boot(({ app }) => {
