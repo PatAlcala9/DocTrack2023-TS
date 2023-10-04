@@ -327,9 +327,11 @@ const getComplaintList2 = async () => {
         complaintList.value.result3 = data.result3
 
         for (let i in data.result4) {
-          arrayStatus.push(await getLatestStatusNameIndividual(data.result[i]))
+          const [result, result2] = await getLatestStatusNameIndividual2(data.result[i])
+          arrayStatus.push(result)
+          // arrayStatus.push(await getLatestStatusNameIndividual2(data.result[i]))
 
-          const remainingDays = (await calculateRemainingDays(data.result4[i])).toString()
+          const remainingDays = (await calculateRemainingDays(result2)).toString()
           arrayRemainingDays.push(arrayStatus[i].toString().includes('SERVED') ? remainingDays : '')
         }
 
@@ -358,6 +360,17 @@ const getLatestStatusNameIndividual = async (code: string): Promise<string> => {
     return data?.result.toString() || ''
   } catch {
     return ''
+  }
+}
+
+const getLatestStatusNameIndividual2 = async (code: string): Promise<[string, string]> => {
+  try {
+    const response = await api.get('/api/GetLatestStatusNameIndividual2/' + code)
+    const data = response.data.length !== 0 ? response.data : null
+
+    return [data?.result.toString(), data?.result2.toString()] || ['','']
+  } catch {
+    return ['', '']
   }
 }
 
