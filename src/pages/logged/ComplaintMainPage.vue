@@ -46,27 +46,36 @@ q-page(padding)
           tbody
             tr(v-for="(item, index) in complaintList.result" :key="item").table-content-group
               td(v-if="complaintList.result5[index].includes('-') || complaintList.result5[index] === '0'" style="background-color: rgba(128, 21, 21, 0.45)") {{item}}
+              td(v-else-if="complaintList.result5[index] === '1' || complaintList.result5[index] === '2'" style="background-color: rgba(255, 244, 99, 0.45)") {{item}}
               td(v-else) {{ item }}
 
               td(v-if="complaintList.result5[index].includes('-') || complaintList.result5[index] === '0'" style="background-color: rgba(128, 21, 21, 0.45)") {{complaintList.result2[index]}}
+              td(v-else-if="complaintList.result5[index] === '1' || complaintList.result5[index] === '2'" style="background-color: rgba(255, 244, 99, 0.45)") {{complaintList.result2[index]}}
               td(v-else) {{ complaintList.result2[index] }}
 
               td(v-if="complaintList.result5[index].includes('-') || complaintList.result5[index] === '0'" style="background-color: rgba(128, 21, 21, 0.45)") {{complaintList.result3[index]}}
+              td(v-else-if="complaintList.result5[index] === '1' || complaintList.result5[index] === '2'" style="background-color: rgba(255, 244, 99, 0.45)") {{complaintList.result3[index]}}
               td(v-else) {{ complaintList.result3[index] }}
 
               td(v-if="complaintList.result5[index].includes('-') || complaintList.result5[index] === '0'" style="background-color: rgba(128, 21, 21, 0.45); cursor: pointer" @click="changeStatus(item, complaintList.result4[index])") {{complaintList.result4[index]}}
+              td(v-else-if="complaintList.result5[index] === '1' || complaintList.result5[index] === '2'" style="background-color: rgba(255, 244, 99, 0.45); cursor: pointer" @click="changeStatus(item, complaintList.result4[index])") {{complaintList.result4[index]}}
               td(v-else @click="changeStatus(item, complaintList.result4[index])" style="cursor: pointer") {{complaintList.result4[index]}}
 
               td(v-if="complaintList.result5[index].includes('-') || complaintList.result5[index] === '0'" style="background-color: rgba(128, 21, 21, 0.45)") {{complaintList.result5[index]}}
+              td(v-else-if="complaintList.result5[index] === '1' || complaintList.result5[index] === '2'" style="background-color: rgba(255, 244, 99, 0.45)") {{complaintList.result5[index]}}
               td(v-else) {{complaintList.result5[index]}}
 
               td(v-if="complaintList.result5[index].includes('-') || complaintList.result5[index] === '0'" style="background-color: rgba(128, 21, 21, 0.45)")
+                q-btn(rounded size="sm" color="button" label="show" :ripple="false" @click="getComplaintSpecific(item, false, true)").button-view
+              td(v-else-if="complaintList.result5[index] === '1' || complaintList.result5[index] === '2'" style="background-color: rgba(255, 244, 99, 0.45)")
                 q-btn(rounded size="sm" color="button" label="show" :ripple="false" @click="getComplaintSpecific(item, false, true)").button-view
               td(v-else)
                 q-btn(rounded size="sm" color="button" label="show" :ripple="false" @click="getComplaintSpecific(item, false, true)").button-view
 
               td(v-if="complaintList.result5[index].includes('-') || complaintList.result5[index] === '0'" style="background-color: rgba(128, 21, 21, 0.45)")
                 q-btn(rounded size="sm" color="button" label="edit" :ripple="false" @click="getComplaintSpecific(item, true, true)").button-view
+              td(v-else-if="complaintList.result5[index] === '1' || complaintList.result5[index] === '2'" style="background-color: rgba(255, 244, 99, 0.45)")
+                q-btn(rounded size="sm" color="button" label="show" :ripple="false" @click="getComplaintSpecific(item, true, true)").button-view
               td(v-else)
                 q-btn(rounded size="sm" color="button" label="edit" :ripple="false" @click="getComplaintSpecific(item, true, true)").button-view
 
@@ -328,24 +337,25 @@ const getComplaintList2 = async () => {
         complaintList.value.result3 = data.result3
 
         for (let i in data.result4) {
-          const [result, result2] = await getLatestStatusNameIndividual2(data.result[i])
+          const [result, result2, result3] = await getLatestStatusNameIndividual2(data.result[i])
+
           arrayStatus.push(result)
-          // const expirationDate =
-          console.log('result2', result2)
-          // const expirationDate = parseDate(result2) + 15
-          const expirationDate = new Date(result2)
-          expirationDate.setDate(expirationDate.getDate() + 15)
-          console.log('expirationDate', expirationDate)
-          const remainingDays = (await calculateRemainingDays(result2)).toString()
+          const transactedDate = new Date(result2)
+          const expirationDate = new Date(result3)
+          const expirationGap = parseInt(date.formatDate(expirationDate, 'DDD')) - parseInt(date.formatDate(new Date(), 'DDD'))
+
+          // expirationDate.setDate(expirationDate.getDate() + 15)
+          // const remainingDays = (await calculateRemainingDays2(result2)).toString()
           // arrayRemainingDays.push(arrayStatus[i].toString().includes('SERVED') ? remainingDays : '')
 
-          if (arrayStatus[i].toString() === 'FIRST NOTICE OF VIOLATION SERVED') {
-            arrayRemainingDays.push(remainingDays)
-          } else if (arrayStatus[i].toString().includes('WORK STOPPAGE ORDER SERVED')) {
-            arrayRemainingDays.push(remainingDays)
-          } else {
-            arrayRemainingDays.push('')
-          }
+          // if (arrayStatus[i].toString() === 'FIRST NOTICE OF VIOLATION SERVED') {
+          //   arrayRemainingDays.push(remainingDays)
+          // } else if (arrayStatus[i].toString().includes('WORK STOPPAGE ORDER SERVED')) {
+          //   arrayRemainingDays.push(remainingDays)
+          // } else {
+          //   arrayRemainingDays.push('')
+          // }
+          arrayRemainingDays.push(expirationGap.toString())
         }
 
         complaintList.value.result4 = arrayStatus
@@ -376,14 +386,14 @@ const getLatestStatusNameIndividual = async (code: string): Promise<string> => {
   }
 }
 
-const getLatestStatusNameIndividual2 = async (code: string): Promise<[string, string]> => {
+const getLatestStatusNameIndividual2 = async (code: string): Promise<[string, string, string]> => {
   try {
     const response = await api.get('/api/GetLatestStatusNameIndividual2/' + code)
     const data = response.data.length !== 0 ? response.data : null
 
-    return [data?.result.toString(), data?.result2.toString()] || ['','']
+    return [data?.result.toString(), data?.result2.toString(), data?.result3.toString()] || ['','', '']
   } catch {
-    return ['', '']
+    return ['', '', '']
   }
 }
 
@@ -445,14 +455,14 @@ const calculateRemainingDays2 = async (status: string): Promise<number> => {
     const remainingDays = expiryDate + parseInt(today)
     const currentDayOfWeek = new Date().getDay()
     const remainingWeekdays = Math.max(remainingDays - Math.floor(remainingDays / 7) * 2, 0)
-    console.log('remainingDays', remainingDays)
+
     let adjustedRemainingDays = remainingWeekdays
     if (currentDayOfWeek === 6) {
       adjustedRemainingDays = Math.max(remainingWeekdays - 1, 0)
     } else if (currentDayOfWeek === 0) {
       adjustedRemainingDays = Math.max(remainingWeekdays - 2, 0)
     }
-    console.log('adjustedRemainingDays', adjustedRemainingDays)
+
     return adjustedRemainingDays
   } else return parseInt(expiryDate) - parseInt(today)
 }
