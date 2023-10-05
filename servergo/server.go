@@ -1287,6 +1287,7 @@ func connect() {
 			Data5 string `json:"data5"`
 			Data6 string `json:"data6"`
 			Data7 string `json:"data7"`
+            Data8 string `json:"data8"`
 		}
 		var statusData StatusData
 		if err := c.ShouldBindJSON(&statusData); err != nil {
@@ -1303,13 +1304,13 @@ func connect() {
 
 		decodedStatus := strings.Replace(statusData.Data3, "~", "/", -1)
 
-		dbpost, err := db.Prepare("INSERT INTO complaint_status (complaint_statusid, complaint_code, date_transacted, status, tagcode, tagword, received_by, remarks) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?)")
+		dbpost, err := db.Prepare("INSERT INTO complaint_status (complaint_statusid, complaint_code, date_transacted, status, tagcode, tagword, received_by, remarks, date_expiration) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?)")
 		if err != nil {
 			panic(err.Error())
 		}
 		defer dbpost.Close()
 
-		exec, err := dbpost.Exec(statusData.Data, statusData.Data2, decodedStatus, statusData.Data4, statusData.Data5, statusData.Data6, statusData.Data7)
+		exec, err := dbpost.Exec(statusData.Data, statusData.Data2, decodedStatus, statusData.Data4, statusData.Data5, statusData.Data6, statusData.Data7, statusData.Data8)
 		if err != nil {
 			panic(err.Error())
 		}
