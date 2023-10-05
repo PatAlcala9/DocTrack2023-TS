@@ -1017,8 +1017,8 @@ func connect() {
 			})
 
 		} else if method == "GetLatestStatusNameIndividual2" {
-            var result2 string
-			err = db.QueryRow("SELECT status AS result, date_transacted AS result2 FROM complaint_status WHERE complaint_code = ? AND complaint_statusid = (SELECT MAX(complaint_statusid) FROM complaint_status WHERE complaint_code = ?)", data, data).Scan(&result, &result2)
+            var result2, result3 string
+			err = db.QueryRow("SELECT status AS result, date_transacted AS result2, date_expiration AS result3 FROM complaint_status WHERE complaint_code = ? AND complaint_statusid = (SELECT MAX(complaint_statusid) FROM complaint_status WHERE complaint_code = ?)", data, data).Scan(&result, &result2, &result3)
 			if err != nil {
 				panic(err.Error())
 			}
@@ -1026,6 +1026,7 @@ func connect() {
 			c.JSON(http.StatusOK, gin.H{
 				"result": result,
                 "result2": result2,
+                "result3": result3,
 			})
 
 		} else if method == "GetWorkStoppageDetails" {
