@@ -442,7 +442,7 @@ const calculateRemainingDays2 = async (status: string): Promise<number> => {
     expiryDate = 15
     console.log('parseInt(today)', parseInt(today))
 
-    const remainingDays = parseInt(expiryDate) - parseInt(today)
+    const remainingDays = expiryDate + parseInt(today)
     const currentDayOfWeek = new Date().getDay()
     const remainingWeekdays = Math.max(remainingDays - Math.floor(remainingDays / 7) * 2, 0)
     console.log('remainingDays', remainingDays)
@@ -561,16 +561,57 @@ const getStatusSpecific = async (whereabout: string): Promise<boolean> => {
   }
 }
 
-const postStatus = async (code: string, date: string, newstatus: string, tagcode: string, tagword: string, receivedby: string, details: string): Promise<boolean> => {
+const postStatus = async (code: string, receiveddate: string, newstatus: string, tagcode: string, tagword: string, receivedby: string, details: string): Promise<boolean> => {
   const encodedStatus = newstatus.replace('/', '~')
+  let expirationGap = 0
+
+  switch (newstatus) {
+    case 'FIRST NOTICE OF VIOLATION SERVED':
+      expirationGap  = 15
+      break
+    case 'FINAL NOTICE OF VIOLATION SERVED':
+      expirationGap  = 15
+      break
+    case 'SECOND NOTICE OF VIOLATION AND WORK STOPPAGE ORDER SERVED':
+      expirationGap = 5
+      break
+    case 'CALL FOR DIALOGUE':
+      expirationGap = 5
+      break
+    case 'FOR NOTICE OF HEARING':
+      expirationGap = 5
+      break
+    case 'CASE FILED':
+      expirationGap = 15
+      break
+    case 'FINAL EXECUTORY':
+      expirationGap = 15
+      break
+    case 'RESOLUTION ORDER':
+      expirationGap = 15
+      break
+    case 'HEARING':
+      expirationGap = 15
+      break
+    default:
+      expirationGap = 0
+      break
+  }
+
+  const expirationDate = parseInt(date.formatDate(receiveddate, 'DDD')) + expirationGap
+  const base = new Date (new Date().getFullYear(), 0, 1)
+  const expirationDateCombine = date.addToDate(base, { days: expirationDate })
+  const expirationDateFormat = date.formatDate(expirationDateCombine, 'YYYY-MM-DD')
+
   const response = await api.post('/api/PostStatus', {
     data: code,
-    data2: date,
+    data2: receiveddate,
     data3: encodedStatus,
     data4: tagcode,
     data5: tagword,
     data6: receivedby,
     data7: details,
+    data8: expirationDateFormat
   })
   const data = response.data.length !== 0 ? response.data : null
 
