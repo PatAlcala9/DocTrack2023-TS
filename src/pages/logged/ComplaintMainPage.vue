@@ -133,7 +133,7 @@ q-dialog(full-width full-height v-model="dialog" transition-show="flip-right" tr
       div.status
         component(:is="docInfo" label="Status" :value="dialogStatus" left)
       div.generate
-        component(:is="docPDF2" title="Sample Document PDF" text="Generate PDF" date="July 12, 2023")
+        component(:is="docPDF2" title="Work Stoppage" :code="dialogCode" text="Generate PDF" :date="today")
 
       div.complaintant
         component(:is="docInfo" label="Complaintant" :value="dialogName" left)
@@ -229,6 +229,7 @@ import { useCurrentPage } from 'stores/currentpage'
 import { useIsDemo } from 'stores/isdemo'
 import { useEmployeeName } from 'stores/employeename'
 import { useEmployeeID } from 'stores/employeeid'
+import { todayDate } from 'src/js/functions'
 
 const router = useRouter()
 const quasar = useQuasar()
@@ -282,6 +283,8 @@ let statusListTagword: Ref<string[]> = ref([])
 let statusListTagcode: Ref<string[]> = ref([])
 let statusLabel = ref('')
 let statusRemarks = ref('')
+
+let today = ref(date.formatDate(new Date(), 'MMMM DD, YYYY'))
 
 type Complaint = {
   result: string
@@ -344,17 +347,6 @@ const getComplaintList2 = async () => {
           const expirationDate = new Date(result3)
           const expirationGap = parseInt(date.formatDate(expirationDate, 'DDD')) - parseInt(date.formatDate(new Date(), 'DDD'))
 
-          // expirationDate.setDate(expirationDate.getDate() + 15)
-          // const remainingDays = (await calculateRemainingDays2(result2)).toString()
-          // arrayRemainingDays.push(arrayStatus[i].toString().includes('SERVED') ? remainingDays : '')
-
-          // if (arrayStatus[i].toString() === 'FIRST NOTICE OF VIOLATION SERVED') {
-          //   arrayRemainingDays.push(remainingDays)
-          // } else if (arrayStatus[i].toString().includes('WORK STOPPAGE ORDER SERVED')) {
-          //   arrayRemainingDays.push(remainingDays)
-          // } else {
-          //   arrayRemainingDays.push('')
-          // }
           arrayRemainingDays.push(expirationGap.toString())
         }
 
@@ -391,7 +383,7 @@ const getLatestStatusNameIndividual2 = async (code: string): Promise<[string, st
     const response = await api.get('/api/GetLatestStatusNameIndividual2/' + code)
     const data = response.data.length !== 0 ? response.data : null
 
-    return [data?.result.toString(), data?.result2.toString(), data?.result3.toString()] || ['','', '']
+    return [data?.result.toString(), data?.result2.toString(), data?.result3.toString()] || ['', '', '']
   } catch {
     return ['', '', '']
   }
@@ -571,37 +563,46 @@ const getStatusSpecific = async (whereabout: string): Promise<boolean> => {
   }
 }
 
+// const isWeekday = (date: string) => {
+//   const cDate = new Date(date)
+//   return cDate.getDay() !== 0 && cDate.getDay() !== 6;
+// }
+
 const postStatus = async (code: string, receiveddate: string, newstatus: string, tagcode: string, tagword: string, receivedby: string, details: string): Promise<boolean> => {
   const encodedStatus = newstatus.replace('/', '~')
   let expirationGap = 0
 
   switch (newstatus) {
     case 'FIRST NOTICE OF VIOLATION SERVED':
-      expirationGap  = 15
+      // const dayOfWeek = date.formatDate(receiveddate, 'd')
+      // if (dayOfWeek === 1) {
+      //   expirationGap  = 21
+      // }
+      expirationGap = 21
       break
     case 'FINAL NOTICE OF VIOLATION SERVED':
-      expirationGap  = 15
+      expirationGap = 21
       break
     case 'SECOND NOTICE OF VIOLATION AND WORK STOPPAGE ORDER SERVED':
-      expirationGap = 5
+      expirationGap = 7
       break
     case 'CALL FOR DIALOGUE':
-      expirationGap = 5
+      expirationGap = 7
       break
     case 'FOR NOTICE OF HEARING':
-      expirationGap = 5
+      expirationGap = 7
       break
     case 'CASE FILED':
-      expirationGap = 15
+      expirationGap = 21
       break
     case 'FINAL EXECUTORY':
-      expirationGap = 15
+      expirationGap = 21
       break
     case 'RESOLUTION ORDER':
-      expirationGap = 15
+      expirationGap = 21
       break
     case 'HEARING':
-      expirationGap = 15
+      expirationGap = 21
       break
     default:
       expirationGap = 0
@@ -609,7 +610,7 @@ const postStatus = async (code: string, receiveddate: string, newstatus: string,
   }
 
   const expirationDate = parseInt(date.formatDate(receiveddate, 'DDD')) + expirationGap
-  const base = new Date (new Date().getFullYear(), 0, 1)
+  const base = new Date(new Date().getFullYear(), 0, 1)
   const expirationDateCombine = date.addToDate(base, { days: expirationDate })
   const expirationDateFormat = date.formatDate(expirationDateCombine, 'YYYY-MM-DD')
 
@@ -621,7 +622,7 @@ const postStatus = async (code: string, receiveddate: string, newstatus: string,
     data5: tagword,
     data6: receivedby,
     data7: details,
-    data8: expirationDateFormat
+    data8: expirationDateFormat,
   })
   const data = response.data.length !== 0 ? response.data : null
 
