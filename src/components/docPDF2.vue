@@ -18,6 +18,7 @@ import { ref } from 'vue'
 
 export interface Props {
   title: string
+  code: string
   text: string
   content: string
   date: string
@@ -30,6 +31,7 @@ export interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   title: 'Generated Document',
+  code: '00-0-0000',
   text: 'Sample Text',
   content: 'Sample Content',
   type: 'First Notice of Violation',
@@ -224,6 +226,6 @@ const createPDF = async () => {
 
   doc.addImage(qrLink.href, 'PNG', 180, sentence2Y + 48, 25, 25, 'qr', 'NONE', 0)
 
-  doc.save('sample.pdf')
+  doc.save(`${props.title} - ${props.code}`)
 }
 </script>
