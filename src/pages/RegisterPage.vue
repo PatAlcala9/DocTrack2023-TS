@@ -124,6 +124,10 @@ let accessOption = ref([
     label: 'Complaint',
     value: 'is_complaint',
   },
+  {
+    label: 'Complaint Inspector',
+    value: 'is_complaintinspector',
+  },
 ])
 
 watch(accessList, (item) => {
@@ -226,6 +230,7 @@ const saveAccount = async () => {
         let iinventory = accessList.value.includes('is_inventory') ? 1 : 0
         let iothers = accessList.value.includes('is_otherdocuments') ? 1 : 0
         let icomplaint = accessList.value.includes('is_complaint') ? 1 : 0
+        let icomplaintinspector = accessList.value.includes('is_complaintinspector') ? 1 : 0
 
         const response = await api.post('/api/PostAccount', {
           data: ifullname.value.toUpperCase(),
@@ -237,6 +242,7 @@ const saveAccount = async () => {
           data7: iinventory,
           data8: iothers,
           data9: icomplaint,
+          data10: icomplaintinspector,
         })
 
         const data = response.data
