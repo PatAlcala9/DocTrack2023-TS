@@ -233,6 +233,7 @@ const getUserDetails = async () => {
       if (data.result6 === '1') _access.access.push('inventory')
       if (data.result7 === '1') _access.access.push('otherdocuments')
       if (data.result8 === '1') _access.access.push('complaint')
+      if (data.result9 === '1') _access.access.push('inspector')
       detailsAllowed = true
     }
   } catch {
@@ -262,6 +263,7 @@ const login = async () => {
     _access.access.push('inventory')
     _access.access.push('otherdocuments')
     _access.access.push('complaint')
+    _access.access.push('inspector')
     _isdemo.isdemo = true
     await setDemo()
     _islogged.islogged = true
