@@ -758,9 +758,9 @@ func connect() {
 			})
 
 		} else if method == "GetUserDetails" {
-			var result2, result3, result4, result5, result6, result7, result8 string
+			var result2, result3, result4, result5, result6, result7, result8, result9 string
 
-			err = db.QueryRow("SELECT userid AS result, employeeName AS result2, is_incoming AS result3, is_outgoing AS result4, is_releasing AS result5, is_inventory AS result6, is_otherdocuments AS result7, is_complaint AS result8 FROM user WHERE username = ?", data).Scan(&result, &result2, &result3, &result4, &result5, &result6, &result7, &result8)
+			err = db.QueryRow("SELECT userid AS result, employeeName AS result2, is_incoming AS result3, is_outgoing AS result4, is_releasing AS result5, is_inventory AS result6, is_otherdocuments AS result7, is_complaint AS result8, is_complaintinspector AS result9 FROM user WHERE username = ?", data).Scan(&result, &result2, &result3, &result4, &result5, &result6, &result7, &result8, &result9)
 			if err != nil {
 				panic(err.Error())
 			}
@@ -774,6 +774,7 @@ func connect() {
 				"result6": result6,
 				"result7": result7,
 				"result8": result8,
+                "result9": result9,
 			})
 
 		} else if method == "GetMaxEntryCode" {
@@ -1103,6 +1104,7 @@ func connect() {
 			Data7 int    `json:"data7"`
 			Data8 int    `json:"data8"`
 			Data9 int    `json:"data9"`
+            Data10 int    `json:"data10"`
 		}
 		var accountData AccountData
 		if err := c.ShouldBindJSON(&accountData); err != nil {
@@ -1117,13 +1119,13 @@ func connect() {
 		c.Writer.Header().Set("X-Download-Options", "noopen")
 		c.Writer.Header().Set("Referrer-Policy", "no-referrer")
 
-		dbpost, err := db.Prepare("INSERT INTO user (userid, employeeName, username, password, is_incoming, is_outgoing, is_releasing, is_inventory, is_otherdocuments, is_monitoring, is_admin, is_complaint) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, ?)")
+		dbpost, err := db.Prepare("INSERT INTO user (userid, employeeName, username, password, is_incoming, is_outgoing, is_releasing, is_inventory, is_otherdocuments, is_monitoring, is_admin, is_complaint, is_complaintinspector) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, ?, ?)")
 		if err != nil {
 			panic(err.Error())
 		}
 		defer dbpost.Close()
 
-		exec, err := dbpost.Exec(accountData.Data, accountData.Data2, accountData.Data3, accountData.Data4, accountData.Data5, accountData.Data6, accountData.Data7, accountData.Data8, accountData.Data9)
+		exec, err := dbpost.Exec(accountData.Data, accountData.Data2, accountData.Data3, accountData.Data4, accountData.Data5, accountData.Data6, accountData.Data7, accountData.Data8, accountData.Data9, accountData.Data10)
 		if err != nil {
 			panic(err.Error())
 		}
