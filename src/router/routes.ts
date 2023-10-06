@@ -26,6 +26,7 @@ const routes: RouteRecordRaw[] = [
       { path: '/complaint', component: () => import('pages/logged/ComplaintDashboardPage.vue') },
       { path: '/complaintmain', component: () => import('pages/logged/ComplaintMainPage.vue') },
       { path: '/complaintadd', component: () => import('pages/logged/ComplaintAddPage.vue') },
+      { path: '/complaintinspect', component: () => import('pages/logged/ComplaintInspectionPage.vue') },
     ],
   },
 

@@ -16,7 +16,7 @@ q-page(padding)
       component(:is="docMenu" text="Add New" icon="add_box" @click="gotoComplaintAdd")
 
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton" v-if="_access.access.includes('inspector')")
-      component(:is="docMenu" text="Add Inspection" icon="add_box" @click="gotoComplaintAdd")
+      component(:is="docMenu" text="Add Inspection" icon="add_box" @click="gotoComplaintInspection")
 
 </template>
 
@@ -37,8 +37,6 @@ const _currentpage = useCurrentPage()
 const _pagewithtable = usePageWithTable()
 const _isdemo = useIsDemo()
 const _access = useAccess()
-
-console.log('_access', _access.access)
 
 let onlineColor = ref('')
 
@@ -64,6 +62,12 @@ const gotoComplaintAdd = () => {
   _pagewithtable.pagewithtable = true
   _currentpage.currentpage = 'complaintadd'
   router.push('/complaintadd')
+}
+
+const gotoComplaintInspection = () => {
+  _pagewithtable.pagewithtable = true
+  _currentpage.currentpage = 'complaintinspect'
+  router.push('/complaintinspect')
 }
 
 const gotoMenu = () => {
