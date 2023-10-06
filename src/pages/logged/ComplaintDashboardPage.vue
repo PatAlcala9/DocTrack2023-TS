@@ -12,8 +12,11 @@ q-page(padding)
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
       component(:is="docMenu" text="View List" icon="fact_check" @click="gotoComplaintInquire")
 
-    transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
+    transition(appear @before-enter="beforeEnterButton" @enter="enterButton" v-if="_access.access.includes('complaint')")
       component(:is="docMenu" text="Add New" icon="add_box" @click="gotoComplaintAdd")
+
+    transition(appear @before-enter="beforeEnterButton" @enter="enterButton" v-if="_access.access.includes('inspector')")
+      component(:is="docMenu" text="Add Inspection" icon="add_box" @click="gotoComplaintAdd")
 
 </template>
 
@@ -24,6 +27,7 @@ import { useCurrentPage } from 'stores/currentpage'
 import { usePageWithTable } from 'stores/pagewithtable'
 import { useIsDemo } from 'stores/isdemo'
 import { gsap } from 'gsap'
+import { useAccess } from 'stores/access'
 
 import docButton from 'components/docButton.vue'
 import docMenu from 'components/docMenu.vue'
@@ -32,6 +36,9 @@ const router = useRouter()
 const _currentpage = useCurrentPage()
 const _pagewithtable = usePageWithTable()
 const _isdemo = useIsDemo()
+const _access = useAccess()
+
+console.log('_access', _access.access)
 
 let onlineColor = ref('')
 
