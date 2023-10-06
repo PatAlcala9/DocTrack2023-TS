@@ -9,7 +9,13 @@ q-page
     q-btn(flat size="md" label="Back" @click="gotoComplaintDashboard" icon="arrow_back").close-button
 
   div.container
-    section.date
+    section.form
+      section.date
+        span.form--label Date Received
+        q-date(flat v-model="calendarDate" minimal color="$button" @click="formatDate").calendar
+        component(v-if="docDate.length > 0" :is="docLabel" :text="docDate" ).form--label
+        component(v-else :is="docLabel" text="No Date Selected").form--label
+
     section.sections
     section.structure-owner
     section.structure-owner-address
@@ -52,6 +58,13 @@ const _isdemo = useIsDemo()
 
 let onlineColor = ref('')
 
+let calendarDate = ref('')
+let docDate = ref('')
+
+const formatDate = () => {
+  docDate.value = date.formatDate(Date.parse(calendarDate.value), 'MMMM D, YYYY')
+}
+
 const gotoComplaintDashboard = () => {
   _pagewithtable.pagewithtable = false
   _currentpage.currentpage = 'complaint'
@@ -60,43 +73,51 @@ const gotoComplaintDashboard = () => {
 </script>
 
 <style lang="sass" scoped>
-.container {  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-  gap: 0px 0px;
-  grid-auto-flow: row;
-  grid-template-areas:
-    "date structure-owner structure-owner"
-    "sections structure-owner-address structure-owner-address"
-    ". lot-owner lot-owner"
-    ". lot-owner-address lot-owner-address"
-    ". telephone telephone"
-    ". location-of-construction location-of-construction"
-    ". occupancy occupancy"
-    ". storey storey"
-    ". remarks remarks";
-}
+.container
+  display: grid
+  grid-template-columns: 1fr 1fr 1fr
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr
+  gap: 0px 0px
+  grid-auto-flow: row
+  grid-template-areas: "date structure-owner structure-owner" "sections structure-owner-address structure-owner-address" ". lot-owner lot-owner" ". lot-owner-address lot-owner-address" ". telephone telephone" ". location-of-construction location-of-construction" ". occupancy occupancy" ". storey storey" ". remarks remarks"
 
-.date { grid-area: date; }
+.date
+  grid-area: date
+.sections
+  grid-area: sections
+.structure-owner
+  grid-area: structure-owner
+.structure-owner-address
+  grid-area: structure-owner-address
+.lot-owner
+  grid-area: lot-owner
+.lot-owner-address
+  grid-area: lot-owner-address
+.telephone
+  grid-area: telephone
+.location-of-construction
+  grid-area: location-of-construction
+.occupancy
+  grid-area: occupancy
+.storey
+  grid-area: storey
+.remarks
+  grid-area: remarks
 
-.sections { grid-area: sections; }
+.form
+  display: flex
+  flex-direction: column
+  flex-wrap: wrap
+  justify-content: center
+  align-items: center
+  align-content: center
+  text-align: center
+  padding-bottom: 1rem
 
-.structure-owner { grid-area: structure-owner; }
-
-.structure-owner-address { grid-area: structure-owner-address; }
-
-.lot-owner { grid-area: lot-owner; }
-
-.lot-owner-address { grid-area: lot-owner-address; }
-
-.telephone { grid-area: telephone; }
-
-.location-of-construction { grid-area: location-of-construction; }
-
-.occupancy { grid-area: occupancy; }
-
-.storey { grid-area: storey; }
-
-.remarks { grid-area: remarks; }
-
+.form--label
+  font-family: 'Inter'
+  font-weight: 300
+  font-size: 1.2rem
+  color: #ffffff
+  padding: 0.5rem
 </style>
