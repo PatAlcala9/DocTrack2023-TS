@@ -35,6 +35,9 @@ q-page(padding)
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
       component(:is="docMenu" text="Complaint" icon="gavel" v-if="_access.access.includes('complaint')" @click="gotoPage('complaint', false)" @mouseover="setMessage('complaint')" @mouseout="returnDefault")
 
+    transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
+      component(:is="docMenu" text="Inspector" icon="gavel" v-if="_access.access.includes('inspector')" @click="gotoPage('complaint', false)" @mouseover="setMessage('inspector')" @mouseout="returnDefault")
+
 </template>
 
 <script setup lang="ts">
@@ -192,11 +195,6 @@ const rotateMessageBack = () => {
 }
 
 ;(async () => {
-  // if (!(await checkAuthentication())) {
-  //   await logout()
-  //   return
-  // }
-
   await setDefault()
 
   await setName()
