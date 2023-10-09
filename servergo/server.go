@@ -379,7 +379,30 @@ func connect() {
 				"result":  array,
 				"result2": array2,
 			})
-		}
+
+        } else if method == "GetSections" {
+            var result2 string
+			array := []string{}
+			array2 := []string{}
+
+            results, err := db.Query("SELECT section AS result, title AS result2 FROM ref_sections")
+			if err != nil {
+				panic(err.Error())
+			}
+
+            for results.Next() {
+				err = results.Scan(&result, &result2)
+				if err != nil {
+					panic(err.Error())
+				}
+				array = append(array, result)
+				array2 = append(array2, result2)
+			}
+			c.JSON(http.StatusOK, gin.H{
+				"result":  array,
+				"result2": array2,
+			})
+        }
 	})
 
 	router.GET("/api/:method/:data", func(c *gin.Context) {
@@ -1064,6 +1087,7 @@ func connect() {
             c.JSON(http.StatusOK, gin.H{
                 "result": result,
             })
+
         }
 	})
 
@@ -1582,6 +1606,100 @@ func connect() {
 			c.String(http.StatusOK, "Success on Posting User Log")
 		} else {
 			c.String(http.StatusInternalServerError, "Failed on Posting User Log")
+		}
+	})
+
+
+    router.POST("/api/PostInspectionSections", func(c *gin.Context) {
+		type InspectionSectionData struct {
+			Data  int `json:"data"`
+			Data2 int `json:"data2"`
+		}
+		var inspectionSectionData InspectionSectionData
+		if err := c.ShouldBindJSON(&inspectionSectionData); err != nil {
+			c.String(http.StatusBadRequest, "Invalid request body")
+			return
+		}
+
+		c.Writer.Header().Set("X-XSS-Protection", "1; mode=block")
+		c.Writer.Header().Set("X-Content-Type-Options", "nosniff")
+		c.Writer.Header().Set("X-DNS-Prefetch-Control", "off")
+		c.Writer.Header().Set("X-Frame-Options", "DENY")
+		c.Writer.Header().Set("X-Download-Options", "noopen")
+		c.Writer.Header().Set("Referrer-Policy", "no-referrer")
+
+		var dbpost *sql.Stmt
+
+		dbpost, err := db.Prepare("INSERT INTO complaint_inspection_sections (complaint_inspection_sectionsid, complaint_inspectionid, ref_sectionsid) VALUES (NULL, ?, ?)")
+		if err != nil {
+			panic(err.Error())
+		}
+		defer dbpost.Close()
+
+		exec, err := dbpost.Exec(inspectionSectionData.Data, inspectionSectionData.Data2)
+		if err != nil {
+			panic(err.Error())
+		}
+
+		affect, err := exec.RowsAffected()
+		if err != nil {
+			panic(err.Error())
+		}
+
+		if affect > 0 {
+			c.String(http.StatusOK, "Success on Posting Inspection Section")
+		} else {
+			c.String(http.StatusInternalServerError, "Failed on Posting Inspection Section")
+		}
+	})
+
+
+    router.POST("/api/PostInspection", func(c *gin.Context) {
+		type InspectionData struct {
+			Data  string `json:"data"`
+			Data2 string `json:"data2"`
+            Data3 string `json:"data3"`
+            Data4 string `json:"data4"`
+            Data5 string `json:"data5"`
+            Data6 string `json:"data6"`
+            Data7 string `json:"data7"`
+            Data8 int `json:"data8"`
+		}
+		var inspectionData InspectionData
+		if err := c.ShouldBindJSON(&inspectionData); err != nil {
+			c.String(http.StatusBadRequest, "Invalid request body")
+			return
+		}
+
+		c.Writer.Header().Set("X-XSS-Protection", "1; mode=block")
+		c.Writer.Header().Set("X-Content-Type-Options", "nosniff")
+		c.Writer.Header().Set("X-DNS-Prefetch-Control", "off")
+		c.Writer.Header().Set("X-Frame-Options", "DENY")
+		c.Writer.Header().Set("X-Download-Options", "noopen")
+		c.Writer.Header().Set("Referrer-Policy", "no-referrer")
+
+		var dbpost *sql.Stmt
+
+		dbpost, err := db.Prepare("INSERT INTO complaint_inspection (complaint_inspectionid, structure_owner, structure_ownerAddress, lot_owner, lot_ownerAddress, phoneNo, locationOfConstruction, useOfOccupancy, noOfStorey) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?)")
+		if err != nil {
+			panic(err.Error())
+		}
+		defer dbpost.Close()
+
+		exec, err := dbpost.Exec(inspectionData.Data, inspectionData.Data2, inspectionData.Data3, inspectionData.Data4, inspectionData.Data5, inspectionData.Data6, inspectionData.Data7, inspectionData.Data8)
+		if err != nil {
+			panic(err.Error())
+		}
+
+		affect, err := exec.RowsAffected()
+		if err != nil {
+			panic(err.Error())
+		}
+
+		if affect > 0 {
+			c.String(http.StatusOK, "Success on Posting Inspection")
+		} else {
+			c.String(http.StatusInternalServerError, "Failed on Posting Inspection")
 		}
 	})
 
