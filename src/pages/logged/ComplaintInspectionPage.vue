@@ -132,6 +132,34 @@ const formatDate = () => {
   docDate.value = date.formatDate(Date.parse(calendarDate.value), 'MMMM D, YYYY')
 }
 
+const postInspectionSections = async (inspectionid: number, sectionid: number): Promise<boolean> => {
+  const response = await api.post('/api/PostInspectionSections', {
+    data: inspectionid,
+    data2: sectionid
+  })
+  const data = response.data.length !== 0 ? response.data : null
+
+  if (data.includes('Success')) return true
+  else return false
+}
+
+const postInspection = async (structureOwner: string, soAddress: string, lotOwner: string, loAddress: string, phone: string, location: string, occupancy: string, storey: number) => {
+  const response = await api.post('/api/PostInspection', {
+    data: structureOwner,
+    data2: soAddress,
+    data3: lotOwner,
+    data4: loAddress,
+    data5: phone,
+    data6: location,
+    data7: occupancy,
+    data8: storey
+  })
+  const data = response.data.length !== 0 ? response.data : null
+
+  if (data.includes('Success')) return true
+  else return false
+}
+
 const gotoComplaintDashboard = () => {
   _pagewithtable.pagewithtable = false
   _currentpage.currentpage = 'complaint'
