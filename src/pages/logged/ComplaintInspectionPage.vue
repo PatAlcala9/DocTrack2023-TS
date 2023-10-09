@@ -1,6 +1,6 @@
 <template lang="pug">
 
-q-page
+q-page(padding)
   section.online
     q-icon(name="circle" size="1rem" :color="onlineColor")
 
@@ -9,23 +9,53 @@ q-page
     q-btn(flat size="md" label="Back" @click="gotoComplaintDashboard" icon="arrow_back").close-button
 
   div.container
-    section.form
-      section.date
+    div.left
+      section.section.date
         span.form--label Date Received
         q-date(flat v-model="calendarDate" minimal color="$button" @click="formatDate").calendar
         component(v-if="docDate.length > 0" :is="docLabel" :text="docDate" ).form--label
         component(v-else :is="docLabel" text="No Date Selected").form--label
 
-    section.sections
-    section.structure-owner
-    section.structure-owner-address
-    section.lot-owner
-    section.lot-owner-address
-    section.telephone
-    section.location-of-construction
-    section.occupancy
-    section.storey
-    section.remarks
+      section.sections
+        component(:is="docList" text="Access" v-model:modelValue="sectionsList" :options="sectionsOption" :alert="redAccess" ).login__username--input
+
+    div.right
+      section.section.structure-owner
+        component(:is="docLabel" text="Complaint Name:").label--spaced
+        component(:is="docInputEntry" v-model:value="complaintName" alignment="left" width=100)
+
+      section.section.structure-owner-address
+        component(:is="docLabel" text="Complaint Name:").label--spaced
+        component(:is="docInputEntry" v-model:value="complaintName" alignment="left" width=100)
+
+      section.section.lot-owner
+        component(:is="docLabel" text="Complaint Name:").label--spaced
+        component(:is="docInputEntry" v-model:value="complaintName" alignment="left" width=100)
+
+      section.section.lot-owner-address
+        component(:is="docLabel" text="Complaint Name:").label--spaced
+        component(:is="docInputEntry" v-model:value="complaintName" alignment="left" width=100)
+
+      section.section.telephone
+        component(:is="docLabel" text="Complaint Name:").label--spaced
+        component(:is="docInputEntry" v-model:value="complaintName" alignment="left" width=100)
+
+      section.section.location-of-construction
+        component(:is="docLabel" text="Complaint Name:").label--spaced
+        component(:is="docInputEntry" v-model:value="complaintName" alignment="left" width=100)
+
+      section.section.occupancy
+        component(:is="docLabel" text="Complaint Name:").label--spaced
+        component(:is="docInputEntry" v-model:value="complaintName" alignment="left" width=100)
+
+      section.section.storey
+        component(:is="docLabel" text="Complaint Name:").label--spaced
+        component(:is="docInputEntry" v-model:value="complaintName" alignment="left" width=100)
+
+      section.section.remarks
+        component(:is="docLabel" text="Complaint Name:").label--spaced
+        component(:is="docInputEntry" v-model:value="complaintName" alignment="left" width=100)
+
 
 </template>
 
@@ -57,6 +87,37 @@ const _pagewithtable = usePageWithTable()
 const _isdemo = useIsDemo()
 
 let onlineColor = ref('')
+let sectionsList = ref<string[]>([])
+let sectionsOption = ref([
+  {
+    label: 'Administrative Fines',
+    value: 'SECTION 212. Administrative Fines',
+  },
+  {
+    label: 'Building Permits',
+    value: 'SECTION 301. Building Permits',
+  },
+  {
+    label: 'Certificate of Occupancy',
+    value: 'SECTION 309. Certificate of Occupancy',
+  },
+  {
+    label: 'Sizes and Dimensions of Courts',
+    value: 'SECTION 804. Sizes and Dimensions of Courts',
+  },
+  {
+    label: 'Windows Openings',
+    value: 'SECTION 808. Windows Openings',
+  },
+  {
+    label: 'Pedestrian Protection',
+    value: 'SECTION 1106. Pedestrian Protection',
+  },
+  {
+    label: 'Excavation, Foundations, and Retaining Walls',
+    value: 'SECTION 1202. Excavation, Foundations, and Retaining Walls',
+  },
+])
 
 let calendarDate = ref('')
 let docDate = ref('')
@@ -75,11 +136,27 @@ const gotoComplaintDashboard = () => {
 <style lang="sass" scoped>
 .container
   display: grid
-  grid-template-columns: 1fr 1fr 1fr
+  grid-template-columns: 1fr 6fr
   grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr
   gap: 0px 0px
   grid-auto-flow: row
-  grid-template-areas: "date structure-owner structure-owner" "sections structure-owner-address structure-owner-address" ". lot-owner lot-owner" ". lot-owner-address lot-owner-address" ". telephone telephone" ". location-of-construction location-of-construction" ". occupancy occupancy" ". storey storey" ". remarks remarks"
+  grid-template-areas: "left right"
+
+.left
+  display: grid
+  grid-template-columns: 1fr
+  grid-template-rows: 1fr 1fr
+  gap: 0px 0px
+  grid-template-areas: "date" "sections"
+  grid-area: left
+
+.right
+  display: grid
+  grid-template-columns: 1fr
+  grid-template-rows: 1fr 1fr
+  gap: 0px 0px
+  grid-template-areas: "structure-owner" "structure-owner-address" "lot-owner" "lot-owner-address" "telephone" "location-of-construction" "occupancy" "storey" "remarks"
+  grid-area: right
 
 .date
   grid-area: date
@@ -120,4 +197,18 @@ const gotoComplaintDashboard = () => {
   font-size: 1.2rem
   color: #ffffff
   padding: 0.5rem
+
+.section
+  display: flex
+  flex-direction: column
+  // background-color: rgba(10, 10, 35, 0.52)
+  // background-color: rgba(17, 25, 40, 0.82)
+  //backdrop-filter: blur(1.6px) saturate(173%)
+  //background-color: rgba(17, 25, 40, 0.8)
+  background-color: rgba(12, 21, 42, 0.45)
+  backdrop-filter: blur(9px) saturate(150%)
+  border-radius: 0.6rem
+  border: 1px solid rgba(255, 255, 255, 0.125)
+  padding: 1.2rem 2rem 1.2rem 1.2rem
+  margin-bottom: 1rem
 </style>
