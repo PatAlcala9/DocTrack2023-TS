@@ -1,8 +1,8 @@
 <template lang="pug">
 
 q-page(padding)
-  section.online
-    q-icon(name="circle" size="1rem" :color="onlineColor")
+  //- section.online
+  //-   q-icon(name="circle" size="1rem" :color="onlineColor")
 
   div.full-width.row.justify-between
     span.title Complaint - Add Inspection
@@ -54,6 +54,24 @@ q-page(padding)
 
   div.flex.flex-center.button-area
     component(:is="docButton" text="Save" @click="saveData")
+
+q-dialog(v-model="dialog" transition-show="flip-right" transition-hide="flip-left").dialog
+  q-card.dialog-card.text-white.flex.flex-center
+    q-card-section.dialog-card__section
+      div.dialog-title-area.column.justify-center.items-center
+        span.dialog-card__title {{ dialogTitle }}
+        span.dialog-card__info {{ dialogMessage }}
+        doc-button(text="OK" @click="dialog=false")
+
+q-dialog(v-model="dialogMissing" transition-show="flip-right" transition-hide="flip-left").dialog
+  q-card.dialog-card-missing.text-white.flex.flex-center
+    q-card-section.dialog-card__section
+      div.dialog-title-area.column.justify-center.items-center
+        span.dialog-card__title {{ dialogMissingTitle }}
+        span.dialog-card__title {{ dialogMissingSubTitle }}
+        span.dialog-card__info {{ dialogMissingMessage }}
+        doc-button(text="OK" @click="dialogMissing=false")
+
 </template>
 
 <script setup lang="ts">
@@ -76,6 +94,15 @@ import docLabel from 'components/docLabel.vue'
 import docSelection from 'components/docSelection.vue'
 import docCalendar from 'components/docCalendar.vue'
 import docList from 'components/docList.vue'
+
+let dialog = ref(false)
+let dialogTitle = ref('')
+let dialogMessage = ref('')
+
+let dialogMissing = ref(false)
+let dialogMissingTitle = ref('')
+let dialogMissingSubTitle = ref('')
+let dialogMissingMessage = ref('')
 
 const router = useRouter()
 const quasar = useQuasar()
@@ -122,7 +149,6 @@ let structureOwner = ref('')
 let structureOwnerAddress = ref('')
 let lotOwner = ref('')
 let lotOwnerAddress = ref('')
-let complaintName = ref('')
 let phoneNo = ref('')
 let locationOfConstruction = ref('')
 let useOfOccupancy = ref('')
@@ -158,6 +184,70 @@ const postInspection = async (structureOwner: string, soAddress: string, lotOwne
 
   if (data.includes('Success')) return true
   else return false
+}
+
+let missingDetails: string[] = []
+const checkComplete = () => {
+  missingDetails = []
+
+  if (!docDate.value) missingDetails.push('calendar')
+  if (!structureOwner.value) missingDetails.push('structural owner')
+  if (!structureOwnerAddress.value) missingDetails.push('address of structural owner')
+  if (!lotOwner.value) missingDetails.push('lot owner')
+  if (!lotOwnerAddress.value) missingDetails.push('address of lot owner')
+  if (!phoneNo.value) missingDetails.push('phone number')
+  if (!locationOfConstruction.value) missingDetails.push('location of construction')
+  if (!useOfOccupancy.value) missingDetails.push('use of occupancy')
+  if (!noOfStorey.value) missingDetails.push('number of storey')
+
+  if (missingDetails.length > 0) return true
+  else return false
+}
+
+const saveData = async () => {
+  if (checkComplete() === false) {
+    quasar.loading.show()
+    if (await checkConnection()) {
+      try {
+        await getSourceIDFromDatabase()
+
+        if ((await postRespondent(respondentName.value.toUpperCase(), respondentContact.value.toUpperCase(), respondentLocation.value.toUpperCase())) === true) {
+          const latestRespondent = await getLatestRespondent()
+          const maxComplaint = await getMaxComplaintCode(sourceEntryID.value)
+          const newComplaint = await generateNewComplaintCode(maxComplaint)
+
+          if (await postStatus(newComplaint, receivedDate.value, 'ENCODED TO SYSTEM', '15', 'ENCODED', complaintName.value.toUpperCase(), '')) {
+            const newStatusID = await getLatestStatus(newComplaint)
+            if (await postComplaint(newComplaint, sourceEntryID.value, complaintName.value.toUpperCase(), complaintContact.value.toUpperCase(), receivedDate.value, complaintLocation.value.toUpperCase(), complaintDetail.value, latestRespondent, newStatusID, receivedDate.value)) {
+              for (let item of attachmentSelectedList.value) {
+                await postAttachment(newComplaint, parseInt(item))
+              }
+              showDialog('Success', 'Successfully Saved Complaint')
+            } else showDialog('Error', 'Failed to Save Complaint')
+          } else showDialog('Error', 'Failed to Save Complaint')
+        } else showDialog('Error', 'Failed to Save Respondent')
+      } catch {
+        showDialog('Error', 'Failed to Save Inspection')
+      }
+    }
+  } else {
+    showDialogMissing('Error on Saving', 'Missing Data',`${missingDetails.toString().toUpperCase()}`)
+  }
+}
+
+const showDialog = (title: string, message: string) => {
+  quasar.loading.hide()
+  dialog.value = true
+  dialogTitle.value = title
+  dialogMessage.value = message
+}
+
+const showDialogMissing = (title: string, subtitle: string, message: string) => {
+  quasar.loading.hide()
+  dialogMissing.value = true
+  dialogMissingTitle.value = title
+  dialogMissingSubTitle.value = subtitle
+  dialogMissingMessage.value = message
 }
 
 const gotoComplaintDashboard = () => {
