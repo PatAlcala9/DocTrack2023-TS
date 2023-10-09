@@ -622,16 +622,6 @@ const gotoComplaintDashboard = () => {
   color: #ffffff
   padding: 0.5rem
 
-.calendar
-  background-color: transparent
-  border: 1px solid rgba(255, 255, 255, 0.525)
-  font-family: 'Inter'
-  font-size: 1.4rem
-  border-radius: 12px
-  :deep .q-date__calendar-item
-    padding-top: 0.6rem
-  :deep .block
-    font-size: 1.1rem
 
 .section
   display: flex
@@ -646,7 +636,6 @@ const gotoComplaintDashboard = () => {
   border: 1px solid rgba(255, 255, 255, 0.125)
   padding: 1.2rem 2rem 1.2rem 1.2rem
   margin-bottom: 1rem
-
 
 .section--calendar, .section--cname, .section--ccontact, .section--clocation, .section--cdetails, .section--rname, .section--rcontact, .section--rlocation
   @extend .section
