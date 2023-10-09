@@ -16,47 +16,44 @@ q-page(padding)
         component(v-if="docDate.length > 0" :is="docLabel" :text="docDate" ).form--label
         component(v-else :is="docLabel" text="No Date Selected").form--label
 
-      section.sections
-        component(:is="docList" text="Access" v-model:modelValue="sectionsList" :options="sectionsOption" :alert="redAccess" ).login__username--input
+        section.sections
+          component(:is="docList" text="Access" v-model:modelValue="sectionsList" :options="sectionsOption" :alert="redAccess" ).login__username--input
 
     div.right
       section.section.structure-owner
-        component(:is="docLabel" text="Complaint Name:").label--spaced
-        component(:is="docInputEntry" v-model:value="complaintName" alignment="left" width=100)
+        component(:is="docLabel" text="Structure Owner:").label--spaced
+        component(:is="docInputEntry" v-model:value="structureOwner" alignment="left" width=100)
 
       section.section.structure-owner-address
-        component(:is="docLabel" text="Complaint Name:").label--spaced
-        component(:is="docInputEntry" v-model:value="complaintName" alignment="left" width=100)
+        component(:is="docLabel" text="Structure Owner Address:").label--spaced
+        component(:is="docInputEntry" v-model:value="structureOwnerAddress" alignment="left" width=100)
 
       section.section.lot-owner
-        component(:is="docLabel" text="Complaint Name:").label--spaced
-        component(:is="docInputEntry" v-model:value="complaintName" alignment="left" width=100)
+        component(:is="docLabel" text="Lot Owner:").label--spaced
+        component(:is="docInputEntry" v-model:value="lotOwner" alignment="left" width=100)
 
       section.section.lot-owner-address
-        component(:is="docLabel" text="Complaint Name:").label--spaced
-        component(:is="docInputEntry" v-model:value="complaintName" alignment="left" width=100)
+        component(:is="docLabel" text="Lot Owner Address:").label--spaced
+        component(:is="docInputEntry" v-model:value="lotOwnerAddress" alignment="left" width=100)
 
       section.section.telephone
-        component(:is="docLabel" text="Complaint Name:").label--spaced
-        component(:is="docInputEntry" v-model:value="complaintName" alignment="left" width=100)
+        component(:is="docLabel" text="Phone Number:").label--spaced
+        component(:is="docInputEntry" v-model:value="phoneNo" alignment="left" width=100)
 
       section.section.location-of-construction
-        component(:is="docLabel" text="Complaint Name:").label--spaced
-        component(:is="docInputEntry" v-model:value="complaintName" alignment="left" width=100)
+        component(:is="docLabel" text="Location of Construction:").label--spaced
+        component(:is="docInputEntry" v-model:value="locationOfConstruction" alignment="left" width=100)
 
       section.section.occupancy
-        component(:is="docLabel" text="Complaint Name:").label--spaced
-        component(:is="docInputEntry" v-model:value="complaintName" alignment="left" width=100)
+        component(:is="docLabel" text="Use of Occupancy:").label--spaced
+        component(:is="docInputEntry" v-model:value="useOfOccupancy" alignment="left" width=100)
 
       section.section.storey
-        component(:is="docLabel" text="Complaint Name:").label--spaced
-        component(:is="docInputEntry" v-model:value="complaintName" alignment="left" width=100)
+        component(:is="docLabel" text="Number of Story:").label--spaced
+        component(:is="docInputEntry" v-model:value="noOfStorey" alignment="left" width=100)
 
-      section.section.remarks
-        component(:is="docLabel" text="Complaint Name:").label--spaced
-        component(:is="docInputEntry" v-model:value="complaintName" alignment="left" width=100)
-
-
+  div.flex.flex-center.button-area
+    component(:is="docButton" text="Save" @click="saveData")
 </template>
 
 <script setup lang="ts">
@@ -121,6 +118,15 @@ let sectionsOption = ref([
 
 let calendarDate = ref('')
 let docDate = ref('')
+let structureOwner = ref('')
+let structureOwnerAddress = ref('')
+let lotOwner = ref('')
+let lotOwnerAddress = ref('')
+let complaintName = ref('')
+let phoneNo = ref('')
+let locationOfConstruction = ref('')
+let useOfOccupancy = ref('')
+let noOfStorey = ref('')
 
 const formatDate = () => {
   docDate.value = date.formatDate(Date.parse(calendarDate.value), 'MMMM D, YYYY')
@@ -137,17 +143,16 @@ const gotoComplaintDashboard = () => {
 .container
   display: grid
   grid-template-columns: 1fr 6fr
-  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr
-  gap: 0px 0px
+  grid-template-rows: 1fr
+  gap: 0px 10px
   grid-auto-flow: row
   grid-template-areas: "left right"
 
 .left
   display: grid
   grid-template-columns: 1fr
-  grid-template-rows: 1fr 1fr
-  gap: 0px 0px
-  grid-template-areas: "date" "sections"
+  grid-template-rows: 1fr
+  grid-template-areas: "date"
   grid-area: left
 
 .right
@@ -211,4 +216,8 @@ const gotoComplaintDashboard = () => {
   border: 1px solid rgba(255, 255, 255, 0.125)
   padding: 1.2rem 2rem 1.2rem 1.2rem
   margin-bottom: 1rem
+
+.button-area
+  margin-top: 2rem
+
 </style>
