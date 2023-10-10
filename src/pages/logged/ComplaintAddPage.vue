@@ -59,7 +59,6 @@ q-page(padding)
             component(:is="docInputEntry" v-model:value="respondentLocation").label--spaced
 
       div.attachment-group
-
           component(:is="docList" text="Attachments" :options="attachmentList" v-model:modelValue="attachmentSelectedList").label--spaced
 
   div(v-else)
