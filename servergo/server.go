@@ -1088,6 +1088,16 @@ func connect() {
                 "result": result,
             })
 
+        } else if method == "GetSectionID" {
+            err = db.QueryRow("SELECT ref_sectionsid AS result FROM ref_sections WHERE title = ?", data).Scan(&result)
+            if err != nil {
+                panic(err.Error())
+            }
+
+            c.JSON(http.StatusOK, gin.H{
+                "result": result,
+            })
+
         }
 	})
 
@@ -1114,6 +1124,15 @@ func connect() {
                 "result": result,
             })
 
+		} else if method == "GetMaxInspection" {
+            err = db.QueryRow("SELECT MAX(complaint_inspectionid) AS result FROM complaint_inspection WHERE structure_owner = ? AND lot_owner = ?", data, data2).Scan(&result)
+            if err != nil {
+                panic(err.Error())
+            }
+
+            c.JSON(http.StatusOK, gin.H{
+                "result": result,
+            })
 		}
 	})
 
