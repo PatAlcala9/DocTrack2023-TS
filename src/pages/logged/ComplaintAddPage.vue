@@ -479,7 +479,7 @@ const saveData = async () => {
         } catch {
           showDialog('Error', 'Failed to Save Complaint')
         }
-      }
+      } else showDialog('Error', 'No Connection on Server')
     }
   } else {
     showDialogMissing('Error on Saving', 'Missing Data',`${missingDetails.toString().toUpperCase()}`)
@@ -692,8 +692,8 @@ const gotoComplaintDashboard = () => {
   backdrop-filter: blur(16px)
   border: 4px solid rgba(255, 255, 255, 0.125)
   border-radius: 12px
-  width: 60%
-  height: 80%
+  width: 50%
+  height: 60%
 
 @media screen and (max-width: 500px)
   .entry-group
