@@ -115,31 +115,31 @@ let sectionsList = ref<string[]>([])
 let sectionsOption = ref([
   {
     label: 'Administrative Fines',
-    value: 'SECTION 212. Administrative Fines',
+    value: 'Administrative Fines',
   },
   {
     label: 'Building Permits',
-    value: 'SECTION 301. Building Permits',
+    value: 'Building Permits',
   },
   {
     label: 'Certificate of Occupancy',
-    value: 'SECTION 309. Certificate of Occupancy',
+    value: 'Certificate of Occupancy',
   },
   {
     label: 'Sizes and Dimensions of Courts',
-    value: 'SECTION 804. Sizes and Dimensions of Courts',
+    value: 'Sizes and Dimensions of Courts',
   },
   {
     label: 'Windows Openings',
-    value: 'SECTION 808. Windows Openings',
+    value: 'Windows Openings',
   },
   {
     label: 'Pedestrian Protection',
-    value: 'SECTION 1106. Pedestrian Protection',
+    value: 'Pedestrian Protection',
   },
   {
     label: 'Excavation, Foundations, and Retaining Walls',
-    value: 'SECTION 1202. Excavation, Foundations, and Retaining Walls',
+    value: 'Excavation, Foundations, and Retaining Walls',
   },
 ])
 
@@ -152,7 +152,7 @@ let lotOwnerAddress = ref('')
 let phoneNo = ref('')
 let locationOfConstruction = ref('')
 let useOfOccupancy = ref('')
-let noOfStorey = ref('')
+let noOfStorey = ref(0)
 
 const formatDate = () => {
   docDate.value = date.formatDate(Date.parse(calendarDate.value), 'MMMM D, YYYY')
@@ -169,7 +169,7 @@ const postInspectionSections = async (inspectionid: number, sectionid: number): 
   else return false
 }
 
-const postInspection = async (structureOwner: string, soAddress: string, lotOwner: string, loAddress: string, phone: string, location: string, occupancy: string, storey: number) => {
+const postInspection = async (structureOwner: string, soAddress: string, lotOwner: string, loAddress: string, phone: string, location: string, occupancy: string, storey: number): Promise<boolean> => {
   const response = await api.post('/api/PostInspection', {
     data: structureOwner,
     data2: soAddress,
@@ -204,32 +204,47 @@ const checkComplete = () => {
   else return false
 }
 
+const getMaxInspection = async (): Promise<number> => {
+  const response = await api.get('/api/GetMaxInspection/' + structureOwner.value.toUpperCase() + '/' + lotOwner.value.toUpperCase())
+  const data = response.data.length !== 0 ? response.data : 0
+
+  if (data !== null) {
+    return data
+  } return 0
+}
+
+const getSectionID = async (section: string): Promise<number> => {
+  const response = await api.get('/api/GetSectionID/' + section)
+  const data = response.data.length !== 0 ? response.data : 0
+
+  if (data !== null) {
+    return data
+  } return 0
+}
+
 const saveData = async () => {
   if (checkComplete() === false) {
     quasar.loading.show()
+
     if (await checkConnection()) {
       try {
-        await getSourceIDFromDatabase()
+        if ((await postInspection(structureOwner.value.toUpperCase(), structureOwnerAddress.value.toUpperCase(), lotOwner.value.toUpperCase(), lotOwnerAddress.value.toUpperCase(), phoneNo.value, locationOfConstruction.value.toUpperCase(), useOfOccupancy.value.toUpperCase(), noOfStorey.value)) === true) {
+          const maxInspection = await getMaxInspection()
 
-        if ((await postRespondent(respondentName.value.toUpperCase(), respondentContact.value.toUpperCase(), respondentLocation.value.toUpperCase())) === true) {
-          const latestRespondent = await getLatestRespondent()
-          const maxComplaint = await getMaxComplaintCode(sourceEntryID.value)
-          const newComplaint = await generateNewComplaintCode(maxComplaint)
+          for (let section of sectionsList.value) {
+            const sectionResponse = await api.get('/api/GetSectionID/' + section)
+            const data = sectionResponse.data.length !== 0 ? sectionResponse.data : 0
 
-          if (await postStatus(newComplaint, receivedDate.value, 'ENCODED TO SYSTEM', '15', 'ENCODED', complaintName.value.toUpperCase(), '')) {
-            const newStatusID = await getLatestStatus(newComplaint)
-            if (await postComplaint(newComplaint, sourceEntryID.value, complaintName.value.toUpperCase(), complaintContact.value.toUpperCase(), receivedDate.value, complaintLocation.value.toUpperCase(), complaintDetail.value, latestRespondent, newStatusID, receivedDate.value)) {
-              for (let item of attachmentSelectedList.value) {
-                await postAttachment(newComplaint, parseInt(item))
-              }
+            if (await postInspectionSections(maxInspection, data.result)) {
               showDialog('Success', 'Successfully Saved Complaint')
             } else showDialog('Error', 'Failed to Save Complaint')
-          } else showDialog('Error', 'Failed to Save Complaint')
-        } else showDialog('Error', 'Failed to Save Respondent')
+          }
+
+        } else showDialog('Error', 'Failed to Save Inspection')
       } catch {
         showDialog('Error', 'Failed to Save Inspection')
       }
-    }
+    } else showDialog('Error on Saving', 'No Connection on Server')
   } else {
     showDialogMissing('Error on Saving', 'Missing Data',`${missingDetails.toString().toUpperCase()}`)
   }
@@ -249,6 +264,8 @@ const showDialogMissing = (title: string, subtitle: string, message: string) => 
   dialogMissingSubTitle.value = subtitle
   dialogMissingMessage.value = message
 }
+
+
 
 const gotoComplaintDashboard = () => {
   _pagewithtable.pagewithtable = false
@@ -338,4 +355,12 @@ const gotoComplaintDashboard = () => {
 .button-area
   margin-top: 2rem
 
+.dialog-card-missing
+  font-family: "Inter"
+  background-color: transparent
+  backdrop-filter: blur(16px)
+  border: 4px solid rgba(255, 255, 255, 0.125)
+  border-radius: 12px
+  width: 50%
+  height: 60%
 </style>
