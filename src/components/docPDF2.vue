@@ -20,13 +20,21 @@ export interface Props {
   title: string
   code: string
   text: string
-  content: string
+  structureOwner: string
+  structureOwnerAddress: string
+  lotOwner: string
+  lotOwnerAddress: string
+  phone: string
+  locationOfConstruction: string
+  useOfOccupancy: string
+  noOfStorey: number
+  // content: string
   date: string
   type: string
-  name: string
-  address: string
+  // name: string
+  // address: string
   remarks: string
-  employee: string
+  // employee: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -36,9 +44,17 @@ const props = withDefaults(defineProps<Props>(), {
   content: 'Sample Content',
   type: 'First Notice of Violation',
   name: 'Juan Dela Cruz',
-  address: 'Davao City',
+  // address: 'Davao City',
   remarks: 'The quick brown fox jumps over the lazy dog.',
   employee: 'Juan Dela Xruz',
+  structureOwner: 'Juan Dela Cruz',
+  structureOwnerAddress: 'Davao City',
+  lotOwner: 'Juan Dela Cruz',
+  lotOwnerAddress: 'Davao City',
+  phone: '0123456789',
+  locationOfConstruction: 'Davao City',
+  useOfOccupancy: 'Residential',
+  noOfStorey: 0
 })
 
 const preText = '**SCAN ME USING OCBO DOCTRACK** QrId::'
