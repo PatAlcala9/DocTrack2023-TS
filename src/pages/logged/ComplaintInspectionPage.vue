@@ -20,6 +20,10 @@ q-page(padding)
           component(:is="docList" text="Access" v-model:modelValue="sectionsList" :options="sectionsOption" :alert="redAccess" ).login__username--input
 
     div.right
+      section.section.complaint-code
+        component(:is="docLabel" text="Complaint Code:").label--spaced
+        component(:is="docInputEntry" v-model:value="complaintCode" alignment="left" width=100)
+
       section.section.structure-owner
         component(:is="docLabel" text="Structure Owner:").label--spaced
         component(:is="docInputEntry" v-model:value="structureOwner" alignment="left" width=100)
@@ -54,6 +58,7 @@ q-page(padding)
 
   div.flex.flex-center.button-area
     component(:is="docButton" text="Save" @click="saveData")
+    component(:is="docPDF2" title="Work Stoppage" :code="complaintCode" text="Generate PDF" :date="today")
 
 q-dialog(v-model="dialog" transition-show="flip-right" transition-hide="flip-left").dialog
   q-card.dialog-card.text-white.flex.flex-center
@@ -94,6 +99,7 @@ import docLabel from 'components/docLabel.vue'
 import docSelection from 'components/docSelection.vue'
 import docCalendar from 'components/docCalendar.vue'
 import docList from 'components/docList.vue'
+import docPDF2 from 'components/docPDF2.vue'
 
 let dialog = ref(false)
 let dialogTitle = ref('')
@@ -109,6 +115,8 @@ const quasar = useQuasar()
 const _currentpage = useCurrentPage()
 const _pagewithtable = usePageWithTable()
 const _isdemo = useIsDemo()
+
+let today = ref(date.formatDate(new Date(), 'MMMM DD, YYYY'))
 
 let onlineColor = ref('')
 let sectionsList = ref<string[]>([])
@@ -143,6 +151,7 @@ let sectionsOption = ref([
   },
 ])
 
+let complaintCode = ref('')
 let calendarDate = ref('')
 let docDate = ref('')
 let structureOwner = ref('')
@@ -169,16 +178,17 @@ const postInspectionSections = async (inspectionid: string, sectionid: string): 
   else return false
 }
 
-const postInspection = async (structureOwner: string, soAddress: string, lotOwner: string, loAddress: string, phone: string, location: string, occupancy: string, storey: string): Promise<boolean> => {
+const postInspection = async (code: string,  structureOwner: string, soAddress: string, lotOwner: string, loAddress: string, phone: string, location: string, occupancy: string, storey: string): Promise<boolean> => {
   const response = await api.post('/api/PostInspection', {
-    data: structureOwner,
-    data2: soAddress,
-    data3: lotOwner,
-    data4: loAddress,
-    data5: phone,
-    data6: location,
-    data7: occupancy,
-    data8: storey
+    data: code,
+    data2: structureOwner,
+    data3: soAddress,
+    data4: lotOwner,
+    data5: loAddress,
+    data6: phone,
+    data7: location,
+    data8: occupancy,
+    data9: storey
   })
   const data = response.data.length !== 0 ? response.data : null
 
@@ -222,14 +232,14 @@ const saveData = async () => {
 
     if (await checkConnection()) {
       try {
-        if ((await postInspection(structureOwner.value.toUpperCase(), structureOwnerAddress.value.toUpperCase(), lotOwner.value.toUpperCase(), lotOwnerAddress.value.toUpperCase(), phoneNo.value, locationOfConstruction.value.toUpperCase(), useOfOccupancy.value.toUpperCase(), noOfStorey.value)) === true) {
+        if ((await postInspection(complaintCode.value, structureOwner.value.toUpperCase(), structureOwnerAddress.value.toUpperCase(), lotOwner.value.toUpperCase(), lotOwnerAddress.value.toUpperCase(), phoneNo.value, locationOfConstruction.value.toUpperCase(), useOfOccupancy.value.toUpperCase(), noOfStorey.value)) === true) {
           const maxInspection = await getMaxInspection()
 
           for (let section of sectionsList.value) {
             const sectionResponse = await api.get('/api/GetSectionID/' + section)
             const data = sectionResponse.data.length !== 0 ? sectionResponse.data : 0
 
-            if (await postInspectionSections(maxInspection, data.result.toString())) {
+            if (await postInspectionSections(maxInspection.toString(), data.result.toString())) {
               showDialog('Success', 'Successfully Saved Complaint')
             } else showDialog('Error', 'Failed to Save Complaint')
           }
@@ -289,13 +299,15 @@ const gotoComplaintDashboard = () => {
   grid-template-columns: 1fr
   grid-template-rows: 1fr 1fr
   gap: 0px 0px
-  grid-template-areas: "structure-owner" "structure-owner-address" "lot-owner" "lot-owner-address" "telephone" "location-of-construction" "occupancy" "storey" "remarks"
+  grid-template-areas: "complaint-code" "structure-owner" "structure-owner-address" "lot-owner" "lot-owner-address" "telephone" "location-of-construction" "occupancy" "storey" "remarks"
   grid-area: right
 
 .date
   grid-area: date
 .sections
   grid-area: sections
+.complaint-code
+  grid-area: complaint-code
 .structure-owner
   grid-area: structure-owner
 .structure-owner-address
