@@ -1631,8 +1631,8 @@ func connect() {
 
     router.POST("/api/PostInspectionSections", func(c *gin.Context) {
 		type InspectionSectionData struct {
-			Data  int `json:"data"`
-			Data2 int `json:"data2"`
+			Data  string `json:"data"`
+			Data2 string `json:"data2"`
 		}
 		var inspectionSectionData InspectionSectionData
 		if err := c.ShouldBindJSON(&inspectionSectionData); err != nil {
@@ -1682,7 +1682,7 @@ func connect() {
             Data5 string `json:"data5"`
             Data6 string `json:"data6"`
             Data7 string `json:"data7"`
-            Data8 int `json:"data8"`
+            Data8 string `json:"data8"`
 		}
 		var inspectionData InspectionData
 		if err := c.ShouldBindJSON(&inspectionData); err != nil {

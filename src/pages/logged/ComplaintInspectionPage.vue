@@ -152,13 +152,13 @@ let lotOwnerAddress = ref('')
 let phoneNo = ref('')
 let locationOfConstruction = ref('')
 let useOfOccupancy = ref('')
-let noOfStorey = ref(0)
+let noOfStorey = ref('')
 
 const formatDate = () => {
   docDate.value = date.formatDate(Date.parse(calendarDate.value), 'MMMM D, YYYY')
 }
 
-const postInspectionSections = async (inspectionid: number, sectionid: number): Promise<boolean> => {
+const postInspectionSections = async (inspectionid: string, sectionid: string): Promise<boolean> => {
   const response = await api.post('/api/PostInspectionSections', {
     data: inspectionid,
     data2: sectionid
@@ -169,7 +169,7 @@ const postInspectionSections = async (inspectionid: number, sectionid: number): 
   else return false
 }
 
-const postInspection = async (structureOwner: string, soAddress: string, lotOwner: string, loAddress: string, phone: string, location: string, occupancy: string, storey: number): Promise<boolean> => {
+const postInspection = async (structureOwner: string, soAddress: string, lotOwner: string, loAddress: string, phone: string, location: string, occupancy: string, storey: string): Promise<boolean> => {
   const response = await api.post('/api/PostInspection', {
     data: structureOwner,
     data2: soAddress,
@@ -207,19 +207,13 @@ const checkComplete = () => {
 const getMaxInspection = async (): Promise<number> => {
   const response = await api.get('/api/GetMaxInspection/' + structureOwner.value.toUpperCase() + '/' + lotOwner.value.toUpperCase())
   const data = response.data.length !== 0 ? response.data : 0
-
-  if (data !== null) {
-    return data
-  } return 0
+  return (data !== null) ? data.result : 0
 }
 
 const getSectionID = async (section: string): Promise<number> => {
   const response = await api.get('/api/GetSectionID/' + section)
   const data = response.data.length !== 0 ? response.data : 0
-
-  if (data !== null) {
-    return data
-  } return 0
+  return (data !== null) ? data.result : 0
 }
 
 const saveData = async () => {
@@ -235,7 +229,7 @@ const saveData = async () => {
             const sectionResponse = await api.get('/api/GetSectionID/' + section)
             const data = sectionResponse.data.length !== 0 ? sectionResponse.data : 0
 
-            if (await postInspectionSections(maxInspection, data.result)) {
+            if (await postInspectionSections(maxInspection, data.result.toString())) {
               showDialog('Success', 'Successfully Saved Complaint')
             } else showDialog('Error', 'Failed to Save Complaint')
           }
