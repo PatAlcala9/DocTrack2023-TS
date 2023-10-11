@@ -1098,6 +1098,16 @@ func connect() {
                 "result": result,
             })
 
+        } else if method == "GetInspectionData" {
+            err = db.QueryRow("SELECT ref_sectionsid AS result FROM ref_sections WHERE title = ?", data).Scan(&result)
+            if err != nil {
+                panic(err.Error())
+            }
+
+            c.JSON(http.StatusOK, gin.H{
+                "result": result,
+            })
+
         }
 	})
 
@@ -1683,6 +1693,7 @@ func connect() {
             Data6 string `json:"data6"`
             Data7 string `json:"data7"`
             Data8 string `json:"data8"`
+            Data9 string `json:"data9"`
 		}
 		var inspectionData InspectionData
 		if err := c.ShouldBindJSON(&inspectionData); err != nil {
@@ -1699,13 +1710,13 @@ func connect() {
 
 		var dbpost *sql.Stmt
 
-		dbpost, err := db.Prepare("INSERT INTO complaint_inspection (complaint_inspectionid, structure_owner, structure_ownerAddress, lot_owner, lot_ownerAddress, phoneNo, locationOfConstruction, useOfOccupancy, noOfStorey) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?)")
+		dbpost, err := db.Prepare("INSERT INTO complaint_inspection (complaint_inspectionid, complaint_code, structure_owner, structure_ownerAddress, lot_owner, lot_ownerAddress, phoneNo, locationOfConstruction, useOfOccupancy, noOfStorey) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
 		if err != nil {
 			panic(err.Error())
 		}
 		defer dbpost.Close()
 
-		exec, err := dbpost.Exec(inspectionData.Data, inspectionData.Data2, inspectionData.Data3, inspectionData.Data4, inspectionData.Data5, inspectionData.Data6, inspectionData.Data7, inspectionData.Data8)
+		exec, err := dbpost.Exec(inspectionData.Data, inspectionData.Data2, inspectionData.Data3, inspectionData.Data4, inspectionData.Data5, inspectionData.Data6, inspectionData.Data7, inspectionData.Data8, inspectionData.Data9)
 		if err != nil {
 			panic(err.Error())
 		}
