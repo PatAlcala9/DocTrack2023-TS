@@ -28,13 +28,13 @@ export interface Props {
   locationOfConstruction: string
   useOfOccupancy: string
   noOfStorey: number
-  // content: string
+  content: string
   date: string
   type: string
-  // name: string
-  // address: string
+  name: string
+  address: string
   remarks: string
-  // employee: string
+  employee: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -44,7 +44,7 @@ const props = withDefaults(defineProps<Props>(), {
   content: 'Sample Content',
   type: 'First Notice of Violation',
   name: 'Juan Dela Cruz',
-  // address: 'Davao City',
+  address: 'Davao City',
   remarks: 'The quick brown fox jumps over the lazy dog.',
   employee: 'Juan Dela Xruz',
   structureOwner: 'Juan Dela Cruz',
@@ -149,42 +149,42 @@ const createPDF = async () => {
   doc.setFont('times', 'normal')
   doc.text('Name of Structure Owner:', 10, 72)
   doc.setFont('times', 'bold')
-  doc.text(props.name, 57, 72)
+  doc.text(props.structureOwner, 57, 72)
 
   doc.setFont('times', 'normal')
   doc.text('Mailing Address of Structure Owner:', 10, 78)
   doc.setFont('times', 'bold')
-  doc.text(props.address, 75, 78)
+  doc.text(props.structureOwnerAddress, 75, 78)
 
   doc.setFont('times', 'normal')
   doc.text('Name of Lot Owner:', 10, 84)
   doc.setFont('times', 'bold')
-  doc.text(props.address, 47, 84)
+  doc.text(props.lotOwner, 47, 84)
 
   doc.setFont('times', 'normal')
   doc.text('Postal/Mailing Address of Lot Owner:', 10, 90)
   doc.setFont('times', 'bold')
-  doc.text(props.address, getTextWidth('Postal/Mailing Address of Lot Owner:', 12) + 8, 90)
+  doc.text(props.lotOwnerAddress, getTextWidth('Postal/Mailing Address of Lot Owner:', 12) + 8, 90)
 
   doc.setFont('times', 'normal')
   doc.text('Telephone No./ Mobile Phone No.:', 10, 96)
   doc.setFont('times', 'bold')
-  doc.text(props.address, getTextWidth('Telephone No./ Mobile Phone No.:', 12) + 10, 96)
+  doc.text(props.phone, getTextWidth('Telephone No./ Mobile Phone No.:', 12) + 10, 96)
 
   doc.setFont('times', 'normal')
   doc.text('Location of Construction or Installation:', 10, 102)
   doc.setFont('times', 'bold')
-  doc.text(props.address, getTextWidth('Location of Construction or Installation:', 12) + 10, 102)
+  doc.text(props.locationOfConstruction, getTextWidth('Location of Construction or Installation:', 12) + 10, 102)
 
   doc.setFont('times', 'normal')
   doc.text('Use or Character of Occupancy:', 10, 108)
   doc.setFont('times', 'bold')
-  doc.text(props.address, getTextWidth('Use or Character of Occupancy:', 12) + 10, 108)
+  doc.text(props.useOfOccupancy, getTextWidth('Use or Character of Occupancy:', 12) + 10, 108)
 
   doc.setFont('times', 'normal')
   doc.text('Number of Storey:', 10, 114)
   doc.setFont('times', 'bold')
-  doc.text(props.address, getTextWidth('Number of Storey:', 12) + 10, 114)
+  doc.text(props.noOfStorey.toString(), getTextWidth('Number of Storey:', 12) + 10, 114)
 
   doc.setFont('times', 'bold')
   doc.text('National Building Code of the Philippines (PD 1096)', pdX, 124)
