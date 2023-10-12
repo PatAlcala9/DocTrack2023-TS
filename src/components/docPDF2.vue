@@ -27,7 +27,7 @@ export interface Props {
   phone: string
   locationOfConstruction: string
   useOfOccupancy: string
-  noOfStorey: number
+  noOfStorey: string
   content: string
   date: string
   type: string
@@ -35,6 +35,7 @@ export interface Props {
   address: string
   remarks: string
   employee: string
+  sections: string[]
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -54,7 +55,8 @@ const props = withDefaults(defineProps<Props>(), {
   phone: '0123456789',
   locationOfConstruction: 'Davao City',
   useOfOccupancy: 'Residential',
-  noOfStorey: 0
+  noOfStorey: '0',
+  sections: () => ['a', 'b', 'c']
 })
 
 const preText = '**SCAN ME USING OCBO DOCTRACK** QrId::'
@@ -184,19 +186,22 @@ const createPDF = async () => {
   doc.setFont('times', 'normal')
   doc.text('Number of Storey:', 10, 114)
   doc.setFont('times', 'bold')
-  doc.text(props.noOfStorey.toString(), getTextWidth('Number of Storey:', 12) + 10, 114)
+  doc.text(props.noOfStorey, getTextWidth('Number of Storey:', 12) + 10, 114)
 
   doc.setFont('times', 'bold')
   doc.text('National Building Code of the Philippines (PD 1096)', pdX, 124)
 
   doc.setFontSize(11)
-  doc.text('SECTION 212. Administrative Fines', 20, 130)
-  doc.text('SECTION 301. Building Permits', 20, 136)
-  doc.text('SECTION 309. Certificate of Occupancy', 20, 142)
-  doc.text('SECTION 804. Sizes and Dimensions of Courts', 20, 148)
-  doc.text('SECTION 808. Windows Openings', 20, 154)
-  doc.text('SECTION 1106. Pedestrian Protection', 20, 160)
-  doc.text('SECTION 1202. Excavation, Foundations, and Retaining Walls', 20, 166)
+  for (let i = 0; i < props.sections.length; i++) {
+    doc.text(props.sections[i], 20, 130 + (i * 6))
+  }
+  // doc.text('SECTION 212. Administrative Fines', 20, 130)
+  // doc.text('SECTION 301. Building Permits', 20, 136)
+  // doc.text('SECTION 309. Certificate of Occupancy', 20, 142)
+  // doc.text('SECTION 804. Sizes and Dimensions of Courts', 20, 148)
+  // doc.text('SECTION 808. Windows Openings', 20, 154)
+  // doc.text('SECTION 1106. Pedestrian Protection', 20, 160)
+  // doc.text('SECTION 1202. Excavation, Foundations, and Retaining Walls', 20, 166)
 
   doc.setFontSize(12)
   doc.setFont('times', 'normal')
