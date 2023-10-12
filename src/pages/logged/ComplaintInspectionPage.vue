@@ -58,7 +58,7 @@ q-page(padding)
 
   div.flex.flex-center.button-area
     //- component(:is="docButton" text="Save" @click="saveData")
-    component(:is="docPDF2" title="Work Stoppage" :code="complaintCode" text="Generate PDF" :date="today" :structureOwner="structureOwner" :structureOwnerAddress="structureOwnerAddress" :lotOwner="lotOwner" :lotOwnerAddress="lotOwnerAddress")
+    component(:is="docPDF2" title="Work Stoppage" :code="complaintCode" text="Generate PDF" :date="today" :structureOwner="structureOwner" :structureOwnerAddress="structureOwnerAddress" :lotOwner="lotOwner" :lotOwnerAddress="lotOwnerAddress" :sections="sectionsList" :noOfStorey="noOfStorey" :locationOfConstruction="locationOfConstruction" :useOfOccupancy="useOfOccupancy" :phone="phoneNo")
 
 q-dialog(v-model="dialog" transition-show="flip-right" transition-hide="flip-left").dialog
   q-card.dialog-card.text-white.flex.flex-center
