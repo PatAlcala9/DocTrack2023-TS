@@ -42,13 +42,14 @@ const styleComponent = computed(() => {
 <style lang="sass" scoped>
 .input
   font-family: 'OpenSans'
-  font-size: 1.1rem
+  font-size: 1rem
   border-radius: 0.6rem
   text-align: var(--alignment)
   text-transform: var(--transform)
   border: 1px solid $button
   color: #000000
   width: var(--width)
+  padding: 0.1rem 1rem 0.1rem 1rem
 
 .input:focus
   outline: none

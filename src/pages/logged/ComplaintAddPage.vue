@@ -68,7 +68,7 @@ q-page(padding)
           component(:is="docSelection" text="Source Type" label="Select Type" :options="sourceEntryList" v-model:modelValue="sourceEntry" :alert="redSourceEntry")
           br
           section.section--calendar
-            span.form--label Date Received
+            component(:is="docLabel" text="Date Received:").label--spaced
             q-date(flat v-model="receivedDate" minimal color="$button" @click="formatDate").calendar
             component(v-if="formattedReceivedDate.length > 0" :is="docLabel" :text="formattedReceivedDate" ).form--label
             component(v-else :is="docLabel" text="No Date Selected").form--label
@@ -105,7 +105,7 @@ q-page(padding)
 
         div.attachment-group
           section
-          component.section--list(:is="docList" text="Attachments" :options="attachmentList" v-model:modelValue="attachmentSelectedList").label--spaced
+            component.section--list(:is="docList" text="Attachments" :options="attachmentList" v-model:modelValue="attachmentSelectedList").label--spaced
 
   div.flex.flex-center.button-area
     component(:is="docButton" text="Save" @click="saveData")
@@ -617,7 +617,7 @@ const gotoComplaintDashboard = () => {
 .form--label
   font-family: 'Inter'
   font-weight: 300
-  font-size: 1.2rem
+  font-size: 0.9rem
   color: #ffffff
   padding: 0.5rem
 
@@ -694,6 +694,9 @@ const gotoComplaintDashboard = () => {
   border-radius: 12px
   width: 50%
   height: 60%
+
+.label--spaced
+  margin: 0 0 0.5rem 0
 
 @media screen and (max-width: 500px)
   .entry-group

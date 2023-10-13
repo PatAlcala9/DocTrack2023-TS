@@ -17,6 +17,6 @@ const props = defineProps<Props>()
 .label
   font-family: 'Inter'
   font-weight: 500
-  font-size: 1.1rem
+  font-size: 0.9rem
   color: #ffffff
 </style>

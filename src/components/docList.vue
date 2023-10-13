@@ -51,8 +51,9 @@ const colorBackground = computed(() => {
 .label
   font-family: 'Inter'
   font-weight: 400
-  font-size: 1rem
+  font-size: 0.9rem
   color: #ffffff
+  margin: 0 0 0 -2rem
 
 .section
   // background-color: rgba(12, 21, 42, 0.45)
@@ -60,10 +61,13 @@ const colorBackground = computed(() => {
   backdrop-filter: blur(9px) saturate(150%)
   border-radius: 0.6rem
   border: 1px solid rgba(255, 255, 255, 0.125)
-  padding: 0.9rem 1.6rem 0.9rem 0.9rem
+  padding: 1rem 1.6rem 1rem 0
+
 
 .list
   width: 30rem
+  font-size: 0.8rem
+  margin: 0 0 0 -2rem
 .icon
   padding: 1rem
 

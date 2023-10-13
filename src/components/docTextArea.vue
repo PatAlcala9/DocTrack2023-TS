@@ -32,7 +32,7 @@ const widthComponent = computed(() => {
 <style lang="sass" scoped>
 .textarea
   font-family: 'OpenSans'
-  font-size: 1.1rem
+  font-size: 1rem
   border-radius: 0.6rem
   text-align: left
   text-transform: initial
@@ -40,6 +40,7 @@ const widthComponent = computed(() => {
   color: #000000
   width: var(--width)
   height: var(--height)
+  padding: 0.1rem 1rem 0.1rem 1rem
 
 .textarea:focus
   outline: none

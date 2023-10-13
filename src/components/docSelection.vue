@@ -4,7 +4,7 @@ div(v-if="$q.screen.width > 500")
   section.full-width.row.inline.wrap.justify-start.items-start.content-start.section(:style="{ '--colorBackground': colorBackground }")
     section.column
       span.label {{text}}:
-      q-select(filled dark :modelValue="props.modelValue" @update:modelValue="updateValue" :options="options" style="width: 250px" color="blue-10" behavior="menu" label-color="blue-1" item-aligned)
+      q-select(filled dark :modelValue="props.modelValue" @update:modelValue="updateValue" :options="options" style="width: 260px; margin-left: -1rem" color="blue-10" behavior="menu" label-color="blue-1" item-aligned)
 
 div(v-else)
   section.fit.column.wrap.justify-center.items-center.content-center.section(:style="{ '--colorBackground': colorBackground }")
@@ -53,8 +53,8 @@ const styleComponent = computed(() => {
 <style lang="sass" scoped>
 .label
   font-family: 'Inter'
-  font-weight: 400
-  font-size: 1.1rem
+  font-weight: 500
+  font-size: 0.9rem
   color: #ffffff
 
 .input
@@ -83,13 +83,13 @@ const styleComponent = computed(() => {
 
 @media screen and (max-width: 500px)
   .label
-    font-weight: 300
-    font-size: 1.1rem
+    margin: 0 0 0.5rem 0
 
   .input
     font-size: 1.1rem
     width: var(--mobileWidth)
 
   .section
-    padding: 1rem 1rem 2rem 1rem
+    // width: 90%
+    // padding: 1rem 1rem 2rem 1rem
 </style>
