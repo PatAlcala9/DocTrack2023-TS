@@ -60,7 +60,7 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const preText = '**SCAN ME USING DDMS** QrId::'
-const encText = encrypt(props.content)
+const encText = encrypt(props.code)
 const qrSize = 200
 
 const createPDF = async () => {
