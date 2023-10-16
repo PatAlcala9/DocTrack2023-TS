@@ -110,17 +110,8 @@ const getQRStatus = async () => {
 
 let extractedData = ref('')
 const extractData = async () => {
-  // const codeLoc = _qrvalue.qrvalue.indexOf('::')
-  // const codeData = _qrvalue.qrvalue.slice(codeLoc + 5)
-
-  // const statusLoc = _qrvalue.qrvalue.indexOf('??')
-  // const statusData = _qrvalue.qrvalue.slice(statusLoc)
-
-  // code.value = codeData
-  // status.value = statusData
   const contentLoc = _qrvalue.qrvalue.indexOf('::')
   const content = decrypt(_qrvalue.qrvalue.slice(contentLoc + 2))
-
   extractedData.value = content
 }
 
