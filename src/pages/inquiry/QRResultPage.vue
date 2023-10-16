@@ -26,6 +26,8 @@ q-page(padding)
       component(:is="docLabel" text="Status")
       span.information {{ status }}
 
+    span {{ extractData }}
+
 </template>
 
 <script setup lang="ts">
@@ -34,6 +36,7 @@ import { useCurrentPage } from 'stores/currentpage'
 import { useQrValue } from 'stores/qrvalue'
 import { useQrError } from 'stores/qrerror'
 import { ref } from 'vue'
+import { decrypt } from 'src/js/OCBO'
 
 import docLabel from 'components/docLabel.vue'
 
@@ -59,14 +62,18 @@ const loadSampleData = () => {
 }
 
 const extractData = () => {
-  const codeLoc = _qrvalue.qrvalue.indexOf('::')
-  const codeData = _qrvalue.qrvalue.slice(codeLoc + 5)
+  // const codeLoc = _qrvalue.qrvalue.indexOf('::')
+  // const codeData = _qrvalue.qrvalue.slice(codeLoc + 5)
 
-  const statusLoc = _qrvalue.qrvalue.indexOf('??')
-  const statusData = _qrvalue.qrvalue.slice(statusLoc)
+  // const statusLoc = _qrvalue.qrvalue.indexOf('??')
+  // const statusData = _qrvalue.qrvalue.slice(statusLoc)
 
-  code.value = codeData
-  status.value = statusData
+  // code.value = codeData
+  // status.value = statusData
+  const contentLoc = _qrvalue.qrvalue.indexOf('::')
+  const content = _qrvalue.qrvalue.slice(contentLoc + 5)
+
+  return content
 }
 
 const gotoHome = () => {
