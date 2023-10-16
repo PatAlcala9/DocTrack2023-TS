@@ -59,7 +59,7 @@ const props = withDefaults(defineProps<Props>(), {
   sections: () => ['a', 'b', 'c']
 })
 
-const preText = '**SCAN ME USING OCBO DOCTRACK** QrId::'
+const preText = '**SCAN ME USING DDMS** QrId::'
 const encText = encrypt(props.content)
 const qrSize = 200
 
