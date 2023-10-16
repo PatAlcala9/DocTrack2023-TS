@@ -45,7 +45,7 @@ const _currentpage = useCurrentPage()
 const _qrvalue = useQrValue()
 const _qrerror = useQrError()
 
-const qrPrefix = '**SCAN ME USING OCBO DOCTRACK** QrId::'
+const qrPrefix = '**SCAN ME USING DDMS** QrId::'
 
 let validQR = ref(0)
 const checkQR = () => {
@@ -54,7 +54,7 @@ const checkQR = () => {
 }
 
 const loadSampleData = () => {
-  _qrvalue.qrvalue = '**SCAN ME USING OCBO DOCTRACK** QrId::2dfg21fd23g23df12g31fd2g12fd12g3'
+  _qrvalue.qrvalue = '**SCAN ME USING DDMS** QrId::2dfg21fd23g23df12g31fd2g12fd12g3'
   validQR.value = 2
 }
 
@@ -76,8 +76,8 @@ const gotoHome = () => {
 }
 
 ;(async () => {
-  // checkQR()
-  loadSampleData()
+  checkQR()
+  // loadSampleData()
 })()
 </script>
 
