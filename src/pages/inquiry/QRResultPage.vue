@@ -26,7 +26,17 @@ q-page(padding)
       component(:is="docLabel" text="Status")
       span.information {{ status }}
 
-    span {{ sample }}
+    section.section.fit.column.wrap.justify-start.items-center.content-center
+      component(:is="docLabel" text="Complaint Type")
+      span.information {{ type }}
+
+    section.section.fit.column.wrap.justify-start.items-center.content-center
+      component(:is="docLabel" text="Complaintant Name")
+      span.information {{ complaintant }}
+
+    section.section.fit.column.wrap.justify-start.items-center.content-center
+      component(:is="docLabel" text="Respondent Name")
+      span.information {{ respondent }}
 
 </template>
 
@@ -43,6 +53,9 @@ import { api } from 'src/boot/axios'
 
 // let code = ref('99-9-9999')
 let status = ref('SAMPLE STATUS')
+let type = ref('')
+let complaintant = ref('')
+let respondent = ref('')
 
 const router = useRouter()
 const _currentpage = useCurrentPage()
