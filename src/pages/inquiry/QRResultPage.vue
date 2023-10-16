@@ -72,7 +72,7 @@ const extractData = () => {
   // code.value = codeData
   // status.value = statusData
   const contentLoc = _qrvalue.qrvalue.indexOf('::')
-  const content = (_qrvalue.qrvalue.slice(contentLoc + 2))
+  const content = decrypt(_qrvalue.qrvalue.slice(contentLoc + 2))
 
   extractedData.value = content
 }
@@ -85,6 +85,7 @@ const gotoHome = () => {
 
 ;(async () => {
   checkQR()
+  extractData()
   // loadSampleData()
 })()
 </script>
