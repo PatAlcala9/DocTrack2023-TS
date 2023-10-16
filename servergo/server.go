@@ -1109,8 +1109,8 @@ func connect() {
             })
 
         } else if method == "GetQRData" {
-            var result2, result3, result4 string
-            err = db.QueryRow("SELECT c.complaint_code AS result, s.source_desc AS result2, c.complaintant_name AS result3, r.respondent_name AS result4 FROM complaint_info c, source_complaint s, respondent_info r WHERE c.source_complaintid = s.source_complaintid AND c.respondent_infoid = r.respondent_infoid AND c.complaint_code = ? LIMIT 1", data).Scan(&result, &result2, &result3, &result4)
+            var result2, result3 string
+            err = db.QueryRow("SELECT s.source_desc AS result, c.complaintant_name AS result2, r.respondent_name AS result3 FROM complaint_info c, source_complaint s, respondent_info r WHERE c.source_complaintid = s.source_complaintid AND c.respondent_infoid = r.respondent_infoid AND c.complaint_code = ? LIMIT 1", data).Scan(&result, &result2, &result3)
             if err != nil {
                 panic(err.Error())
             }
@@ -1119,7 +1119,6 @@ func connect() {
                 "result": result,
                 "result2": result2,
                 "result3": result3,
-                "result4": result4,
             })
 
         }
