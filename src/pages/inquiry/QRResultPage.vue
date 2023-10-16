@@ -61,6 +61,7 @@ const loadSampleData = () => {
   validQR.value = 2
 }
 
+let extractedData = ref('')
 const extractData = () => {
   // const codeLoc = _qrvalue.qrvalue.indexOf('::')
   // const codeData = _qrvalue.qrvalue.slice(codeLoc + 5)
@@ -73,7 +74,7 @@ const extractData = () => {
   const contentLoc = _qrvalue.qrvalue.indexOf('::')
   const content = decrypt(_qrvalue.qrvalue.slice(contentLoc + 2))
 
-  return content
+  extractedData.value = content
 }
 
 const gotoHome = () => {
