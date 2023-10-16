@@ -71,7 +71,7 @@ const extractData = () => {
   // code.value = codeData
   // status.value = statusData
   const contentLoc = _qrvalue.qrvalue.indexOf('::')
-  const content = _qrvalue.qrvalue.slice(contentLoc + 5)
+  const content = decrypt(_qrvalue.qrvalue.slice(contentLoc + 2))
 
   return content
 }
