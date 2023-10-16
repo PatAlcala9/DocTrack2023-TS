@@ -27,6 +27,14 @@ q-page(padding)
       span.information {{ status }}
 
     section.section.fit.column.wrap.justify-start.items-center.content-center
+      component(:is="docLabel" text="Transacted")
+      span.information {{ transacted }}
+
+    section.section.fit.column.wrap.justify-start.items-center.content-center
+      component(:is="docLabel" text="Expiration")
+      span.information {{ expiration }}
+
+    section.section.fit.column.wrap.justify-start.items-center.content-center
       component(:is="docLabel" text="Complaint Type")
       span.information {{ type }}
 
@@ -47,6 +55,7 @@ import { useQrValue } from 'stores/qrvalue'
 import { useQrError } from 'stores/qrerror'
 import { ref } from 'vue'
 import { decrypt } from 'src/js/OCBO'
+import { date } from 'quasar'
 
 import docLabel from 'components/docLabel.vue'
 import { api } from 'src/boot/axios'
@@ -56,6 +65,8 @@ let status = ref('SAMPLE STATUS')
 let type = ref('')
 let complaintant = ref('')
 let respondent = ref('')
+let transacted = ref('')
+let expiration = ref('')
 
 const router = useRouter()
 const _currentpage = useCurrentPage()
@@ -75,13 +86,25 @@ const checkQR = async () => {
 //   validQR.value = 2
 // }
 
-let sample = ref('')
 const getQRData = async () => {
   const response = await api.get('/api/GetQRData/' + extractedData.value)
   const data = response.data.length !== 0 ? response.data : null
 
   if (data !== null) {
-    return sample
+    type.value = data.result
+    complaintant.value = data.result2
+    respondent.value = data.result3
+  }
+}
+
+const getQRStatus = async () => {
+  const response = await api.get('/api/GetLatestStatusNameIndividual2/' + extractedData.value)
+  const data = response.data.length !== 0 ? response.data : null
+
+  if (data !== null) {
+    status.value = data.result
+    transacted.value = date.formatDate(data.result2, 'MMMM DD, YYYY')
+    expiration.value = date.formatDate(data.result3, 'MMMM DD, YYYY')
   }
 }
 
@@ -110,8 +133,8 @@ const gotoHome = () => {
 ;(async () => {
   await checkQR()
   await extractData()
-
-  getQRData()
+  await getQRData()
+  getQRStatus()
 })()
 </script>
 
