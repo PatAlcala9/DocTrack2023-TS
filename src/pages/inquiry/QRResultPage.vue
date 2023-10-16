@@ -26,7 +26,7 @@ q-page(padding)
       component(:is="docLabel" text="Status")
       span.information {{ status }}
 
-    span {{ extractData }}
+    span {{ extractedData }}
 
 </template>
 
