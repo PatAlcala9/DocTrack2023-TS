@@ -20,13 +20,13 @@ q-page(padding)
   div(v-else).fit.column.wrap.justify-start.items-center.content-center
     section.section.fit.column.wrap.justify-start.items-center.content-center
       component(:is="docLabel" text="Code")
-      span.information {{ code }}
+      span.information {{ extractedData }}
 
     section.section.fit.column.wrap.justify-start.items-center.content-center
       component(:is="docLabel" text="Status")
       span.information {{ status }}
 
-    span {{ extractedData }}
+    span {{ sample }}
 
 </template>
 
@@ -39,8 +39,9 @@ import { ref } from 'vue'
 import { decrypt } from 'src/js/OCBO'
 
 import docLabel from 'components/docLabel.vue'
+import { api } from 'src/boot/axios'
 
-let code = ref('99-9-9999')
+// let code = ref('99-9-9999')
 let status = ref('SAMPLE STATUS')
 
 const router = useRouter()
@@ -51,18 +52,28 @@ const _qrerror = useQrError()
 const qrPrefix = '**SCAN ME USING DDMS** QrId::'
 
 let validQR = ref(0)
-const checkQR = () => {
+const checkQR = async () => {
   if ((_qrerror.qrerror === '' || _qrerror.qrerror == undefined) && _qrvalue.qrvalue.includes(qrPrefix) === true) validQR.value = 2
   else validQR.value = 1
 }
 
-const loadSampleData = () => {
-  _qrvalue.qrvalue = '**SCAN ME USING DDMS** QrId::2dfg21fd23g23df12g31fd2g12fd12g3'
-  validQR.value = 2
+// const loadSampleData = () => {
+//   _qrvalue.qrvalue = '**SCAN ME USING DDMS** QrId::2dfg21fd23g23df12g31fd2g12fd12g3'
+//   validQR.value = 2
+// }
+
+let sample = ref('')
+const getQRData = async () => {
+  const response = await api.get('/api/GetQRData/' + extractedData.value)
+  const data = response.data.length !== 0 ? response.data : null
+
+  if (data !== null) {
+    return sample
+  }
 }
 
 let extractedData = ref('')
-const extractData = () => {
+const extractData = async () => {
   // const codeLoc = _qrvalue.qrvalue.indexOf('::')
   // const codeData = _qrvalue.qrvalue.slice(codeLoc + 5)
 
@@ -84,9 +95,10 @@ const gotoHome = () => {
 }
 
 ;(async () => {
-  checkQR()
-  extractData()
-  // loadSampleData()
+  await checkQR()
+  await extractData()
+
+  getQRData()
 })()
 </script>
 
