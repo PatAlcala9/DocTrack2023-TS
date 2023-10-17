@@ -8,8 +8,9 @@ div.full-width.column.wrap.justify-start.items-start.content-start
 </template>
 
 <script setup lang="ts">
-const versions = ['0.13', '0.12', '0.11', '0.10', '0.9', '0.8', '0.7', '0.6', '0.5', '0.4', '0.3', '0.2', '0.1', 'Undocumented']
+const versions = ['0.14', '0.13', '0.12', '0.11', '0.10', '0.9', '0.8', '0.7', '0.6', '0.5', '0.4', '0.3', '0.2', '0.1', 'Undocumented']
 const infos = {
+  '0.14': ['10/17/2023 - Added Detection for fake QR', '10/17/2023 - Added new API for Backend to access QR Data', '10/16/2023 - Added data to be displayed', '10/16/2023 - Fixed display data for Scanned QR'],
   '0.13': ['10/12/2023 - Additional data in PDF', '10/11/2023 - Added complaint code to inspection data', '10/11/2023 - Fixed bug on saving inspection', '10/10/2023 - Added saving of Inspection', '10/09/2023 - Added dialogs on Inspection', '10/09/2023 - Sectionized Date input', '10/09/2023 - New APIs on Backend', '10/06/2023 - Grid design on UI', '10/06/2023 - Added Inspection Entry'],
   '0.12': ['10/05/2023 - Added counting of expiration on backend', '10/03/2023 - Finished Complaint highlighting when empty', '10/03/2023 - Fixed minor bug on backend', '09/29/2023 - Registration highlighted to red when empty', '09/29/2023 - Added color variables for fast color switching', '09/29/2023 - Complaint Add highlighted to red when empty (partially)'],
   '0.11': ['09/27/2023 - Added Highligh of expired data', '09/27/2023 - Revised complaint list filter', '09/26/2023 - Fixed Expiration countdown', '09/26/2023 - Added Pop-up when missing details', '09/25/2023 - Added recording of Employee Id', '09/25/2023 - Fixed lowercase value on saved data', '09/25/2023 - Changed checking of connection to 1 minute', '09/25/2023 - Added Edit log'],
