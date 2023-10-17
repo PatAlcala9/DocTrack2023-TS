@@ -18,33 +18,42 @@ q-page(padding)
     span.invalid-message DocTrack QR
 
   div(v-else).fit.column.wrap.justify-start.items-center.content-center
-    section.section.fit.column.wrap.justify-start.items-center.content-center
-      component(:is="docLabel" text="Code")
-      span.information {{ extractedData }}
+    div(v-if="!invalid").section.fit.column.wrap.justify-start.items-center.content-center
+      section.section.fit.column.wrap.justify-start.items-center.content-center
+        component(:is="docLabel" text="Code")
+        span.information {{ extractedData }}
 
-    section.section.fit.column.wrap.justify-start.items-center.content-center
-      component(:is="docLabel" text="Status")
-      span.information {{ status }}
+      section.section.fit.column.wrap.justify-start.items-center.content-center
+        component(:is="docLabel" text="Status")
+        span.information {{ status }}
 
-    section.section.fit.column.wrap.justify-start.items-center.content-center
-      component(:is="docLabel" text="Transacted")
-      span.information {{ transacted }}
+      section.section.fit.column.wrap.justify-start.items-center.content-center
+        component(:is="docLabel" text="Transacted")
+        span.information {{ transacted }}
 
-    section.section.fit.column.wrap.justify-start.items-center.content-center
-      component(:is="docLabel" text="Expiration")
-      span.information {{ expiration }}
+      section.section.fit.column.wrap.justify-start.items-center.content-center
+        component(:is="docLabel" text="Expiration")
+        span.information {{ expiration }}
 
-    section.section.fit.column.wrap.justify-start.items-center.content-center
-      component(:is="docLabel" text="Complaint Type")
-      span.information {{ type }}
+      section.section.fit.column.wrap.justify-start.items-center.content-center
+        component(:is="docLabel" text="Complaint Type")
+        span.information {{ type }}
 
-    section.section.fit.column.wrap.justify-start.items-center.content-center
-      component(:is="docLabel" text="Complaintant Name")
-      span.information {{ complaintant }}
+      section.section.fit.column.wrap.justify-start.items-center.content-center
+        component(:is="docLabel" text="Complaintant Name")
+        span.information {{ complaintant }}
 
-    section.section.fit.column.wrap.justify-start.items-center.content-center
-      component(:is="docLabel" text="Respondent Name")
-      span.information {{ respondent }}
+      section.section.fit.column.wrap.justify-start.items-center.content-center
+        component(:is="docLabel" text="Respondent Name")
+        span.information {{ respondent }}
+
+      section.break
+
+    div(v-else)
+      div.text-negative
+        q-icon(name="gpp_bad" size="10rem")
+      span.invalid-message No Record
+      span.invalid-message Found
 
 </template>
 
@@ -67,6 +76,8 @@ let complaintant = ref('')
 let respondent = ref('')
 let transacted = ref('')
 let expiration = ref('')
+
+let invalid = ref(false)
 
 const router = useRouter()
 const _currentpage = useCurrentPage()
@@ -94,7 +105,8 @@ const getQRData = async () => {
     type.value = data.result
     complaintant.value = data.result2
     respondent.value = data.result3
-  }
+    invalid.value = false
+  } else invalid.value = true
 }
 
 const getQRStatus = async () => {
@@ -115,6 +127,10 @@ const extractData = async () => {
   extractedData.value = content
 }
 
+const checkInvalid = async (): Promise<boolean> => {
+  return !complaintant.value ? false : true
+}
+
 const gotoHome = () => {
   _qrvalue.qrvalue = ''
   _currentpage.currentpage = '/'
@@ -125,7 +141,10 @@ const gotoHome = () => {
   await checkQR()
   await extractData()
   await getQRData()
-  getQRStatus()
+
+  if (await checkInvalid()) {
+    getQRStatus()
+  }
 })()
 </script>
 
@@ -153,4 +172,7 @@ const gotoHome = () => {
   border-radius: 3rem
   padding: 0.5rem 1.5rem
   //background-color: $background
+
+.break
+  padding: 0 0 2rem 0
 </style>
