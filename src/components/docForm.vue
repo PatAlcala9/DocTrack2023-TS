@@ -99,10 +99,10 @@ const styleComponent = computed(() => {
   background-color: var(--colorBackground)
   border-radius: 0.6rem
   border: 1px solid rgba(255, 255, 255, 0.125)
-  padding: 0.9rem 1.6rem 0.9rem 0.9rem
+  padding: 0.8rem 1.4rem 0.9rem 0.1rem
 
 .icon
-  padding: 1rem
+  padding: 0.9rem
 
 @media screen and (max-width: 500px)
   .label

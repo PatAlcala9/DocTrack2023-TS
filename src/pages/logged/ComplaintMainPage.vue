@@ -9,7 +9,7 @@ q-page(padding)
     q-btn(flat size="md" label="Back" @click="gotoComplaint" icon="arrow_back").close-button
 
   div.fit.row.wrap.justify-center.search-area
-    component(:is="docForm" text="Search" v-model:value="searchValue" :width=30 :mobileWidth=14 icon="search" @keypress.enter="filterTable")
+    component(:is="docForm" text="Search" v-model:value="searchValue" :width=24 :mobileWidth=14 icon="search" @keypress.enter="filterTable")
 
   div(v-if="nodata").fit.row.wrap.justify-center
     span.flex.flex-center.nodata--text No Data Found

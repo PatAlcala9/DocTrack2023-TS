@@ -39,18 +39,18 @@ const displayMultiline = (value: string) => {
 .information
   font-family: 'Inter'
   font-weight: 560
-  font-size: 1.4rem
+  font-size: 0.9rem
   border: 1px solid #ffffff
-  border-radius: 3rem
-  padding: 0.4rem 1.5rem
-  background-color: transparent
+  border-radius: 0.4rem
+  padding: 0.4rem 1rem
+  background-color: rgba(0, 0, 0, 0.8)
 
 .wide
   @extend .information
   font-weight: 450
-  font-size: 1.1rem
+  font-size: 0.9rem
   width: 50vw
   height: auto
-  padding: 1rem 2rem
+  padding: 0.5rem 1rem
   text-align: justify
 </style>
