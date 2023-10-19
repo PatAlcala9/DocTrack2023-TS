@@ -105,7 +105,7 @@ q-page(padding)
 
         div.attachment-group
           section
-            component.section--list(:is="docList" text="Attachments" :options="attachmentList" v-model:modelValue="attachmentSelectedList").label--spaced
+            component.section--list(:is="docList" text="Attachments" :options="attachmentList" v-model:modelValue="attachmentSelectedList")
 
   div.flex.flex-center.button-area
     component(:is="docButton" text="Save" @click="saveData")
