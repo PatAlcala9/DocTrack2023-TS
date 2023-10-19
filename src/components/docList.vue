@@ -53,7 +53,7 @@ const colorBackground = computed(() => {
   font-weight: 400
   font-size: 0.9rem
   color: #ffffff
-  margin: 0 0 0 -2rem
+  margin: 0 0 0 1rem
 
 .section
   // background-color: rgba(12, 21, 42, 0.45)
@@ -67,7 +67,7 @@ const colorBackground = computed(() => {
 .list
   width: 30rem
   font-size: 0.8rem
-  margin: 0 0 0 -2rem
+  margin: 0 0 0 0rem
 .icon
   padding: 1rem
 
