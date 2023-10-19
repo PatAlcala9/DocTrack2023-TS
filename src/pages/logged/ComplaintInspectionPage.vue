@@ -16,8 +16,10 @@ q-page(padding)
         component(v-if="docDate.length > 0" :is="docLabel" :text="docDate" ).form--label
         component(v-else :is="docLabel" text="No Date Selected").form--label
 
-        section.sections
-          component(:is="docList" text="Access" v-model:modelValue="sectionsList" :options="sectionsOption" :alert="redAccess" ).login__username--input
+      section.sections
+        component(:is="docList" text="Sections" v-model:modelValue="sectionsList" :options="sectionsOption" :alert="redAccess" ).sections-list
+        //- span.label AA:
+        //- q-option-group(dark :modelValue="sectionsList" @update:modelValue="sectionsList" :options="sectionsOption" color="blue-10" type="checkbox" @keypress="keypressEvent").list
 
     div.right
       section.section.complaint-code
@@ -56,9 +58,13 @@ q-page(padding)
         component(:is="docLabel" text="Number of Story:").label--spaced
         component(:is="docInputEntry" v-model:value="noOfStorey" alignment="left" width=100)
 
+      section.section.remarks
+        component(:is="docLabel" text="Remarks:").label--spaced
+        component(:is="docTextArea" v-model:value="remarks" alignment="left" width=100 height=9)
+
   div.flex.flex-center.button-area
     //- component(:is="docButton" text="Save" @click="saveData")
-    component(:is="docPDF2" title="Work Stoppage" :code="complaintCode" text="Generate PDF" :date="today" :structureOwner="structureOwner" :structureOwnerAddress="structureOwnerAddress" :lotOwner="lotOwner" :lotOwnerAddress="lotOwnerAddress" :sections="sectionsList" :noOfStorey="noOfStorey" :locationOfConstruction="locationOfConstruction" :useOfOccupancy="useOfOccupancy" :phone="phoneNo")
+    component(:is="docPDF2" title="Work Stoppage" :code="complaintCode" text="Generate PDF" :date="today" :structureOwner="structureOwner" :structureOwnerAddress="structureOwnerAddress" :lotOwner="lotOwner" :lotOwnerAddress="lotOwnerAddress" :sections="sectionsList" :noOfStorey="noOfStorey" :locationOfConstruction="locationOfConstruction" :useOfOccupancy="useOfOccupancy" :phone="phoneNo" :remarks="remarks")
 
 q-dialog(v-model="dialog" transition-show="flip-right" transition-hide="flip-left").dialog
   q-card.dialog-card.text-white.flex.flex-center
@@ -162,6 +168,7 @@ let phoneNo = ref('')
 let locationOfConstruction = ref('')
 let useOfOccupancy = ref('')
 let noOfStorey = ref('')
+let remarks = ref('')
 
 const formatDate = () => {
   docDate.value = date.formatDate(Date.parse(calendarDate.value), 'MMMM D, YYYY')
@@ -289,9 +296,9 @@ const gotoComplaintDashboard = () => {
 
 .left
   display: grid
-  grid-template-columns: 1fr
-  grid-template-rows: 1fr
-  grid-template-areas: "date"
+  // grid-template-columns: 1fr
+  grid-template-rows: 27rem 25rem
+  grid-template-areas: "date" "sections"
   grid-area: left
 
 .right
@@ -339,8 +346,8 @@ const gotoComplaintDashboard = () => {
 
 .form--label
   font-family: 'Inter'
-  font-weight: 300
-  font-size: 1.2rem
+  font-weight: 500
+  font-size: 0.9rem
   color: #ffffff
   padding: 0.5rem
 
@@ -357,6 +364,9 @@ const gotoComplaintDashboard = () => {
   border: 1px solid rgba(255, 255, 255, 0.125)
   padding: 1.2rem 2rem 1.2rem 1.2rem
   margin-bottom: 1rem
+
+.sections-list
+  // padding: 0 0 0 8rem
 
 .button-area
   margin-top: 2rem
