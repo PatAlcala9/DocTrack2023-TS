@@ -63,8 +63,8 @@ q-page(padding)
         component(:is="docTextArea" v-model:value="remarks" alignment="left" width=100 height=9)
 
   div.flex.flex-center.button-area
-    //- component(:is="docButton" text="Save" @click="saveData")
-    component(:is="docPDF2" title="Work Stoppage" :code="complaintCode" text="Generate PDF" :date="today" :structureOwner="structureOwner" :structureOwnerAddress="structureOwnerAddress" :lotOwner="lotOwner" :lotOwnerAddress="lotOwnerAddress" :sections="sectionsList" :noOfStorey="noOfStorey" :locationOfConstruction="locationOfConstruction" :useOfOccupancy="useOfOccupancy" :phone="phoneNo" :remarks="remarks")
+    component(:is="docButton" text="Save" @click="saveData")
+    component(:is="docPDF2" title="Work Stoppage" :code="complaintCode" text="Generate PDF" :date="today" :structureOwner="structureOwner" :structureOwnerAddress="structureOwnerAddress" :lotOwner="lotOwner" :lotOwnerAddress="lotOwnerAddress" :sections="sectionsList" :noOfStorey="noOfStorey" :locationOfConstruction="locationOfConstruction" :useOfOccupancy="useOfOccupancy" :phone="phoneNo" :remarks="remarks" :sectionsNumber="sectionNumberList")
 
 q-dialog(v-model="dialog" transition-show="flip-right" transition-hide="flip-left").dialog
   q-card.dialog-card.text-white.flex.flex-center
@@ -126,6 +126,7 @@ let today = ref(date.formatDate(new Date(), 'MMMM DD, YYYY'))
 
 let onlineColor = ref('')
 let sectionsList = ref<string[]>([])
+let sectionNumberList = ref<string[]>([])
 let sectionsOption = ref([
   {
     label: 'Administrative Fines',
@@ -185,7 +186,7 @@ const postInspectionSections = async (inspectionid: string, sectionid: string): 
   else return false
 }
 
-const postInspection = async (code: string,  structureOwner: string, soAddress: string, lotOwner: string, loAddress: string, phone: string, location: string, occupancy: string, storey: string): Promise<boolean> => {
+const postInspection = async (code: string,  structureOwner: string, soAddress: string, lotOwner: string, loAddress: string, phone: string, location: string, occupancy: string, storey: string, remarks: string): Promise<boolean> => {
   const response = await api.post('/api/PostInspection', {
     data: code,
     data2: structureOwner,
@@ -195,7 +196,8 @@ const postInspection = async (code: string,  structureOwner: string, soAddress: 
     data6: phone,
     data7: location,
     data8: occupancy,
-    data9: storey
+    data9: storey,
+    data10: remarks
   })
   const data = response.data.length !== 0 ? response.data : null
 
@@ -216,6 +218,7 @@ const checkComplete = () => {
   if (!locationOfConstruction.value) missingDetails.push('location of construction')
   if (!useOfOccupancy.value) missingDetails.push('use of occupancy')
   if (!noOfStorey.value) missingDetails.push('number of storey')
+  if (!remarks.value) missingDetails.push('remarks')
 
   if (missingDetails.length > 0) return true
   else return false
@@ -239,7 +242,9 @@ const saveData = async () => {
 
     if (await checkConnection()) {
       try {
-        if ((await postInspection(complaintCode.value, structureOwner.value.toUpperCase(), structureOwnerAddress.value.toUpperCase(), lotOwner.value.toUpperCase(), lotOwnerAddress.value.toUpperCase(), phoneNo.value, locationOfConstruction.value.toUpperCase(), useOfOccupancy.value.toUpperCase(), noOfStorey.value)) === true) {
+        await getAllSection()
+
+        if ((await postInspection(complaintCode.value, structureOwner.value.toUpperCase(), structureOwnerAddress.value.toUpperCase(), lotOwner.value.toUpperCase(), lotOwnerAddress.value.toUpperCase(), phoneNo.value, locationOfConstruction.value.toUpperCase(), useOfOccupancy.value.toUpperCase(), noOfStorey.value, remarks.value)) === true) {
           const maxInspection = await getMaxInspection()
 
           for (let section of sectionsList.value) {
@@ -257,8 +262,23 @@ const saveData = async () => {
       }
     } else showDialog('Error on Saving', 'No Connection on Server')
   } else {
-    showDialogMissing('Error on Saving', 'Missing Data',`${missingDetails.toString().toUpperCase()}`)
+    const missingDataString = missingDetails.join(', ')
+    showDialogMissing('Error on Saving', 'Missing Data',`${missingDataString.toUpperCase()}`)
   }
+}
+
+const getSectionData = async (section: string): Promise<string> => {
+  const response = await api.get('/api/GetSectionData/' + section)
+  const data = response.data.length !== 0 ? response.data : 0
+  return (data !== null) ? data.result : ''
+}
+
+const getAllSection = async () => {
+  for (let item of sectionsList.value) {
+    const sectionItem = await getSectionData(item)
+    sectionNumberList.value.push(sectionItem)
+  }
+  console.log('sectionNumberList', sectionNumberList.value)
 }
 
 const showDialog = (title: string, message: string) => {
