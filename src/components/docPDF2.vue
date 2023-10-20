@@ -36,6 +36,7 @@ export interface Props {
   remarks: string
   employee: string
   sections: string[]
+  sectionsNumber: string[]
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -56,7 +57,8 @@ const props = withDefaults(defineProps<Props>(), {
   locationOfConstruction: 'Davao City',
   useOfOccupancy: 'Residential',
   noOfStorey: '0',
-  sections: () => ['a', 'b', 'c']
+  sections: () => ['a', 'b', 'c'],
+  sectionsNumber: () => ['1', '2', '3']
 })
 
 const preText = '**SCAN ME USING DDMS** QrId::'
@@ -90,6 +92,19 @@ const createPDF = async () => {
     const textWidth = doc.getStringUnitWidth(text) * fontSize * 0.35 // Adjust the multiplier if needed
     return textWidth
   }
+
+  // const getSectionData = async (section: string): Promise<string> => {
+  //   const response = await api.get('/api/GetSectionData/' + section)
+  //   const data = response.data.length !== 0 ? response.data : 0
+  //   return (data !== null) ? data.result : ''
+  // }
+
+  // const getAllSection = async () => {
+  //   for (let item of props.sections) {
+  //     const sectionItem = await getSectionData(item)
+  //     props.sectionsNumber.push(sectionItem)
+  //   }
+  // }
 
   const pageWidth = doc.internal.pageSize.getWidth()
 
@@ -126,8 +141,8 @@ const createPDF = async () => {
   doc.text(cityText, cityTextX, 22)
 
 
-  doc.addImage(lungsodLink.href, 'PNG', 5, 2, 30, 30, 'lungsod', 'NONE', 0)
-  doc.addImage(ocboLink.href, 'PNG', pageWidth - 35, 2, 30, 30, 'ocbo', 'NONE', 0)
+  doc.addImage(lungsodLink.href, 'PNG', 5, 2, 28, 28, 'lungsod', 'NONE', 0)
+  doc.addImage(ocboLink.href, 'PNG', pageWidth - 35, 2, 28, 28, 'ocbo', 'NONE', 0)
 
   doc.setLineWidth(0.9)
   doc.line(10, 34, 200, 34)
@@ -193,7 +208,7 @@ const createPDF = async () => {
 
   doc.setFontSize(11)
   for (let i = 0; i < props.sections.length; i++) {
-    doc.text(props.sections[i], 20, 130 + (i * 6))
+    doc.text(props.sectionsNumber + ' - ' + props.sections[i], 20, 130 + (i * 6))
   }
   // doc.text('SECTION 212. Administrative Fines', 20, 130)
   // doc.text('SECTION 301. Building Permits', 20, 136)
@@ -208,9 +223,18 @@ const createPDF = async () => {
   doc.text('REMARKS:', 10, 176)
   doc.text(props.remarks, 10, 182, { maxWidth: 188, align: 'justify' })
 
-  const remarksY = 182
+  let remarksY = 182
   const sentenceY = remarksY + (props.remarks.length / 188) * 10 + 6
   const sentence2Y = sentenceY + (sentence.length / 188) * 10
+
+  // for (let i = 0; i < props.sections.length; i++) {
+  //   doc.text(props.sections[i], 20, 130 + (i * 6))
+  // }
+  // for (let j = 0; j < props.remarks.length; j++) {
+  //   doc.text(props.remarks[j], 16, remarksY, { maxWidth: 190 })
+  //   if (getTextWidth(props.remarks[j], 10) > 186) remarksY += 6
+  //   remarksY += 5
+  // }
 
   doc.text(sentence, 10, sentenceY, { maxWidth: 188, align: 'justify' })
   doc.text(sentence2, 10, sentence2Y, { maxWidth: 188, align: 'justify' })
