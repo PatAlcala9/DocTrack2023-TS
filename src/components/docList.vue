@@ -63,7 +63,6 @@ const colorBackground = computed(() => {
   border: 1px solid rgba(255, 255, 255, 0.125)
   padding: 1rem 1.6rem 1rem 0
 
-
 .list
   width: 30rem
   font-size: 0.8rem
