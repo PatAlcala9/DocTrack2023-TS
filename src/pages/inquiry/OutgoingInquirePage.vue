@@ -5,66 +5,115 @@ q-page(padding)
     span.title Inquiry for Released Documents
     q-btn(flat size="md" label="Back" @click="gotoHome" icon="arrow_back").close-button
 
-  div.fit.row.wrap.justify-start.items-start.content-start.search-area
-    section.column
-      span Search
-      q-input(dense filled v-model="searchValue" bg-color="white" :input-style="{ fontSize: '1.2rem', fontFamily: 'OpenSans' }" @keydown.enter="getOutgoingUsingValue")
-    section.column
-      span Search By
-      //- input
-      q-btn-dropdown(unelevated color="grey-10" :label="searchByValue" size="1rem" :content-style="{ fontSize: '1.2rem', fontFamily: 'Raleway' }")
-        q-list
-          q-item(clickable v-close-popup @click="searchByReference")
-            q-item-section
-              q-item-label REFERENCE NUMBER
+  div.fit.row.wrap.justify-center.search-area
+    component(:is="docForm" text="Search" v-model:value="searchValue" :width=24 :mobileWidth=14 icon="search" @keypress.enter="filterTable")
 
-          q-item(clickable v-close-popup @click="searchByValue = 'RESPONDENT'")
-            q-item-section
-              q-item-label RESPONDENT
+  //- div.fit.row.wrap.justify-start.items-start.content-start.search-area
+  //-   section.column
+  //-     span Search
+  //-     q-input(dense filled v-model="searchValue" bg-color="white" :input-style="{ fontSize: '1.2rem', fontFamily: 'OpenSans' }" @keydown.enter="getOutgoingUsingValue")
+  //-   section.column
+  //-     span Search By
+  //-     //- input
+  //-     q-btn-dropdown(unelevated color="grey-10" :label="searchByValue" size="1rem" :content-style="{ fontSize: '1.2rem', fontFamily: 'Raleway' }")
+  //-       q-list
+  //-         q-item(clickable v-close-popup @click="searchByReference")
+  //-           q-item-section
+  //-             q-item-label REFERENCE NUMBER
 
-          q-item(clickable v-close-popup @click="searchByValue = 'ADDRESS'")
-            q-item-section
-              q-item-label ADDRESS
+  //-         q-item(clickable v-close-popup @click="searchByValue = 'RESPONDENT'")
+  //-           q-item-section
+  //-             q-item-label RESPONDENT
 
-          q-item(clickable v-close-popup @click="searchByValue = 'SUBJECT'")
-            q-item-section
-              q-item-label SUBJECT
+  //-         q-item(clickable v-close-popup @click="searchByValue = 'ADDRESS'")
+  //-           q-item-section
+  //-             q-item-label ADDRESS
 
-          q-item(clickable v-close-popup @click="searchByValue = 'DATE'")
-            q-item-section
-              q-item-label DATE
+  //-         q-item(clickable v-close-popup @click="searchByValue = 'SUBJECT'")
+  //-           q-item-section
+  //-             q-item-label SUBJECT
 
-  div.flex.flex-center
-    //- section(v-if="outgoingList.result !== ''").dialog-content-table
-    //-   table.table
-    //-     thead
-    //-       tr
-    //-         th Reference Number
-    //-         th Respondent
-    //-         th Address
-    //-         th Subject
-    //-         th Date Released
-    //-         th Details
-    //-     tbody
-    //-       tr(v-for="(item, index) in outgoingList.result" :key="item").table-content-group
-    //-         td {{item}}
-    //-         td {{outgoingList.result2[index]}}
-    //-         td {{outgoingList.result3[index]}}
-    //-         td {{outgoingList.result4[index]}}
-    //-         td {{outgoingList.result5[index]}}
-    //-         td
-    //-           q-btn(color="button" icon="visibility" :ripple="false" @click="openDetails(item, outgoingList.result2[index], outgoingList.result3[index], outgoingList.result4[index])").button-view
-    //-           //- q-btn(v-if="showText === false" v-else color="button" label="View" :ripple="false" @mouseleave="mouseLeave").button-view
+  //-         q-item(clickable v-close-popup @click="searchByValue = 'DATE'")
+  //-           q-item-section
+  //-             q-item-label DATE
 
-    //- section(v-else).table-loading.column.items-center
-    //-   span Loading Contents
-    //-   q-spinner-orbit(color="white" size="4em" style="margin-top: 2rem")
-    section.column.text-center(style="font-size: 1.2rem")
-      span Cannot display table
-      span No Connection on Server
+  //- div.flex.flex-center
+  //-   //- section(v-if="outgoingList.result !== ''").dialog-content-table
+  //-   //-   table.table
+  //-   //-     thead
+  //-   //-       tr
+  //-   //-         th Reference Number
+  //-   //-         th Respondent
+  //-   //-         th Address
+  //-   //-         th Subject
+  //-   //-         th Date Released
+  //-   //-         th Details
+  //-   //-     tbody
+  //-   //-       tr(v-for="(item, index) in outgoingList.result" :key="item").table-content-group
+  //-   //-         td {{item}}
+  //-   //-         td {{outgoingList.result2[index]}}
+  //-   //-         td {{outgoingList.result3[index]}}
+  //-   //-         td {{outgoingList.result4[index]}}
+  //-   //-         td {{outgoingList.result5[index]}}
+  //-   //-         td
+  //-   //-           q-btn(color="button" icon="visibility" :ripple="false" @click="openDetails(item, outgoingList.result2[index], outgoingList.result3[index], outgoingList.result4[index])").button-view
+  //-   //-           //- q-btn(v-if="showText === false" v-else color="button" label="View" :ripple="false" @mouseleave="mouseLeave").button-view
 
-q-dialog(v-model="details" maximized)
-  q-card.detail-dialog
+  //-   //- section(v-else).table-loading.column.items-center
+  //-   //-   span Loading Contents
+  //-   //-   q-spinner-orbit(color="white" size="4em" style="margin-top: 2rem")
+  //-   section.column.text-center(style="font-size: 1.2rem")
+  //-     span Cannot display table
+  //-     span No Connection on Server
+
+  div(v-if="nodata").fit.row.wrap.justify-center
+    span.flex.flex-center.nodata--text No Data Found
+
+  div(v-else).fit.row.wrap.justify-center
+    section(v-if="quasar.screen.width <= 500").flex.flex-center
+      section(v-if="outgoingList.result !== ''").dialog-content-table
+        table.table
+          thead
+            tr
+              th Reference Number
+              th Respondent
+              th Address
+              th Subject
+              th Date Released
+              th Details
+          tbody
+            tr(v-for="(item, index) in outgoingList.result" :key="item").table-content-group
+              td {{item}}
+              td {{outgoingList.result2[index]}}
+              td {{outgoingList.result3[index]}}
+              td {{outgoingList.result4[index]}}
+              td {{outgoingList.result5[index]}}
+              td
+                q-btn(color="button" icon="visibility" :ripple="false" @click="openDetails(item, outgoingList.result2[index], outgoingList.result3[index], outgoingList.result4[index])").button-view
+
+    section(v-else).flex.flex-center
+      section(v-if="outgoingList.result !== ''").dialog-content-table
+        table.table
+          thead
+            tr
+              th Reference Number
+              th Respondent
+              th Address
+              th Subject
+              th Date Released
+              th Details
+          tbody
+            tr(v-for="(item, index) in outgoingList.result" :key="item").table-content-group
+              td {{item}}
+              td {{outgoingList.result2[index]}}
+              td {{outgoingList.result3[index]}}
+              td {{outgoingList.result4[index]}}
+              td {{outgoingList.result5[index]}}
+              td
+                q-btn(color="button" icon="visibility" :ripple="false" @click="openDetails(item, outgoingList.result2[index], outgoingList.result3[index], outgoingList.result4[index])").button-view
+
+q-dialog(full-width v-model="details" transition-show="flip-right" transition-hide="flip-left").dialog
+  q-card.dialog-card.text-white(style="height: auto")
     q-card-section.full-width.column.items-center
       section.full-width.column.justify-between
         span.detail-dialog__info--large {{referenceDetail}}
@@ -110,14 +159,24 @@ import { ref } from 'vue'
 import { api } from 'boot/axios'
 import { useRouter } from 'vue-router'
 import { useCurrentPage } from 'stores/currentpage'
+import { useIsLogged } from 'stores/islogged'
+import { useQuasar } from 'quasar'
 
 import docButton from 'components/docButton.vue'
+import docForm from 'components/docForm.vue'
+import docInfo from 'components/docInfo.vue'
+import docInfoEdit from 'components/docInfoEdit.vue'
+import docLabel from 'components/docLabel.vue'
+import docPDF2 from 'components/docPDF2.vue'
+import { parseDate } from 'pdf-lib'
 
 const router = useRouter()
+const quasar = useQuasar()
 const _currentpage = useCurrentPage()
 
 let searchValue = ref('')
 let searchByValue = ref('')
+let nodata = ref(true)
 
 type Outgoing = {
   result: string
@@ -168,7 +227,8 @@ const getOutgoing = async () => {
 
   if (data !== undefined) {
     outgoingList.value = data
-  }
+    nodata.value = false
+  } else nodata.value = true
 }
 
 const getOutgoingByReference = async () => {
@@ -275,8 +335,6 @@ const getOutgoingActionLog = async () => {
   if (_currentpage.currentpage !== undefined) router.push(_currentpage.currentpage)
   else router.push('/outgoinginquire')
 })()
-
-
 </script>
 
 <style lang="sass" scoped>
@@ -286,35 +344,35 @@ const getOutgoingActionLog = async () => {
   font-size: 2rem
   margin-top: 3rem
 
-.table
-  font-family: 'Montserrat'
-  font-size: 0.8rem
-  text-transform: uppercase
-  border-collapse: collapse
-  margin: 2rem 0
-  min-width: 24rem
-  border-radius: 1rem 1rem 0 0
-  overflow: hidden
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2)
+// .table
+//   font-family: 'Montserrat'
+//   font-size: 0.8rem
+//   text-transform: uppercase
+//   border-collapse: collapse
+//   margin: 2rem 0
+//   min-width: 24rem
+//   border-radius: 1rem 1rem 0 0
+//   overflow: hidden
+//   box-shadow: 0 0 20px rgba(0, 0, 0, 0.2)
 
-.table thead tr
-  background-color: #000406
-  color: #ffffff
-  text-align: left
-  font-weight: bold
+// .table thead tr
+//   background-color: #000406
+//   color: #ffffff
+//   text-align: left
+//   font-weight: bold
 
-.table th, .table td
-  padding: 1rem 2.5rem
-  width: 20rem
+// .table th, .table td
+//   padding: 1rem 2.5rem
+//   width: 20rem
 
-.table tbody tr
-  border-bottom: 1px solid #dddddd
+// .table tbody tr
+//   border-bottom: 1px solid #dddddd
 
-.table tbody tr:nth-of-type(even)
-  background-color: #1C4157
+// .table tbody tr:nth-of-type(even)
+//   background-color: #1C4157
 
-.table tbody tr:last-of-type
-  border-bottom: 2px solid #000406
+// .table tbody tr:last-of-type
+//   border-bottom: 2px solid #000406
 
 .button-view
   width: 4rem
