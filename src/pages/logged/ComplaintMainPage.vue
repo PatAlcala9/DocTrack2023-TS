@@ -849,15 +849,15 @@ const refreshData = async () => {
   font-size: 1.2rem
   padding-bottom: 2rem
 
-.nodata--text
-  font-family: 'Inter'
-  font-weight: 400
-  font-size: 1.6rem
-  margin-top: 6rem
-  background-color: rgba(17, 25, 40, 0.8)
-  border-radius: 0.6rem
-  border: 1px solid rgba(255, 255, 255, 0.125)
-  padding: 1.2rem 9rem
+// .nodata--text
+//   font-family: 'Inter'
+//   font-weight: 400
+//   font-size: 1.6rem
+//   margin-top: 6rem
+//   background-color: rgba(17, 25, 40, 0.8)
+//   border-radius: 0.6rem
+//   border: 1px solid rgba(255, 255, 255, 0.125)
+//   padding: 1.2rem 9rem
 
 .q-card--section
   padding: 2rem

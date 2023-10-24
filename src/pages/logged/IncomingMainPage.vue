@@ -5,10 +5,12 @@ q-page(padding)
     span.title Incoming Commmunications
     q-btn(flat size="md" label="Back" @click="gotoMenu" icon="arrow_back").close-button
 
+  div.fit.row.wrap.justify-center.search-area
+    component(:is="docForm" text="Search" v-model:value="searchValue" :width=24 :mobileWidth=14 icon="search" @keypress.enter="filterTable")
 
-  div.full-width.column.items-center.content-center
-    doc-label(text="Entry Code Number" )
-    doc-input(v-model:value="entryCode" @keypress.enter = "searchIncoming")
+  //- div.full-width.column.items-center.content-center
+  //-   doc-label(text="Entry Code Number" )
+  //-   doc-input(v-model:value="entryCode" @keypress.enter = "searchIncoming")
 
   section(v-if="dataExist")
     div(v-if="sourceName").full-width.column.justify-start.information
@@ -30,7 +32,6 @@ q-page(padding)
       section.column
         doc-label(text="Details:").information__label
         span.information__data {{ details }}
-
 
     div(v-if="attachments").full-width.column.justify-start.information
       section.column

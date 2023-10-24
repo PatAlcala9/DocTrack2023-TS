@@ -8,37 +8,62 @@ q-page(padding)
     span.title Incomings - New Entry
     q-btn(flat size="md" label="Back" @click="gotoIncomingDashboard" icon="arrow_back").close-button
 
-  section.form-area.fit.row.items-center.justify-center
-    div.column
-      span.inputs__label Received Date:
-        span.requiredWarning {{ missingDate }}
-      q-date(flat v-model="receivedDate" minimal color="$button" @click="sample").calendar
-      span(v-if="formattedReceivedDate.length > 0").inputs__label--date {{ formattedReceivedDate }}
-      span(v-else).inputs__label--date No Date Selected
+  div.container
+    div.left
+      section.section--calendar
+        component(:is="docLabel" text="Date Received:").label--spaced
+        q-date(flat v-model="receivedDate" minimal color="$button" @click="formatDate").calendar
+        component(v-if="formattedReceivedDate.length > 0" :is="docLabel" :text="formattedReceivedDate" ).form--label
+        component(v-else :is="docLabel" text="No Date Selected").form--label
 
-    div.inputs.column
-      span.inputs__label Source:
-        span.requiredWarning {{ missingSource }}
-      component(:is="docInput" width="40" alignment="left" transform="initial" v-model:value="inSource")
+    div.right
+      section.section--source
+        component(:is="docLabel" text="Source:").label--spaced
+        component(:is="docInputEntry" v-model:value="inSource" alignment="left" width=100)
 
-      span.inputs__label Subject:
-        span.requiredWarning {{ missingSubject }}
-      component(:is="docInput" width="40" alignment="left" transform="initial" v-model:value="inSubject")
+      section.section--subject
+        component(:is="docLabel" text="Subject:").label--spaced
+        component(:is="docInputEntry" v-model:value="inSubject" alignment="left" width=100)
 
-      span.inputs__label Details:
-        span.requiredWarning {{ missingDetails }}
-      component(:is="docTextArea" width="40" v-model:value="inDetails")
+      section.section--details
+        component(:is="docLabel" text="Details:").label--spaced
+        component(:is="docTextArea" v-model:value="inDetails" alignment="left" width=100)
 
-      span.inputs__label Attachments:
-        span.requiredWarning {{ missingAttachments }}
-      component(:is="docTextArea" width="40" v-model:value="inAttachments")
+      section.section--attachments
+        component(:is="docLabel" text="Attachments:").label--spaced
+        component(:is="docTextArea" v-model:value="inAttachments" width="100" height="20")
 
-  section.button-area.fit.row.items-center.justify-center
-    doc-button(text="Save" type="submit" @click="saveNewIncoming")
+      //- div.attachment-group
+      //-   section
+      //-     component.section--list(:is="docList" text="Attachments" :options="attachmentList" v-model:modelValue="attachmentSelectedList")
 
-  //- section.list-area.column.text-center
-  //-   span.list-area__span(v-if="!showList" @click="showListTrigger").inquiry-text Show List of Incomings
-  //-   span.list-area__span(v-else @click="showListTrigger").inquiry-text Hide List of Incomings
+  //- section.form-area.fit.row.items-center.justify-center
+  //-   div.column
+  //-     span.inputs__label Received Date:
+  //-       span.requiredWarning {{ missingDate }}
+  //-     q-date(flat v-model="receivedDate" minimal color="$button" @click="sample").calendar
+  //-     span(v-if="formattedReceivedDate.length > 0").inputs__label--date {{ formattedReceivedDate }}
+  //-     span(v-else).inputs__label--date No Date Selected
+
+  //-   div.inputs.column
+  //-     span.inputs__label Source:
+  //-       span.requiredWarning {{ missingSource }}
+  //-     component(:is="docInput" width="40" alignment="left" transform="initial" v-model:value="inSource")
+
+  //-     span.inputs__label Subject:
+  //-       span.requiredWarning {{ missingSubject }}
+  //-     component(:is="docInput" width="40" alignment="left" transform="initial" v-model:value="inSubject")
+
+  //-     span.inputs__label Details:
+  //-       span.requiredWarning {{ missingDetails }}
+  //-     component(:is="docTextArea" width="40" v-model:value="inDetails")
+
+  //-     span.inputs__label Attachments:
+  //-       span.requiredWarning {{ missingAttachments }}
+  //-     component(:is="docTextArea" width="40" v-model:value="inAttachments")
+
+  //- section.button-area.fit.row.items-center.justify-center
+  //-   doc-button(text="Save" type="submit" @click="saveNewIncoming")
 
   //- section(v-if="showList === true" style="margin-top: -3rem")
   //-   table.table
@@ -77,6 +102,11 @@ import { useCurrentPage } from 'stores/currentpage'
 import docButton from 'components/docButton.vue'
 import docTextArea from 'components/docTextArea.vue'
 import docInput from 'components/docInput.vue'
+import docInputEntry from 'components/docInputEntry.vue'
+import docLabel from 'components/docLabel.vue'
+import docSelection from 'components/docSelection.vue'
+import docCalendar from 'components/docCalendar.vue'
+import docList from 'components/docList.vue'
 
 const router = useRouter()
 let _currentpage = useCurrentPage()
@@ -282,82 +312,8 @@ const saveNewIncoming = async () => {
   padding: 0 0 0 1rem
   margin: 0 0 -2rem 0
 
-.logo
-  width: 12rem
-  height: auto
-  opacity: 0.9
-  margin-right: 2rem
-
-.name
-  grid-area: name
-  justify-self: start
-  align-self: center
-
-.login
-  grid-area: login
-  justify-self: center
-  align-self: center
-  padding: 1.4rem
-  border: 1px solid rgba(255, 255, 255, 0.125)
-  border-radius: 2rem
-  background-color: #021926
-  margin-top: -10rem
-  // backdrop-filter: blur(16px) saturate(180%)
-
-.inquiry
-  grid-area: inquiry
-  justify-self: start
-  align-self: center
-
-.inquiry-text
-  font-family: 'Raleway'
-  font-size: 1.2rem
-  text-decoration: underline
-  padding: 2rem
-  cursor: pointer
-  color: #ffffff
-
-.username-area
-  margin: 1rem
-
-.username-label
-  font-family: 'Raleway'
-  font-size: 1.4rem
-  color: #ffffff
-
-.username-input
-  font-family: 'Raleway'
-  font-size: 1.3rem
-  border-radius: 0.6rem
-  text-align: center
-  text-transform: uppercase
-
-.password-area
-  margin: 1rem
-
-.password-label
-  @extend .username-label
-
-.password-input
-  @extend .username-input
-
 .button-area
   padding-top: 1rem
-
-.davao
-  grid-area: davao
-  justify-self: end
-  align-self: center
-
-.davaologo
-  width: 18rem
-  height: auto
-  opacity: 0.4
-
-.inquiry-label
-  font-family: 'Raleway'
-  font-size: 2.1rem
-  color: #ffffff
 
 .dialog
   width: 100vw
@@ -392,18 +348,6 @@ const saveNewIncoming = async () => {
   font-family: 'OpenSans'
   margin-top: 0.5rem
   font-size: 1.4rem
-
-.button-area
-  margin-top: 2rem
-
-.list-area
-  padding-top: 2rem
-  font-size: 0.5rem
-
-.list-area__span
-  cursor: pointer
-  text-decoration: underline
-  font-size: 1.2rem
 
 .form-area
   margin-top: 2rem
@@ -440,4 +384,45 @@ const saveNewIncoming = async () => {
 
 .table tbody tr:last-of-type
   border-bottom: 2px solid #000406
+
+.section
+  display: flex
+  flex-direction: column
+  background-color: rgba(12, 21, 42, 0.45)
+  backdrop-filter: blur(9px) saturate(150%)
+  border-radius: 0.6rem
+  border: 1px solid rgba(255, 255, 255, 0.125)
+  padding: 1.2rem 2rem 1.2rem 1.2rem
+  margin-bottom: 1rem
+
+.section--calendar, .section--source, .section--subject, .section--details, .section--attachments
+  @extend .section
+  background-color: rgba(128, 21, 21, 0.45)
+
+.container
+  display: grid
+  grid-template-columns: 1fr 6fr
+  grid-template-rows: 1fr
+  gap: 0px 10px
+  grid-auto-flow: row
+  grid-template-areas: "left right"
+
+.left
+  display: grid
+  grid-template-columns: 1fr
+  grid-template-rows: 1fr
+  grid-template-areas: "source"
+  grid-area: left
+
+.source
+  grid-area: source
+
+.right
+  display: grid
+  grid-template-columns: 1fr
+  grid-template-rows: 1fr 1fr 1fr
+  gap: 0px 0px
+  grid-auto-flow: row
+  grid-template-areas: "name" "contact" "location" "details"
+  grid-area: right
 </style>

@@ -1,8 +1,8 @@
 <template lang="pug">
 
 q-page(padding)
-  section.online
-    q-icon(name="circle" size="1rem" :color="onlineColor")
+  //- section.online
+  //-   q-icon(name="circle" size="1rem" :color="onlineColor")
 
   div.full-width.row.justify-between
     span.title Complaint - Add New
