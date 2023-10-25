@@ -20,6 +20,7 @@ const routes: RouteRecordRaw[] = [
       { path: '/incomingadd', component: () => import('pages/logged/IncomingAddPage.vue') },
       { path: '/incomingmain', component: () => import('pages/logged/IncomingMainPage.vue') },
       { path: '/outgoing', component: () => import('pages/logged/OutgoingDashboardPage.vue') },
+      { path: '/outgoingadd', component: () => import('pages/logged/OutgoingAddPage.vue') },
       { path: '/releasing', component: () => import('pages/logged/ReleasingPage.vue') },
       { path: '/inventory', component: () => import('pages/logged/InventoryPage.vue') },
       { path: '/inventoryfile', component: () => import('pages/logged/InventoryFileDocPage.vue') },
