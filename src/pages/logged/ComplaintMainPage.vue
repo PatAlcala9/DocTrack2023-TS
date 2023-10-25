@@ -157,7 +157,6 @@ q-dialog(full-width full-height v-model="dialog" transition-show="flip-right" tr
       section.fit.row.wrap.justify-around.items-center.content-center.button-area
         component(:is="docButton" text="OK" @click="dialog=false")
 
-
 q-dialog(full-width full-height v-model="dialogEdit" transition-show="flip-right" transition-hide="flip-left" ).dialog
   q-card.dialog-card.text-white
     q-card-section
