@@ -6,13 +6,13 @@ q-page(padding)
 
   div.full-width.row.justify-between
     span.title Incomings - New Entry
-    q-btn(flat size="md" label="Back" @click="gotoIncomingDashboard" icon="arrow_back").close-button
+    q-btn(flat size="md" label="Back" @click="gotoMenu" icon="arrow_back").close-button
 
   div.container
     div.left
       section.section--calendar
         component(:is="docLabel" text="Date Received:").label--spaced
-        q-date(flat v-model="receivedDate" minimal color="$button" @click="formatDate").calendar
+        q-date(flat v-model="receivedDate" minimal color="$button" @click="formatDateProperly").calendar
         component(v-if="formattedReceivedDate.length > 0" :is="docLabel" :text="formattedReceivedDate" ).form--label
         component(v-else :is="docLabel" text="No Date Selected").form--label
 
@@ -33,9 +33,8 @@ q-page(padding)
         component(:is="docLabel" text="Attachments:").label--spaced
         component(:is="docTextArea" v-model:value="inAttachments" width="100" height="20")
 
-      //- div.attachment-group
-      //-   section
-      //-     component.section--list(:is="docList" text="Attachments" :options="attachmentList" v-model:modelValue="attachmentSelectedList")
+  div.flex.flex-center.button-area
+    component(:is="docButton" text="Save" @click="saveNewIncoming")
 
   //- section.form-area.fit.row.items-center.justify-center
   //-   div.column
@@ -92,7 +91,7 @@ q-dialog(v-model="dialog" transition-show="flip-right" transition-hide="flip-lef
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { date } from 'quasar'
 import { useRouter } from 'vue-router'
 import { api } from 'boot/axios'
@@ -146,7 +145,7 @@ const showListTrigger = async () => {
   }
 }
 
-const sample = () => {
+const formatDateProperly = () => {
   formattedReceivedDate.value = date.formatDate(Date.parse(receivedDate.value), 'MMMM D, YYYY')
 }
 
@@ -202,6 +201,29 @@ const saveIncoming = async () => {
   } catch {
     data = ''
   }
+
+  if (data.includes('Success')) {
+    dialog.value = true
+    dialogMessage.value = 'Successfully Saved'
+    dialogSubMessage.value = `Entry Code: ${newEntryCode}`
+  } else {
+    dialog.value = true
+    dialogMessage.value = 'Failed on Saving Incoming'
+    dialogSubMessage.value = ''
+  }
+}
+
+const postIncoming = async () => {
+  const incomingDate = date.formatDate(receivedDate.value, 'YYYY-MM-DD HH:mm:ss')
+  const response = await api.post('/api/PostIncoming', {
+    data: newEntryCode,
+    data2: incomingDate,
+    data3: inSource.value,
+    data4: inSubject.value,
+    data5: inDetails.value,
+    data6: inAttachments.value,
+  })
+  const data = response.data
 
   if (data.includes('Success')) {
     dialog.value = true
@@ -290,12 +312,33 @@ const saveNewIncoming = async () => {
     await checkData()
     await notifyMissingData()
 
-    // if (missingItems.value.length === 0) {
-    //   await generateNewEntryCode()
-    //   await saveIncoming()
-    // }
+    if (missingItems.value.length === 0) {
+      await generateNewEntryCode()
+      await postIncoming()
+    }
   }
 }
+
+watch(receivedDate, (item) => {
+  const cal: HTMLElement | null = document.querySelector('.section--calendar')
+  cal.style.backgroundColor = (item.length > 0) ? 'rgba(12, 21, 42, 0.45)' : 'rgba(128, 21, 21, 0.45)'
+})
+watch(inSource, (item) => {
+  const cal: HTMLElement | null = document.querySelector('.section--source')
+  cal.style.backgroundColor = (item.length > 0) ? 'rgba(12, 21, 42, 0.45)' : 'rgba(128, 21, 21, 0.45)'
+})
+watch(inSubject, (item) => {
+  const cal: HTMLElement | null = document.querySelector('.section--subject')
+  cal.style.backgroundColor = (item.length > 0) ? 'rgba(12, 21, 42, 0.45)' : 'rgba(128, 21, 21, 0.45)'
+})
+watch(inDetails, (item) => {
+  const cal: HTMLElement | null = document.querySelector('.section--details')
+  cal.style.backgroundColor = (item.length > 0) ? 'rgba(12, 21, 42, 0.45)' : 'rgba(128, 21, 21, 0.45)'
+})
+watch(inAttachments, (item) => {
+  const cal: HTMLElement | null = document.querySelector('.section--attachments')
+  cal.style.backgroundColor = (item.length > 0) ? 'rgba(12, 21, 42, 0.45)' : 'rgba(128, 21, 21, 0.45)'
+})
 
 ;(async () => {
   if (_currentpage.currentpage !== undefined) router.push(_currentpage.currentpage)
@@ -395,7 +438,12 @@ const saveNewIncoming = async () => {
   padding: 1.2rem 2rem 1.2rem 1.2rem
   margin-bottom: 1rem
 
-.section--calendar, .section--source, .section--subject, .section--details, .section--attachments
+.section--calendar
+  @extend .section
+  background-color: rgba(128, 21, 21, 0.45)
+  grid-area: section--calendar
+
+.section--source, .section--subject, .section--details, .section--attachments
   @extend .section
   background-color: rgba(128, 21, 21, 0.45)
 
@@ -406,16 +454,16 @@ const saveNewIncoming = async () => {
   gap: 0px 10px
   grid-auto-flow: row
   grid-template-areas: "left right"
+  margin: 1rem 0 0 0
+
 
 .left
   display: grid
   grid-template-columns: 1fr
   grid-template-rows: 1fr
-  grid-template-areas: "source"
+  grid-template-areas: "section--calendar"
   grid-area: left
-
-.source
-  grid-area: source
+  margin: auto
 
 .right
   display: grid
@@ -425,4 +473,8 @@ const saveNewIncoming = async () => {
   grid-auto-flow: row
   grid-template-areas: "name" "contact" "location" "details"
   grid-area: right
+.source
+  grid-area: source
+
+
 </style>
