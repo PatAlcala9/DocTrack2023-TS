@@ -100,6 +100,7 @@ q-page(padding)
                 q-btn(rounded size="sm" color="button" label="edit" :ripple="false" @click="openDetails(item, incomingList.result2[index], incomingList.result3[index], incomingList.result4[index])").button-view
 
 
+
 q-dialog(full-width v-model="details" transition-show="flip-right" transition-hide="flip-left").dialog
   q-card.dialog-card.text-white(style="height: auto" )
     q-card-section.full-width.column.items-center
@@ -131,7 +132,8 @@ q-dialog(full-width v-model="details" transition-show="flip-right" transition-hi
         //-   span.detail-dialog__info--subdetail {{noteDetail}}
 
     q-card-section(v-if="doclogEmpty === false").doc-log-area.full-width.column.items-center
-      span.detail-dialog__info Document Logs
+      //- span.detail-dialog__info Document Logs
+      component(:is="docLabel" text="Document Logs")
       table.table
         thead
           tr
@@ -143,10 +145,12 @@ q-dialog(full-width v-model="details" transition-show="flip-right" transition-hi
             td {{doclogDetail.result2[index]}}
 
     q-card-section(v-else).doc-log-area.full-width.column.items-center
-      span.detail-dialog__info No Document Logs Found
+      //- span.detail-dialog__info No Document Logs Found
+      component(:is="docLabel" text="No Document Logs Found")
 
     q-card-section(v-if="actionlogEmpty === false").full-width.column.items-center
-      span.detail-dialog__info Actions Logs
+      //- span.detail-dialog__info Actions Logs
+      component(:is="docLabel" text="Actions Logs")
       table.table
         thead
           tr
@@ -158,7 +162,8 @@ q-dialog(full-width v-model="details" transition-show="flip-right" transition-hi
             td {{actionlogDetail.result2[index]}}
 
     q-card-section(v-else).full-width.column.items-center
-      span.detail-dialog__info No Actions Logs Found
+      //- span.detail-dialog__info No Actions Logs Found
+      component(:is="docLabel" text="No Actions Logs Found")
 
     q-card-actions(align="center")
       component(:is="docButton" text="Close" v-close-popup).detail-dialog__button
