@@ -163,10 +163,10 @@ const setDefault = async () => {
 const setMessage = (link: string) => {
   switch (link) {
     case 'incoming':
-      menuMessage.value = "Tracking of Government's Internal Document record"
+      menuMessage.value = "Tracking of Government's Internal Document Record"
       break
     case 'outgoing':
-      menuMessage.value = 'Tracking of OCBO Issue Documents'
+      menuMessage.value = 'Tracking of OCBO Issued Documents'
       break
     case 'releasing':
       menuMessage.value = 'Release the Kraken,'
