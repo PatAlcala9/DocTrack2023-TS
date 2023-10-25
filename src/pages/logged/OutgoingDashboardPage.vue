@@ -16,10 +16,10 @@ q-page(padding)
 
   div.button-group
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
-      component(:is="docMenu" text="View List" icon="fact_check" @click="gotoIncomingInquire")
+      component(:is="docMenu" text="View List" icon="fact_check" @click="gotoOutgoingInquire")
 
     transition(appear @before-enter="beforeEnterButton" @enter="enterButton")
-      component(:is="docMenu" text="Add New" icon="add_box" @click="gotoIncomingAdd")
+      component(:is="docMenu" text="Add New" icon="add_box" @click="gotoOutgoingAdd")
 
 </template>
 
@@ -39,16 +39,15 @@ const _currentpage = useCurrentPage()
 const _pagewithtable = usePageWithTable()
 const _isdemo = useIsDemo()
 
-const gotoIncomingInquire = () => {
-  _currentpage.currentpage = 'incominginquire'
-  router.push('/incominginquire')
+const gotoOutgoingInquire = () => {
+  _currentpage.currentpage = 'outgoinginquire'
+  router.push('/outgoinginquire')
 }
 
-const gotoIncomingAdd = () => {
-  _currentpage.currentpage = 'incomingadd'
-  router.push('/incomingadd')
+const gotoOutgoingAdd = () => {
+  _currentpage.currentpage = 'outgoingadd'
+  router.push('/outgoingadd')
 }
-
 
 const gotoMenu = () => {
   _currentpage.currentpage = 'dashboard'
@@ -72,5 +71,5 @@ const enterButton = (el: any) => {
   align-items: center
   align-content: flex-end
   height: calc(100vh - 10rem)
-  
+
 </style>
