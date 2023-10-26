@@ -1747,6 +1747,60 @@ func connect() {
 		}
 	})
 
+
+
+    router.POST("/api/PostOutgoing", func(c *gin.Context) {
+		type OutgoingData struct {
+			Data  string `json:"data"`
+			Data2 string `json:"data2"`
+            Data3 string `json:"data3"`
+            Data4 string `json:"data4"`
+            Data5 string `json:"data5"`
+            Data6 string `json:"data6"`
+            Data7 string `json:"data7"`
+            Data8 string `json:"data8"`
+            Data9 string `json:"data9"`
+            Data10 string `json:"data10"`
+		}
+		var outgoingData OutgoingData
+		if err := c.ShouldBindJSON(&outgoingData); err != nil {
+			c.String(http.StatusBadRequest, "Invalid request body")
+			return
+		}
+
+		c.Writer.Header().Set("X-XSS-Protection", "1; mode=block")
+		c.Writer.Header().Set("X-Content-Type-Options", "nosniff")
+		c.Writer.Header().Set("X-DNS-Prefetch-Control", "off")
+		c.Writer.Header().Set("X-Frame-Options", "DENY")
+		c.Writer.Header().Set("X-Download-Options", "noopen")
+		c.Writer.Header().Set("Referrer-Policy", "no-referrer")
+
+		var dbpost *sql.Stmt
+
+		dbpost, err := db.Prepare(`INSERT INTO outgoing (referenceNo, comType, date_released, date_received, respondent, address, sender_name, subjectInfo, subjectDetails, building_inspector, electrical_inspector, mechanical_inspector, signage_inspector, Attachments, date_forwarded, fr_release, tag_release, tag_filing, folder_no, page_no, applicationNo)
+        VALUES (?, '', @drelease, @drece, @respondent, @address, @sender, @subject, @details, @inspector, @einspector, @minspector, @sinspector, @attachment, @forwared, @fr, @tag, @tagfiling, @folder, @page, @app)`)
+		if err != nil {
+			panic(err.Error())
+		}
+		defer dbpost.Close()
+
+		exec, err := dbpost.Exec(outgoingData.Data, outgoingData.Data2, outgoingData.Data3, outgoingData.Data4, outgoingData.Data5, outgoingData.Data6, outgoingData.Data7, outgoingData.Data8, outgoingData.Data9, outgoingData.Data10)
+		if err != nil {
+			panic(err.Error())
+		}
+
+		affect, err := exec.RowsAffected()
+		if err != nil {
+			panic(err.Error())
+		}
+
+		if affect > 0 {
+			c.String(http.StatusOK, "Success on Posting Outgoing")
+		} else {
+			c.String(http.StatusInternalServerError, "Failed on Posting Outgoing")
+		}
+	})
+
 	// router.POST("/api/PostUpdateContact", func(c *gin.Context) {
 	//   type EditData struct {
 	//     Data  string `json:"data"`
