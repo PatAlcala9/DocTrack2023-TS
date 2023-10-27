@@ -664,27 +664,27 @@ const gotoComplaintDashboard = () => {
 
 .right
   display: grid
-  grid-template-columns: 1fr
-  grid-template-rows: 1fr 1fr 1fr
-  gap: 0px 0px
-  grid-auto-flow: row
-  grid-template-areas: "name" "contact" "location" "details"
-  grid-area: right
+//   grid-template-columns: 1fr
+//   grid-template-rows: 1fr 1fr 1fr
+//   gap: 0px 0px
+//   grid-auto-flow: row
+//   grid-template-areas: "name" "contact" "location" "details"
+//   grid-area: right
 
-.name
-  grid-area: name
+// .name
+//   grid-area: name
 
-.contact
-  grid-area: contact
+// .contact
+//   grid-area: contact
 
-.location
-  grid-area: location
+// .location
+//   grid-area: location
 
-.details
-  grid-area: details
+// .details
+//   grid-area: details
 
-.button-area
-  margin-top: 2rem
+// .button-area
+//   margin-top: 2rem
 
 .dialog-card-missing
   font-family: "Inter"
