@@ -16,6 +16,12 @@ import docButton from 'components/docButton.vue'
 import { ref } from 'vue'
 // const image = ref('../assets/lungsod.png')
 
+import Lora from '../assets/fonts/Lora.js'
+import LoraBold from '../assets/fonts/Lora-Bold.js'
+import LoraItalic from '../assets/fonts/Lora-Italic.js'
+import RedHatText from '../assets/fonts/RedHatText.js'
+import RedHatTextBold from '../assets/fonts/RedHatText-Bold.js'
+
 export interface Props {
   title: string
   code: string
@@ -58,7 +64,7 @@ const props = withDefaults(defineProps<Props>(), {
   useOfOccupancy: 'Residential',
   noOfStorey: '0',
   sections: () => ['a', 'b', 'c'],
-  sectionsNumber: () => ['1', '2', '3']
+  sectionsNumber: () => ['1', '2', '3'],
 })
 
 const preText = '**SCAN ME USING DDMS** QrId::'
@@ -130,16 +136,20 @@ const createPDF = async () => {
     '     In view hereof, you are hereby directed to stop immediately the illegal construction activities of your structure and secure Necessary Permits for your construction within a period of fifteen (15) calendar days from receipt of this notice. Failure to comply with this Work Stoppage Order will prompt the Building Official to request the DCWD for disconnection of the water supply, request the DLPC for disconnection of the electricity supply, and/or order the closure of the structure. This letter shall serve as your formal notice, and it is incumbent on your part to show why no actions should be taken against you and your property.'
   const sentence2 = '     Your immediate attention and cooperation on this regard is earnestly sought.'
 
-  // doc.addFont('../assets/fonts/lora.ttf', 'lora', 'normal')
-  // doc.setFont('lora')
+  // doc.addFont('../assets/fonts/PlaypenSans-Medium.ttf', 'lora', 'normal')
+  // doc.addFileToVFS('PlaypenSans.ttf', PlaypenSans)
+  // doc.addFont('PlaypenSans.ttf', 'PlaypenSans', 'normal')
+  // doc.setFont('Lora')
 
-  doc.setFont('times', 'normal')
+  doc.setFont('Lora', 'normal')
+  doc.setFontSize(12)
   doc.text(republicText, republicTextX, 10)
-  doc.setFont('times', 'bold')
+  doc.setFont('LoraBold', 'bold')
+  doc.setFontSize(14)
   doc.text(officeText, officeTextX, 16)
-  doc.setFont('times', 'normal')
+  doc.setFont('Lora', 'normal')
+  doc.setFontSize(12)
   doc.text(cityText, cityTextX, 22)
-
 
   doc.addImage(lungsodLink.href, 'PNG', 5, 2, 28, 28, 'lungsod', 'NONE', 0)
   doc.addImage(ocboLink.href, 'PNG', pageWidth - 35, 2, 28, 28, 'ocbo', 'NONE', 0)
@@ -147,68 +157,69 @@ const createPDF = async () => {
   doc.setLineWidth(0.9)
   doc.line(10, 34, 200, 34)
 
-  doc.setFont('times', 'italic')
-  doc.setFontSize(9)
+  doc.setFont('LoraItalic', 'italic')
+  doc.setFontSize(8)
   doc.text('Reference No. OCBO-2023-R', 10, 38)
 
-  doc.setFont('times', 'bold')
-  doc.setFontSize(14)
+  doc.setFont('LoraBold', 'bold')
+  doc.setFontSize(15)
   doc.text('WORK STOPPAGE ORDER', workTextX, 46)
 
-  doc.setFont('times', 'bold')
+  doc.setFont('LoraBold', 'bold')
   doc.setFontSize(14)
   doc.text(props.type, propsTypeX, 56)
 
-  doc.setFontSize(12)
-  doc.setFont('times', 'normal')
-  doc.text(props.date, pageWidth - props.date.length * 3, 38)
+  doc.setFontSize(10)
+  doc.setFont('Lora', 'normal')
+  doc.text(props.date, pageWidth - props.date.length * 2.8, 38)
 
-  doc.setFont('times', 'normal')
+  doc.setFont('Lora', 'normal')
   doc.text('Name of Structure Owner:', 10, 72)
-  doc.setFont('times', 'bold')
-  doc.text(props.structureOwner, 57, 72)
+  doc.setFont('LoraBold', 'bold')
+  doc.text(props.structureOwner, 55, 72)
 
-  doc.setFont('times', 'normal')
+  doc.setFont('Lora', 'normal')
   doc.text('Mailing Address of Structure Owner:', 10, 78)
-  doc.setFont('times', 'bold')
-  doc.text(props.structureOwnerAddress, 75, 78)
+  doc.setFont('LoraBold', 'bold')
+  doc.text(props.structureOwnerAddress, 72, 78)
 
-  doc.setFont('times', 'normal')
+  doc.setFont('Lora', 'normal')
   doc.text('Name of Lot Owner:', 10, 84)
-  doc.setFont('times', 'bold')
-  doc.text(props.lotOwner, 47, 84)
+  doc.setFont('LoraBold', 'bold')
+  doc.text(props.lotOwner, 45, 84)
 
-  doc.setFont('times', 'normal')
+  doc.setFont('Lora', 'normal')
   doc.text('Postal/Mailing Address of Lot Owner:', 10, 90)
-  doc.setFont('times', 'bold')
-  doc.text(props.lotOwnerAddress, getTextWidth('Postal/Mailing Address of Lot Owner:', 12) + 8, 90)
+  doc.setFont('LoraBold', 'bold')
+  doc.text(props.lotOwnerAddress, getTextWidth('Postal/Mailing Address of Lot Owner:', 10) + 10, 90)
 
-  doc.setFont('times', 'normal')
+  doc.setFont('Lora', 'normal')
+  // doc.setFontSize(10)
   doc.text('Telephone No./ Mobile Phone No.:', 10, 96)
-  doc.setFont('times', 'bold')
-  doc.text(props.phone, getTextWidth('Telephone No./ Mobile Phone No.:', 12) + 10, 96)
+  doc.setFont('LoraBold', 'bold')
+  doc.text(props.phone, getTextWidth('Telephone No./ Mobile Phone No.:', 10) + 11, 96)
 
-  doc.setFont('times', 'normal')
+  doc.setFont('Lora', 'normal')
   doc.text('Location of Construction or Installation:', 10, 102)
-  doc.setFont('times', 'bold')
-  doc.text(props.locationOfConstruction, getTextWidth('Location of Construction or Installation:', 12) + 10, 102)
+  doc.setFont('LoraBold', 'bold')
+  doc.text(props.locationOfConstruction, getTextWidth('Location of Construction or Installation:', 10) + 10, 102)
 
-  doc.setFont('times', 'normal')
+  doc.setFont('Lora', 'normal')
   doc.text('Use or Character of Occupancy:', 10, 108)
-  doc.setFont('times', 'bold')
-  doc.text(props.useOfOccupancy, getTextWidth('Use or Character of Occupancy:', 12) + 10, 108)
+  doc.setFont('LoraBold', 'bold')
+  doc.text(props.useOfOccupancy, getTextWidth('Use or Character of Occupancy:', 10) + 11, 108)
 
-  doc.setFont('times', 'normal')
+  doc.setFont('Lora', 'normal')
   doc.text('Number of Storey:', 10, 114)
-  doc.setFont('times', 'bold')
-  doc.text(props.noOfStorey, getTextWidth('Number of Storey:', 12) + 10, 114)
+  doc.setFont('LoraBold', 'bold')
+  doc.text(props.noOfStorey, getTextWidth('Number of Storey:', 10) + 11, 114)
 
-  doc.setFont('times', 'bold')
+  doc.setFont('LoraBold', 'bold')
   doc.text('National Building Code of the Philippines (PD 1096)', pdX, 124)
 
-  doc.setFontSize(11)
+  doc.setFontSize(10)
   for (let i = 0; i < props.sections.length; i++) {
-    doc.text(props.sectionsNumber + ' - ' + props.sections[i], 20, 130 + (i * 6))
+    doc.text(props.sectionsNumber + ' - ' + props.sections[i], 20, 130 + i * 6)
   }
   // doc.text('SECTION 212. Administrative Fines', 20, 130)
   // doc.text('SECTION 301. Building Permits', 20, 136)
@@ -218,8 +229,8 @@ const createPDF = async () => {
   // doc.text('SECTION 1106. Pedestrian Protection', 20, 160)
   // doc.text('SECTION 1202. Excavation, Foundations, and Retaining Walls', 20, 166)
 
-  doc.setFontSize(12)
-  doc.setFont('times', 'normal')
+  doc.setFont('RedHatText', 'normal')
+  doc.setFontSize(10)
   doc.text('REMARKS:', 10, 176)
   doc.text(props.remarks, 10, 182, { maxWidth: 188, align: 'justify' })
 
@@ -236,13 +247,14 @@ const createPDF = async () => {
   //   remarksY += 5
   // }
 
+  doc.setFontSize(10)
   doc.text(sentence, 10, sentenceY, { maxWidth: 188, align: 'justify' })
   doc.text(sentence2, 10, sentence2Y, { maxWidth: 188, align: 'justify' })
 
   doc.text('Very truly yours,', 140, sentence2Y + 18)
-  doc.setFont('times', 'bold')
+  doc.setFont('LoraBold', 'bold')
   doc.text('AR. KHASAHAYAR L. TOGHYANI', 120, sentence2Y + 30)
-  doc.setFont('times', 'normal')
+  doc.setFont('Lora', 'normal')
   doc.text('Officer-In-Charge', 140, sentence2Y + 36)
 
   doc.text('Received By    :', 10, sentence2Y + 54)
@@ -253,7 +265,7 @@ const createPDF = async () => {
   doc.line(40, sentence2Y + 60, 100, sentence2Y + 60)
 
   doc.text('Served By        :', 10, sentence2Y + 66)
-  doc.setFont('times', 'bold')
+  doc.setFont('LoraBold', 'bold')
   doc.text(props.employee, 39, sentence2Y + 66)
 
   const footerWidth = getTextWidth('Office of the City Building Official - Pichon Street (former Magallanes Street)', 9)
@@ -263,7 +275,7 @@ const createPDF = async () => {
   const footer3Width = getTextWidth('Tel. No. 291-6695 / email address: ocbo.davao@gmail.com', 9)
   const footer3WidthX = (pageWidth - footer3Width) / 2
 
-  doc.setFont('times', 'italic')
+  doc.setFont('LoraItalic', 'italic')
   doc.setFontSize(9)
   doc.text('Office of the City Building Official - Pichon Street (former Magallanes Street)', footerWidthX, sentence2Y + 84)
   doc.text('fronting A. Bonifacio Monument Rotunda, Davao City', footer2WidthX, sentence2Y + 89)
