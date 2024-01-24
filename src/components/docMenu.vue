@@ -33,7 +33,8 @@ const props = withDefaults(defineProps<Props>(), {
 
 .section:hover
   border: 3px solid rgba(255, 255, 255, 1)
-  margin-top: -1rem
+  // margin-top: -1rem
+  border-radius: 4rem
 
 .icon
   padding: 0 0 0.8rem 0
