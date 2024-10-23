@@ -56,7 +56,9 @@ q-page(padding)
         //- component(:is="docPDF2" title="Sample Document PDF" text="aaaa" date="July 12, 2023")
 
     div.version
-      span(@click="versionDialog=true").version--text {{version}}
+      section.version--section
+        span(@click="versionDialog=true").version--text {{version}}
+        span.version--text Developed By: Pat Alcala
 
 q-dialog(v-model="error" transition-show="flip-right" transition-hide="flip-left" @keypress.enter="error=false").dialog
   q-card.dialog-card.text-white.flex.flex-center
@@ -654,6 +656,10 @@ const detectBrowser = () => {
   font-size: 0.9rem
   color: #ffffff
   cursor: pointer
+
+.version--section
+  display: flex
+  flex-direction: column
 
 .no-scrolling
   overflow: hidden
